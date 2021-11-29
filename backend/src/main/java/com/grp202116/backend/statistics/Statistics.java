@@ -7,6 +7,12 @@ import java.util.List;
 
 public class Statistics {
     BigInteger projectId;
+    BigInteger datasNumber;
+    BigInteger annotationsNumber;
+    BigInteger predictionsNumber;
+    Float completionPercentage;
+    List<PredictionDO> predictions;
+
     public Statistics(BigInteger projectId){
         this.projectId = projectId;
     }
@@ -50,10 +56,4 @@ public class Statistics {
     public void setPredictions(List<PredictionDO> predictions) {
         this.predictions = predictions;
     }
-
-    BigInteger datasNumber;
-    BigInteger annotationsNumber;
-    BigInteger predictionsNumber;
-    Float completionPercentage;
-    List<PredictionDO> predictions;
 }
