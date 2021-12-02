@@ -7,7 +7,6 @@ public class ProjectDO extends ProjectDistinguishableDO{
     private Date updateTime;
     private String name;
     private String description;
-    private String color;
 
     public String getType() {
         return type;
@@ -39,13 +38,5 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 }
