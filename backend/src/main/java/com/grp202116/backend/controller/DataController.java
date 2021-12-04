@@ -23,14 +23,18 @@ public class DataController {
         return dataMapper.listByProjectId(projectId);
     }
 
-    @PutMapping("/datas/project/{projectId}")
-    public void updateProjectDatas(@PathVariable BigInteger projectId, @RequestBody List<DataDO> datas){
-        dataMapper.deleteByProjectId((projectId));
+    @PutMapping("/datas")
+    public void addDatas(@RequestBody List<DataDO> datas){
         dataMapper.insertAll(datas);
     }
 
     @DeleteMapping("/datas/project/{projectId}")
     public void deleteProjectDatas(@PathVariable BigInteger projectId){
         dataMapper.deleteByProjectId(projectId);
+    }
+
+    @DeleteMapping("/datas/{dataIds}")
+    public void deleteDatas(@PathVariable String dataIds){
+        dataMapper.deleteDatas(dataIds);
     }
 }

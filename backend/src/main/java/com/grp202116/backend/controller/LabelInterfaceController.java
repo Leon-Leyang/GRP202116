@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class LabelInterfaceController {
+    public static final List<Integer> templatesProjectId = null;
     @Resource
     private LabelInterfaceMapper labelInterfaceMapper;
 
@@ -21,5 +24,10 @@ public class LabelInterfaceController {
     public void updateLabelInterface(@PathVariable BigInteger projectId, @RequestBody LabelInterfaceDO labelInterface){
         labelInterfaceMapper.deleteByProjectId(projectId);
         labelInterfaceMapper.insert(labelInterface);
+    }
+
+    @GetMapping("/labelinterfaces/templates")
+    public List<LabelInterfaceDO> getTemplates() {
+        return null;
     }
 }

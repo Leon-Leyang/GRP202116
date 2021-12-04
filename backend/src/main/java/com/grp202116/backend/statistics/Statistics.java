@@ -1,5 +1,6 @@
 package com.grp202116.backend.statistics;
 
+import com.grp202116.backend.pojo.AnnotationDO;
 import com.grp202116.backend.pojo.PredictionDO;
 
 import java.math.BigInteger;
@@ -12,6 +13,7 @@ public class Statistics {
     BigInteger predictionsNumber;
     Float completionPercentage;
     List<PredictionDO> predictions;
+    List<AnnotationDO> annotations;
 
     public Statistics(BigInteger projectId){
         this.projectId = projectId;
@@ -31,6 +33,10 @@ public class Statistics {
 
     public void setAnnotationsNumber(BigInteger annotationsNumber) {
         this.annotationsNumber = annotationsNumber;
+    }
+
+    public List<AnnotationDO> getAnnotations() {
+        return annotations;
     }
 
     public BigInteger getPredictionsNumber() {

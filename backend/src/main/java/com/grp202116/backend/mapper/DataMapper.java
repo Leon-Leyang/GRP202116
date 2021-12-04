@@ -17,4 +17,6 @@ public interface DataMapper extends BaseMapper {
 
     @Override
     public void deleteByProjectId(BigInteger projectId);
+
+    public void deleteDatas(String dataIds);
 }
