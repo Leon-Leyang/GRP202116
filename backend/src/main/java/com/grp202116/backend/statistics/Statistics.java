@@ -1,12 +1,25 @@
 package com.grp202116.backend.statistics;
 
+import com.grp202116.backend.mapper.AnnotationMapper;
+import com.grp202116.backend.mapper.DataMapper;
+import com.grp202116.backend.mapper.PredictionMapper;
 import com.grp202116.backend.pojo.AnnotationDO;
+import com.grp202116.backend.pojo.DataDO;
 import com.grp202116.backend.pojo.PredictionDO;
 
+import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.List;
 
 public class Statistics {
+    @Resource
+    private DataMapper dataMapper;
+    @Resource
+    private AnnotationMapper annotationMapper;
+    @Resource
+    private PredictionMapper predictionMapper;
+
+
     BigInteger projectId;
     BigInteger datasNumber;
     BigInteger annotationsNumber;
@@ -17,6 +30,12 @@ public class Statistics {
 
     public Statistics(BigInteger projectId){
         this.projectId = projectId;
+        this.setDatasNumber(countDatas());
+        this.setCompletionPercentage(calculateCompletionPercentage());
+        this.setAnnotations(getAnnotationsFromDB());
+        this.setAnnotationsNumber(BigInteger.valueOf(getAnnotations().size()));
+        this.setPredictions(getPredictionsFromDB());
+        this.setPredictionsNumber(BigInteger.valueOf(getPredictions().size()));
     }
 
     public BigInteger getDatasNumber() {
@@ -37,6 +56,10 @@ public class Statistics {
 
     public List<AnnotationDO> getAnnotations() {
         return annotations;
+    }
+
+    public void setAnnotations(List<AnnotationDO> annotations) {
+        this.annotations = annotations;
     }
 
     public BigInteger getPredictionsNumber() {
@@ -61,5 +84,24 @@ public class Statistics {
 
     public void setPredictions(List<PredictionDO> predictions) {
         this.predictions = predictions;
+    }
+
+    public BigInteger countDatas(){
+        List<DataDO> datas = dataMapper.listByProjectId(this.projectId);
+        return BigInteger.valueOf(datas.size());
+    }
+
+    public List<AnnotationDO> getAnnotationsFromDB(){
+        List<AnnotationDO> annotations = annotationMapper.listByProjectId(this.projectId);
+        return annotations;
+    }
+
+    public List<PredictionDO> getPredictionsFromDB(){
+        List<PredictionDO> predictions = predictionMapper.listByProjectId(this.projectId);
+        return predictions;
+    }
+
+    public float calculateCompletionPercentage(){
+        return 0;
     }
 }
