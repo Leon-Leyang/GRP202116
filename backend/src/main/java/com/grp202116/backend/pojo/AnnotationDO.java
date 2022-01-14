@@ -1,13 +1,15 @@
 package com.grp202116.backend.pojo;
 
-public class AnnotationDO extends LabelDO {
-    private String annotationId;
+import java.math.BigInteger;
 
-    public String getAnnotationId() {
+public class AnnotationDO extends LabelDO {
+    private BigInteger annotationId;
+
+    public BigInteger getAnnotationId() {
         return annotationId;
     }
 
-    public void setAnnotationId(String annotationId) {
+    public void setAnnotationId(BigInteger annotationId) {
         this.annotationId = annotationId;
     }
 }
