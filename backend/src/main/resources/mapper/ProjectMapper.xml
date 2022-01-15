@@ -3,8 +3,36 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.grp202116.mapper.ProjectMapper">
-    <select id="selectAllDepartment" resultType="Department">
-        select * from project
+
+    <resultMap id="projectMap" type="com.grp202116.backend.pojo.ProjectDO">
+        <id column="project_id" property="projectId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type" property="type"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+    </resultMap>
+
+    <select id="getByProjectId" resultMap="projectMap">
+        select *
+        from project
+        where project_id = #{id}
     </select>
+
+    <insert id="insert" parameterType="ProjectDO">
+        insert into project (project_id, create_time, update_time, type, name, description)
+        values (#{projectId}, #{createTime}, #{updateTime}, #{type}, #{name}, #{description})
+    </insert>
+
+    <select id="listAll" resultMap="projectMap">
+        select *
+        from project
+    </select>
+
+    <delete id="deleteByProjectId">
+        delete
+        from project
+        where project_id = #{projectId}
+    </delete>
 
 </mapper>

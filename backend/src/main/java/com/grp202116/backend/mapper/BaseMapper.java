@@ -6,5 +6,5 @@ import java.math.BigInteger;
 
 @Mapper
 public interface BaseMapper {
-    public void deleteByProjectId(BigInteger projectId);
+    void deleteByProjectId(BigInteger projectId);
 }

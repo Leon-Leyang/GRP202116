@@ -9,12 +9,12 @@ import java.util.List;
 @Mapper
 public interface PredictionMapper extends BaseMapper {
 
-    public void insertAll(List<PredictionDO> predictions);
+    void insertAll(List<PredictionDO> predictions);
 
-    public List<PredictionDO> listByDataId(BigInteger dataId);
+    List<PredictionDO> listByDataId(BigInteger dataId);
 
-    public List<PredictionDO> listByProjectId(BigInteger projectId);
+    List<PredictionDO> listByProjectId(BigInteger projectId);
 
     @Override
-    public void deleteByProjectId(BigInteger projectId);
+    void deleteByProjectId(BigInteger projectId);
 }
