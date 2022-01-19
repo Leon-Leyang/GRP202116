@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grp202116.mapper.DataMapper">
+
+    <resultMap id="dataMap" type="com.grp202116.backend.pojo.DataDO">
+        <id column="data_id" property="dataId"/>
+        <result column="url" property="url"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type" property="type"/>
+        <result column="project_id" property="projectId"/>
+    </resultMap>
+
+    <insert id="insertAll" parameterType="java.util.List">
+        insert into data (data_id,url,update_time,type,project_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.dataId},#{item.url},#{item.updateTime},#{item.type},#{item.projectId})
+        </foreach>
+    </insert>
+
+    <select id="getByDataId" resultMap="dataMap">
+        select *
+        from data
+        where data_id = #{dataId}
+    </select>
+
+    <select id="listByProjectId" resultMap="dataMap">
+        select *
+        from data
+        where project_id = #{projectId}
+    </select>
+
+    <delete id="deleteByProjectId">
+        delete
+        from data
+        where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteDatas">
+        delete
+        from data
+        where data_id = #{dataIds}
+    </delete>
+
+</mapper>

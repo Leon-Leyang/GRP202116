@@ -8,10 +8,10 @@ import java.math.BigInteger;
 @Mapper
 public interface ModelMapper extends BaseMapper {
 
-    public void insert(ModelDO model);
+    void insert(ModelDO model);
 
-    public ModelDO getByProjectId(BigInteger projectId);
+    ModelDO getByProjectId(BigInteger projectId);
 
     @Override
-    public void deleteByProjectId(BigInteger projectId);
+    void deleteByProjectId(BigInteger projectId);
 }

@@ -9,14 +9,14 @@ import java.util.List;
 @Mapper
 public interface DataMapper extends BaseMapper {
 
-    public void insertAll(List<DataDO> datas);
+    void insertAll(List<DataDO> datas);
 
-    public DataDO getByDataId(BigInteger id);
+    DataDO getByDataId(BigInteger id);
 
-    public List<DataDO> listByProjectId(BigInteger projectId);
+    List<DataDO> listByProjectId(BigInteger projectId);
 
     @Override
-    public void deleteByProjectId(BigInteger projectId);
+    void deleteByProjectId(BigInteger projectId);
 
-    public void deleteDatas(String dataIds);
+    void deleteDatas(String dataIds);
 }

@@ -9,12 +9,12 @@ import java.util.List;
 @Mapper
 public interface ProjectMapper extends BaseMapper {
 
-    public ProjectDO getByProjectId(BigInteger id);
+    ProjectDO getByProjectId(BigInteger id);
 
-    public void insert(ProjectDO project);
+    void insert(ProjectDO project);
 
-    public List<ProjectDO> listAll();
+    List<ProjectDO> listAll();
 
     @Override
-    public void deleteByProjectId(BigInteger id);
+    void deleteByProjectId(BigInteger id);
 }
