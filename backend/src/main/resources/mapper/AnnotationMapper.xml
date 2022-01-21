@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.grp202116.mapper.DataMapper">
+<mapper namespace="com.grp202116.backend.mapper.AnnotationMapper">
 
     <resultMap id="annotationMap" type="com.grp202116.backend.pojo.AnnotationDO">
         <id column="annotation_id" property="annotationId"/>

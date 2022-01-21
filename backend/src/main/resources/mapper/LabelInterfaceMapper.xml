@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.grp202116.mapper.ModelMapper">
+<mapper namespace="com.grp202116.backend.mapper.LabelInterfaceMapper">
 
     <resultMap id="interfaceMap" type="com.grp202116.backend.pojo.LabelInterfaceDO">
         <id column="code" property="code"/>

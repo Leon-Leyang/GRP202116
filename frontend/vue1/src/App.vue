@@ -1,13 +1,28 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <button v-on:click="postInfo">TEST</button>
+    <br>
+    {{this.info}}
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      info: {}
+    }
+  },
+  methods: {
+    postInfo: function () {
+      this.$axios.get('/api/projects')
+        .then(response => (this.info = response))
+        .catch(function (error) { // 请求失败处理
+          console.log(error);
+        });
+    }
+  }
 }
 </script>
 
