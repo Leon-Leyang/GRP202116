@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import Table from '../components/Table.vue';
-import Create from '../components/Create.vue';
+import Table from '../components/ProjectManage/Table.vue';
+import Create from '../components/ProjectManage/Create.vue';
 // import axios from 'axios';
   export default {
     components: {

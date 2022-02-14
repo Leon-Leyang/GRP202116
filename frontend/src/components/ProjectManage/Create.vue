@@ -92,10 +92,3 @@
     },
   }
 </script>
-
-<style>
-.el-tab-pane{
-    /* height: 380px; */
-    
-}
-</style>
