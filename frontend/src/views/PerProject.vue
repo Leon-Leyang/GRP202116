@@ -35,34 +35,12 @@
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
-          <v-card-title class="text-h5">
-            An even better title
-          </v-card-title>
-          <v-card-text>
-            <p>
-              Maecenas ullamcorper, dui et placerat feugiat, eros pede varius nisi, condimentum viverra felis nunc et lorem. Sed hendrerit. Maecenas malesuada. Vestibulum ullamcorper mauris at ligula. Proin faucibus arcu quis ante.
-            </p>
-
-            <p class="mb-0">
-              Etiam vitae tortor. Curabitur ullamcorper ultricies nisi. Sed magna purus, fermentum eu, tincidunt eu, varius ut, felis. Aliquam lobortis. Suspendisse potenti.
-            </p>
-          </v-card-text>
+          <ML></ML>
         </v-card>
       </v-tab-item>
       <v-tab-item>
         <v-card flat>
-          <v-card-title class="text-h5">
-            An even better title
-          </v-card-title>
-          <v-card-text>
-            <p>
-              Maecenas ullamcorper, dui et placerat feugiat, eros pede varius nisi, condimentum viverra felis nunc et lorem. Sed hendrerit. Maecenas malesuada. Vestibulum ullamcorper mauris at ligula. Proin faucibus arcu quis ante.
-            </p>
-
-            <p class="mb-0">
-              Etiam vitae tortor. Curabitur ullamcorper ultricies nisi. Sed magna purus, fermentum eu, tincidunt eu, varius ut, felis. Aliquam lobortis. Suspendisse potenti.
-            </p>
-          </v-card-text>
+          <Setting></Setting>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -72,9 +50,13 @@
 
 <script>
 import Statistics from '@/views/PerProject/Statistics'
+import ML from '@/views/PerProject/ML'
+import Setting from '@/views/PerProject/Setting'
   export default {
     components: {
-      Statistics
+      Statistics,
+      ML,
+      Setting,
     },
     data () {
       return {
@@ -88,6 +70,6 @@ import Statistics from '@/views/PerProject/Statistics'
 <style>
 #problock{
     margin: 0 auto;
-    width: 900px;
+    width: 90%;
 }
 </style>
