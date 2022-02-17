@@ -1,9 +1,10 @@
 import axios from 'axios'
 
+// const serverURL = 
+
 // 创建一个axios实例
 const service = axios.create({
-  // 请求超时时间
-  timeout: 3000
+  timeout: 3000,
 })
 
 // 添加请求拦截器

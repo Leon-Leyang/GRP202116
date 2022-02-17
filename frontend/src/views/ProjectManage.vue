@@ -18,7 +18,7 @@
 <script>
 import Table from '../components/ProjectManage/Table.vue';
 import Create from '../components/ProjectManage/Create.vue';
-// import axios from 'axios';
+import axios from 'axios';
   export default {
     components: {
       Table,
@@ -54,8 +54,7 @@ import Create from '../components/ProjectManage/Create.vue';
         getList(name = '') {
             this.config.loading = true
             name ? (this.config.page = 1) : ''
-            this.$http
-                .get('/api/project/getProject', {
+            axios.get('/api/project/getProject', {
                     params: {
                         page: this.config.page,
                         name
@@ -84,13 +83,13 @@ import Create from '../components/ProjectManage/Create.vue';
         confirm() {
             if (this.operateType === 'edit') {
                 console.log(this.operateForm)
-                this.$http.post('/api/project/edit', this.operateForm).then(res => {
+                axios.post('/api/project/edit', this.operateForm).then(res => {
                     console.log(res.data)
                     this.isShow = false
                     this.getList()
                 })
             } else {
-                this.$http.post('/api/project/add', this.operateForm).then(res => {
+                axios.post('/api/project/add', this.operateForm).then(res => {
                     console.log(res.data)
                     this.isShow = false
                     this.getList()
@@ -105,8 +104,7 @@ import Create from '../components/ProjectManage/Create.vue';
             })
                 .then(() => {
                     let id = row.id
-                    this.$http
-                        .get('/api/project/del', {
+                    axios.get('/api/project/del', {
                             params: {
                                 id
                             }
