@@ -5,22 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="60ad0e4b-6c12-4076-94f4-072ed3d14213" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__ai_djl_mxnet_mxnet_engine_0_15_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/ml/ModelDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/ml/ModelDriver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/ml/ModelSaver.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/ml/ModelSaver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/pojo/ModelDO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/pojo/ModelDO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/test/java/com/grp202116/backend/ml/ModelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/test/java/com/grp202116/backend/ml/ModelTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/config/dev.env.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/config/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/config/prod.env.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/ProjectManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/ProjectManage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vue.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ml/pytorch/resnet18/resnet18.pt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ml/pytorch/resnet18/synset.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,11 +109,22 @@
       <workItem from="1645071188628" duration="2458000" />
       <workItem from="1645081347628" duration="342000" />
       <workItem from="1645082099568" duration="4178000" />
-      <workItem from="1645150136151" duration="6318000" />
+      <workItem from="1645150136151" duration="9549000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/controller/ProjectController.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
