@@ -2,12 +2,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router/index.js'
-// import axios from 'axios'
+import axios from 'axios'
 
-// Vue.prototype.$axios = axios
+Vue.prototype.$axios = axios
+axios.defaults.baseURL = '/api'
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 Vue.config.productionTip = false
-// import axios from 'axios'
+//import axios from 'axios'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // import moment from "moment";

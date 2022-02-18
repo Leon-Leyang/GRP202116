@@ -54,7 +54,7 @@ import axios from 'axios';
         getList(name = '') {
             this.config.loading = true
             name ? (this.config.page = 1) : ''
-            axios.get('/api/project/getProject', {
+            this.$axios.get('/projects', {
                     params: {
                         page: this.config.page,
                         name

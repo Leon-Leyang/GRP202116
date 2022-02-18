@@ -43,8 +43,8 @@ public class ModelTest {
         Criteria<Image, Classifications> criteria = Criteria.builder()
                 .setTypes(Image.class, Classifications.class) // defines input and output data type
                 .optTranslator(translator)
-                .optModelPath(Paths.get("ml/pytorch/resnet18")) // search models in specified path
-                .optModelName("resnet18") // specify model file prefix
+                .optModelPath(Paths.get("ml/models")) // search models in specified path
+                .optModelName("att2in-20220218T051628Z-001") // specify model file prefix
                 .optProgress(new ProgressBar())
                 .optEngine("PyTorch")
                 .build();

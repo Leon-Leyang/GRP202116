@@ -14,11 +14,11 @@ public class ModelSaver {
     }
 
     public void save() {
-        String path = "ml/" + model.getEngine() + "/" + model.getName();
-        try {
-            DownloadUtils.download(model.getUrl(), path, new ProgressBar());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //String path = "ml/" + model.getEngine() + "/" + model.getName();
+//        try {
+//            DownloadUtils.download(model.getUrl(), path, new ProgressBar());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }

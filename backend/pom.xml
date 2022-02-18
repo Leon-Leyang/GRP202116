@@ -74,12 +74,6 @@
         </dependency>
 
         <dependency>
-            <groupId>ai.djl.mxnet</groupId>
-            <artifactId>mxnet-engine</artifactId>
-            <version>${djl.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>ai.djl</groupId>
             <artifactId>model-zoo</artifactId>
             <version>${djl.version}</version>

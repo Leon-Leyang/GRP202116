@@ -29,22 +29,12 @@ public class ModelDriver {
     }
 
     public void runModel(){
-        Translator<Image, Classifications> translator = ImageClassificationTranslator.builder()
-                .addTransform(new Resize(256))
-                .addTransform(new CenterCrop(224, 224))
-                .addTransform(new ToTensor())
-                .addTransform(new Normalize(
-                        new float[]{0.485f, 0.456f, 0.406f},
-                        new float[]{0.229f, 0.224f, 0.225f}))
-                .optApplySoftmax(true)
-                .build();
 
         Criteria<Image, Classifications> criteria = Criteria.builder()
                 .setTypes(Image.class, Classifications.class) // defines input and output data type
-                .optTranslator(translator)
                 .optModelUrls(model.getUrl())
                 .optModelName(model.getName()) // specify model file prefix
-                .optEngine(model.getEngine())
+                .optEngine("PyTorch")
                 .optProgress(new ProgressBar())
                 .build();
 
