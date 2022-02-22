@@ -61,14 +61,19 @@ import axios from 'axios';
                     }
                 })
                 .then(res => {
-                    console.log("1")
-                    this.tableData = res.data.list.map(item => {
+                    console.log(res)
+                    this.tableData = res.data.map(item => {
                         return item
                     })
-                    this.config.total = res.data.count
+
+                    this.config.total = res.data.length
                     this.config.loading = false
-                    console.log("2" + res.data.count)
+                    console.log(this.tableData)
                 })
+                .catch((error) => {
+        // here you will have access to error.response
+        console.log(error.response)
+    });
         },
         addProject() {
             this.operateForm = {}
@@ -127,6 +132,7 @@ import axios from 'axios';
         }
     },
     created() {
+        // console.log('tag', '')
         this.getList()
     }
   }
