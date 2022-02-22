@@ -29,6 +29,16 @@
         from project
     </select>
 
+    <update id="edit" parameterType="ProjectDO">
+        update project
+        set create_time = #{createTime},
+            update_time = #{updateTime},
+            type        = #{type},
+            name        = #{name},
+            description = #{description}
+        where project_id = #{projectId}
+    </update>
+
     <delete id="deleteByProjectId">
         delete
         from project

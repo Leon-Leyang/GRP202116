@@ -24,6 +24,11 @@ public class ProjectController {
         return projectMapper.listAll();
     }
 
+    @GetMapping("/projects/edit/{projectId}")
+    public void editProject(@PathVariable BigInteger projectId){
+        projectMapper.edit(projectId);
+    }
+
     @PostMapping("/projects")
     public void addProject(@RequestBody ProjectDO project){
         projectMapper.insert(project);
