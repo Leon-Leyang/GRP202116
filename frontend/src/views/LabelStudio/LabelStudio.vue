@@ -1,6 +1,9 @@
 <template>
+<div>
   <!-- Create the Label Studio container -->
   <div id="label-studio"></div>
+  <button @click="test">test</button>
+</div>
 </template>
 
 <script>
@@ -10,10 +13,20 @@ import "@heartexlabs/label-studio/build/static/css/main.css";
 
 export default {
   name: "Home",
+  data() {
+      return {
+          labelStudio:'',
+      }
+  },
 
   inject: ["app"],
+  methods: {
+      test(){
+          console.log(this.labelStudio)
+      }
+  },
   mounted() {
-    var labelStudio = new LabelStudio("label-studio", {
+    this.labelStudio = new LabelStudio("label-studio", {
       config: `
       <View>
         <Image name="img" value="$image"></Image>
@@ -60,7 +73,7 @@ export default {
         LS.annotationStore.selectAnnotation(c.id);
       },
     });
-    console.log(labelStudio)
+    console.log(this.labelStudio)
   },
 };
 </script>
