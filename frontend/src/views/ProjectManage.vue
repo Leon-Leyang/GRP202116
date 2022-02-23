@@ -90,7 +90,8 @@ import Create from '../components/ProjectManage/Create.vue';
         confirm() {
             if (this.operateType === 'edit') {
                 console.log(this.operateForm)
-                this.$axios.post('/projects/edit', this.operateForm).then(res => {
+                this.$axios.post('/projects/edit', this.operateForm)
+                    .then(res => {
                     console.log(res.data)
                     this.isShow = false
                     this.getList()

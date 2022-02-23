@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -24,13 +25,18 @@ public class ProjectController {
         return projectMapper.listAll();
     }
 
-    @GetMapping("/projects/edit/{projectId}")
-    public void editProject(@PathVariable BigInteger projectId){
-        projectMapper.edit(projectId);
+    @PostMapping("/projects/edit")
+    public void editProject(@RequestBody ProjectDO project){
+        project.setUpdateTime(new Date());
+        projectMapper.edit(project);
     }
 
     @PostMapping("/projects")
     public void addProject(@RequestBody ProjectDO project){
+        Date date = new Date();
+        project.setCreateTime(date);
+        project.setUpdateTime(date);
+
         projectMapper.insert(project);
     }
 

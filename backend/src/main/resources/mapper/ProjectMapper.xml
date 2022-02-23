@@ -19,9 +19,9 @@
         where project_id = #{id}
     </select>
 
-    <insert id="insert" parameterType="ProjectDO">
-        insert into project (project_id, create_time, update_time, type, name, description)
-        values (#{projectId}, #{createTime}, #{updateTime}, #{type}, #{name}, #{description})
+    <insert id="insert" useGeneratedKeys="true" keyProperty="project_id" parameterType="ProjectDO">
+        insert into project (create_time, update_time, type, name, description)
+        values (#{createTime}, #{updateTime}, #{type}, #{name}, #{description})
     </insert>
 
     <select id="listAll" resultMap="projectMap">
@@ -31,11 +31,16 @@
 
     <update id="edit" parameterType="ProjectDO">
         update project
-        set create_time = #{createTime},
-            update_time = #{updateTime},
-            type        = #{type},
-            name        = #{name},
-            description = #{description}
+        set update_time = #{updateTime}
+        <if test="type != '' and type != null">
+            ,type = #{type}
+        </if>
+        <if test="name != '' and name != null">
+            ,name = #{name}
+        </if>
+        <if test="description != '' and description != null">
+            ,description = #{description}
+        </if>
         where project_id = #{projectId}
     </update>
 
