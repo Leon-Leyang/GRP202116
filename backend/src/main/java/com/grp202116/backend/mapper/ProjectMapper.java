@@ -13,6 +13,8 @@ public interface ProjectMapper extends BaseMapper {
 
     void insert(ProjectDO project);
 
+    void edit(BigInteger id);
+
     List<ProjectDO> listAll();
 
     @Override
