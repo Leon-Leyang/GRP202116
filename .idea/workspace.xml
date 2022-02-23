@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="60ad0e4b-6c12-4076-94f4-072ed3d14213" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/ProjectManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/ProjectManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ProjectManage/Table.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ProjectManage/Table.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,26 +123,13 @@
       <workItem from="1645150136151" duration="9549000" />
       <workItem from="1645168170984" duration="4329000" />
       <workItem from="1645505903944" duration="1340000" />
-      <workItem from="1645510668014" duration="755000" />
+      <workItem from="1645510668014" duration="1351000" />
+      <workItem from="1645528969712" duration="359000" />
+      <workItem from="1645529523782" duration="1605000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/BackendApplication.java</url>
-          <line>8</line>
-          <properties class="com.grp202116.backend.BackendApplication" method="main">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

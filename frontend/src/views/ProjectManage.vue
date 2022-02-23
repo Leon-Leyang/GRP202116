@@ -18,7 +18,7 @@
 <script>
 import Table from '../components/ProjectManage/Table.vue';
 import Create from '../components/ProjectManage/Create.vue';
-import axios from 'axios';
+// import axios from 'axios';
   export default {
     components: {
       Table,
@@ -40,13 +40,14 @@ import axios from 'axios';
               loading: false
           },
           operateForm: {
-              proname: '',
-              desc: '',
-              propro: '',
-              modi: '',
-              createt: '',
-              data: '',
-              ml: '',
+              projectId: '',
+              name: '',
+              description: '',
+              process: '',
+              updateTime: '',
+              createTime: '',
+            //   data: '',
+            //   ml: '',
           },
       }
     },
@@ -79,6 +80,7 @@ import axios from 'axios';
             this.operateForm = {}
             this.operateType = 'add'
             this.isShow = true
+
         },
         editProject(row) {
             this.operateType = 'edit'
@@ -88,16 +90,18 @@ import axios from 'axios';
         confirm() {
             if (this.operateType === 'edit') {
                 console.log(this.operateForm)
-                axios.post('/api/project/edit', this.operateForm).then(res => {
+                this.$axios.post('/projects/edit', this.operateForm).then(res => {
                     console.log(res.data)
                     this.isShow = false
                     this.getList()
                 })
             } else {
-                axios.post('/api/project/add', this.operateForm).then(res => {
+                console.log(this.operateForm)
+                this.$axios.post('/projects', this.operateForm).then(res => {
                     console.log(res.data)
                     this.isShow = false
                     this.getList()
+
                 })
             }
         },
@@ -108,10 +112,12 @@ import axios from 'axios';
                 type: 'warning'
             })
                 .then(() => {
-                    let id = row.id
-                    axios.get('/api/project/del', {
+                    let projectId = row.projectId
+                    console.log(typeof(projectId))
+                    console.log(projectId)
+                    this.$axios.delete('/projects/${projectId}', {
                             params: {
-                                id
+                                projectId
                             }
                         })
                         .then(res => {

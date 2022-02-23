@@ -15,7 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 // import moment from "moment";
 import Vuex from 'vuex'
 // import http from './api/config'  //axios
-import './mock'   // mockjs
+// import './mock'   // mockjs
 
 
 Vue.use(Vuex)

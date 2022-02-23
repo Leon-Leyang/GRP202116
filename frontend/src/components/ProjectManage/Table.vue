@@ -4,29 +4,25 @@
 <el-table
   :data="tableData"
   style="width: 100%"
-  :default-sort = "{prop: 'createt', order: 'descending'}"
+  :default-sort = "{prop: 'createTime', order: 'descending'}"
   v-cloak
   stripe>
   <el-table-column
     type="selection"
     width="55">
   </el-table-column>
-  <!-- <el-table-column show-overflow-tooltip v-for="item in tableLabel" :key="item.prop" :label="item.label" :width="item.width ? item.width : 205">
-    <template slot-scope="scope">
-      <span style="margin-left: 10px" v-if="item.prop !='propro'">{{ scope.row[item.prop] }}</span>
-      <el-progress :text-inside="true" :stroke-width="20" :percentage="scope.row.propro" :color="customColorMethod" v-if="item.prop ==='propro'"></el-progress>
-    </template>
-  </el-table-column> -->
-  <el-table-column show-overflow-tooltip label="Project Name" width="205" prop="proname">
+  <el-table-column show-overflow-tooltip label="Project Name" width="205" prop="name">
   </el-table-column> 
-  <el-table-column show-overflow-tooltip label="Process" width="205" prop="propro">
+<!-- 因为暂时后端没有包含这个变量 到时候要加上!!! -->
+  <!-- <el-table-column show-overflow-tooltip label="Process" width="205" prop="propro">
     <template slot-scope="scope">
       <el-progress :text-inside="true" :stroke-width="20" :percentage="scope.row.propro" :color="customColorMethod"></el-progress>
     </template>
-  </el-table-column> 
-  <el-table-column show-overflow-tooltip sortable label="Last Modification Time" width="205" prop="modi" align="center">
+  </el-table-column>  -->
+
+  <el-table-column show-overflow-tooltip sortable label="Last Modification Time" width="205" prop="updateTime" align="center">
   </el-table-column>  
-  <el-table-column show-overflow-tooltip sortable label="Creation Time" width="205" prop="createt" align="center">
+  <el-table-column show-overflow-tooltip sortable label="Creation Time" width="205" prop="createTime" align="center">
   </el-table-column> 
   <el-table-column
     label="More"

@@ -9,12 +9,12 @@
 
                 <!-- Project Name -->
                 <el-form-item label="Project Name" prop="name">
-                    <el-input v-model="form.proname"></el-input>
+                    <el-input v-model="form.name"></el-input>
                 </el-form-item>
 
                 <!-- Project Description -->
                 <el-form-item label="Description" style="margin-top:50px">
-                    <el-input type="textarea" v-model="form.desc" placeholder="(Optional)" rows="10"></el-input>
+                    <el-input type="textarea" v-model="form.description" placeholder="(Optional)" rows="10"></el-input>
                 </el-form-item>   
 
             </el-form>
@@ -89,6 +89,10 @@
             // num<3 && num++
             this.active = num.toString()
         },
+    },
+    mounted() {
+        this.form.projectId = 1;
+        console.log(this.form.projectId)
     },
   }
 </script>
