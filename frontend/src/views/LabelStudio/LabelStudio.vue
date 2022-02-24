@@ -19,7 +19,7 @@ export default {
       }
   },
 
-  inject: ["app"],
+  //inject: ["app"],
   methods: {
       test(){
           console.log(this.labelStudio)
@@ -56,7 +56,32 @@ export default {
       },
 
       task: {
-        annotations: [],
+        annotations: [{
+          id: "1001",
+          lead_time: 15.053,
+          result: [
+            {
+              "original_width": 2242,
+              "original_height": 2802,
+              "image_rotation": 0,
+              "origin": "prediction",
+              "value": {
+                  "x": 17.46666666666666,
+                  "y": 79.29562433297758,
+                  "width": 23.6,
+                  "height": 13.447171824973319,
+                  "rotation": 0,
+                  "rectanglelabels": [
+                      "Hello"
+                  ]
+              },
+              "id": "dYjaasY56i",
+              "from_name": "tag",
+              "to_name": "img",
+              "type": "rectanglelabels"
+            },
+          ]
+        }],
         predictions: [],
         id: 1,
         data: {
@@ -64,6 +89,7 @@ export default {
             "https://htx-misc.s3.amazonaws.com/opensource/label-studio/examples/images/nick-owuor-astro-nic-visuals-wDifg5xc9Z4-unsplash.jpg",
         },
       },
+
       
 
       onLabelStudioLoad: function (LS) {
