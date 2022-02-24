@@ -41,12 +41,26 @@ export default {
         "panel",
         "update",
         "submit",
+        "skip",
         "controls",
+        //"review",
+        "infobar",
+        "topbar",
+        "instruction",
         "side-column",
+        "ground-truth",
+        "annotations:history",
+        "annotations:tabs",
         "annotations:menu",
+        "annotations:current",
         "annotations:add-new",
         "annotations:delete",
+        'annotations:view-all',
+        "predictions:tabs",
         "predictions:menu",
+        "auto-annotation",
+        "edit-history",
+        //"topbar:prevnext",
       ],
 
       user: {
@@ -80,9 +94,54 @@ export default {
               "to_name": "img",
               "type": "rectanglelabels"
             },
+            {
+              "original_width": 2242,
+              "original_height": 2802,
+              "image_rotation": 0,
+              "origin": "prediction",
+              "value": {
+                  "x": 37.46666666666666,
+                  "y": 79.29562433297758,
+                  "width": 23.6,
+                  "height": 13.447171824973319,
+                  "rotation": 0,
+                  "rectanglelabels": [
+                      "World"
+                  ]
+              },
+              "id": "dYjaasY57i",
+              "from_name": "tag",
+              "to_name": "img",
+              "type": "rectanglelabels"
+            },
           ]
         }],
-        predictions: [],
+        predictions: [{
+          id: "1001",
+          lead_time: 15.053,
+          result: [
+            {
+              "original_width": 2242,
+              "original_height": 2802,
+              "image_rotation": 0,
+              "origin": "prediction",
+              "value": {
+                  "x": 87.46666666666666,
+                  "y": 79.29562433297758,
+                  "width": 23.6,
+                  "height": 13.447171824973319,
+                  "rotation": 0,
+                  "rectanglelabels": [
+                      "Hello"
+                  ]
+              },
+              "id": "dYjaasY56i",
+              "from_name": "tag",
+              "to_name": "img",
+              "type": "rectanglelabels"
+            },
+          ]
+        }],
         id: 1,
         data: {
           image:
@@ -98,6 +157,11 @@ export default {
         });
         LS.annotationStore.selectAnnotation(c.id);
       },
+
+      onUpdateAnnotation: function(LS, annotation) {
+        // retrive an annotation 
+        console.log(annotation.serializeAnnotation())
+      }
     });
     console.log(this.labelStudio)
   },
