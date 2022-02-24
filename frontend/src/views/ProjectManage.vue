@@ -70,6 +70,8 @@ import Create from '../components/ProjectManage/Create.vue';
                     this.config.total = res.data.length
                     this.config.loading = false
                     console.log(this.tableData)
+                // console.log("dew",row)
+
                 })
                 .catch((error) => {
         // here you will have access to error.response
@@ -86,10 +88,11 @@ import Create from '../components/ProjectManage/Create.vue';
             this.operateType = 'edit'
             this.isShow = true
             this.operateForm = row
+            console.log('tag', row)
         },
         confirm() {
             if (this.operateType === 'edit') {
-                console.log(this.operateForm)
+                console.log("test",this.operateForm)
                 this.$axios.post('/projects/edit', this.operateForm)
                     .then(res => {
                     console.log(res.data)
@@ -116,7 +119,7 @@ import Create from '../components/ProjectManage/Create.vue';
                     let projectId = row.projectId
                     console.log(typeof(projectId))
                     console.log(projectId)
-                    this.$axios.delete('/projects/${projectId}', {
+                    this.$axios.delete('/projects/'+ projectId, {
                             params: {
                                 projectId
                             }
