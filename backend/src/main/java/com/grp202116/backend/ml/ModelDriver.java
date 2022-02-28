@@ -16,18 +16,23 @@ import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grp202116.backend.pojo.ModelDO;
+
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-
 import javax.xml.parsers.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 
 public class ModelDriver {
@@ -39,7 +44,7 @@ public class ModelDriver {
         this.model = model;
     }
 
-    public void parseConfig(){
+    public ParsedConfig parseConfig(){
         String config = "<View>" +
                 "        <Labels name=\"label\" toName=\"text\">\n" +
                 "          <Label value=\"Date\"></Label>\n" +
@@ -49,9 +54,11 @@ public class ModelDriver {
                 "        <Text name=\"text\" value=\"$text\"></Text>\n" +
                 "      </View>";
 
+
+        // Object to store information extracted from config
+        ParsedConfig parsedConfig = new ParsedConfig();
+
         try {
-            // Object to store information extracted from config
-            Config configObj = new Config();
 
             // Create mew DocumentBuilder
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -75,16 +82,19 @@ public class ModelDriver {
                     // Find the tool tag
                     if(ToolTags.contains(node.getNodeName())){
                         Element element = (Element)node;
-                        configObj.setFromName(element.getAttribute("name"));
-                        configObj.setToName(element.getAttribute("toName"));
-                        configObj.setType(node.getNodeName().toLowerCase());
+                        parsedConfig.setFromName(element.getAttribute("name"));
+                        parsedConfig.setToName(element.getAttribute("toName"));
+                        parsedConfig.setType(node.getNodeName().toLowerCase());
                     }
                 }
 
             }
-            System.out.println("from_name: " + configObj.getFromName());
-            System.out.println("to_name: " + configObj.getToName());
-            System.out.println("type: " + configObj.getType());
+            System.out.println("from_name: " + parsedConfig.getFromName());
+            System.out.println("to_name: " + parsedConfig.getToName());
+            System.out.println("type: " + parsedConfig.getType());
+
+
+
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -94,9 +104,12 @@ public class ModelDriver {
             e.printStackTrace();
         }
 
+        return parsedConfig;
     }
 
     public void runModel(){
+
+        ParsedConfig parsedConfig = parseConfig();
 
         // Define the preprocessing pipeline
         Translator<Image, Classifications> translator = ImageClassificationTranslator.builder()
@@ -108,15 +121,6 @@ public class ModelDriver {
                         new float[] {0.229f, 0.224f, 0.225f}))
                 .optApplySoftmax(true)
                 .build();
-
-//        Criteria<Image, Classifications> criteria = Criteria.builder()
-//                .setTypes(Image.class, Classifications.class) // defines input and output data type
-//                .optModelUrls(model.getUrl())
-//                .optModelName(model.getName()) // specify model file prefix
-//                .optEngine("PyTorch")
-//                .optProgress(new ProgressBar())
-//                .build();
-
 
         // Define the criteria of the model
 //        Criteria<Image, Classifications> criteria = Criteria.builder()
@@ -156,10 +160,30 @@ public class ModelDriver {
             Predictor<Image, Classifications> predictor = zooModel.newPredictor();
             try {
                 Classifications classifications = predictor.predict(img);
-                System.out.println(classifications);
-                System.out.println(classifications.best().getClassName());
-                System.out.println(classifications.best().getProbability());
+//                System.out.println(classifications);
+//                System.out.println(classifications.best().getClassName());
+//                System.out.println(classifications.best().getProbability());
+
+                String id = UUID.randomUUID().toString();
+
+                Value value = new Value();
+                value.setChoices(new String[]{classifications.best().getClassName()});
+                value.setScore(classifications.best().getProbability());
+
+                ResultItem resultItem = new ResultItem();
+                resultItem.setId(id);
+                resultItem.setFrom_name(parsedConfig.getFromName());
+                resultItem.setTo_name(parsedConfig.getToName());
+                resultItem.setType(parsedConfig.getType());
+                resultItem.setValue(value);
+
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                String json = ow.writeValueAsString(resultItem);
+
+                System.out.println(json);
             } catch (TranslateException e) {
+                e.printStackTrace();
+            } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }catch (NullPointerException e){
@@ -182,7 +206,7 @@ public class ModelDriver {
     public static void main(String[] args){
         ModelDO model = new ModelDO();
         ModelDriver modelDriver = new ModelDriver(model);
-        //modelDriver.runModel();
-        modelDriver.parseConfig();
+        modelDriver.runModel();
+        //modelDriver.parseConfig();
     }
 }

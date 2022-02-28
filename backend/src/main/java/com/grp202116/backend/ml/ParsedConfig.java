@@ -1,6 +1,6 @@
 package com.grp202116.backend.ml;
 
-public class Config {
+public class ParsedConfig {
     private String fromName, toName, type;
 
     public String getFromName() {
