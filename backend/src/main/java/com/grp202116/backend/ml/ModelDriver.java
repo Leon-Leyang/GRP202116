@@ -30,14 +30,42 @@ public class ModelDriver {
 
     public void runModel(){
 
-        Criteria<Image, Classifications> criteria = Criteria.builder()
-                .setTypes(Image.class, Classifications.class) // defines input and output data type
-                .optModelUrls(model.getUrl())
-                .optModelName(model.getName()) // specify model file prefix
-                .optEngine("PyTorch")
-                .optProgress(new ProgressBar())
+        // Define the preprocessing pipeline
+        Translator<Image, Classifications> translator = ImageClassificationTranslator.builder()
+                .addTransform(new Resize(256))
+                .addTransform(new CenterCrop(224, 224))
+                .addTransform(new ToTensor())
+                .addTransform(new Normalize(
+                        new float[] {0.485f, 0.456f, 0.406f},
+                        new float[] {0.229f, 0.224f, 0.225f}))
+                .optApplySoftmax(true)
                 .build();
 
+//        Criteria<Image, Classifications> criteria = Criteria.builder()
+//                .setTypes(Image.class, Classifications.class) // defines input and output data type
+//                .optModelUrls(model.getUrl())
+//                .optModelName(model.getName()) // specify model file prefix
+//                .optEngine("PyTorch")
+//                .optProgress(new ProgressBar())
+//                .build();
+
+
+        // Define the criteria of the model
+//        Criteria<Image, Classifications> criteria = Criteria.builder()
+//                .setTypes(Image.class, Classifications.class)
+//                .optModelUrls(model.getUrl())
+//                .optOption("mapLocation", "true") // this model requires mapLocation for GPU
+//                .optTranslator(translator)
+//                .optProgress(new ProgressBar()).build();
+        Criteria<Image, Classifications> criteria = Criteria.builder()
+                .setTypes(Image.class, Classifications.class)
+                .optModelPath(Paths.get("C:/Users/Leon/Desktop/GRP/GRP202116/ml/models/resnet18"))
+                .optOption("mapLocation", "true") // this model requires mapLocation for GPU
+                .optTranslator(translator)
+                .optProgress(new ProgressBar()).build();
+
+
+        // Get the model from the criteria
         ZooModel<Image, Classifications> zooModel = null;
         try {
             zooModel = criteria.loadModel();
@@ -45,26 +73,56 @@ public class ModelDriver {
             e.printStackTrace();
         }
 
+
+        // Get the test sample
         Image img = null;
         try {
-            img = ImageFactory.getInstance().fromFile(Paths.get("ml/resources/testing.jpg"));
+            img = ImageFactory.getInstance().fromFile(Paths.get("C:/Users/Leon/Desktop/GRP/GRP202116/ml/resources/testing.jpg"));
             img.getWrappedImage();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Predictor<Image, Classifications> predictor = zooModel.newPredictor();
-        Classifications classifications = null;
-        try {
-            classifications = predictor.predict(img);
-        } catch (TranslateException e) {
+        // Predict on the test sample
+        try{
+            Predictor<Image, Classifications> predictor = zooModel.newPredictor();
+            try {
+                Classifications classifications = predictor.predict(img);
+                System.out.println(classifications);
+                System.out.println(classifications.best().getClassName());
+                System.out.println(classifications.best().getProbability());
+            } catch (TranslateException e) {
+                e.printStackTrace();
+            }
+        }catch (NullPointerException e){
             e.printStackTrace();
         }
 
-        System.out.println(classifications);
+
+
+
+
+
+
+
+
+
+
     }
+
+
+
+
+
+
 
     public void updatePredictions() {
         //
+    }
+
+    public static void main(String[] args){
+        ModelDO model = new ModelDO();
+        ModelDriver modelDriver = new ModelDriver(model);
+        modelDriver.runModel();
     }
 }
