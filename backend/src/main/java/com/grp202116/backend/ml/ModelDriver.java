@@ -18,14 +18,82 @@ import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import com.grp202116.backend.pojo.ModelDO;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.*;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class ModelDriver {
     ModelDO model;
 
+    public static final List<String> ToolTags = Arrays.asList(new String[]{"Labels", "Choices"});
+
     public ModelDriver(ModelDO model){
         this.model = model;
+    }
+
+    public void parseConfig(){
+        String config = "<View>" +
+                "        <Labels name=\"label\" toName=\"text\">\n" +
+                "          <Label value=\"Date\"></Label>\n" +
+                "          <Label value=\"Time\"></Label>\n" +
+                "          <Label value=\"Location\"></Label>\n" +
+                "        </Labels>\n" +
+                "        <Text name=\"text\" value=\"$text\"></Text>\n" +
+                "      </View>";
+
+        try {
+            // Object to store information extracted from config
+            Config configObj = new Config();
+
+            // Create mew DocumentBuilder
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // Create Document from the config
+            byte[] configBytes = config.getBytes(StandardCharsets.UTF_8);
+            ByteArrayInputStream configBuffer = new ByteArrayInputStream(configBytes);
+            Document doc = builder.parse(configBuffer);
+
+            doc.getDocumentElement().normalize();
+
+            // Visit all child nodes rooted at <View>
+            NodeList childNodes = doc.getDocumentElement().getChildNodes();
+            for (int index = 0; index < childNodes.getLength(); index++) {
+                Node node = childNodes.item(index);
+
+                // Filter TEXT_NODE
+                if(node.getNodeType() == Node.ELEMENT_NODE){
+
+                    // Find the tool tag
+                    if(ToolTags.contains(node.getNodeName())){
+                        Element element = (Element)node;
+                        configObj.setFromName(element.getAttribute("name"));
+                        configObj.setToName(element.getAttribute("toName"));
+                        configObj.setType(node.getNodeName().toLowerCase());
+                    }
+                }
+
+            }
+            System.out.println("from_name: " + configObj.getFromName());
+            System.out.println("to_name: " + configObj.getToName());
+            System.out.println("type: " + configObj.getType());
+
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void runModel(){
@@ -99,15 +167,6 @@ public class ModelDriver {
         }
 
 
-
-
-
-
-
-
-
-
-
     }
 
 
@@ -123,6 +182,7 @@ public class ModelDriver {
     public static void main(String[] args){
         ModelDO model = new ModelDO();
         ModelDriver modelDriver = new ModelDriver(model);
-        modelDriver.runModel();
+        //modelDriver.runModel();
+        modelDriver.parseConfig();
     }
 }
