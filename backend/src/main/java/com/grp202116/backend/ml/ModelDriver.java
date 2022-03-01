@@ -21,6 +21,9 @@ import com.grp202116.backend.pojo.ModelDO;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+/**
+ * The class ModelDriver aim to run the ml model using PyTorch
+ */
 public class ModelDriver {
     ModelDO model;
 

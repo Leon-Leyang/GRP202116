@@ -7,8 +7,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigInteger;
 
+/**
+ * The Class StatisticsController, control the Statistics of the project
+ * Control the list of the Statistics
+ */
 @RestController
 public class StatisticsController {
+    /**
+     * Get the Statistics of certain project
+     * @param projectId the projectId fetched from the mapper
+     * @return return the Statistics of corresponding projectId
+     */
     @GetMapping("/statistics/{projectId}")
     public Statistics getStatistics(@PathVariable BigInteger projectId){
         Statistics statistics = new Statistics(projectId);

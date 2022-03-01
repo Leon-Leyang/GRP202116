@@ -11,6 +11,9 @@ import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.List;
 
+/**
+ * The class Statistic
+ */
 public class Statistics {
     @Resource
     private DataMapper dataMapper;
