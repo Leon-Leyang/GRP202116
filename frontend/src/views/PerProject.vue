@@ -23,9 +23,7 @@
     <v-tabs-items v-model="tabs">
       <v-tab-item>
         <v-card flat>
-          <v-card-text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          </v-card-text>
+          <Table :tableData="tableData" :tableLabel="tableLabel" :config="config" @changePage="getList()" />
         </v-card>
       </v-tab-item>
       <v-tab-item>
@@ -49,6 +47,7 @@
 
 
 <script>
+import Table from '../components/ProjectManage/DataTable.vue';
 import Statistics from '@/views/PerProject/Statistics'
 import ML from '@/views/PerProject/ML'
 import Setting from '@/views/PerProject/Setting'
@@ -57,11 +56,17 @@ import Setting from '@/views/PerProject/Setting'
       Statistics,
       ML,
       Setting,
+      Table,
     },
     data () {
       return {
         tabs: null,
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        tableData:[],
+        config: {          //重要的地方
+              page: 1,
+              total: 30,
+              loading: false
+          },
       }
     },
   }
