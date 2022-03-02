@@ -134,9 +134,10 @@ public class ModelDriver {
 //                .optProgress(new ProgressBar()).build();
         Criteria<Image, Classifications> criteria = Criteria.builder()
                 .setTypes(Image.class, Classifications.class)
-                .optModelPath(Paths.get("C:/Users/Leon/Desktop/GRP/GRP202116/ml/models/resnet18"))
+                .optModelPath(Paths.get("ml/models/resnet18"))
                 .optOption("mapLocation", "true") // this model requires mapLocation for GPU
                 .optTranslator(translator)
+                .optEngine("PyTorch")
                 .optProgress(new ProgressBar()).build();
 
 
@@ -152,7 +153,7 @@ public class ModelDriver {
         // Get the test sample
         Image img = null;
         try {
-            img = ImageFactory.getInstance().fromFile(Paths.get("C:/Users/Leon/Desktop/GRP/GRP202116/ml/resources/testing.jpg"));
+            img = ImageFactory.getInstance().fromFile(Paths.get("ml/resources/testing.jpg"));
             img.getWrappedImage();
         } catch (IOException e) {
             e.printStackTrace();

@@ -30,6 +30,15 @@ public class ModelTest {
 //            e.printStackTrace();
 //        }
 
+//        Translator<Image, Classifications> translator = ImageClassificationTranslator.builder()
+//                .addTransform(new Resize(256))
+//                .addTransform(new CenterCrop(224, 224))
+//                .addTransform(new ToTensor())
+//                .addTransform(new Normalize(
+//                        new float[]{0.485f, 0.456f, 0.406f},
+//                        new float[]{0.229f, 0.224f, 0.225f}))
+//                .optApplySoftmax(true)
+//                .build();
         Translator<Image, Classifications> translator = ImageClassificationTranslator.builder()
                 .addTransform(new Resize(256))
                 .addTransform(new CenterCrop(224, 224))
@@ -40,16 +49,16 @@ public class ModelTest {
                 .optApplySoftmax(true)
                 .build();
 
-        Criteria<Image, Classifications> criteria = Criteria.builder()
-                .setTypes(Image.class, Classifications.class) // defines input and output data type
-                .optTranslator(translator)
-                .optModelPath(Paths.get("ml/models")) // search models in specified path
-                .optModelName("att2in-20220218T051628Z-001") // specify model file prefix
+        Criteria<String, Classifications> criteria = Criteria.builder()
+                .setTypes(String.class, Classifications.class) // defines input and output data type
+                //.optTranslator(translator)
+                .optModelPath(Paths.get("ml/models/cnn")) // search models in specified path
+                //.optModelName("best_steps_3000") // specify model file prefix
                 .optProgress(new ProgressBar())
                 .optEngine("PyTorch")
                 .build();
 
-        ZooModel<Image, Classifications> model = null;
+        ZooModel<String, Classifications> model = null;
         try {
             model = criteria.loadModel();
         } catch (IOException | ModelNotFoundException | MalformedModelException e) {
@@ -64,10 +73,10 @@ public class ModelTest {
             e.printStackTrace();
         }
 
-        Predictor<Image, Classifications> predictor = model.newPredictor();
+        Predictor<String, Classifications> predictor = model.newPredictor();
         Classifications classifications = null;
         try {
-            classifications = predictor.predict(img);
+            classifications = predictor.predict("img");
         } catch (TranslateException e) {
             e.printStackTrace();
         }

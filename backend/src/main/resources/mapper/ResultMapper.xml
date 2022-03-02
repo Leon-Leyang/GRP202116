@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grp202116.backend.mapper.ResultMapper">
+
+    <resultMap id="resultMap" type="com.grp202116.backend.pojo.ResultDO">
+        <id column="result_id" property="resultId"/>
+        <result column="label_id" property="labelId"/>
+        <result column="type" property="type"/>
+        <result column="origin" property="origin"/>
+        <result column="value" property="value"/>
+        <result column="rotation" property="rotation"/>
+        <result column="from_name" property="fromName"/>
+        <result column="to_name" property="toName"/>
+        <result column="original_height" property="originalHeight"/>
+        <result column="original_weight" property="originalWeight"/>
+    </resultMap>
+
+    <insert id="insertAll" parameterType="java.util.List">
+        insert into result
+        (result_id,label_id,type,origin,value,from_name,to_name,original_height,original_weight)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.resultId},#{item.labelId},#{item.type},#{item.origin},#{item.value},
+            #{item.fromName},#{item.toName}),#{item.originalHeight},#{item.originalWeight}
+        </foreach>
+    </insert>
+
+    <select id="listByDataId" resultMap="resultMap">
+        select *
+        from result
+        where label_id = #{labelId}
+    </select>
+
+    <delete id="deleteByLabelId">
+        delete
+        from result
+        where result_id = #{resultId}
+    </delete>
+
+</mapper>
