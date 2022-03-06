@@ -44,29 +44,30 @@ public class ModelDriver {
     // Object to store information extracted from config
     ParsedConfig parsedConfig;
 
-    public static final List<String> ToolTags = Arrays.asList(new String[]{"Labels", "Choices"});
+    public static final List<String> ToolTags = Arrays.asList("Labels", "Choices");
 
-    public ModelDriver(ModelDO model){
+    public ModelDriver(ModelDO model) {
         this.model = model;
         this.parsedConfig = new ParsedConfig();
     }
 
     // Parse config with only one
-    public ParsedConfig parseConfig(){
-        String config = "<View>\n" +
-                "  <Text name=\"text\" value=\"$text\"/>\n" +
-                "  <View style=\"box-shadow: 2px 2px 5px #999;\n" +
-                "               padding: 20px; margin-top: 2em;\n" +
-                "               border-radius: 5px;\">\n" +
-                "    <Header value=\"Choose text sentiment\"/>\n" +
-                "    <Choices name=\"sentiment\" toName=\"text\"\n" +
-                "             choice=\"single\" showInLine=\"true\">\n" +
-                "      <Choice value=\"Positive\"/>\n" +
-                "      <Choice value=\"Negative\"/>\n" +
-                "      <Choice value=\"Neutral\"/>\n" +
-                "    </Choices>\n" +
-                "  </View>\n" +
-                "</View>";
+    public ParsedConfig parseConfig() {
+        String config = """
+                <View>
+                  <Text name="text" value="$text"/>
+                  <View style="box-shadow: 2px 2px 5px #999;
+                               padding: 20px; margin-top: 2em;
+                               border-radius: 5px;">
+                    <Header value="Choose text sentiment"/>
+                    <Choices name="sentiment" toName="text"
+                             choice="single" showInLine="true">
+                      <Choice value="Positive"/>
+                      <Choice value="Negative"/>
+                      <Choice value="Neutral"/>
+                    </Choices>
+                  </View>
+                </View>""";
 
         try {
 
@@ -84,25 +85,14 @@ public class ModelDriver {
             // Visit all child nodes rooted at <View>
             Node parentNode = doc.getDocumentElement();
 
-
-
-
             extractInformation(parentNode);
-
-
 
             System.out.println("from_name: " + parsedConfig.getFromName());
             System.out.println("to_name: " + parsedConfig.getToName());
             System.out.println("type: " + parsedConfig.getType());
 
 
-
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
 
@@ -115,11 +105,11 @@ public class ModelDriver {
             Node childNode = childNodes.item(index);
 
             // Filter TEXT_NODE
-            if(childNode.getNodeType() == Node.ELEMENT_NODE){
+            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
 
                 // Find the tool tag
-                if(ToolTags.contains(childNode.getNodeName())){
-                    Element element = (Element)childNode;
+                if (ToolTags.contains(childNode.getNodeName())) {
+                    Element element = (Element) childNode;
                     parsedConfig.setFromName(element.getAttribute("name"));
                     parsedConfig.setToName(element.getAttribute("toName"));
                     parsedConfig.setType(childNode.getNodeName().toLowerCase());
@@ -127,7 +117,7 @@ public class ModelDriver {
             }
         }
 
-        if(parsedConfig.getFromName() == null){
+        if (parsedConfig.getFromName() == null) {
             for (int index = 0; index < childNodes.getLength(); index++) {
                 Node childNode = childNodes.item(index);
                 extractInformation(childNode);
@@ -135,8 +125,7 @@ public class ModelDriver {
         }
     }
 
-    public void runModel(){
-/*
+    public void runModel() {
         ParsedConfig parsedConfig = parseConfig();
 
         // Define the preprocessing pipeline
@@ -164,7 +153,6 @@ public class ModelDriver {
                 .optTranslator(translator)
                 .optEngine("PyTorch")
                 .optProgress(new ProgressBar()).build();
-
 
         // Get the model from the criteria
         ZooModel<Image, Classifications> zooModel = null;
@@ -210,32 +198,23 @@ public class ModelDriver {
                 String json = ow.writeValueAsString(resultItem);
 
                 System.out.println(json);
-            } catch (TranslateException e) {
-                e.printStackTrace();
-            } catch (JsonProcessingException e) {
+            } catch (TranslateException | JsonProcessingException e) {
                 e.printStackTrace();
             }
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-
-*/
     }
-
-
-
-
-
 
 
     public void updatePredictions() {
         //
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ModelDO model = new ModelDO();
         ModelDriver modelDriver = new ModelDriver(model);
-        //modelDriver.runModel();
+        modelDriver.runModel();
         modelDriver.parseConfig();
     }
 }

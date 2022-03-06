@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="60ad0e4b-6c12-4076-94f4-072ed3d14213" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/controller/AnnotationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/controller/AnnotationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/controller/ModelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/controller/ModelController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/ml/ModelDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/ml/ModelDriver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/pojo/ResultDO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/grp202116/backend/pojo/ResultDO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/mapper/ResultMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/mapper/ResultMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/LabelStudio/LabelStudio.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/LabelStudio/LabelStudio.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +68,7 @@
       <recent name="C:\Users\Guillered\Desktop\Y3\GRP\GRP202116\ml" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.BackendApplication">
+  <component name="RunManager" selected="Application.ModelDriver">
     <configuration name="ModelDriver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.grp202116.backend.ml.ModelDriver" />
       <module name="backend" />
@@ -149,8 +144,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.BackendApplication" />
         <item itemvalue="Application.ModelDriver" />
+        <item itemvalue="Spring Boot.BackendApplication" />
         <item itemvalue="Application.ModelTest" />
         <item itemvalue="JUnit.ModelTest" />
       </list>
@@ -180,7 +175,7 @@
       <workItem from="1646009844829" duration="784000" />
       <workItem from="1646186571414" duration="10560000" />
       <workItem from="1646276641679" duration="2479000" />
-      <workItem from="1646534912021" duration="5954000" />
+      <workItem from="1646534912021" duration="7876000" />
     </task>
     <servers />
   </component>
