@@ -331,7 +331,7 @@ public class Statistics {
     /**
      * Count and calculate the average words of the text data
      * @return the average words of the text data
-     * @throws IOException the file exist exception
+     * @throws IOException the file if exist exception
      */
     public Float countAverageTextWordsNumber() throws IOException {
         int textDataType = 0;
