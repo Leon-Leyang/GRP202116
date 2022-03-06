@@ -16,7 +16,6 @@ import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grp202116.backend.pojo.ModelDO;
 
 import org.w3c.dom.*;
@@ -40,22 +39,23 @@ import java.util.UUID;
  */
 public class ModelDriver {
     ModelDO model;
+    String[] paths = new String[]{"ml/resources/testing.jpg"};
 
-    public static final List<String> ToolTags = Arrays.asList(new String[]{"Labels", "Choices"});
+    public static final List<String> ToolTags = Arrays.asList("Labels", "Choices");
 
-    public ModelDriver(ModelDO model){
+    public ModelDriver(ModelDO model) {
         this.model = model;
     }
 
-    public ParsedConfig parseConfig(){
-        String config = "<View>" +
-                "        <Labels name=\"label\" toName=\"text\">\n" +
-                "          <Label value=\"Date\"></Label>\n" +
-                "          <Label value=\"Time\"></Label>\n" +
-                "          <Label value=\"Location\"></Label>\n" +
-                "        </Labels>\n" +
-                "        <Text name=\"text\" value=\"$text\"></Text>\n" +
-                "      </View>";
+    public ParsedConfig parseConfig() {
+        String config = """
+                <View>        <Labels name="label" toName="text">
+                          <Label value="Date"></Label>
+                          <Label value="Time"></Label>
+                          <Label value="Location"></Label>
+                        </Labels>
+                        <Text name="text" value="$text"></Text>
+                      </View>""";
 
 
         // Object to store information extracted from config
@@ -80,11 +80,11 @@ public class ModelDriver {
                 Node node = childNodes.item(index);
 
                 // Filter TEXT_NODE
-                if(node.getNodeType() == Node.ELEMENT_NODE){
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                     // Find the tool tag
-                    if(ToolTags.contains(node.getNodeName())){
-                        Element element = (Element)node;
+                    if (ToolTags.contains(node.getNodeName())) {
+                        Element element = (Element) node;
                         parsedConfig.setFromName(element.getAttribute("name"));
                         parsedConfig.setToName(element.getAttribute("toName"));
                         parsedConfig.setType(node.getNodeName().toLowerCase());
@@ -97,20 +97,14 @@ public class ModelDriver {
             System.out.println("type: " + parsedConfig.getType());
 
 
-
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
 
         return parsedConfig;
     }
 
-    public void runModel(){
+    public void runModel() {
 
         ParsedConfig parsedConfig = parseConfig();
 
@@ -120,8 +114,8 @@ public class ModelDriver {
                 .addTransform(new CenterCrop(224, 224))
                 .addTransform(new ToTensor())
                 .addTransform(new Normalize(
-                        new float[] {0.485f, 0.456f, 0.406f},
-                        new float[] {0.229f, 0.224f, 0.225f}))
+                        new float[]{0.485f, 0.456f, 0.406f},
+                        new float[]{0.229f, 0.224f, 0.225f}))
                 .optApplySoftmax(true)
                 .build();
 
@@ -149,20 +143,12 @@ public class ModelDriver {
             e.printStackTrace();
         }
 
-
-        // Get the test sample
-        Image img = null;
-        try {
-            img = ImageFactory.getInstance().fromFile(Paths.get("ml/resources/testing.jpg"));
-            img.getWrappedImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Predict on the test sample
-        try{
-            Predictor<Image, Classifications> predictor = zooModel.newPredictor();
+        for (String path : paths) {
             try {
+                Image img = ImageFactory.getInstance().fromFile(Paths.get(path));
+                img.getWrappedImage();
+
+                Predictor<Image, Classifications> predictor = zooModel.newPredictor();
                 Classifications classifications = predictor.predict(img);
 //                System.out.println(classifications);
 //                System.out.println(classifications.best().getClassName());
@@ -185,29 +171,19 @@ public class ModelDriver {
                 String json = ow.writeValueAsString(resultItem);
 
                 System.out.println(json);
-            } catch (TranslateException e) {
-                e.printStackTrace();
-            } catch (JsonProcessingException e) {
+            } catch (IOException | TranslateException | NullPointerException e) {
                 e.printStackTrace();
             }
-        }catch (NullPointerException e){
-            e.printStackTrace();
         }
 
-
     }
-
-
-
-
-
 
 
     public void updatePredictions() {
         //
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ModelDO model = new ModelDO();
         ModelDriver modelDriver = new ModelDriver(model);
         modelDriver.runModel();

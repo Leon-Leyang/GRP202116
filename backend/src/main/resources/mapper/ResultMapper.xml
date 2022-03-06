@@ -10,7 +10,6 @@
         <result column="type" property="type"/>
         <result column="origin" property="origin"/>
         <result column="value" property="value"/>
-        <result column="rotation" property="rotation"/>
         <result column="from_name" property="fromName"/>
         <result column="to_name" property="toName"/>
         <result column="original_height" property="originalHeight"/>

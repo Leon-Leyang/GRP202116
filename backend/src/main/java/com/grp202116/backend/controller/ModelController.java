@@ -56,6 +56,6 @@ public class ModelController {
     public void runModel(@PathVariable BigInteger projectId){
         ModelDO model = modelMapper.getByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(model);
-        modelDriver.runModel();
+        //modelDriver.runModel();
     }
 }

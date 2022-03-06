@@ -9,7 +9,6 @@ public class ResultDO {
     private String fromName;
     private String toName;
     private String value;
-    private String rotation;
     private String origin;
     private BigInteger originalHeight;
     private BigInteger getOriginalWeight;
@@ -60,14 +59,6 @@ public class ResultDO {
 
     public void setValue(String value) {
         this.value = value;
-    }
-
-    public String getRotation() {
-        return rotation;
-    }
-
-    public void setRotation(String rotation) {
-        this.rotation = rotation;
     }
 
     public String getOrigin() {

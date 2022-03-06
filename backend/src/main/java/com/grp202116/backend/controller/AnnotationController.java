@@ -49,6 +49,7 @@ public class AnnotationController {
      */
     @PutMapping("/annotations/data/{dataId}")
     public void updateDataAnnotations(@PathVariable BigInteger dataId, @RequestBody List<AnnotationDO> annotations){
+        System.out.println(dataId);
         annotationMapper.deleteByDataId(dataId);
         annotationMapper.insertAll(annotations);
     }
