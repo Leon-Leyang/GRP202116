@@ -1,9 +1,9 @@
 <template>
-<div>
-  <!-- Create the Label Studio container -->
-  <div id="label-studio"></div>
-  <button @click="test">test</button>
-</div>
+  <div>
+    <!-- Create the Label Studio container -->
+    <div id="label-studio"></div>
+    <button @click="test">test</button>
+  </div>
 </template>
 
 <script>
@@ -14,16 +14,16 @@ import "@heartexlabs/label-studio/build/static/css/main.css";
 export default {
   name: "Home",
   data() {
-      return {
-          labelStudio:'',
-      }
+    return {
+      labelStudio: '',
+    }
   },
 
   //inject: ["app"],
   methods: {
-      test(){
-          console.log(this.labelStudio)
-      }
+    test() {
+      console.log(this.labelStudio)
+    }
   },
   mounted() {
     this.labelStudio = new LabelStudio("label-studio", {
@@ -78,16 +78,16 @@ export default {
               "original_width": 2242,
               "original_height": 2802,
               "image_rotation": 0,
-              "origin": "prediction",
+              "origin": "manual",
               "value": {
-                  "x": 17.46666666666666,
-                  "y": 79.29562433297758,
-                  "width": 23.6,
-                  "height": 13.447171824973319,
-                  "rotation": 0,
-                  "rectanglelabels": [
-                      "Hello"
-                  ]
+                "x": 17.46666666666666,
+                "y": 79.29562433297758,
+                "width": 23.6,
+                "height": 13.447171824973319,
+                "rotation": 0,
+                "rectanglelabels": [
+                  "Hello"
+                ]
               },
               "id": "dYjaasY56i",
               "from_name": "tag",
@@ -100,14 +100,14 @@ export default {
               "image_rotation": 0,
               "origin": "prediction",
               "value": {
-                  "x": 37.46666666666666,
-                  "y": 79.29562433297758,
-                  "width": 23.6,
-                  "height": 13.447171824973319,
-                  "rotation": 0,
-                  "rectanglelabels": [
-                      "World"
-                  ]
+                "x": 37.46666666666666,
+                "y": 79.29562433297758,
+                "width": 23.6,
+                "height": 13.447171824973319,
+                "rotation": 0,
+                "rectanglelabels": [
+                  "World"
+                ]
               },
               "id": "dYjaasY57i",
               "from_name": "tag",
@@ -126,14 +126,14 @@ export default {
               "image_rotation": 0,
               "origin": "prediction",
               "value": {
-                  "x": 87.46666666666666,
-                  "y": 79.29562433297758,
-                  "width": 23.6,
-                  "height": 13.447171824973319,
-                  "rotation": 0,
-                  "rectanglelabels": [
-                      "Hello"
-                  ]
+                "x": 87.46666666666666,
+                "y": 79.29562433297758,
+                "width": 23.6,
+                "height": 13.447171824973319,
+                "rotation": 0,
+                "rectanglelabels": [
+                  "Hello"
+                ]
               },
               "id": "dYjaasY56i",
               "from_name": "tag",
@@ -145,11 +145,10 @@ export default {
         id: 1,
         data: {
           image:
-            "https://htx-misc.s3.amazonaws.com/opensource/label-studio/examples/images/nick-owuor-astro-nic-visuals-wDifg5xc9Z4-unsplash.jpg",
+              "https://htx-misc.s3.amazonaws.com/opensource/label-studio/examples/images/nick-owuor-astro-nic-visuals-wDifg5xc9Z4-unsplash.jpg",
         },
       },
 
-      
 
       onLabelStudioLoad: function (LS) {
         var c = LS.annotationStore.addAnnotation({
@@ -158,9 +157,10 @@ export default {
         LS.annotationStore.selectAnnotation(c.id);
       },
 
-      onUpdateAnnotation: function(LS, annotation) {
+      onUpdateAnnotation: function (LS, annotation) {
         // retrive an annotation 
         console.log(annotation.serializeAnnotation())
+        this.$axios.post('/annotations/data/1', annotation.serializeAnnotation())
       }
     });
     console.log(this.labelStudio)

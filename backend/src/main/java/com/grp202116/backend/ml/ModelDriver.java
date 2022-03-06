@@ -41,29 +41,37 @@ import java.util.UUID;
 public class ModelDriver {
     ModelDO model;
 
-    public static final List<String> ToolTags = Arrays.asList(new String[]{"Labels", "Choices"});
+    // Object to store information extracted from config
+    ParsedConfig parsedConfig;
 
-    public ModelDriver(ModelDO model){
+    public static final List<String> ToolTags = Arrays.asList("Labels", "Choices");
+
+    public ModelDriver(ModelDO model) {
         this.model = model;
+        this.parsedConfig = new ParsedConfig();
     }
 
-    public ParsedConfig parseConfig(){
-        String config = "<View>" +
-                "        <Labels name=\"label\" toName=\"text\">\n" +
-                "          <Label value=\"Date\"></Label>\n" +
-                "          <Label value=\"Time\"></Label>\n" +
-                "          <Label value=\"Location\"></Label>\n" +
-                "        </Labels>\n" +
-                "        <Text name=\"text\" value=\"$text\"></Text>\n" +
-                "      </View>";
-
-
-        // Object to store information extracted from config
-        ParsedConfig parsedConfig = new ParsedConfig();
+    // Parse config with only one
+    public ParsedConfig parseConfig() {
+        String config = """
+                <View>
+                  <Text name="text" value="$text"/>
+                  <View style="box-shadow: 2px 2px 5px #999;
+                               padding: 20px; margin-top: 2em;
+                               border-radius: 5px;">
+                    <Header value="Choose text sentiment"/>
+                    <Choices name="sentiment" toName="text"
+                             choice="single" showInLine="true">
+                      <Choice value="Positive"/>
+                      <Choice value="Negative"/>
+                      <Choice value="Neutral"/>
+                    </Choices>
+                  </View>
+                </View>""";
 
         try {
 
-            // Create mew DocumentBuilder
+            // Create new DocumentBuilder
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -75,43 +83,49 @@ public class ModelDriver {
             doc.getDocumentElement().normalize();
 
             // Visit all child nodes rooted at <View>
-            NodeList childNodes = doc.getDocumentElement().getChildNodes();
-            for (int index = 0; index < childNodes.getLength(); index++) {
-                Node node = childNodes.item(index);
+            Node parentNode = doc.getDocumentElement();
 
-                // Filter TEXT_NODE
-                if(node.getNodeType() == Node.ELEMENT_NODE){
+            extractInformation(parentNode);
 
-                    // Find the tool tag
-                    if(ToolTags.contains(node.getNodeName())){
-                        Element element = (Element)node;
-                        parsedConfig.setFromName(element.getAttribute("name"));
-                        parsedConfig.setToName(element.getAttribute("toName"));
-                        parsedConfig.setType(node.getNodeName().toLowerCase());
-                    }
-                }
-
-            }
             System.out.println("from_name: " + parsedConfig.getFromName());
             System.out.println("to_name: " + parsedConfig.getToName());
             System.out.println("type: " + parsedConfig.getType());
 
 
-
-
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
 
         return parsedConfig;
     }
 
-    public void runModel(){
+    private void extractInformation(Node parentNode) {
+        NodeList childNodes = parentNode.getChildNodes();
+        for (int index = 0; index < childNodes.getLength(); index++) {
+            Node childNode = childNodes.item(index);
 
+            // Filter TEXT_NODE
+            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                // Find the tool tag
+                if (ToolTags.contains(childNode.getNodeName())) {
+                    Element element = (Element) childNode;
+                    parsedConfig.setFromName(element.getAttribute("name"));
+                    parsedConfig.setToName(element.getAttribute("toName"));
+                    parsedConfig.setType(childNode.getNodeName().toLowerCase());
+                }
+            }
+        }
+
+        if (parsedConfig.getFromName() == null) {
+            for (int index = 0; index < childNodes.getLength(); index++) {
+                Node childNode = childNodes.item(index);
+                extractInformation(childNode);
+            }
+        }
+    }
+
+    public void runModel() {
         ParsedConfig parsedConfig = parseConfig();
 
         // Define the preprocessing pipeline
@@ -134,11 +148,11 @@ public class ModelDriver {
 //                .optProgress(new ProgressBar()).build();
         Criteria<Image, Classifications> criteria = Criteria.builder()
                 .setTypes(Image.class, Classifications.class)
-                .optModelPath(Paths.get("C:/Users/Leon/Desktop/GRP/GRP202116/ml/models/resnet18"))
+                .optModelPath(Paths.get("ml/models/resnet18"))
                 .optOption("mapLocation", "true") // this model requires mapLocation for GPU
                 .optTranslator(translator)
+                .optEngine("PyTorch")
                 .optProgress(new ProgressBar()).build();
-
 
         // Get the model from the criteria
         ZooModel<Image, Classifications> zooModel = null;
@@ -152,7 +166,7 @@ public class ModelDriver {
         // Get the test sample
         Image img = null;
         try {
-            img = ImageFactory.getInstance().fromFile(Paths.get("C:/Users/Leon/Desktop/GRP/GRP202116/ml/resources/testing.jpg"));
+            img = ImageFactory.getInstance().fromFile(Paths.get("ml/resources/testing.jpg"));
             img.getWrappedImage();
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,32 +198,23 @@ public class ModelDriver {
                 String json = ow.writeValueAsString(resultItem);
 
                 System.out.println(json);
-            } catch (TranslateException e) {
-                e.printStackTrace();
-            } catch (JsonProcessingException e) {
+            } catch (TranslateException | JsonProcessingException e) {
                 e.printStackTrace();
             }
         }catch (NullPointerException e){
             e.printStackTrace();
         }
-
-
     }
-
-
-
-
-
 
 
     public void updatePredictions() {
         //
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ModelDO model = new ModelDO();
         ModelDriver modelDriver = new ModelDriver(model);
         modelDriver.runModel();
-        //modelDriver.parseConfig();
+        modelDriver.parseConfig();
     }
 }
