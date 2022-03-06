@@ -8,8 +8,14 @@ import com.grp202116.backend.pojo.DataDO;
 import com.grp202116.backend.pojo.PredictionDO;
 
 import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The class Statistics contains the basic information of the statistics
@@ -27,9 +33,14 @@ public class Statistics {
 
     BigInteger projectId;
     BigInteger datasNumber;
+    BigInteger labeledDatasNumber;
     BigInteger annotationsNumber;
     BigInteger predictionsNumber;
     Float completionPercentage;
+    Float averageAnnotations;
+    Float averagePredictions;
+    Float averageTextWordsNumber;
+    List<DataDO> datas;
     List<PredictionDO> predictions;
     List<AnnotationDO> annotations;
 
@@ -38,14 +49,35 @@ public class Statistics {
      * and initialize the basic data object
      * @param projectId the created project id
      */
-    public Statistics(BigInteger projectId){
+    public Statistics(BigInteger projectId) throws IOException {
         this.projectId = projectId;
         this.setDatasNumber(countDatas());
+        this.setLabeledDatasNumber(countLabeledDatasNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());
+        this.setDatas(getDatasFromDB());
         this.setAnnotations(getAnnotationsFromDB());
         this.setAnnotationsNumber(BigInteger.valueOf(getAnnotations().size()));
         this.setPredictions(getPredictionsFromDB());
         this.setPredictionsNumber(BigInteger.valueOf(getPredictions().size()));
+        this.setAverageAnnotations(countAverageAnnotations());
+        this.setAveragePredictions(countAveragePredictions());
+        this.setAverageTextWordsNumber(countAverageTextWordsNumber());
+    }
+
+    /**
+     * Set the Data objects list
+     * @param datas the Data objects list
+     */
+    public void setDatas(List<DataDO> datas) {
+        this.datas = datas;
+    }
+
+    /**
+     * Get the Data objects list
+     * @return the Data objects list
+     */
+    public List<DataDO> getDatasFromDB(){
+       return dataMapper.listByProjectId(this.projectId);
     }
 
     /**
@@ -62,6 +94,37 @@ public class Statistics {
      */
     public void setDatasNumber(BigInteger datasNumber) {
         this.datasNumber = datasNumber;
+    }
+
+    /**
+     * Set the number of labeled Data
+     * @param labeledDatasNumber the number of the labeled Data
+     */
+    public void setLabeledDatasNumber(BigInteger labeledDatasNumber) {
+        this.labeledDatasNumber = labeledDatasNumber;
+    }
+
+    /**
+     * Count the number of labeled Data
+     * @return the number of labeled Data
+     */
+    public BigInteger countLabeledDatasNumber(){
+
+        Set labeledData = new HashSet<>();
+        for (AnnotationDO annotationDO : annotations){
+            labeledData.add(annotationDO.getDataId());
+        }
+
+        return BigInteger.valueOf(labeledData.size());
+
+    }
+
+    /**
+     * Get the number of labeled Data
+     * @return the number of labeled Data
+     */
+    public BigInteger getLabeledDatasNumber() {
+        return labeledDatasNumber;
     }
 
     /**
@@ -98,48 +161,188 @@ public class Statistics {
 
     /**
      * Get the number of the predictions
-     * @return
+     * @return the number of the predictions
      */
     public BigInteger getPredictionsNumber() {
         return predictionsNumber;
     }
 
+    /**
+     * Set the number of the predictions
+     * @param predictionsNumber
+     */
     public void setPredictionsNumber(BigInteger predictionsNumber) {
         this.predictionsNumber = predictionsNumber;
     }
 
+    /**
+     * Get the percentage value completed in one project according to the
+     * data labeled and the number of all the data
+     * @return
+     */
     public Float getCompletionPercentage() {
         return completionPercentage;
     }
 
+    /**
+     * Set the completed percentage of the project
+     * @param completionPercentage the completed percentage
+     */
     public void setCompletionPercentage(Float completionPercentage) {
         this.completionPercentage = completionPercentage;
     }
 
+    /**
+     * Get the prediction data object list
+     * @return the predictions object list
+     */
     public List<PredictionDO> getPredictions() {
         return predictions;
     }
 
+    /**
+     * Set the prediction data object list
+     * @param predictions the prediction data object list
+     */
     public void setPredictions(List<PredictionDO> predictions) {
         this.predictions = predictions;
     }
 
+    /**
+     * Get the size of the data in the project according to the project id and read value from the DB
+     * @return the size of the data
+     */
     public BigInteger countDatas(){
-        List<DataDO> datas = dataMapper.listByProjectId(this.projectId);
         return BigInteger.valueOf(datas.size());
     }
 
+    /**
+     * Get the annotations object list from the DB and give the value to the Statistics list
+     * @return the annotations object list from the DB
+     */
     public List<AnnotationDO> getAnnotationsFromDB(){
-        List<AnnotationDO> annotations = annotationMapper.listByProjectId(this.projectId);
-        return annotations;
+        return annotationMapper.listByProjectId(this.projectId);
     }
 
+    /**
+     * Get the Prediction object list from the DB and give the value to the Statistics list
+     * @return the Prediction object list from the DB
+     */
     public List<PredictionDO> getPredictionsFromDB(){
-        List<PredictionDO> predictions = predictionMapper.listByProjectId(this.projectId);
-        return predictions;
+        return predictionMapper.listByProjectId(this.projectId);
     }
 
+    /**
+     * Get the percentage of the annotated data files in all data files for each project
+     * @return the percentage of the annotated data files in all data files for each project
+     */
     public float calculateCompletionPercentage(){
-        return 0;
+
+        return getLabeledDatasNumber().floatValue()/getDatasNumber().floatValue()*100;
+
+    }
+
+    /**
+     * Set the average number of the Annotations
+     * @param averageAnnotations the average number of the Annotations
+     */
+    public void setAverageAnnotations(Float averageAnnotations) {
+        this.averageAnnotations = averageAnnotations;
+    }
+
+    /**
+     * Get the average number of the Annotations
+     * @return the average number of the Annotations
+     */
+    public Float getAverageAnnotations() {
+        return averageAnnotations;
+    }
+
+    /**
+     * Count the average number of the Annotations
+     * @return the average number of the Annotations
+     */
+    public Float countAverageAnnotations(){
+        return getAnnotationsNumber().floatValue()/getDatasNumber().floatValue();
+    }
+
+    /**
+     * Set the average number of Predictions
+     * @param averagePredictions the average number of Predictions
+     */
+    public void setAveragePredictions(Float averagePredictions) {
+        this.averagePredictions = averagePredictions;
+    }
+
+    /**
+     * Get the average number of Predictions
+     * @return the average number of Predictions
+     */
+    public Float getAveragePredictions() {
+        return averagePredictions;
+    }
+
+    /**
+     * Count the average number of Predictions
+     * @return the average number of Predictions
+     */
+    public Float countAveragePredictions(){
+        return getPredictionsNumber().floatValue()/getDatasNumber().floatValue();
+    }
+
+    /**
+     * Get the average words number of the text type data
+     * @return average words number
+     */
+    public Float getAverageTextWordsNumber() {
+        return averageTextWordsNumber;
+    }
+
+    /**
+     * Set the average words number of the text type data
+     * @param averageTextWordsNumber he average words number of the text type data
+     */
+    public void setAverageTextWordsNumber(Float averageTextWordsNumber) {
+        this.averageTextWordsNumber = averageTextWordsNumber;
+    }
+
+    /**
+     * Count the text number of the data
+     * @param url the url link
+     * @return the text number of the data
+     * @throws IOException the file exist exception
+     */
+    public int countTextNumber(String url) throws IOException {
+
+        BufferedReader br = new BufferedReader(new FileReader(url));
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            String line = br.readLine();
+            if (line == null)
+                break;
+            sb.append(line);
+        }
+        br.close();
+        String content = sb.toString();
+        return content.replaceAll(" ", "" ).length();
+
+    }
+
+    /**
+     * Count and calculate the average words of the text data
+     * @return the average words of the text data
+     * @throws IOException the file if exist exception
+     */
+    public Float countAverageTextWordsNumber() throws IOException {
+        int textDataType = 0;
+        int wordSum = 0;
+        for(DataDO dataDO : datas){
+            if (dataDO.getType().equalsIgnoreCase("text")){
+                textDataType++;
+                wordSum = wordSum + countTextNumber(dataDO.getUrl());
+            }
+        }
+        return (float)wordSum/(float) textDataType;
     }
 }
+

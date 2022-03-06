@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.math.BigInteger;
 
 /**
@@ -19,7 +20,7 @@ public class StatisticsController {
      * @return return the Statistics of corresponding projectId
      */
     @GetMapping("/statistics/{projectId}")
-    public Statistics getStatistics(@PathVariable BigInteger projectId){
+    public Statistics getStatistics(@PathVariable BigInteger projectId) throws IOException {
         Statistics statistics = new Statistics(projectId);
         return statistics;
     }
