@@ -6,25 +6,9 @@ package com.grp202116.backend.pojo;
  * controls the value, fromName and toName value by getter and setter method
  */
 public class LabelDO extends DataDistinguishableDO{
-    private String value;
     private String fromName;
     private String toName;
-
-    /**
-     * Get the value information of the label
-     * @return the value of the label
-     */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * Set the value information of the label
-     * @param value the newly set value
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+    private String result;
 
     /**
      * Get the fromName information of the label
@@ -56,5 +40,13 @@ public class LabelDO extends DataDistinguishableDO{
      */
     public void setToName(String toName) {
         this.toName = toName;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

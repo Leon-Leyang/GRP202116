@@ -1,7 +1,5 @@
 /*
-SQLyog Job Agent Version 10.0 Beta1 Copyright(c) Webyog Inc. All Rights Reserved.
-
-
+SQLyog Ultimate v10.00 Beta1
 MySQL - 8.0.27 : Database - grp2021
 *********************************************************************
 */
@@ -27,12 +25,16 @@ CREATE TABLE `annotation` (
   `project_id` int DEFAULT NULL,
   `data_id` int DEFAULT NULL,
   `type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `value` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `result` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `create_time` date DEFAULT NULL,
   `update_time` date DEFAULT NULL,
   `from_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `to_name` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`annotation_id`)
+  PRIMARY KEY (`annotation_id`),
+  KEY `project_id` (`project_id`),
+  KEY `data_id` (`data_id`),
+  CONSTRAINT `annotation_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
+  CONSTRAINT `annotation_ibfk_2` FOREIGN KEY (`data_id`) REFERENCES `data` (`data_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `annotation` */
@@ -48,7 +50,9 @@ CREATE TABLE `data` (
   `update_time` date DEFAULT NULL,
   `createTime` date DEFAULT NULL,
   `project_id` int DEFAULT NULL,
-  PRIMARY KEY (`data_id`)
+  PRIMARY KEY (`data_id`),
+  KEY `project_id` (`project_id`),
+  CONSTRAINT `data_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `data` */
@@ -61,7 +65,9 @@ CREATE TABLE `labelinterface` (
   `code` varchar(50) NOT NULL,
   `project_id` int DEFAULT NULL,
   `create_time` date DEFAULT NULL,
-  PRIMARY KEY (`code`)
+  PRIMARY KEY (`code`),
+  KEY `project_id` (`project_id`),
+  CONSTRAINT `labelinterface_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `labelinterface` */
@@ -76,7 +82,9 @@ CREATE TABLE `model` (
   `description` varchar(100) DEFAULT NULL,
   `project_id` int DEFAULT NULL,
   `create_time` date DEFAULT NULL,
-  PRIMARY KEY (`url`)
+  PRIMARY KEY (`url`),
+  KEY `project_id` (`project_id`),
+  CONSTRAINT `model_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `model` */
@@ -87,7 +95,7 @@ DROP TABLE IF EXISTS `prediction`;
 
 CREATE TABLE `prediction` (
   `prediction_id` int NOT NULL,
-  `value` varchar(100) DEFAULT NULL,
+  `result` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `score` double DEFAULT NULL,
   `from_name` varchar(100) DEFAULT NULL,
   `to_name` varchar(100) DEFAULT NULL,
@@ -96,7 +104,11 @@ CREATE TABLE `prediction` (
   `update_time` date DEFAULT NULL,
   `create_time` date DEFAULT NULL,
   `project_id` int DEFAULT NULL,
-  PRIMARY KEY (`prediction_id`)
+  PRIMARY KEY (`prediction_id`),
+  KEY `project_id` (`project_id`),
+  KEY `data_id` (`data_id`),
+  CONSTRAINT `prediction_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
+  CONSTRAINT `prediction_ibfk_2` FOREIGN KEY (`data_id`) REFERENCES `data` (`data_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `prediction` */
@@ -106,16 +118,18 @@ CREATE TABLE `prediction` (
 DROP TABLE IF EXISTS `project`;
 
 CREATE TABLE `project` (
-  `project_id` int NOT NULL,
+  `project_id` int NOT NULL AUTO_INCREMENT,
   `create_time` date DEFAULT NULL,
   `update_time` date DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`project_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `project` */
+
+insert  into `project`(`project_id`,`create_time`,`update_time`,`type`,`name`,`description`) values (1,'2022-02-15','2022-02-23',NULL,'34',NULL),(3,'2022-02-23','2022-02-23',NULL,'test','this is a test'),(7,'2022-02-26','2022-02-26',NULL,'seven id','sf');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -160,6 +160,8 @@ export default {
       onUpdateAnnotation: function (LS, annotation) {
         // retrive an annotation 
         console.log(annotation.serializeAnnotation())
+        console.log(annotation._initialAnnotationObj)
+        console.log(JSON.stringify(annotation.serializeAnnotation()))
         this.$axios.post('/annotations/data/1', annotation.serializeAnnotation())
       }
     });

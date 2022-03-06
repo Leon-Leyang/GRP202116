@@ -9,7 +9,7 @@
         <result column="project_id" property="projectId"/>
         <result column="data_id" property="dataId"/>
         <result column="type" property="type"/>
-        <result column="value" property="value"/>
+        <result column="result" property="result"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="from_name" property="fromName"/>
@@ -18,10 +18,10 @@
 
     <insert id="insertAll" parameterType="java.util.List">
         insert into annotation
-        (annotation_id,project_id,data_id,type,value,create_time,update_time,from_name,to_name)
+        (annotation_id,project_id,data_id,type,result,create_time,update_time,from_name,to_name)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.annotationId},#{item.projectId},#{item.dataId},#{item.type},#{item.value},
+            (#{item.annotationId},#{item.projectId},#{item.dataId},#{item.type},#{item.result},
             #{item.createTime},#{item.updateTime},#{item.fromName},#{item.toName})
         </foreach>
     </insert>
