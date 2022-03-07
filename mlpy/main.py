@@ -1,4 +1,3 @@
-import xml.dom.minidom
 from xml.dom.minidom import parseString, Node, Element
 
 class ModelDriver():
@@ -7,8 +6,24 @@ class ModelDriver():
     def __init__(self):
         pass
 
-
+    # Parse the config of a project to get information(i.e. fromName, toName and type)
     def parseConfig(self):
+        configs = """
+                        <View>
+                          <Text name="text" value="$text"/>
+                          <View style="box-shadow: 2px 2px 5px #999;
+                                       padding: 20px; margin-top: 2em;
+                                       border-radius: 5px;">
+                            <Header value="Choose text sentiment"/>
+                            <Choices name="sentiment" toName="text"
+                                     choice="single" showInLine="true">
+                              <Choice value="Positive"/>
+                              <Choice value="Negative"/>
+                              <Choice value="Neutral"/>
+                            </Choices>
+                          </View>
+                        </View>"""
+
         # Denotes the finish of parsing config
         parseDone = False
         fromName = ''
@@ -38,25 +53,10 @@ class ModelDriver():
                 parseDone = False
 
 
-        configs = """
-                <View>
-                  <Text name="text" value="$text"/>
-                  <View style="box-shadow: 2px 2px 5px #999;
-                               padding: 20px; margin-top: 2em;
-                               border-radius: 5px;">
-                    <Header value="Choose text sentiment"/>
-                    <Choices name="sentiment" toName="text"
-                             choice="single" showInLine="true">
-                      <Choice value="Positive"/>
-                      <Choice value="Negative"/>
-                      <Choice value="Neutral"/>
-                    </Choices>
-                  </View>
-                </View>"""
-
-
+        # Construct dom tree from config
         DOMTree = parseString(configs)
 
+        # Get the root element of the dom tree
         rootElement = DOMTree.documentElement
 
         extractInfo(rootElement)
