@@ -47,7 +47,7 @@
 
 
 <script>
-import Table from '../components/ProjectManage/DataTable.vue';
+import Table from '../components/ProjectManage/DataTable';
 import Statistics from '@/views/PerProject/Statistics'
 import ML from '@/views/PerProject/ML'
 import Setting from '@/views/PerProject/Setting'
