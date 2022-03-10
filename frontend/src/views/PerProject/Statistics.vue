@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-tabs vertical>
+    <v-tabs vertical  class="bar">
       <v-tab>
         Data
       </v-tab>
@@ -10,7 +10,6 @@
       <v-tab>
         Prediction
       </v-tab>
-
       <v-tab-item class="content">
         <v-card flat>
           <Data></Data>
@@ -48,6 +47,8 @@ export default {
   .content{
     width:80%;
     margin: 0 auto;
-    
+  }
+  .bar{
+    padding-top: 20px;
   }
 </style>
