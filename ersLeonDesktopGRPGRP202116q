@@ -1,0 +1,228 @@
+[33mcommit 4c16bfabf4a62d94314d9780e5cb04f5ed0b1985[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Merge: e99c884 7d8ab19
+Author: Leon-Leyang <scylh6@nottingham.edu.cn>
+Date:   Mon Feb 28 12:01:38 2022 +0800
+
+    Merge branch 'main' of https://github.com/Leon-Leyang/GRP202116
+
+[33mcommit e99c88459c9bd578a014a822f8384c71e1c71a5d[m
+Author: Leon-Leyang <scylh6@nottingham.edu.cn>
+Date:   Mon Feb 28 11:59:01 2022 +0800
+
+    Get the prediction with the highest probability
+
+[33mcommit 7d8ab197c05e31a9f4fc3e01451688f265b7baa9[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Thu Feb 24 13:09:24 2022 +0800
+
+    fix delete part
+
+[33mcommit 86b83956bc9ef58303eb1d6d80515e60d7f17e02[m
+Author: Leon-Leyang <scylh6@nottingham.edu.cn>
+Date:   Thu Feb 24 10:38:46 2022 +0800
+
+    Add preexisting predictions to the labeling page
+
+[33mcommit bbcaa978e5b8beb28e9a4278f50d2c342faf22a4[m
+Author: Leon-Leyang <scylh6@nottingham.edu.cn>
+Date:   Thu Feb 24 10:01:51 2022 +0800
+
+    Add preexisting annotations to the labeling page
+
+[33mcommit dc084aa8846de1e428b665d18084d95a11e43ea0[m
+Merge: 8f25f13 732adc8
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Wed Feb 23 16:20:18 2022 +0800
+
+    Merge branch 'main' of https://github.com/Leon-Leyang/GRP202116
+
+[33mcommit 8f25f137acd4049756946fcbd0035f5a94af061f[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Wed Feb 23 16:19:26 2022 +0800
+
+    Project CRUD updated
+
+[33mcommit 732adc84da0afb112b210be86b508796dff852e1[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Wed Feb 23 14:44:39 2022 +0800
+
+    add label studio button
+
+[33mcommit 364659ab0e9e5349153ab32e049e05b0cc0f7f1d[m
+Merge: 1da9a0c 792afa2
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Wed Feb 23 14:20:59 2022 +0800
+
+    Merge branch 'main' of https://github.com/Leon-Leyang/GRP202116
+
+[33mcommit 1da9a0c9fbd337803d0c4511c17c6f581714a2d4[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Wed Feb 23 14:12:40 2022 +0800
+
+    change variable name
+
+[33mcommit 792afa289562f31ab7ba3777eab8ba19c7308b51[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Tue Feb 22 21:26:51 2022 +0800
+
+    Edit project updated.
+
+[33mcommit 3e55f344bf7adcb6c48f62b8953454c7f627dd1b[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Tue Feb 22 14:45:03 2022 +0800
+
+    fit be name
+
+[33mcommit f5e087372db7ea81d56155cdcf9db9b0a4438168[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Fri Feb 18 14:47:40 2022 +0800
+
+    CORS fixed
+
+[33mcommit b9cb8977b5a0ab0b58c5a97e8ab5fac7926a76fb[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Fri Feb 18 14:00:34 2022 +0800
+
+    Proxy problem spoted
+
+[33mcommit f9d1f2b68ef631c98ba0b07000b4f30314b1f192[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Thu Feb 17 15:24:05 2022 +0800
+
+    change http to axios
+
+[33mcommit 0aa9d45256d2c7ed45d3595d0207b2a6ceaaf65a[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Tue Feb 15 14:28:01 2022 +0800
+
+    basically set up PerProject struction
+
+[33mcommit cebc76bada1c908a5ae0d9f3d9d04837fc9ff1a1[m
+Merge: 718c470 aa9d36f
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Tue Feb 15 13:33:59 2022 +0800
+
+    temp frontend
+
+[33mcommit aa9d36f85a6236e48fa2058e59c68fdb803643fa[m[33m ([m[1;31morigin/LinjingSUN[m[33m)[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Tue Feb 15 13:01:58 2022 +0800
+
+    add statistics
+
+[33mcommit 718c4706975f769f3cfa81137434d2790ac2d45c[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Mon Feb 14 20:26:51 2022 +0800
+
+    Fixed file structure
+
+[33mcommit f4dfad581c1cff58f24993d82ee5de97f6ed47b2[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Mon Feb 14 19:09:35 2022 +0800
+
+    new
+
+[33mcommit 0bbf51b4cffc9d1adbb224fbf447ce85c28f252b[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Sun Feb 13 21:01:04 2022 +0800
+
+    basic function finished
+
+[33mcommit 9f99ef8d3c1cc9f7bd416154af35481c35a4f2b0[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Fri Jan 28 18:01:33 2022 +0800
+
+    The machine learning backend is updated.
+
+[33mcommit 46f022e9eb326eb41672d741f341f8ab3c6eed3a[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Fri Jan 21 19:51:52 2022 +0800
+
+    Fixed CORS problem
+
+[33mcommit bb0a647162a95cf6c92d10d6cb26a1ce68a23aa7[m
+Merge: b0bb1c3 b2abc50
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Wed Jan 19 16:23:20 2022 +0800
+
+    Merge branch 'dev'
+
+[33mcommit b0bb1c320af5d274f2b85a1df57415d1719fb74b[m
+Author: YJL <scyyl17@nottingham.edu.cn>
+Date:   Sun Jan 16 17:39:31 2022 +0800
+
+    place the previous vue project to vue1 folder in frontend folder, and add another vue project in vue2 folder to frontend folder.
+
+[33mcommit b2abc5029bcb886a5831a8e1c576a106c0c9dc77[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Sat Jan 15 11:08:46 2022 +0800
+
+    Mapper files updated.
+
+[33mcommit f079267e6d1625ddb16744238db08c64090723f1[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Fri Jan 14 16:22:59 2022 +0800
+
+    Added sql data source
+
+[33mcommit 7ed5a9c9b171eef9c6424fe748792a13f6fbf395[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Tue Jan 11 08:49:29 2022 +0800
+
+    add frontend part
+
+[33mcommit f6859dcd32669f9f5e385c4bf581856f37e3ebe9[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Mon Dec 6 10:40:32 2021 +0800
+
+    Frontend: add create operation
+
+[33mcommit 3524fd5da6b9a296b53e7c30fff9a2b35da4e9bb[m
+Author: Leon-Leyang <82098977+Leon-Leyang@users.noreply.github.com>
+Date:   Sat Dec 4 21:07:59 2021 +0800
+
+    Modify statistics.
+
+[33mcommit 3c68c9ed166aaa6958a1c19292b8ef958f074a73[m
+Author: scyyc7 <scyyc7@nottingham.edu.cn>
+Date:   Sat Dec 4 20:42:53 2021 +0800
+
+    Modify statistics
+
+[33mcommit d0669b10008d40031498de791d2678f808a71283[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Sat Dec 4 20:10:22 2021 +0800
+
+    recreate frontend
+    
+    Change Vue3 to Vue2 because the current version of Vuetify does not support Vue 3.
+
+[33mcommit 473779b96b103c9dfb822d5390432907ee5964da[m
+Author: LinjingSUN <scyls1@nottingham.edu.cn>
+Date:   Sat Dec 4 19:50:48 2021 +0800
+
+    Create frontend part
+
+[33mcommit d66cb7ff25d4ff3c40d3cb19d1a2373fae3e70f7[m
+Author: Leon-Leyang <82098977+Leon-Leyang@users.noreply.github.com>
+Date:   Thu Dec 2 13:45:30 2021 +0800
+
+    Delete code concerning project color.
+
+[33mcommit 26615213e601210c296cd4768859880350a7085f[m
+Author: Leon-Leyang <82098977+Leon-Leyang@users.noreply.github.com>
+Date:   Mon Nov 29 13:35:19 2021 +0800
+
+    Delete code concerning instruction.
+
+[33mcommit 322945ecdfca381e82f8772e9567569afc9fa1f3[m
+Author: Leon-Leyang <82098977+Leon-Leyang@users.noreply.github.com>
+Date:   Mon Nov 29 13:16:20 2021 +0800
+
+    Write the draft of backend code.
+
+[33mcommit 7c50eab236f49c9243f116728642fafc5aaddbe8[m
+Author: Leon-Leyang <82098977+Leon-Leyang@users.noreply.github.com>
+Date:   Tue Sep 28 17:33:49 2021 +0800
+
+    Create README.md

@@ -1,0 +1,28 @@
+Semantic Segmentation:
+
+"""<View>
+	<Image name="image" value="$image" zoom="true"/>
+	<BrushLabels name="label" toName="image">
+                	<Label value="Airplane" background="rgba(255, 0, 0, 0.7)"/>	
+		<Label value="Car" background="rgba(0, 0, 255, 0.7)"/>
+	</BrushLabels>
+</View>"""
+
+-----------------------------------------------------------------------------------------------
+
+Text Classification:
+
+"""<View>
+	<Text name="text" value="$text"/>
+	<View style="box-shadow: 2px 2px 5px #999;
+		     padding: 20px; margin-top: 2em;
+                                     border-radius: 5px;">
+		<Header value="Choose text sentiment"/>
+		<Choices name="sentiment" toName="text"
+                                               choice="single" showInLine="true">
+			<Choice value="Positive"/>
+			<Choice value="Negative"/>
+			<Choice value="Neutral"/>
+		</Choices>	
+	</View>
+</View>"""
