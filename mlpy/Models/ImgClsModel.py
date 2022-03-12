@@ -1,12 +1,8 @@
 from PIL import Image
-from label_studio_converter import brush
 
 import uuid
 import torch
 import torchvision.transforms as tf
-import numpy as np
-
-from Models.Model import Model
 
 from Models.Model import Model
 
