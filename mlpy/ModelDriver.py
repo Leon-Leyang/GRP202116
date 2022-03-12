@@ -51,7 +51,8 @@ class ModelDriver():
 
 
     @staticmethod
-    def runModel(type, datas):
+    # Run model on a single data and update its predictions
+    def runModelOnData(type, data):
         # TODO: Get configs from database
         configs = """<View>
                                 <Image name="image" value="$image" zoom="true"/>
@@ -102,11 +103,21 @@ class ModelDriver():
         else:
             pass
 
-        for data in datas:
-            predictionItem = model.predict(data)
-            predictions.append(predictionItem)
+        predictionItem = model.predict(data)
+        # TODO: Merge predictionItems with the same model version together
+        predictions.append(predictionItem)
 
         print(predictions)
 
+        # TODO: Save new predictions in database
+
+
+    @staticmethod
+    # Run model on a list of data
+    def runModelOnDatas(type, datas):
+        for data in datas:
+            ModelDriver.runModelOnData(type, data)
+
+
 if __name__ == '__main__':
-    ModelDriver.runModel('Semantic Segmentation Mask', ['./puppy.webp'])
+    ModelDriver.runModelOnData('Semantic Segmentation Mask', './puppy.webp')
