@@ -8,11 +8,12 @@ import numpy as np
 
 from Models.Model import Model
 
+# Model for semantic segmentation task with mask
 class SemSegMaskModel(Model):
-    def __init__(self, modelPath, modelVersion, fromName, toName, type, labels):
-        super().__init__(modelPath, modelVersion, fromName, toName, type)
+    def __init__(self, modelPath, modelVersion, fromName, toName, toolType, labels):
+        super().__init__(modelPath, modelVersion, fromName, toName, toolType)
 
-        # Map to store class index with its name
+        # List to store class index with its name
         self.labels = labels
 
         # Preprocessing operations
