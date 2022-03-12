@@ -9,11 +9,11 @@ import numpy as np
 from Models.Model import Model
 
 class SemSegMaskModel(Model):
-    def __init__(self, modelPath, modelVersion, fromName, toName, type, index2nameMap):
+    def __init__(self, modelPath, modelVersion, fromName, toName, type, labels):
         super().__init__(modelPath, modelVersion, fromName, toName, type)
 
         # Map to store class index with its name
-        self.index2nameMap = index2nameMap
+        self.labels = labels
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -41,7 +41,7 @@ class SemSegMaskModel(Model):
 
             value = {}
             value['format'] = 'rle'
-            value['brushlabels'] = [self.index2nameMap[classIndex]]
+            value['brushlabels'] = [self.labels[classIndex]]
             value['rle'] = rle
 
             resultItem = {}
@@ -62,32 +62,10 @@ if __name__ == '__main__':
     fromName = 'tag'
     toName = 'image'
     type = 'brushlabels'
-    index2nameMap = {
-        0: 'Background',
-        1: 'Aeroplane',
-        2: 'Bicycle',
-        3: 'Bird',
-        4: 'Boat',
-        5: 'Bottle',
-        6: 'Bus',
-        7: 'Car',
-        8: 'Cat',
-        9: 'Chair',
-        10: 'Cow',
-        11: 'Dining table',
-        12: 'Dog',
-        13: 'Horse',
-        14: 'Motorbike',
-        15: 'Person',
-        16: 'Potted plant',
-        17: 'Sheep',
-        18: 'Sofa',
-        19: 'Train',
-        20: 'Tv/monitor'
-    }
+    labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow', 'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train', 'Tv/monitor']
     imgPath = '../puppy.webp'
 
 
-    semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, fromName, toName, type, index2nameMap)
+    semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, fromName, toName, type, labels)
     predictionItem = semSegMaskModel.predict(imgPath)
     print(predictionItem)

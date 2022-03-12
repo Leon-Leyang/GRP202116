@@ -52,7 +52,7 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-    def runModelOnData(type, data):
+    def runModelOnData(projectType, data):
         # TODO: Get configs from database
         configs = """<View>
                                 <Image name="image" value="$image" zoom="true"/>
@@ -73,33 +73,11 @@ class ModelDriver():
 
         fromName, toName, toolType = ModelDriver.parseConfig(configs)
 
-        if(type == 'Semantic Segmentation Mask'):
-            # TODO: Get index2nameMap from database
-            index2nameMap = {
-                0: 'Background',
-                1: 'Aeroplane',
-                2: 'Bicycle',
-                3: 'Bird',
-                4: 'Boat',
-                5: 'Bottle',
-                6: 'Bus',
-                7: 'Car',
-                8: 'Cat',
-                9: 'Chair',
-                10: 'Cow',
-                11: 'Dining table',
-                12: 'Dog',
-                13: 'Horse',
-                14: 'Motorbike',
-                15: 'Person',
-                16: 'Potted plant',
-                17: 'Sheep',
-                18: 'Sofa',
-                19: 'Train',
-                20: 'Tv/monitor'
-            }
+        if(projectType == 'Semantic Segmentation Mask'):
+            # TODO: Get labels from database
+            labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow', 'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train', 'Tv/monitor']
 
-            model = SemSegMaskModel(modelPath, modelVersion, fromName, toName, type, index2nameMap)
+            model = SemSegMaskModel(modelPath, modelVersion, fromName, toName, toolType, labels)
         else:
             pass
 
@@ -114,9 +92,9 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a list of data
-    def runModelOnDatas(type, datas):
+    def runModelOnDatas(projectType, datas):
         for data in datas:
-            ModelDriver.runModelOnData(type, data)
+            ModelDriver.runModelOnData(projectType, data)
 
 
 if __name__ == '__main__':

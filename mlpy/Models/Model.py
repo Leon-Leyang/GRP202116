@@ -5,10 +5,11 @@ class Model():
         # Load the model from the file
         self.model = torch.load(modelPath)
 
-        # Transfer the model to GPU if available
+        # Flash the model to GPU if available
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model = self.model.to(self.device)
 
+        # Set the model to evaluation mode
         self.model.eval()
 
         self.modelVersion = modelVersion
