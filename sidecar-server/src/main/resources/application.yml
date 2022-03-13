@@ -1,0 +1,37 @@
+server:
+  port: 7901
+
+spring:
+  application:
+    name: sidecar-server
+  profiles:
+    active: "dev"
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+sidecar:
+  port: 6000
+  health-uri: http://localhost:${sidecar.port}/health
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7900/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: localhost:${spring.application.name}:${server.port}
+    status-page-url: http://localhost:${server.port}/
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+
+ribbon:
+  ConnectTimeout: 5000
+  ReadTimeout: 5000
