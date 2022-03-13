@@ -10,7 +10,7 @@ class ModelDriver():
 
     @staticmethod
     # Parse the config of a project to get information(i.e. fromName, toName and type)
-    def parseConfig(configs):
+    def parse_config(configs):
         # Denotes the finish of parsing config
         parseDone = False
         fromName = ''
@@ -32,8 +32,8 @@ class ModelDriver():
                         parseDone = True
                         break
 
-            if(parseDone == False):
-                if(len(childNodes) != 0):
+            if (parseDone == False):
+                if (len(childNodes) != 0):
                     for childNode in childNodes:
                         extractInfo(childNode)
             else:
@@ -51,49 +51,44 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-    def runModelOnData(projectType, data):
-        # TODO: Get configs from database
-        configs = """<View>
-                                <Image name="image" value="$image" zoom="true"/>
-                                <BrushLabels name="tag" toName="image">
-                                    <Label value="Airplane" background="rgba(255, 0, 0, 0.7)"/>
-                                    <Label value="Car" background="rgba(0, 0, 255, 0.7)"/>
-                                </BrushLabels>
-                            </View>"""
+    def run_model_on_data(project_type, data, configs, predictions, model_path, model_version, labels):
 
-        # TODO: Get pre-existing predictions from database
-        predictions = []
+        from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
-        # TODO: Get modelVersion from database
-        modelPath = '../ml/models/fcn/fcn.pth'
-
-        # TODO: Get modelVersion from database
-        modelVersion = 'undefined'
-
-        fromName, toName, toolType = ModelDriver.parseConfig(configs)
-
-        if(projectType == 'Semantic Segmentation Mask'):
-            # TODO: Get labels from database
-            labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow', 'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train', 'Tv/monitor']
-
-            model = SemSegMaskModel(modelPath, modelVersion, fromName, toName, toolType, labels)
+        if project_type == 'Semantic Segmentation Mask':
+            model = SemSegMaskModel(model_path, model_version, from_name, to_name, tool_type, labels)
         else:
+            print("model unassigned")
             pass
 
-        predictionItem = model.predict(data)
+        prediction_item = model.predict(data)
         # TODO: Merge predictionItems with the same model version together
-        predictions.append(predictionItem)
+        predictions.append(prediction_item)
 
         print(predictions)
-
-        # TODO: Save new predictions in database
+        return predictions
 
     @staticmethod
     # Run model on a list of data
-    def runModelOnDatas(projectType, datas):
-        for data in datas:
-            ModelDriver.runModelOnData(projectType, data)
+    def run_model_on_data_set(project_type, data_set, configs, predictions, model_path, model_version, labels):
+        for data in data_set:
+            ModelDriver.run_model_on_data(project_type, data, configs, predictions, model_path, model_version, labels)
 
 
 if __name__ == '__main__':
-    ModelDriver.runModelOnData('Semantic Segmentation Mask', './puppy.webp')
+    configs = """<View>
+                                    <Image name="image" value="$image" zoom="true"/>
+                                    <BrushLabels name="tag" toName="image">
+                                        <Label value="Airplane" background="rgba(255, 0, 0, 0.7)"/>
+                                        <Label value="Car" background="rgba(0, 0, 255, 0.7)"/>
+                                    </BrushLabels>
+                                </View>"""
+
+    predictions = []
+    model_path = '../ml/models/fcn/fcn.pth'
+    model_version = 'undefined'
+    labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow',
+              'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train',
+              'Tv/monitor']
+    ModelDriver.run_model_on_data('Semantic Segmentation Mask', './puppy.webp', configs, predictions, model_path,
+                                  model_version, labels)
