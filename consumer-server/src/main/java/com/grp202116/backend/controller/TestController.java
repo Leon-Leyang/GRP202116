@@ -48,16 +48,15 @@ public class TestController {
                 "                           </BrushLabels>" +
                 "                       </View>";
 
-        String labels = "'Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow'," +
-                "'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train'," +
-                " 'Tv/monitor'";
+        String labels = "Background, Aeroplane, Bicycle, Bird, Boat, Bottle, Bus, Car, Cat, Chair, Cow," +
+                "Dining table, Dog, Horse, Motorbike, Person, Potted plant, Sheep, Sofa, Train," +
+                " Tv/monitor";
 
 
         JSONObject param = new JSONObject();
         param.put("project_type", "Semantic Segmentation Mask");
         param.put("data", "./puppy.webp");
         param.put("configs", configs);
-        param.put("predictions", "");
         param.put("model_path", "../ml/models/fcn/fcn.pth");
         param.put("model_version", "undefined");
         param.put("labels", labels);

@@ -51,7 +51,7 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-    def run_model_on_data(project_type, data, configs, predictions, model_path, model_version, labels):
+    def run_model_on_data(project_type, data, configs, model_path, model_version, labels):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
@@ -63,16 +63,15 @@ class ModelDriver():
 
         prediction_item = model.predict(data)
         # TODO: Merge predictionItems with the same model version together
-        predictions.append(prediction_item)
 
-        print(predictions)
-        return predictions
+        print(prediction_item)
+        return prediction_item
 
     @staticmethod
     # Run model on a list of data
-    def run_model_on_data_set(project_type, data_set, configs, predictions, model_path, model_version, labels):
+    def run_model_on_data_set(project_type, data_set, configs, model_path, model_version, labels):
         for data in data_set:
-            ModelDriver.run_model_on_data(project_type, data, configs, predictions, model_path, model_version, labels)
+            ModelDriver.run_model_on_data(project_type, data, configs, model_path, model_version, labels)
 
 
 if __name__ == '__main__':
@@ -84,11 +83,11 @@ if __name__ == '__main__':
                                     </BrushLabels>
                                 </View>"""
 
-    predictions = []
+    predictions = []  # this is not necessary in here
     model_path = '../ml/models/fcn/fcn.pth'
     model_version = 'undefined'
     labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow',
               'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train',
               'Tv/monitor']
-    ModelDriver.run_model_on_data('Semantic Segmentation Mask', './puppy.webp', configs, predictions, model_path,
+    ModelDriver.run_model_on_data('Semantic Segmentation Mask', './puppy.webp', configs, model_path,
                                   model_version, labels)

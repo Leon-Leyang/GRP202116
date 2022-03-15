@@ -21,7 +21,6 @@ public class StatisticsController {
      */
     @GetMapping("/statistics/{projectId}")
     public Statistics getStatistics(@PathVariable BigInteger projectId) throws IOException {
-        Statistics statistics = new Statistics(projectId);
-        return statistics;
+        return new Statistics(projectId);
     }
 }

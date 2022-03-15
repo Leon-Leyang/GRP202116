@@ -26,7 +26,7 @@ public class AnnotationController {
      * @param dataId the dataId fetched from the mapper
      * @return return the Annotations of corresponding dataId
      */
-    @GetMapping("/annotations/data/{dataId}")
+    @GetMapping("/annotation/data/{dataId}")
     public List<AnnotationDO> listDataAnnotations(@PathVariable BigInteger dataId){
         return annotationMapper.listByDataId(dataId);
     }
@@ -36,7 +36,7 @@ public class AnnotationController {
      * @param projectId the projectId fetched from the mapper
      * @return return the Annotations of corresponding projectId
      */
-    @GetMapping("/annotations/project/{projectId}")
+    @GetMapping("/annotation/project/{projectId}")
     public List<AnnotationDO> listProjectAnnotations(@PathVariable BigInteger projectId){
         return annotationMapper.listByProjectId(projectId);
     }
@@ -47,7 +47,7 @@ public class AnnotationController {
      * @param dataId the dataId fetched from the mapper
      * @param annotations the newly set Annotations
      */
-    @PutMapping("/annotations/data/{dataId}")
+    @PutMapping("/annotation/data/{dataId}")
     public void updateDataAnnotations(@PathVariable BigInteger dataId, @RequestBody List<AnnotationDO> annotations){
         System.out.println(dataId);
         annotationMapper.deleteByDataId(dataId);
@@ -58,7 +58,7 @@ public class AnnotationController {
      * Delete the Annotations in certain data
      * @param dataId the dataId fetched from the mapper
      */
-    @DeleteMapping("/annotations/data/{dataId}")
+    @DeleteMapping("/annotation/data/{dataId}")
     public void deleteDataAnnotations(@PathVariable BigInteger dataId){
         annotationMapper.deleteByDataId(dataId);
     }
@@ -67,7 +67,7 @@ public class AnnotationController {
      * Delete the Annotations in certain project
      * @param projectId the projectId fetched from the mapper
      */
-    @DeleteMapping("/annotations/project/{projectId}")
+    @DeleteMapping("/annotation/project/{projectId}")
     public void deleteProjectAnnotations(@PathVariable BigInteger projectId) {
         annotationMapper.deleteByProjectId(projectId);
     }

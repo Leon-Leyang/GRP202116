@@ -25,7 +25,7 @@ public class PredictionController {
      * @param dataId the dataId fetched from the mapper
      * @return return the Prediction of corresponding dataId
      */
-    @GetMapping("/predictions/data/{dataId}")
+    @GetMapping("/prediction/data/{dataId}")
     public List<PredictionDO> listDataPredictions(@PathVariable BigInteger dataId){
         return predictionMapper.listByDataId(dataId);
     }
@@ -35,7 +35,7 @@ public class PredictionController {
      * @param projectId the projectId fetched from the mapper
      * @return return the Prediction of corresponding projectId
      */
-    @GetMapping("/predictions/project/{projectId}")
+    @GetMapping("/prediction/project/{projectId}")
     public List<PredictionDO> listProjectPredictions(@PathVariable BigInteger projectId){
         return predictionMapper.listByProjectId(projectId);
     }
@@ -44,7 +44,7 @@ public class PredictionController {
      * Delete all the Prediction in the certain project
      * @param projectId the projectId fetched from the mapper
      */
-    @DeleteMapping("predictions/project/{projectId}")
+    @DeleteMapping("prediction/project/{projectId}")
     public void deleteProjectPredictions(@PathVariable BigInteger projectId){
         predictionMapper.deleteByProjectId(projectId);
     }

@@ -17,6 +17,6 @@ public class HttpUtils {
 
 
     public static HttpEntity<String> parseJsonToFlask(String param) {
-        return new HttpEntity<String>(param, headers);
+        return new HttpEntity<>(param, headers);
     }
 }
