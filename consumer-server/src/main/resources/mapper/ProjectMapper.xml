@@ -11,6 +11,8 @@
         <result column="type" property="type"/>
         <result column="name" property="name"/>
         <result column="description" property="description"/>
+        <result column="configs" property="configs"/>
+        <result column="labels" property="labels"/>
     </resultMap>
 
     <select id="getByProjectId" resultMap="projectMap">
