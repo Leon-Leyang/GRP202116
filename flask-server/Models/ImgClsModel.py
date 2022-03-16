@@ -8,8 +8,8 @@ from Models.Model import Model
 
 # Model for image classification task
 class ImgClsModel(Model):
-    def __init__(self, modelPath, modelVersion, fromName, toName, toolType, labels):
-        super().__init__(modelPath, modelVersion, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -51,6 +51,7 @@ class ImgClsModel(Model):
 if __name__ == '__main__':
     modelPath = '../../ml/models/resnet101/resnet101.pth'
     modelVersion = 'one'
+    modelRoot = './'
     fromName = 'choice'
     toName = 'image'
     toolType = 'choices'
@@ -60,7 +61,7 @@ if __name__ == '__main__':
 
     imgPath = '../puppy.webp'
 
-    imgClsModel = ImgClsModel(modelPath, modelVersion, fromName, toName, toolType, labels)
+    imgClsModel = ImgClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
 
     predictionItem = imgClsModel.predict(imgPath)
     print(predictionItem)

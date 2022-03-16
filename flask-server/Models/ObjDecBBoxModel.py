@@ -10,8 +10,8 @@ from Models.Model import Model
 
 # Model for image classification task
 class ObjDecBBoxModel(Model):
-    def __init__(self, modelPath, modelVersion, fromName, toName, toolType, labels, threashold):
-        super().__init__(modelPath, modelVersion, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, threashold):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -68,6 +68,7 @@ class ObjDecBBoxModel(Model):
 if __name__ == '__main__':
     modelPath = '../../ml/models/frcnn-resnet/frcnn-resnet.pth'
     modelVersion = 'one'
+    modelRoot = './'
     fromName = 'label'
     toName = 'image'
     toolType = 'rectanglelabels'
@@ -78,7 +79,7 @@ if __name__ == '__main__':
 
     imgPath = '../puppy.webp'
 
-    objDecBBoxModel = ObjDecBBoxModel(modelPath, modelVersion, fromName, toName, toolType, labels, threashold)
+    objDecBBoxModel = ObjDecBBoxModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, threashold)
 
     predictionItem = objDecBBoxModel.predict(imgPath)
     print(predictionItem)

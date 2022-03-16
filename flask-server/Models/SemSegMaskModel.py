@@ -10,8 +10,8 @@ from Models.Model import Model
 
 # Model for semantic segmentation task with mask
 class SemSegMaskModel(Model):
-    def __init__(self, modelPath, modelVersion, fromName, toName, toolType, labels):
-        super().__init__(modelPath, modelVersion, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -57,6 +57,7 @@ class SemSegMaskModel(Model):
 if __name__ == '__main__':
     modelPath = '../../ml/models/fcn/fcn.pth'
     modelVersion = 'one'
+    modelRoot = './'
     fromName = 'tag'
     toName = 'image'
     type = 'brushlabels'
@@ -64,6 +65,6 @@ if __name__ == '__main__':
     imgPath = '../puppy.webp'
 
 
-    semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, fromName, toName, type, labels)
+    semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, modelRoot, fromName, toName, type, labels)
     predictionItem = semSegMaskModel.predict(imgPath)
     print(predictionItem)

@@ -1,8 +1,11 @@
 import torch
-
+import sys
 
 class Model():
-    def __init__(self, modelPath, modelVersion, fromName, toName, toolType, labels):
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels):
+        # Add the model root path to environment variable path
+        sys.path.append(modelRoot)
+
         # Load the model from the file
         self.model = torch.load(modelPath)
 

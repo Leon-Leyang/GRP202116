@@ -51,12 +51,12 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-    def run_model_on_data(project_type, data, configs, predictions, model_path, model_version, labels):
+    def run_model_on_data(project_type, data, configs, predictions, model_path, model_version, model_root, labels):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
         if project_type == 'Semantic Segmentation Mask':
-            model = SemSegMaskModel(model_path, model_version, from_name, to_name, tool_type, labels)
+            model = SemSegMaskModel(model_path, model_version, model_root, from_name, to_name, tool_type, labels)
         else:
             print("model unassigned")
             pass
@@ -70,9 +70,9 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a list of data
-    def run_model_on_data_set(project_type, data_set, configs, predictions, model_path, model_version, labels):
+    def run_model_on_data_set(project_type, data_set, configs, predictions, model_path, model_version, model_root, labels):
         for data in data_set:
-            ModelDriver.run_model_on_data(project_type, data, configs, predictions, model_path, model_version, labels)
+            ModelDriver.run_model_on_data(project_type, data, configs, predictions, model_path, model_version, model_root, labels)
 
 
 if __name__ == '__main__':
@@ -87,8 +87,9 @@ if __name__ == '__main__':
     predictions = []
     model_path = '../ml/models/fcn/fcn.pth'
     model_version = 'undefined'
+    model_root = './'
     labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow',
               'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train',
               'Tv/monitor']
     ModelDriver.run_model_on_data('Semantic Segmentation Mask', './puppy.webp', configs, predictions, model_path,
-                                  model_version, labels)
+                                  model_version, model_root, labels)
