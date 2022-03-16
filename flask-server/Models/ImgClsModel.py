@@ -9,10 +9,7 @@ from Models.Model import Model
 # Model for image classification task
 class ImgClsModel(Model):
     def __init__(self, modelPath, modelVersion, fromName, toName, toolType, labels):
-        super().__init__(modelPath, modelVersion, fromName, toName, toolType)
-
-        # List to store class index with its name
-        self.labels = labels
+        super().__init__(modelPath, modelVersion, fromName, toName, toolType, labels)
 
         # Preprocessing operations
         self.transforms = tf.Compose([

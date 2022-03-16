@@ -2,7 +2,7 @@ import torch
 
 
 class Model():
-    def __init__(self, modelPath, modelVersion, fromName, toName, toolType):
+    def __init__(self, modelPath, modelVersion, fromName, toName, toolType, labels):
         # Load the model from the file
         self.model = torch.load(modelPath)
 
@@ -17,6 +17,9 @@ class Model():
         self.fromName = fromName
         self.toName = toName
         self.type = toolType
+
+        # List to store label names
+        self.labels = labels
 
         self.predictionItem = {}
 
