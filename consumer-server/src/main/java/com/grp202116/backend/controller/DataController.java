@@ -23,7 +23,7 @@ public class DataController {
      * @param dataId the dataId fetched from the mapper
      * @return return the Data of corresponding id
      */
-    @GetMapping("/datas/{dataId}")
+    @GetMapping("/data/{dataId}")
     public DataDO getData(@PathVariable BigInteger dataId){
         return dataMapper.getByDataId(dataId);
     }
@@ -34,35 +34,35 @@ public class DataController {
      * @param projectId the projectId fetched from the mapper
      * @return return the Data of corresponding projectId
      */
-    @GetMapping("/datas/project/{projectId}")
-    public List<DataDO> listProjectDatas(@PathVariable BigInteger projectId){
+    @GetMapping("/data/project/{projectId}")
+    public List<DataDO> listProjectDataList(@PathVariable BigInteger projectId){
         return dataMapper.listByProjectId(projectId);
     }
 
     /**
      * Add the Data to the database
-     * @param datas the uploaded data
+     * @param dataList the uploaded data
      */
-    @PutMapping("/datas")
-    public void addDatas(@RequestBody List<DataDO> datas){
-        dataMapper.insertAll(datas);
+    @PutMapping("/data/add")
+    public void addDataList(@RequestBody List<DataDO> dataList){
+        dataMapper.insertAll(dataList);
     }
 
     /**
      * Delete the Data in certain project
      * @param projectId the projectId fetched from the mapper
      */
-    @DeleteMapping("/datas/project/{projectId}")
-    public void deleteProjectDatas(@PathVariable BigInteger projectId){
+    @DeleteMapping("/data/project/{projectId}")
+    public void deleteProjectData(@PathVariable BigInteger projectId){
         dataMapper.deleteByProjectId(projectId);
     }
 
     /**
      * Delete the Data by the corresponding id
-     * @param dataIds the dataId fetched from the mapper
+     * @param dataId the dataId fetched from the mapper
      */
-    @DeleteMapping("/datas/{dataIds}")
-    public void deleteDatas(@PathVariable String dataIds){
-        dataMapper.deleteDatas(dataIds);
+    @DeleteMapping("/data/{dataId}")
+    public void deleteDataById(@PathVariable String dataId){
+        dataMapper.deleteDataById(dataId);
     }
 }

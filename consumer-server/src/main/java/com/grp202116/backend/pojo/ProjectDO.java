@@ -11,6 +11,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
     private Date updateTime;
     private String name;
     private String description;
+    private String configs;
 
     /**
      * Get the type of the project object
@@ -74,5 +75,13 @@ public class ProjectDO extends ProjectDistinguishableDO{
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getConfigs() {
+        return configs;
+    }
+
+    public void setConfigs(String configs) {
+        this.configs = configs;
     }
 }

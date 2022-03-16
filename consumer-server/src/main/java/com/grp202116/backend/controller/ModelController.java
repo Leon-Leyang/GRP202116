@@ -22,7 +22,7 @@ public class ModelController {
      * @param projectId the projectId fetched from the mapper
      * @return  return the Model of corresponding projectId
      */
-    @GetMapping("/models/{projectId}")
+    @GetMapping("/model/{projectId}")
     public ModelDO getProjectModel(@PathVariable BigInteger projectId){
         return modelMapper.getByProjectId(projectId);
     }
@@ -33,7 +33,7 @@ public class ModelController {
      * @param projectId the projectId fetched from the mapper
      * @param model the newly imported Model
      */
-    @PostMapping("/models/{projectId}")
+    @PostMapping("/model/{projectId}")
     public void updateModel(@PathVariable BigInteger projectId, @RequestBody ModelDO model){
         modelMapper.deleteByProjectId(projectId);
         modelMapper.insert(model);
@@ -43,7 +43,7 @@ public class ModelController {
      * Delete the Model in certain project
      * @param projectId the projectId fetched from the mapper
      */
-    @DeleteMapping("/models/{projectId}")
+    @DeleteMapping("/model/{projectId}")
     public void deleteModel(@PathVariable BigInteger projectId){
         modelMapper.deleteByProjectId(projectId);
     }
@@ -52,7 +52,7 @@ public class ModelController {
      * Run the ml Model in the certain project
      * @param projectId the projectId fetched from the mapper
      */
-    @GetMapping("/models/run/{projectId}")
+    @GetMapping("/model/run/{projectId}")
     public void runModel(@PathVariable BigInteger projectId){
         ModelDO model = modelMapper.getByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(model);

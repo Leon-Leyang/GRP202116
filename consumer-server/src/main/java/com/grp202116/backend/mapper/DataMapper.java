@@ -13,9 +13,9 @@ import java.util.List;
 public interface DataMapper extends BaseMapper {
     /**
      * Insert all the Data to the database
-     * @param datas the uploaded Data
+     * @param dataList the uploaded Data
      */
-    void insertAll(List<DataDO> datas);
+    void insertAll(List<DataDO> dataList);
 
     /**
      * Get the Data by the dataId
@@ -40,7 +40,7 @@ public interface DataMapper extends BaseMapper {
 
     /**
      * Delete the data by its id
-     * @param dataIds dataId
+     * @param dataId dataId
      */
-    void deleteDatas(String dataIds);
+    void deleteDataById(String dataId);
 }

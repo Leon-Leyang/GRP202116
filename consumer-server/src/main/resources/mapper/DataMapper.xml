@@ -38,10 +38,10 @@
         where project_id = #{projectId}
     </delete>
 
-    <delete id="deleteDatas">
+    <delete id="deleteByDataId">
         delete
         from data
-        where data_id = #{dataIds}
+        where data_id = #{dataId}
     </delete>
 
 </mapper>

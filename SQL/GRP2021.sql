@@ -82,6 +82,7 @@ CREATE TABLE `model` (
   `description` varchar(100) DEFAULT NULL,
   `project_id` int DEFAULT NULL,
   `create_time` date DEFAULT NULL,
+  `labels` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`url`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `model_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
@@ -124,12 +125,14 @@ CREATE TABLE `project` (
   `type` varchar(100) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
+  `configs` varchar(500) DEFAULT NULL,
+  `labels` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `project` */
 
-insert  into `project`(`project_id`,`create_time`,`update_time`,`type`,`name`,`description`) values (1,'2022-02-15','2022-02-23',NULL,'34',NULL),(3,'2022-02-23','2022-02-23',NULL,'test','this is a test'),(7,'2022-02-26','2022-02-26',NULL,'seven id','sf');
+insert  into `project`(`project_id`,`create_time`,`update_time`,`type`,`name`,`description`,`configs`,`labels`) values (1,'2022-02-15','2022-02-23',NULL,'34',NULL,NULL,NULL),(3,'2022-02-23','2022-02-23',NULL,'test','this is a test',NULL,NULL),(7,'2022-02-26','2022-02-26',NULL,'seven id','sf',NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -24,7 +24,6 @@ def test_model():
     predictions = ModelDriver.run_model_on_data(request.json.get("project_type"),
                                                 request.json.get("data"),
                                                 request.json.get("configs"),
-                                                request.json.get("predictions").split(', '),
                                                 request.json.get("model_path"),
                                                 request.json.get("model_version"),
                                                 request.json.get("labels").split(', '))

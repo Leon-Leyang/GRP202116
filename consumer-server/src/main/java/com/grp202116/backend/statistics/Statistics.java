@@ -9,7 +9,6 @@ import com.grp202116.backend.pojo.PredictionDO;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -32,15 +31,15 @@ public class Statistics {
 
 
     BigInteger projectId;
-    BigInteger datasNumber;
-    BigInteger labeledDatasNumber;
+    BigInteger dataListNumber;
+    BigInteger labeledDataListNumber;
     BigInteger annotationsNumber;
     BigInteger predictionsNumber;
     Float completionPercentage;
     Float averageAnnotations;
     Float averagePredictions;
     Float averageTextWordsNumber;
-    List<DataDO> datas;
+    List<DataDO> dataList;
     List<PredictionDO> predictions;
     List<AnnotationDO> annotations;
 
@@ -51,10 +50,10 @@ public class Statistics {
      */
     public Statistics(BigInteger projectId) throws IOException {
         this.projectId = projectId;
-        this.setDatasNumber(countDatas());
-        this.setLabeledDatasNumber(countLabeledDatasNumber());
+        this.setDataListNumber(countDataList());
+        this.setLabeledDataListNumber(countLabeledDataListNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());
-        this.setDatas(getDatasFromDB());
+        this.setDataList(getDataListFromDB());
         this.setAnnotations(getAnnotationsFromDB());
         this.setAnnotationsNumber(BigInteger.valueOf(getAnnotations().size()));
         this.setPredictions(getPredictionsFromDB());
@@ -66,17 +65,17 @@ public class Statistics {
 
     /**
      * Set the Data objects list
-     * @param datas the Data objects list
+     * @param dataList the Data objects list
      */
-    public void setDatas(List<DataDO> datas) {
-        this.datas = datas;
+    public void setDataList(List<DataDO> dataList) {
+        this.dataList = dataList;
     }
 
     /**
      * Get the Data objects list
      * @return the Data objects list
      */
-    public List<DataDO> getDatasFromDB(){
+    public List<DataDO> getDataListFromDB(){
        return dataMapper.listByProjectId(this.projectId);
     }
 
@@ -84,33 +83,33 @@ public class Statistics {
      * Get the number of the data
      * @return the number of the data
      */
-    public BigInteger getDatasNumber() {
-        return datasNumber;
+    public BigInteger getDataListNumber() {
+        return dataListNumber;
     }
 
     /**
      * Set the number of the data
-     * @param datasNumber the number of the data
+     * @param dataListNumber the number of the data
      */
-    public void setDatasNumber(BigInteger datasNumber) {
-        this.datasNumber = datasNumber;
+    public void setDataListNumber(BigInteger dataListNumber) {
+        this.dataListNumber = dataListNumber;
     }
 
     /**
      * Set the number of labeled Data
-     * @param labeledDatasNumber the number of the labeled Data
+     * @param labeledDataListNumber the number of the labeled Data
      */
-    public void setLabeledDatasNumber(BigInteger labeledDatasNumber) {
-        this.labeledDatasNumber = labeledDatasNumber;
+    public void setLabeledDataListNumber(BigInteger labeledDataListNumber) {
+        this.labeledDataListNumber = labeledDataListNumber;
     }
 
     /**
      * Count the number of labeled Data
      * @return the number of labeled Data
      */
-    public BigInteger countLabeledDatasNumber(){
+    public BigInteger countLabeledDataListNumber(){
 
-        Set labeledData = new HashSet<>();
+        Set<Object> labeledData = new HashSet<>();
         for (AnnotationDO annotationDO : annotations){
             labeledData.add(annotationDO.getDataId());
         }
@@ -123,8 +122,8 @@ public class Statistics {
      * Get the number of labeled Data
      * @return the number of labeled Data
      */
-    public BigInteger getLabeledDatasNumber() {
-        return labeledDatasNumber;
+    public BigInteger getLabeledDataListNumber() {
+        return labeledDataListNumber;
     }
 
     /**
@@ -212,8 +211,8 @@ public class Statistics {
      * Get the size of the data in the project according to the project id and read value from the DB
      * @return the size of the data
      */
-    public BigInteger countDatas(){
-        return BigInteger.valueOf(datas.size());
+    public BigInteger countDataList(){
+        return BigInteger.valueOf(dataList.size());
     }
 
     /**
@@ -238,7 +237,7 @@ public class Statistics {
      */
     public float calculateCompletionPercentage(){
 
-        return getLabeledDatasNumber().floatValue()/getDatasNumber().floatValue()*100;
+        return getLabeledDataListNumber().floatValue()/ getDataListNumber().floatValue()*100;
 
     }
 
@@ -263,7 +262,7 @@ public class Statistics {
      * @return the average number of the Annotations
      */
     public Float countAverageAnnotations(){
-        return getAnnotationsNumber().floatValue()/getDatasNumber().floatValue();
+        return getAnnotationsNumber().floatValue()/ getDataListNumber().floatValue();
     }
 
     /**
@@ -287,7 +286,7 @@ public class Statistics {
      * @return the average number of Predictions
      */
     public Float countAveragePredictions(){
-        return getPredictionsNumber().floatValue()/getDatasNumber().floatValue();
+        return getPredictionsNumber().floatValue()/ getDataListNumber().floatValue();
     }
 
     /**
@@ -336,7 +335,7 @@ public class Statistics {
     public Float countAverageTextWordsNumber() throws IOException {
         int textDataType = 0;
         int wordSum = 0;
-        for(DataDO dataDO : datas){
+        for(DataDO dataDO : dataList){
             if (dataDO.getType().equalsIgnoreCase("text")){
                 textDataType++;
                 wordSum = wordSum + countTextNumber(dataDO.getUrl());

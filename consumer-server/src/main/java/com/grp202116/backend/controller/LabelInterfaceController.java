@@ -23,7 +23,7 @@ public class LabelInterfaceController {
      * Get the Label Interface of certain project
      * @param projectId the projectId fetched from the mapper
      */
-    @GetMapping("/labelinterfaces/{projectId}")
+    @GetMapping("/interface/{projectId}")
     public void getLabelInterface(@PathVariable BigInteger projectId){
         labelInterfaceMapper.getByProjectId(projectId);
     }
@@ -34,7 +34,7 @@ public class LabelInterfaceController {
      * @param projectId the projectId fetched from the mapper
      * @param labelInterface the newly set Label Interface
      */
-    @PostMapping("/labelinterfaces/{projectId}")
+    @PostMapping("/interface/{projectId}")
     public void updateLabelInterface(@PathVariable BigInteger projectId, @RequestBody LabelInterfaceDO labelInterface){
         labelInterfaceMapper.deleteByProjectId(projectId);
         labelInterfaceMapper.insert(labelInterface);
@@ -44,7 +44,7 @@ public class LabelInterfaceController {
      * Get the set templates of the Label Interface
      * @return return the set templates of the Label Interface
      */
-    @GetMapping("/labelinterfaces/templates")
+    @GetMapping("/interface/templates")
     public List<LabelInterfaceDO> getTemplates() {
         return null;
     }

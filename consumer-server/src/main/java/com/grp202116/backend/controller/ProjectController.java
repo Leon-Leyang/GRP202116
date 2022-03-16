@@ -24,7 +24,7 @@ public class ProjectController {
      * @param projectId the projectId fetched from the mapper
      * @return return the Project of corresponding projectId
      */
-    @GetMapping("/projects/{projectId}")
+    @GetMapping("/project/{projectId}")
     public ProjectDO getProject(@PathVariable BigInteger projectId){
         return projectMapper.getByProjectId((projectId));
     }
@@ -33,7 +33,7 @@ public class ProjectController {
      * List all the Project
      * @return return all the created Project
      */
-    @GetMapping("/projects")
+    @GetMapping("/project/list")
     public List<ProjectDO> listAllProjects(){
         return projectMapper.listAll();
     }
@@ -43,7 +43,7 @@ public class ProjectController {
      * the name, the type, and the description of the Project
      * @param project the projectId fetched from the mapper
      */
-    @PostMapping("/projects/edit")
+    @PostMapping("/project/edit")
     public void editProject(@RequestBody ProjectDO project){
         project.setUpdateTime(new Date());
         projectMapper.edit(project);
@@ -53,7 +53,7 @@ public class ProjectController {
      * Add the Project to the database, set the created time and update time
      * @param project the newly set Project
      */
-    @PostMapping("/projects")
+    @PostMapping("/project/add")
     public void addProject(@RequestBody ProjectDO project){
         Date date = new Date();
         project.setCreateTime(date);
@@ -66,7 +66,7 @@ public class ProjectController {
      * Delete the Project by the id
      * @param projectId the projectId fetched from the mapper
      */
-    @DeleteMapping("/projects/{projectId}")
+    @DeleteMapping("/project/{projectId}")
     public void deleteProject(@PathVariable BigInteger projectId){
         projectMapper.deleteByProjectId(projectId);
     }
