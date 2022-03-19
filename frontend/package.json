@@ -21,6 +21,7 @@
     "vue-axios": "^3.4.0",
     "vue-codemirror": "^4.0.6",
     "vue-router": "^3.5.3",
+    "vue-simple-uploader": "^0.7.6",
     "vuereact-combined": "^1.2.4",
     "vuetify": "^2.4.0",
     "vuex": "^3.6.2"

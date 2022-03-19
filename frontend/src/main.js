@@ -48,8 +48,19 @@ Vue.use(VueCodemirror, /* {
   events: ['scroll', ...]
 } */)
 
+import uploader from 'vue-simple-uploader'
+
+Vue.use(uploader)
+
+/* eslint-disable no-new */
+// new Vue({
+//   render(createElement) {
+//     return createElement(App)
+//   }
+// }).$mount('#app')
+
 new Vue({
     vuetify,
     router,
-    render: h => h(App)
+    render: h => h(App),
 }).$mount('#app')
