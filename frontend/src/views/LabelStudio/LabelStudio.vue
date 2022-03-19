@@ -1,3 +1,4 @@
+<!-- 正常标注界面 -->
 <template>
   <div>
     <button @click="prev">prev</button>
@@ -66,7 +67,7 @@ export default {
 
   //inject: ["app"],
   methods: {
-      prev() {
+  prev() {
     this.labelStudio.destroy()
     this.labelStudio = new LabelStudio("label-studio", {
       config: this.config,

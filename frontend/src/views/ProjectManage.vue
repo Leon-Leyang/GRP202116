@@ -1,3 +1,4 @@
+<!-- 最终的project管理界面 样式颜色仍需要调整 部分为静态页面 -->
 <template>
 <div>
   <v-container fluid>

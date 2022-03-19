@@ -1,4 +1,7 @@
+<!--用代码设置label interface-->
 <template>
+
+
   <div style="display: flex">
       <!-- Two-way Data-Binding -->
   <!-- <codemirror v-model="code" :options="cmOptions" /> -->
@@ -46,7 +49,7 @@ export default {
     return {
 
       //codemirror para
-      code: 'const a = 10',
+      code: ' ',
       cmOptions: {
         tabSize: 4,
         mode: 'text/javascript',

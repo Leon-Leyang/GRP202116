@@ -1,3 +1,6 @@
+<!-- Statistic部分要合到一起, 可参考css的设置 -->
+
+
 <template>
     <div>
         <el-row>
