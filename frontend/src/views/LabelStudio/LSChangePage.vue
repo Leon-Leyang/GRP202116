@@ -16,51 +16,41 @@ import "@heartexlabs/label-studio/build/static/css/main.css";
 
 export default {
   name: "Home",
-  props:{
-    configInterface: String,
-    imageURL: String,
-    imageId: Number,
-
-  },
   data() {
     return {
       labelStudio: '',
-
-      //test param
       id:0,
       config: `
-        <View>
+      <View>
 
-          <!-- Image with Polygons -->
-          <View style="padding: 25px;
-                      box-shadow: 2px 2px 8px #AAA">
-            <Header value="Label the image with polygons"/>
-            <Image name="img" value="$image"/>
-            <Text name="text1"
-                  value="Select label, start to click on image"/>
+  <!-- Image with Polygons -->
+  <View style="padding: 25px;
+               box-shadow: 2px 2px 8px #AAA">
+    <Header value="Label the image with polygons"/>
+    <Image name="img" value="$image"/>
+    <Text name="text1"
+          value="Select label, start to click on image"/>
 
-            <PolygonLabels name="tag" toName="img">
-              <Label value="Airbus" background="blue"/>
-              <Label value="Boeing" background="red"/>
-            </PolygonLabels>
-          </View>
+    <PolygonLabels name="tag" toName="img">
+      <Label value="Airbus" background="blue"/>
+      <Label value="Boeing" background="red"/>
+    </PolygonLabels>
+  </View>
 
-          <!-- Text with multi-choices -->
-          <View style="margin-top: 20px; padding: 25px;
-                      box-shadow: 2px 2px 8px #AAA;">
-            <Header value="Classify the text"/>
-            <Text name="text2" value="$text"/>
+  <!-- Text with multi-choices -->
+  <View style="margin-top: 20px; padding: 25px;
+               box-shadow: 2px 2px 8px #AAA;">
+    <Header value="Classify the text"/>
+    <Text name="text2" value="$text"/>
 
-            <Choices name="" toName="img" choice="multiple">
-              <Choice alias="wisdom" value="Wisdom"/>
-              <Choice alias="long" value="Long"/>
-            </Choices>
-          </View>
+    <Choices name="" toName="img" choice="multiple">
+      <Choice alias="wisdom" value="Wisdom"/>
+      <Choice alias="long" value="Long"/>
+    </Choices>
+  </View>
 
-        </View>
-      `,
-      //logic param
-      // config: this.configInterface,
+</View>
+`
     }
   },
 
@@ -77,7 +67,7 @@ export default {
         "submit",
         "skip",
         "controls",
-        "review",
+        //"review",
         "infobar",
         "topbar",
         "instruction",
@@ -183,7 +173,6 @@ export default {
         },
       },
 
-//steam vr  lagecy vr
 
       onLabelStudioLoad: function (LS) {
         var c = LS.annotationStore.addAnnotation({
@@ -204,8 +193,6 @@ export default {
     });
     }
   },
-  //config:  project
-
   mounted() {
     this.labelStudio = new LabelStudio("label-studio", {
       config: this.config,
@@ -216,7 +203,7 @@ export default {
         "submit",
         "skip",
         "controls",
-        "review",
+        //"review",
         "infobar",
         "topbar",
         "instruction",

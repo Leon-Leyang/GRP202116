@@ -1,6 +1,18 @@
 <template>
-  <div>
-    <button @click="prev">prev</button>
+  <div style="display: flex">
+      <!-- Two-way Data-Binding -->
+  <!-- <codemirror v-model="code" :options="cmOptions" /> -->
+
+  <!-- Or manually control the data synchronization -->
+  <codemirror
+    ref="cmEditor"
+    :value="code"
+    :options="cmOptions"
+    @ready="onCmReady"
+    @focus="onCmFocus"
+    @input="onCmCodeChange"
+  />
+    <!-- <button @click="prev">prev</button> -->
 
     <!-- <button @click="next">next</button> -->
 
@@ -13,20 +25,40 @@
 // @ is an alias to /src
 import LabelStudio from "@heartexlabs/label-studio";
 import "@heartexlabs/label-studio/build/static/css/main.css";
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+
+// import language js
+import 'codemirror/mode/javascript/javascript.js'
+
+// import theme style
+import 'codemirror/theme/base16-dark.css'
+
+// import more 'codemirror/some-resource...'
+
 
 export default {
   name: "Home",
-  props:{
-    configInterface: String,
-    imageURL: String,
-    imageId: Number,
-
+  component:{
+    codemirror,
   },
   data() {
     return {
-      labelStudio: '',
 
-      //test param
+      //codemirror para
+      code: 'const a = 10',
+      cmOptions: {
+        tabSize: 4,
+        mode: 'text/javascript',
+        theme: 'base16-dark',
+        lineNumbers: true,
+        line: true,
+        // more CodeMirror options...
+      },
+
+
+
+      labelStudio: '',
       id:0,
       config: `
         <View>
@@ -58,42 +90,49 @@ export default {
           </View>
 
         </View>
-      `,
-      //logic param
-      // config: this.configInterface,
+`
     }
   },
 
   //inject: ["app"],
   methods: {
-      prev() {
+    onCmReady(cm) {
+      console.log('the editor is readied!', cm)
+    },
+    onCmFocus(cm) {
+      console.log('the editor is focused!', cm)
+    },
+    onCmCodeChange(newCode) {
+      console.log('this is new code', newCode)
+      this.code = newCode
+      this.config = newCode
     this.labelStudio.destroy()
     this.labelStudio = new LabelStudio("label-studio", {
-      config: this.config,
+      config: newCode,
 
       interfaces: [
         "panel",
-        "update",
-        "submit",
-        "skip",
-        "controls",
-        "review",
-        "infobar",
-        "topbar",
-        "instruction",
-        "side-column",
-        "ground-truth",
-        "annotations:history",
-        "annotations:tabs",
-        "annotations:menu",
-        "annotations:current",
-        "annotations:add-new",
-        "annotations:delete",
-        'annotations:view-all',
-        "predictions:tabs",
-        "predictions:menu",
-        "auto-annotation",
-        "edit-history",
+        // "update",
+        // "submit",
+        // "skip",
+        // "controls",
+        //"review",
+        // "infobar",
+        // "topbar",
+        // "instruction",
+        // "side-column",
+        // "ground-truth",
+        // "annotations:history",
+        // "annotations:tabs",
+        // "annotations:menu",
+        // "annotations:current",
+        // "annotations:add-new",
+        // "annotations:delete",
+        // 'annotations:view-all',
+        // "predictions:tabs",
+        // "predictions:menu",
+        // "auto-annotation",
+        // "edit-history",
         //"topbar:prevnext",
       ],
 
@@ -183,7 +222,6 @@ export default {
         },
       },
 
-//steam vr  lagecy vr
 
       onLabelStudioLoad: function (LS) {
         var c = LS.annotationStore.addAnnotation({
@@ -204,35 +242,38 @@ export default {
     });
     }
   },
-  //config:  project
-
+  computed: {
+    codemirror() {
+      return this.$refs.cmEditor.codemirror
+    }
+  },
   mounted() {
     this.labelStudio = new LabelStudio("label-studio", {
       config: this.config,
 
       interfaces: [
         "panel",
-        "update",
-        "submit",
-        "skip",
+        // "update",
+        // "submit",
+        // "skip",
         "controls",
-        "review",
+        //"review",
         "infobar",
-        "topbar",
-        "instruction",
-        "side-column",
-        "ground-truth",
-        "annotations:history",
-        "annotations:tabs",
-        "annotations:menu",
-        "annotations:current",
-        "annotations:add-new",
-        "annotations:delete",
-        'annotations:view-all',
-        "predictions:tabs",
-        "predictions:menu",
-        "auto-annotation",
-        "edit-history",
+        // "topbar",
+        // "instruction",
+        // "side-column",
+        // "ground-truth",
+        // "annotations:history",
+        // "annotations:tabs",
+        // "annotations:menu",
+        // "annotations:current",
+        // "annotations:add-new",
+        // "annotations:delete",
+        // 'annotations:view-all',
+        // "predictions:tabs",
+        // "predictions:menu",
+        // "auto-annotation",
+        // "edit-history",
         //"topbar:prevnext",
       ],
 
@@ -340,7 +381,28 @@ export default {
         this.$axios.post('/annotations/data/1', annotation.serializeAnnotation())
       }
     });
-    console.log(this.labelStudio)
+    console.log(this.labelStudio);
+    console.log('the current CodeMirror instance object:', this.codemirror)
   },
 };
 </script>
+
+<style>
+.CodeMirror-scroll {
+  overflow: scroll !important;
+  margin-bottom: 0;
+  margin-right: 0;
+  padding-bottom: 0;
+  height: 100%;
+  outline: none;
+  position: relative;
+  border: 1px solid #dddddd;
+}
+</style>
+<style scoped>
+.code-mirror{
+  font-size : 13px;
+  line-height : 150%;
+  text-align: left;
+}
+</style>

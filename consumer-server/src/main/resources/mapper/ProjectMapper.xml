@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grp202116.backend.mapper.ProjectMapper">
+
+    <resultMap id="projectMap" type="com.grp202116.backend.pojo.ProjectDO">
+        <id column="project_id" property="projectId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type" property="type"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="configs" property="configs"/>
+        <result column="labels" property="labels"/>
+    </resultMap>
+
+    <select id="getByProjectId" resultMap="projectMap">
+        select *
+        from project
+        where project_id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="project_id" parameterType="ProjectDO">
+        insert into project (create_time, update_time, type, name, description)
+        values (#{createTime}, #{updateTime}, #{type}, #{name}, #{description})
+    </insert>
+
+    <select id="listAll" resultMap="projectMap">
+        select *
+        from project
+    </select>
+
+    <update id="edit" parameterType="ProjectDO">
+        update project
+        set update_time = #{updateTime}
+        <if test="type != '' and type != null">
+            ,type = #{type}
+        </if>
+        <if test="name != '' and name != null">
+            ,name = #{name}
+        </if>
+        <if test="description != '' and description != null">
+            ,description = #{description}
+        </if>
+        where project_id = #{projectId}
+    </update>
+
+    <delete id="deleteByProjectId">
+        delete
+        from project
+        where project_id = #{projectId}
+    </delete>
+
+</mapper>
