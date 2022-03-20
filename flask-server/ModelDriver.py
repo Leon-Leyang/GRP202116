@@ -1,9 +1,13 @@
 from xml.dom.minidom import parseString, Node
 from Models import *
+from Models.ImgClsModel import ImgClsModel
+from Models.NERModel import NERModel
+from Models.ObjDecBBoxModel import ObjDecBBoxModel
+from Models.TextClsModel import TextClsModel
 
 
 class ModelDriver():
-    TOOL_TAGS = ['Labels', 'Choices', 'BrushLabels']
+    TOOL_TAGS = ['Labels', 'Choices', 'BrushLabels', 'RectangleLabels']
 
     def __init__(self):
         pass
@@ -55,10 +59,18 @@ class ModelDriver():
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
-        if project_type == 'Semantic Segmentation Mask':
+        if project_type == 'Image Classification':
+            model = ImgClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['mean'], kwargs['std'], kwargs['imgSize'])
+        elif project_type == 'Object Detection':
+            model = ObjDecBBoxModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['threashold'])
+        elif project_type == 'Semantic Segmentation Mask':
             model = SemSegMaskModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['mean'], kwargs['std'])
+        elif project_type == 'Text Classification':
+            model = TextClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['textsPath'], kwargs['tokenNum'], kwargs['sequenceLen'])
+        elif project_type == 'Named Entity Recognition':
+            model = NERModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['sequenceLen'])
         else:
-            print("model unassigned")
+            print("model undefined")
             pass
 
         prediction_item = model.predict(data)

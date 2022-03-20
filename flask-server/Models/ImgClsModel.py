@@ -8,8 +8,8 @@ from Models.Model import Model
 
 # Model for image classification task
 class ImgClsModel(Model):
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelPath, mean, std, imgSize):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelPath)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
