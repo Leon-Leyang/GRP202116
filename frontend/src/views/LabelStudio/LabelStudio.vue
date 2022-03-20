@@ -333,12 +333,44 @@ export default {
 
       onUpdateAnnotation: function (LS, annotation) {
         // retrive an annotation 
+
+      
+        var myDate = new Date();
+        myDate.toLocaleDateString();                    
+        myDate.toLocaleString( ); 
+        var annotationObject = annotation.serializeAnnotation()
+        var previousAnnotations= LS.task.app.annotationStore.annotations.target
+      
+        var annotationlist = []
+        for(var i = 0; i < annotationObject.length; i++){
+          annotationlist[i]=new Object()
+          annotationlist[i].annotation_id = annotationObject[i].id
+          annotationlist[i].project_id = LS.task.app.project
+          annotationlist[i].data_id = LS.task.id
+          annotationlist[i].type = annotationObject[i].type
+          annotationlist[i].result = annotationObject[i].value
+          annotationlist[i].create_time = myDate.toLocaleString()
+          
+          for(annotation in previousAnnotations ){
+            if(annotation.value.id==annotationObject[i].id){
+                annotationlist[i].create_time = annotation.value.createdDate
+            }
+          }
+          
+          annotationlist[i].update_time = myDate.toLocaleString()
+          annotationlist[i].from_name = annotationObject[i].from_name
+          annotationlist[i].to_name = annotationObject[i].to_name          
+        }
+      
+        console.log(annotationlist)
         console.log(annotation.serializeAnnotation())
-        console.log(annotation._initialAnnotationObj)
-        console.log(JSON.stringify(annotation.serializeAnnotation()))
+        
         console.log('this', LS.task)
         console.log('tag', this.LabelStudio.task)
-        this.$axios.post('/annotations/data/1', annotation.serializeAnnotation())
+        
+        
+        this.$axios.post('/annotations/data/1', annotationlist)
+
       }
     });
     console.log(this.labelStudio)
