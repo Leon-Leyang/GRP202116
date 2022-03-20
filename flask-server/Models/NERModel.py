@@ -31,8 +31,8 @@ class NERModel(Model):
             return seq
 
 
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, sequenceLen):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Initialize the preprocess object
         self.preprocess = self.Preprocess(sequenceLen)
@@ -98,10 +98,11 @@ if __name__ == '__main__':
     fromName = 'label'
     toName = 'text'
     toolType = 'labels'
-    labels = ['O', 'B-geo', 'B-gpe', 'B-per', 'I-geo', 'B-org', 'I-org', 'B-tim', 'I-per', 'I-gpe', 'I-tim']
+    labelsPath = '../bio.txt'
+
     sequenceLen = 128
 
-    nERModel = NERModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, sequenceLen)
+    nERModel = NERModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen)
 
     textPath = '../ner.txt'
     predictionItem = nERModel.predict(textPath)

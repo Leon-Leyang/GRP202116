@@ -2,7 +2,7 @@ import torch
 import sys
 
 class Model():
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels):
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath):
         # Add the model root path to environment variable path
         sys.path.append(modelRoot)
 
@@ -21,8 +21,9 @@ class Model():
         self.toName = toName
         self.type = toolType
 
-        # List to store label names
-        self.labels = labels
+        # Initialize list to store label names
+        with open(labelsPath) as f:
+            self.labels = [line.strip() for line in f.readlines()]
 
         self.predictionItem = {}
 

@@ -51,12 +51,12 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-    def run_model_on_data(project_type, data, configs, model_path, model_version, model_root, labels):
+    def run_model_on_data(project_type, data, configs, model_path, model_version, model_root, labelsPath, **kwargs):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
         if project_type == 'Semantic Segmentation Mask':
-            model = SemSegMaskModel(model_path, model_version, model_root, from_name, to_name, tool_type, labels)
+            model = SemSegMaskModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['mean'], kwargs['std'])
         else:
             print("model unassigned")
             pass
@@ -69,9 +69,9 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a list of data
-    def run_model_on_data_set(project_type, data_set, configs, model_path, model_version, model_root, labels):
+    def run_model_on_data_set(project_type, data_set, configs, model_path, model_version, model_root, labelsPath, **kwargs):
         for data in data_set:
-            ModelDriver.run_model_on_data(project_type, data, configs, model_path, model_version, model_root, labels)
+            ModelDriver.run_model_on_data(project_type, data, configs, model_path, model_version, model_root, labelsPath, **kwargs)
 
 
 if __name__ == '__main__':
@@ -87,9 +87,9 @@ if __name__ == '__main__':
     model_path = '../ml/models/fcn/fcn.pth'
     model_version = 'undefined'
     model_root = './'
-    labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow',
-              'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train',
-              'Tv/monitor']
+    labelsPath = './voc2007.txt'
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
 
     ModelDriver.run_model_on_data('Semantic Segmentation Mask', './puppy.webp', configs, model_path,
-                                  model_version, model_root, labels)
+                                  model_version, model_root, labelsPath, mean=mean, std=std)

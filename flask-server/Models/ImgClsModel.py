@@ -8,17 +8,17 @@ from Models.Model import Model
 
 # Model for image classification task
 class ImgClsModel(Model):
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelPath, mean, std, imgSize):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelPath)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
             tf.Resize(256),
             # TODO: Get the image size for center crop from user
-            tf.CenterCrop(224),
+            tf.CenterCrop(imgSize),
             tf.ToTensor(),
-            tf.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225])])
+            tf.Normalize(mean=mean,
+                         std=std)])
 
     def predict(self, imgPath):
         super().predict()
@@ -35,7 +35,7 @@ class ImgClsModel(Model):
         percentage = (torch.nn.functional.softmax(modelOutput, dim=1)[0] * 100)[index].item()
 
         value = {}
-        value['choices'] = [labels[index]]
+        value['choices'] = [self.labels[index]]
         resultItem = {}
         resultItem['id'] = str(uuid.uuid4())
         resultItem['from_name'] = self.fromName
@@ -55,13 +55,15 @@ if __name__ == '__main__':
     fromName = 'choice'
     toName = 'image'
     toolType = 'choices'
+    labelsPath = '../../ml/models/resnet101/ImageNetClasses.txt'
 
-    with open('../../ml/models/resnet101/ImageNetClasses.txt') as f:
-        labels = [line.strip() for line in f.readlines()]
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
+    imgSize = 224
 
     imgPath = '../puppy.webp'
 
-    imgClsModel = ImgClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
+    imgClsModel = ImgClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize)
 
     predictionItem = imgClsModel.predict(imgPath)
     print(predictionItem)

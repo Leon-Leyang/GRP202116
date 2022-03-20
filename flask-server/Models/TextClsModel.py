@@ -32,8 +32,8 @@ class TextClsModel(Model):
             return seq
 
 
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, textsPath, tokenNum, sequenceLen):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, textsPath, tokenNum, sequenceLen):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Initialize the preprocess object
         self.preprocess = self.Preprocess(textsPath, tokenNum, sequenceLen)
@@ -51,7 +51,7 @@ class TextClsModel(Model):
         index = round(modelOutput.item())
 
         value = {}
-        value['choices'] = [labels[index]]
+        value['choices'] = [self.labels[index]]
         resultItem = {}
         resultItem['id'] = str(uuid.uuid4())
         resultItem['from_name'] = self.fromName
@@ -71,12 +71,13 @@ if __name__ == '__main__':
     fromName = 'sentiment'
     toName = 'text'
     toolType = 'choices'
-    labels = ['not real', 'real']
+    labelsPath = '../textCls.txt'
+
     textsPath = '../vocab.csv'
     tokenNum = 1000
     sequenceLen = 20
 
-    textClsModel = TextClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, textsPath, tokenNum, sequenceLen)
+    textClsModel = TextClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, textsPath, tokenNum, sequenceLen)
 
     textPath = '../tweets.txt'
     predictionItem = textClsModel.predict(textPath)
