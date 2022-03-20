@@ -1,215 +1,75 @@
 package com.grp202116.backend.ml;
 
-import ai.djl.MalformedModelException;
-import ai.djl.inference.Predictor;
-import ai.djl.modality.Classifications;
-import ai.djl.modality.cv.Image;
-import ai.djl.modality.cv.ImageFactory;
-import ai.djl.modality.cv.transform.CenterCrop;
-import ai.djl.modality.cv.transform.Normalize;
-import ai.djl.modality.cv.transform.Resize;
-import ai.djl.modality.cv.transform.ToTensor;
-import ai.djl.modality.cv.translator.ImageClassificationTranslator;
-import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelNotFoundException;
-import ai.djl.repository.zoo.ZooModel;
-import ai.djl.training.util.ProgressBar;
-import ai.djl.translate.TranslateException;
-import ai.djl.translate.Translator;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.grp202116.backend.mapper.PredictionMapper;
 import com.grp202116.backend.pojo.ModelDO;
+import com.grp202116.backend.pojo.PredictionDO;
+import com.grp202116.backend.util.HttpUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.netflix.hystrix.HystrixCommandKey;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-import javax.xml.parsers.*;
-import java.util.Arrays;
+import javax.annotation.Resource;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.Objects;
 
-
-/**
- * The class ModelDriver aim to run the ml model using PyTorch
- */
+//Todo: combine with the frontend to retrieve requested project id and data id;
 public class ModelDriver {
+
     ModelDO model;
 
-    // Object to store information extracted from config
-    ParsedConfig parsedConfig;
-
-    public static final List<String> ToolTags = Arrays.asList("Labels", "Choices");
-
-    public ModelDriver(ModelDO model) {
-        this.model = model;
-        this.parsedConfig = new ParsedConfig();
+    public ModelDriver(BigInteger projectId) {
+        this.model = new ModelDO();
     }
 
-    // Parse config with only one
-    public ParsedConfig parseConfig() {
-        String config = "<View>" +
-                "        <Labels name=\"label\" toName=\"text\">\n" +
-                "          <Label value=\"Date\"></Label>\n" +
-                "          <Label value=\"Time\"></Label>\n" +
-                "          <Label value=\"Location\"></Label>\n" +
-                "        </Labels>\n" +
-                "        <Text name=\"text\" value=\"$text\"></Text>\n" +
-                "      </View>";
+    public JSONObject parseConfig() {
+        String configs = "<View>" +
+                "  <Image name=\" image \" value=\" $image \" zoom=\" true \"/>" +
+                " <BrushLabels name=\" tag \" toName=\" image \">" +
+                "     <Label value=\" Airplane \" background=\" rgba(255, 0, 0, 0.7) \"/>" +
+                "                               <Label value=\" Car \" background=\" rgba(0, 0, 255, 0.7) \"/>" +
+                "                           </BrushLabels>" +
+                "                       </View>";
 
-        try {
+        String labels = "Background, Aeroplane, Bicycle, Bird, Boat, Bottle, Bus, Car, Cat, Chair, Cow," +
+                "Dining table, Dog, Horse, Motorbike, Person, Potted plant, Sheep, Sofa, Train," +
+                " Tv/monitor";
 
-            // Create new DocumentBuilder
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
+        JSONObject param = new JSONObject();
 
-            // Create Document from the config
-            byte[] configBytes = config.getBytes(StandardCharsets.UTF_8);
-            ByteArrayInputStream configBuffer = new ByteArrayInputStream(configBytes);
-            Document doc = builder.parse(configBuffer);
+        param.put("project_type", "Semantic Segmentation Mask");
+        param.put("data", "./puppy.webp");
+        param.put("configs", configs);
+        param.put("model_path", "../ml/models/fcn/fcn.pth");
+        param.put("model_version", "undefined");
+        param.put("model_root", "./");
+        param.put("labels", labels);
 
-            doc.getDocumentElement().normalize();
-
-            // Visit all child nodes rooted at <View>
-            Node parentNode = doc.getDocumentElement();
-
-            extractInformation(parentNode);
-
-            System.out.println("from_name: " + parsedConfig.getFromName());
-            System.out.println("to_name: " + parsedConfig.getToName());
-            System.out.println("type: " + parsedConfig.getType());
-
-
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
-        }
-
-        return parsedConfig;
+        return param;
     }
 
-    private void extractInformation(Node parentNode) {
-        NodeList childNodes = parentNode.getChildNodes();
-        for (int index = 0; index < childNodes.getLength(); index++) {
-            Node childNode = childNodes.item(index);
+    public List<PredictionDO> savePredictions(JSONArray predictions) {
+        List<PredictionDO> predictionList = new ArrayList<>();
+        for (int i = 0; i < Objects.requireNonNull(predictions).size(); i++) {
+            JSONObject predictionJSONObject = predictions.getJSONObject(i);
+            PredictionDO prediction = new PredictionDO();
+            prediction.setPredictionId(predictionJSONObject.getString("id"));
+            prediction.setType(predictionJSONObject.getString("type"));
+            prediction.setValue(predictionJSONObject.getString("value"));
+            prediction.setFromName(predictionJSONObject.getString("from_name"));
+            prediction.setToName(predictionJSONObject.getString("to_name"));
 
-            // Filter TEXT_NODE
-            if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+            Date date = new Date();
+            prediction.setCreateTime(date);
+            prediction.setUpdateTime(date);
+            prediction.setDataId(new BigInteger(String.valueOf(1)));
+            prediction.setProjectId(new BigInteger(String.valueOf(1)));
 
-                // Find the tool tag
-                if (ToolTags.contains(childNode.getNodeName())) {
-                    Element element = (Element) childNode;
-                    parsedConfig.setFromName(element.getAttribute("name"));
-                    parsedConfig.setToName(element.getAttribute("toName"));
-                    parsedConfig.setType(childNode.getNodeName().toLowerCase());
-                }
-            }
+            predictionList.add(prediction);
         }
 
-        if (parsedConfig.getFromName() == null) {
-            for (int index = 0; index < childNodes.getLength(); index++) {
-                Node childNode = childNodes.item(index);
-                extractInformation(childNode);
-            }
-        }
-    }
-
-    public void runModel() {
-        ParsedConfig parsedConfig = parseConfig();
-
-        // Define the preprocessing pipeline
-        Translator<Image, Classifications> translator = ImageClassificationTranslator.builder()
-                .addTransform(new Resize(256))
-                .addTransform(new CenterCrop(224, 224))
-                .addTransform(new ToTensor())
-                .addTransform(new Normalize(
-                        new float[] {0.485f, 0.456f, 0.406f},
-                        new float[] {0.229f, 0.224f, 0.225f}))
-                .optApplySoftmax(true)
-                .build();
-
-        // Define the criteria of the model
-//        Criteria<Image, Classifications> criteria = Criteria.builder()
-//                .setTypes(Image.class, Classifications.class)
-//                .optModelUrls(model.getUrl())
-//                .optOption("mapLocation", "true") // this model requires mapLocation for GPU
-//                .optTranslator(translator)
-//                .optProgress(new ProgressBar()).build();
-        Criteria<Image, Classifications> criteria = Criteria.builder()
-                .setTypes(Image.class, Classifications.class)
-                .optModelPath(Paths.get("ml/models/resnet18"))
-                .optOption("mapLocation", "true") // this model requires mapLocation for GPU
-                .optTranslator(translator)
-                .optEngine("PyTorch")
-                .optProgress(new ProgressBar()).build();
-
-        // Get the model from the criteria
-        ZooModel<Image, Classifications> zooModel = null;
-        try {
-            zooModel = criteria.loadModel();
-        } catch (IOException | ModelNotFoundException | MalformedModelException e) {
-            e.printStackTrace();
-        }
-
-
-        // Get the test sample
-        Image img = null;
-        try {
-            img = ImageFactory.getInstance().fromFile(Paths.get("ml/resources/testing.jpg"));
-            img.getWrappedImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Predict on the test sample
-        try{
-            Predictor<Image, Classifications> predictor = zooModel.newPredictor();
-            try {
-                Classifications classifications = predictor.predict(img);
-//                System.out.println(classifications);
-//                System.out.println(classifications.best().getClassName());
-//                System.out.println(classifications.best().getProbability());
-
-                String id = UUID.randomUUID().toString();
-
-                Value value = new Value();
-                value.setChoices(new String[]{classifications.best().getClassName()});
-                value.setScore(classifications.best().getProbability());
-
-                ResultItem resultItem = new ResultItem();
-                resultItem.setId(id);
-                resultItem.setFrom_name(parsedConfig.getFromName());
-                resultItem.setTo_name(parsedConfig.getToName());
-                resultItem.setType(parsedConfig.getType());
-                resultItem.setValue(value);
-
-                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-                String json = ow.writeValueAsString(resultItem);
-
-                System.out.println(json);
-            } catch (TranslateException | JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }catch (NullPointerException e){
-            e.printStackTrace();
-        }
-    }
-
-
-    public void updatePredictions() {
-        //
-    }
-
-    public static void main(String[] args) {
-        ModelDO model = new ModelDO();
-        ModelDriver modelDriver = new ModelDriver(model);
-        modelDriver.runModel();
-        modelDriver.parseConfig();
+        return predictionList;
     }
 }

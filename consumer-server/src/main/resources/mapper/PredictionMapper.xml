@@ -9,8 +9,8 @@
         <result column="project_id" property="projectId"/>
         <result column="data_id" property="dataId"/>
         <result column="type" property="type"/>
-        <result column="result" property="result"/>
-        <result column="score" property="score"/>
+        <result column="value" property="value"/>
+        <result column="model_version" property="model"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="from_name" property="fromName"/>
@@ -18,13 +18,15 @@
     </resultMap>
 
     <insert id="insertAll" parameterType="java.util.List">
+        SET FOREIGN_KEY_CHECKS = 0;
         insert into prediction
-        (prediction_id,project_id,data_id,type,score,result,create_time,update_time,from_name,to_name)
+        (prediction_id,project_id,data_id,type,value,model_version,create_time,update_time,from_name,to_name)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.annotationId},#{item.projectId},#{item.dataId},#{item.type},#{item.score},#{item.result},
-            #{item.createTime},#{item.updateTime},#{item.fromName},#{item.toName})
-        </foreach>
+            (#{item.predictionId},#{item.projectId},#{item.dataId},#{item.type},
+            #{item.value},#{item.model},#{item.createTime},#{item.updateTime},#{item.fromName},#{item.toName})
+        </foreach>;
+        SET FOREIGN_KEY_CHECKS = 1;
     </insert>
 
     <select id="listByDataId" resultMap="predictionMap">

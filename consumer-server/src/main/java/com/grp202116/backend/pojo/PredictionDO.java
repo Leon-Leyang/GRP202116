@@ -6,7 +6,7 @@ package com.grp202116.backend.pojo;
  */
 public class PredictionDO extends LabelDO {
     private String predictionId;
-    private Double score;
+    private String model;
 
     /**
      * Get the id of the Prediction label object
@@ -24,19 +24,11 @@ public class PredictionDO extends LabelDO {
         this.predictionId = predictionId;
     }
 
-    /**
-     * Get the score of the Prediction label object
-     * @return the score of the prediction
-     */
-    public Double getScore() {
-        return score;
+    public String getModel() {
+        return model;
     }
 
-    /**
-     * Set the score of the Prediction label object
-     * @param score the given score
-     */
-    public void setScore(Double score) {
-        this.score = score;
+    public void setModel(String model) {
+        this.model = model;
     }
 }
