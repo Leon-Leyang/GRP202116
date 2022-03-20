@@ -89,25 +89,25 @@
             <version>1.2.79</version>
         </dependency>
 
-        <!-- AWS DJL -->
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>api</artifactId>
-            <version>${djl.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; AWS DJL &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>ai.djl</groupId>-->
+<!--            <artifactId>api</artifactId>-->
+<!--            <version>${djl.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-engine</artifactId>
-            <version>${djl.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ai.djl.pytorch</groupId>-->
+<!--            <artifactId>pytorch-engine</artifactId>-->
+<!--            <version>${djl.version}</version>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>model-zoo</artifactId>
-            <version>${djl.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ai.djl</groupId>-->
+<!--            <artifactId>model-zoo</artifactId>-->
+<!--            <version>${djl.version}</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 

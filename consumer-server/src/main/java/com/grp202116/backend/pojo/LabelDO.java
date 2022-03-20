@@ -8,7 +8,7 @@ package com.grp202116.backend.pojo;
 public class LabelDO extends DataDistinguishableDO{
     private String fromName;
     private String toName;
-    private String result;
+    private String value;
 
     /**
      * Get the fromName information of the label
@@ -42,11 +42,11 @@ public class LabelDO extends DataDistinguishableDO{
         this.toName = toName;
     }
 
-    public String getResult() {
-        return result;
+    public String getValue() {
+        return value;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setValue(String value) {
+        this.value = value;
     }
 }
