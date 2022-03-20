@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <img src="@/assets/new/0_10.jpg" alt="">
+      
         <img :src="item" alt="" v-for="(item, index) in imgList" :key="index" />
     </div>
 </template>
