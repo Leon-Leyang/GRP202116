@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing import sequence
@@ -65,7 +67,7 @@ class TextClsModel(Model):
 if __name__ == '__main__':
     modelPath = '../../ml/models/lstm/lstm.pth'
     modelVersion = 'one'
-    modelRoot = 'C:/Users/Leon/Desktop/Text-Classification-LSTMs-PyTorch'
+    modelRoot = 'C:/Users/Leon/Desktop/Text-Classification-LSTMs'
     fromName = 'sentiment'
     toName = 'text'
     toolType = 'choices'

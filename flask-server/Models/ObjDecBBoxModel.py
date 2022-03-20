@@ -1,10 +1,7 @@
 from PIL import Image
 
 import uuid
-import torch
-import cv2
 import torchvision.transforms as tf
-import numpy as np
 
 from Models.Model import Model
 
