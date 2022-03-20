@@ -1,3 +1,4 @@
+<!-- 原project管理界面 方法还未完全迁移到新界面 -->
 <template>
   <div class="page-block">
       <el-dialog :title="operateType === 'add' ? 'New' : 'Update'" :visible.sync="isShow">
