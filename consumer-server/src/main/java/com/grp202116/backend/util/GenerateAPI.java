@@ -3,6 +3,9 @@ package com.grp202116.backend.util;
 import io.github.yedaxia.apidocs.Docs;
 import io.github.yedaxia.apidocs.DocsConfig;
 
+/**
+ * Generate the API docs for the backend
+ */
 public class GenerateAPI {
     public static void main(String[] args){
         DocsConfig config = new DocsConfig();
