@@ -1,21 +1,21 @@
 package com.grp202116.backend.ml;
-
-import ai.djl.MalformedModelException;
-import ai.djl.inference.Predictor;
-import ai.djl.modality.Classifications;
-import ai.djl.modality.cv.Image;
-import ai.djl.modality.cv.ImageFactory;
-import ai.djl.modality.cv.transform.CenterCrop;
-import ai.djl.modality.cv.transform.Normalize;
-import ai.djl.modality.cv.transform.Resize;
-import ai.djl.modality.cv.transform.ToTensor;
-import ai.djl.modality.cv.translator.ImageClassificationTranslator;
-import ai.djl.repository.zoo.Criteria;
-import ai.djl.repository.zoo.ModelNotFoundException;
-import ai.djl.repository.zoo.ZooModel;
-import ai.djl.training.util.ProgressBar;
-import ai.djl.translate.TranslateException;
-import ai.djl.translate.Translator;
+//
+//import ai.djl.MalformedModelException;
+//import ai.djl.inference.Predictor;
+//import ai.djl.modality.Classifications;
+//import ai.djl.modality.cv.Image;
+//import ai.djl.modality.cv.ImageFactory;
+//import ai.djl.modality.cv.transform.CenterCrop;
+//import ai.djl.modality.cv.transform.Normalize;
+//import ai.djl.modality.cv.transform.Resize;
+//import ai.djl.modality.cv.transform.ToTensor;
+//import ai.djl.modality.cv.translator.ImageClassificationTranslator;
+//import ai.djl.repository.zoo.Criteria;
+//import ai.djl.repository.zoo.ModelNotFoundException;
+//import ai.djl.repository.zoo.ZooModel;
+//import ai.djl.training.util.ProgressBar;
+//import ai.djl.translate.TranslateException;
+//import ai.djl.translate.Translator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.grp202116.backend.pojo.ModelDO;
 

@@ -1,7 +1,7 @@
 package com.grp202116.backend.ml;
-
-import ai.djl.training.util.DownloadUtils;
-import ai.djl.training.util.ProgressBar;
+//
+//import ai.djl.training.util.DownloadUtils;
+//import ai.djl.training.util.ProgressBar;
 import com.grp202116.backend.pojo.ModelDO;
 
 import java.io.IOException;

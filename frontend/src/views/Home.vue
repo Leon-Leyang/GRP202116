@@ -4,7 +4,7 @@
 
 
     <v-data-iterator
-      :items="items"
+      :items="tableData"
       :items-per-page.sync="itemsPerPage"
       :page.sync="page"
       :search="search"
@@ -220,7 +220,6 @@
 </template>
 
 <script>
-import Mock from 'mockjs'
 import Create from '../components/ProjectManage/Create.vue';
   export default {
       components:{
@@ -379,7 +378,7 @@ import Create from '../components/ProjectManage/Create.vue';
     },
     computed: {
       numberOfPages () {
-        return Math.ceil(this.items.length / this.itemsPerPage)
+        return Math.ceil(this.tableData.length / this.itemsPerPage)
       },
       filteredKeys () {
         return this.keys.filter(key => key !== 'Name')
