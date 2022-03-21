@@ -1,4 +1,3 @@
-<!-- 暂时用来做测试的界面 方便查看页面效果 完成后需要删掉 -->
 <template>
 <div>
   <v-container fluid>
@@ -15,33 +14,50 @@
     >
       <template v-slot:header>
         <v-card-title>    
-
-        <v-dialog
-        v-model="dialog"
-        width="500"
-        >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-            color="red lighten-2"
-            dark
-            v-bind="attrs"
-            v-on="on"
+        <v-row>
+            <v-dialog
+            v-model="isShow"
+            persistent
+            width="700"
             >
-            Create
-            </v-btn>
-        </template>
-
-        <v-card>
-               <el-dialog :title="operateType === 'add' ? 'New' : 'Update'" :visible.sync="isShow">
-          <Create :form="operateForm" ref="form" style="width: 100%" />
-          <div slot="footer" class="dialog-footer">
-              <el-button @click="isShow = false">Cancel</el-button>
-              <el-button type="primary" @click="confirm">Finish</el-button>
-          </div>
-      </el-dialog>
-        </v-card>
-        </v-dialog>
-
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                color="primary"
+                dark
+                v-bind="attrs"
+                v-on="on"
+                @click="addProject()"
+                >
+                Create
+                </v-btn>
+            </template>
+            <v-card>
+                <v-card-title class="text-h5">
+                {{operateType === 'add' ? 'New' : 'Update'}}
+                </v-card-title>
+                <v-card-text>
+                    <Create :form="operateForm" ref="form" style="width: 100%" />
+                </v-card-text>
+                <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="isShow = false"
+                >
+                    Cancel
+                </v-btn>
+                <v-btn
+                    color="green darken-1"
+                    text
+                    @click="confirm()"
+                >
+                    Finish
+                </v-btn>
+                </v-card-actions>
+            </v-card>
+            </v-dialog>
+        </v-row>
 
         <v-spacer></v-spacer>
           <v-text-field
@@ -86,11 +102,11 @@
         </v-card-title>
       </template>
 
-      <template v-slot:default="props">
+      <template>
         <v-row dense>
           <v-col
-            v-for="item in props.items"
-            :key="item.name"
+            v-for="item in tableData"
+            :key="item.projectId"
             cols="12"
             md="4"
           >
@@ -102,7 +118,7 @@
                 <v-card-subtitle>{{item.description}}</v-card-subtitle>
               
                 <v-progress-linear
-                color="light-blue"
+                :color="customColorMethod(item.process)"
                 height="7"
                 rounded
                 :value="item.process"
@@ -123,11 +139,11 @@
                 </div>
 
                 <v-spacer></v-spacer>
-                <v-btn icon>
+                <v-btn icon @click="editProject(item)">
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
 
-                <v-btn icon>
+                <v-btn icon @click="delProject(item)">
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
                 </v-card-actions>
@@ -212,29 +228,19 @@ import Create from '../components/ProjectManage/Create.vue';
       },
     data () {
       return {
-        listQuery: {
-        page: 1,
-        limit: 10
-      },
         operateType: 'add',
         isShow: false,
         tableData: [],
-          config: {
-              page: 1,
-              total: 30,
-              loading: false
-          },
-          operateForm: {
-              projectId: 12,
-              name: '',
-              description: '',
-              process: '',
-              updateTime: '',
-              createTime: '',
-            //   data: '',
-            //   ml: '',
-          },
-
+        operateForm: {
+            configs:'',
+            createTime: '',
+            description: '',
+            name: '',
+            process: '',
+            projectId: '',
+            type:'',
+            updateTime: '',
+        },
 
         itemsPerPageArray: [6, 8, 12],
         search: '',
@@ -250,101 +256,27 @@ import Create from '../components/ProjectManage/Create.vue';
           'UpdateTime',
           'CreateTime',
         ],
-        items: [
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-          {
-            name: Mock.Random.title(1),
-            description: Mock.Random.sentence(3, 5),
-            process: Mock.Random.integer(0, 100),
-            updateTime: Mock.Random.date(),
-            createTime: Mock.Random.date(),
-          },
-        
-        ],
       }
     },
     methods: {
-        getList(name = '') {
-            this.config.loading = true
-            name ? (this.config.page = 1) : ''
-            this.$axios.get('/projects', {
+        getList() {
+            // this.config.loading = true
+            // name ? (this.config.page = 1) : ''
+            this.$axios.get('/project/list', {
                     params: {
-                        page: this.config.page,
-                        name
+                        // page: this.config.page,
                     }
                 })
                 .then(res => {
-                    console.log("list",res)
+                  console.log('tag', res)
                     this.tableData = res.data.map(item => {
-                        item.updateTime = this.convertTime(item.updateTime)
-                        item.createTime = this.convertTime(item.createTime)
+                        // item.updateTime = this.convertTime(item.updateTime)
+                        // item.createTime = this.convertTime(item.createTime)
                         return {...item,process:12}
                     })
 
-                    this.config.total = res.data.length
-                    this.config.loading = false
+                    // this.config.total = res.data.length
+                    // this.config.loading = false
                     console.log("table",this.tableData)
                 // console.log("dew",row)
 
@@ -368,21 +300,25 @@ import Create from '../components/ProjectManage/Create.vue';
         confirm() {
             if (this.operateType === 'edit') {
                 console.log("test",this.operateForm)
-                this.$axios.post('/projects/edit', this.operateForm)
+                this.$axios.post(`/project/edit`, JSON.stringify(this.operateForm))
                     .then(res => {
                     console.log(res.data)
                     this.isShow = false
                     this.getList()
                 })
             } else {
-                console.log(this.operateForm)
-                this.$axios.post('/projects', this.operateForm).then(res => {
-                    console.log(res.data)
+                console.log("add test",this.operateForm)
+                this.operateForm.projectId = 12
+                this.$axios.post('/project/add', this.operateForm)
+                .then(res => {
+                    console.log("new", res.data)
                     this.isShow = false
                     this.getList()
 
                 })
             }
+            this.isShow = false
+
         },
         delProject(row) {
             this.$confirm('This operation will permanently delete the file, are you sure you want to continue?', 'Hint', {
@@ -394,7 +330,7 @@ import Create from '../components/ProjectManage/Create.vue';
                     let projectId = row.projectId
                     console.log(typeof(projectId))
                     console.log(projectId)
-                    this.$axios.delete('/projects/'+ projectId, {
+                    this.$axios.delete('/project/'+ projectId, {
                             params: {
                                 projectId
                             }
@@ -428,6 +364,13 @@ import Create from '../components/ProjectManage/Create.vue';
       },
       updateItemsPerPage (number) {
         this.itemsPerPage = number
+      },
+      customColorMethod(percentage) {
+        if (percentage < 100) {
+          return '#FFE7AD';
+        } else {
+          return '#7EDF96';
+        }
       },
     },
     created() {

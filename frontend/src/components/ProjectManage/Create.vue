@@ -1,6 +1,7 @@
 <template>
 <div>
-<el-tabs v-model="active">
+
+<el-tabs v-model="active" style="height:500px">
     <el-tab-pane name="1" >
         <span slot="label">Basic Info</span>
 
@@ -59,8 +60,7 @@
     <!-- Button block -->
     <div style="display: flex; float: right; width:35%">
         <!-- Next Button -->
-        <el-button type="primary" @click="nextStep" style="margin-right:10%">Next</el-button>
-        <el-button class="next" @click="nextStep" style="float: right" icon="el-icon-d-arrow-right" circle></el-button>
+        <!-- <el-button class="next" @click="nextStep" style="float: right" icon="el-icon-d-arrow-right" circle></el-button> -->
         <!-- Complete Button -->
         <!-- <el-button type="primary" @click="modify">Completed</el-button> -->
     </div>
