@@ -1,17 +1,14 @@
 from PIL import Image
 
 import uuid
-import torch
-import cv2
 import torchvision.transforms as tf
-import numpy as np
 
 from Models.Model import Model
 
 # Model for image classification task
 class ObjDecBBoxModel(Model):
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, threashold):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -72,14 +69,13 @@ if __name__ == '__main__':
     fromName = 'label'
     toName = 'image'
     toolType = 'rectanglelabels'
-
-    labels = ['__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'N/A', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'N/A', 'backpack', 'umbrella', 'N/A', 'N/A', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket', 'bottle', 'N/A', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch', 'potted plant', 'bed', 'N/A', 'dining table', 'N/A', 'N/A', 'toilet', 'N/A', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'N/A', 'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush']
+    labelsPath = '../coco.txt'
 
     threashold = 0.75
 
     imgPath = '../puppy.webp'
 
-    objDecBBoxModel = ObjDecBBoxModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels, threashold)
+    objDecBBoxModel = ObjDecBBoxModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
 
     predictionItem = objDecBBoxModel.predict(imgPath)
     print(predictionItem)

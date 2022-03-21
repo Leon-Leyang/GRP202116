@@ -10,14 +10,14 @@ from Models.Model import Model
 
 # Model for semantic segmentation task with mask
 class SemSegMaskModel(Model):
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labels)
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std):
+        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
             tf.ToTensor(),
-            tf.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225])])
+            tf.Normalize(mean=mean,
+                         std=std)])
 
     def predict(self, imgPath):
         super().predict()
@@ -61,10 +61,13 @@ if __name__ == '__main__':
     fromName = 'tag'
     toName = 'image'
     type = 'brushlabels'
-    labels = ['Background', 'Aeroplane', 'Bicycle', 'Bird', 'Boat', 'Bottle', 'Bus', 'Car', 'Cat', 'Chair', 'Cow', 'Dining table', 'Dog', 'Horse', 'Motorbike', 'Person', 'Potted plant', 'Sheep', 'Sofa', 'Train', 'Tv/monitor']
+    labelsPath = '../voc2007.txt'
+
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
     imgPath = '../puppy.webp'
 
 
-    semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, modelRoot, fromName, toName, type, labels)
+    semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, modelRoot, fromName, toName, type, labelsPath, mean, std)
     predictionItem = semSegMaskModel.predict(imgPath)
     print(predictionItem)

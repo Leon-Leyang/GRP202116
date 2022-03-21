@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigInteger;
 
 /**
- * Just for test
+ * Just for test models
  */
 @RestController
 public class TestController {
@@ -52,6 +52,8 @@ public class TestController {
                 "Dining table, Dog, Horse, Motorbike, Person, Potted plant, Sheep, Sofa, Train," +
                 " Tv/monitor";
 
+        String model_root = "./";
+
 
         JSONObject param = new JSONObject();
         param.put("project_type", "Semantic Segmentation Mask");
@@ -59,6 +61,7 @@ public class TestController {
         param.put("configs", configs);
         param.put("model_path", "../ml/models/fcn/fcn.pth");
         param.put("model_version", "undefined");
+        param.put("model_root", "./");
         param.put("labels", labels);
 
         String response = restTemplate.postForObject("http://sidecar-server/model",

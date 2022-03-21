@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 
@@ -49,8 +50,13 @@ public class AnnotationController {
      */
     @PutMapping("/annotation/data/{dataId}")
     public void updateDataAnnotations(@PathVariable BigInteger dataId, @RequestBody List<AnnotationDO> annotations){
-        System.out.println(dataId);
         annotationMapper.deleteByDataId(dataId);
+
+        Date date = new Date();
+        for (AnnotationDO annotation: annotations) {
+            annotation.setCreateTime(date);
+            annotation.setUpdateTime(date);
+        }
         annotationMapper.insertAll(annotations);
     }
 
