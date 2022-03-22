@@ -36,14 +36,14 @@
                 {{operateType === 'add' ? 'New' : 'Update'}}
                 </v-card-title>
                 <v-card-text>
-                    <Create :form="operateForm" ref="form" style="width: 100%" />
+                    <Create :dataURL="dataURL" :form="operateForm" ref="form" style="width: 100%" />
                 </v-card-text>
                 <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
                     color="green darken-1"
                     text
-                    @click="isShow = false"
+                    @click="cancelChange()"
                 >
                     Cancel
                 </v-btn>
@@ -230,6 +230,7 @@ import Create from '../components/ProjectManage/Create.vue';
         operateType: 'add',
         isShow: false,
         tableData: [],
+        tempData: [],
         operateForm: {
             configs:'',
             createTime: '',
@@ -240,6 +241,7 @@ import Create from '../components/ProjectManage/Create.vue';
             type:'',
             updateTime: '',
         },
+        dataURL:'',
 
         itemsPerPageArray: [6, 8, 12],
         search: '',
@@ -269,8 +271,8 @@ import Create from '../components/ProjectManage/Create.vue';
                 .then(res => {
                   console.log('tag', res)
                     this.tableData = res.data.map(item => {
-                        // item.updateTime = this.convertTime(item.updateTime)
-                        // item.createTime = this.convertTime(item.createTime)
+                        item.updateTime = this.convertTime(item.updateTime)
+                        item.createTime = this.convertTime(item.createTime)
                         return {...item,process:12}
                     })
 
@@ -287,6 +289,7 @@ import Create from '../components/ProjectManage/Create.vue';
         },
         addProject() {
             this.operateForm = {}
+            this.dataURL = {}
             this.operateType = 'add'
             this.isShow = true
         },
@@ -294,6 +297,7 @@ import Create from '../components/ProjectManage/Create.vue';
             this.operateType = 'edit'
             this.isShow = true
             this.operateForm = row
+            
             console.log('tag', row)
         },
         confirm() {
@@ -317,6 +321,33 @@ import Create from '../components/ProjectManage/Create.vue';
                 })
             }
             this.isShow = false
+
+        },
+        cancelChange(){
+          this.isShow = false;
+            this.$axios.get('/project/list', {
+                    params: {
+                        // page: this.config.page,
+                    }
+                })
+                .then(res => {
+                  console.log('tag', res)
+                    this.tableData = res.data.map(item => {
+                        item.updateTime = this.convertTime(item.updateTime)
+                        item.createTime = this.convertTime(item.createTime)
+                        return {...item,process:12}
+                    })
+
+                    // this.config.total = res.data.length
+                    // this.config.loading = false
+                    console.log("table",this.tableData)
+                // console.log("dew",row)
+
+                })
+                .catch((error) => {
+        // here you will have access to error.response
+        console.log(error.response)
+    });          
 
         },
         delProject(row) {
