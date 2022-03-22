@@ -43,4 +43,6 @@ public interface DataMapper extends BaseMapper {
      * @param dataId dataId
      */
     void deleteDataById(String dataId);
+
+    Boolean getAnnotateStatus(String dataId);
 }

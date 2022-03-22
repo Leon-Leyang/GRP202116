@@ -10,9 +10,10 @@
         <result column="update_time" property="updateTime"/>
         <result column="type" property="type"/>
         <result column="project_id" property="projectId"/>
+        <result column="is_annotated" property="isAnnotated"/>
     </resultMap>
 
-    <insert id="insertAll" parameterType="java.util.List">
+    <insert id="insertAll" parameterType="List">
         insert into data (data_id,url,update_time,type,project_id)
         values
         <foreach collection="list" item="item" index="index" separator=",">
@@ -30,6 +31,12 @@
         select *
         from data
         where project_id = #{projectId}
+    </select>
+
+    <select id="getAnnotateStatus" parameterType="String" resultType="Boolean">
+        select is_annotated
+        from data
+        where data_id = #{dataId}
     </select>
 
     <delete id="deleteByProjectId">

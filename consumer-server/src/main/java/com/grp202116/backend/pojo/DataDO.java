@@ -6,6 +6,7 @@ package com.grp202116.backend.pojo;
  */
 public class DataDO extends DataDistinguishableDO {
     private String url;
+    private boolean isAnnotated;
 
     /**
      * Get the Url value of the data
@@ -21,5 +22,13 @@ public class DataDO extends DataDistinguishableDO {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isAnnotated() {
+        return isAnnotated;
+    }
+
+    public void setAnnotated(boolean annotated) {
+        isAnnotated = annotated;
     }
 }
