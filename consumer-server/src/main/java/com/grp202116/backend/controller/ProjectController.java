@@ -50,7 +50,7 @@ public class ProjectController {
      *
      * @return the process, retains four decimal
      */
-    @GetMapping("/project/process/{projectId")
+    @GetMapping("/project/{projectId}/process")
     public String getProjectProcess(@PathVariable BigInteger projectId) {
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         int annotatedCount = 0;

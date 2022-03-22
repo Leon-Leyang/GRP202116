@@ -1,7 +1,10 @@
 package com.grp202116.backend.controller;
 
 import com.grp202116.backend.mapper.DataMapper;
+import com.grp202116.backend.mapper.ProjectMapper;
 import com.grp202116.backend.pojo.DataDO;
+import com.grp202116.backend.pojo.ProjectDO;
+import com.grp202116.backend.util.DataUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -17,6 +20,9 @@ import java.util.List;
 public class DataController {
     @Resource
     private DataMapper dataMapper;
+
+    @Resource
+    private ProjectMapper projectMapper;
 
     /**
      * Get the Data by the corresponding id
@@ -43,8 +49,20 @@ public class DataController {
      * Add the Data to the database
      * @param dataList the uploaded data
      */
+    @Deprecated
     @PutMapping("/data/add")
     public void addDataList(@RequestBody List<DataDO> dataList){
+        dataMapper.insertAll(dataList);
+    }
+
+    /**
+     * Upload data to project path
+     * @param urlList a list of data urls
+     */
+    @PostMapping("/project/{projectId}/data")
+    public void uploadData(@RequestBody List<String> urlList, @PathVariable BigInteger projectId) {
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        List<DataDO> dataList = DataUtils.uploadProjectData(urlList, projectId, project.getType());
         dataMapper.insertAll(dataList);
     }
 

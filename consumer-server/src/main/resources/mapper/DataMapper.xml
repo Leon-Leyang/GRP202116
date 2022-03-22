@@ -13,11 +13,11 @@
         <result column="is_annotated" property="isAnnotated"/>
     </resultMap>
 
-    <insert id="insertAll" parameterType="List">
-        insert into data (data_id,url,update_time,type,project_id)
+    <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="dataId" keyColumn="data_id">
+        insert into data (url,update_time,type,project_id)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.dataId},#{item.url},#{item.updateTime},#{item.type},#{item.projectId})
+            (#{item.url},#{item.updateTime},#{item.type},#{item.projectId})
         </foreach>
     </insert>
 
