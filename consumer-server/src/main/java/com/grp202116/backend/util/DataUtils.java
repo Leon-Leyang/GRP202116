@@ -18,14 +18,14 @@ public class DataUtils {
     private static BigInteger projectId;
     private static String projectPath;
 
-    public static List<DataDO> uploadProjectData(List<String> urlList, BigInteger projectId, String type) {
+    public static List<DataDO> uploadProjectData(List<File> fileList, BigInteger projectId, String type) {
         dataList = new ArrayList<>();
         DataUtils.projectId = projectId;
         projectPath = "../files/" + projectId + "/";
 
-        for (String url : urlList) {
+        for (File file : fileList) {
             try {
-                moveToLocal(url, type);
+                moveToLocal(file, type);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -47,11 +47,8 @@ public class DataUtils {
      * named entity recognition
      * machine translation
      *
-     * @param url
-     * @param type
      */
-    private static void moveToLocal(String url, String type) throws IOException {
-        File file = new File(url);
+    private static void moveToLocal(File file, String type) throws IOException {
 
         if (!file.exists()) throw new FileNotFoundException();
 
@@ -88,7 +85,7 @@ public class DataUtils {
         data.setUpdateTime(date);
         data.setCreateTime(date);
 
-        File targetFile = new File(projectPath + UUID.randomUUID());
+        File targetFile = new File(projectPath + UUID.randomUUID() + "." + realType);
         data.setUrl(targetFile.getPath());
 
         try {

@@ -8,7 +8,9 @@ import com.grp202116.backend.util.DataUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,10 +61,20 @@ public class DataController {
      * Upload data to project path
      * @param urlList a list of data urls
      */
-    @PostMapping("/project/{projectId}/data")
-    public void uploadData(@RequestBody List<String> urlList, @PathVariable BigInteger projectId) {
+    @PostMapping("/project/{projectId}/data_url")
+    public void uploadDataURL(@RequestBody List<String> urlList, @PathVariable BigInteger projectId) {
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        List<DataDO> dataList = DataUtils.uploadProjectData(urlList, projectId, project.getType());
+        List<File> fileList = new ArrayList<>();
+        for (String url: urlList) fileList.add(new File(url));
+
+        List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
+        dataMapper.insertAll(dataList);
+    }
+
+    @PostMapping("/project/{projectId}/data_file")
+    public void uploadDataFile(@RequestBody List<File> fileList, @PathVariable BigInteger projectId) {
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
         dataMapper.insertAll(dataList);
     }
 
