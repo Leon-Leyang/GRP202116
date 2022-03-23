@@ -1,27 +1,22 @@
 package com.grp202116.backend.util;
 
 import com.grp202116.backend.pojo.DataDO;
-import org.apache.tika.Tika;
+import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class DataUtils {
     private static List<DataDO> dataList;
     private static BigInteger projectId;
     private static String projectPath;
-    private static final Tika tika;
-
-    static {
-        tika = new Tika();
-    }
 
     public static List<DataDO> uploadProjectData(List<String> urlList, BigInteger projectId, String type) {
         dataList = new ArrayList<>();
@@ -72,9 +67,18 @@ public class DataUtils {
     }
 
     private static void readSingleFile(File file, String dataType) throws IOException {
-        String realType = tika.detect(file);
-        if (dataType.equals("image") && !realType.substring(0, 5).equals(dataType)) return;
-        else if (!realType.equals("text/plain")) return;
+        String realType = FilenameUtils.getExtension(file.getName());
+
+        if (dataType.equals("image")) {
+            if (!realType.equals("jpg") && !realType.equals("png") && !realType.equals("gif")
+                    && !realType.equals("bmp") && !realType.equals("svg") && !realType.equals("webp"))
+                return;
+        } else {
+            if (!realType.equals("txt") && !realType.equals("csv") && !realType.equals("tsv")
+                    && !realType.equals("json"))
+                return;
+            else splitText(file, realType);
+        }
 
         DataDO data = new DataDO();
         data.setProjectId(projectId);
@@ -84,10 +88,43 @@ public class DataUtils {
         data.setUpdateTime(date);
         data.setCreateTime(date);
 
-        File targetFile = new File(projectPath + file.getName());
-        Files.copy(file.toPath(), targetFile.toPath());
+        File targetFile = new File(projectPath + UUID.randomUUID());
+        data.setUrl(targetFile.getPath());
+
+        try {
+            Files.copy(file.toPath(), targetFile.toPath());
+        } catch (FileAlreadyExistsException e) {
+            e.printStackTrace();
+        }
 
         dataList.add(data);
+    }
+
+    private static void splitText(File file, String realType) throws IOException {
+        BufferedReader bf = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8);
+        String line;
+
+        while ((line = bf.readLine()) != null) {
+            DataDO data = new DataDO();
+            data.setProjectId(projectId);
+            data.setType(realType);
+
+            Date date = new Date();
+            data.setUpdateTime(date);
+            data.setCreateTime(date);
+
+            File targetFile = new File(projectPath + UUID.randomUUID() + ".txt");
+            if (targetFile.createNewFile()) System.out.println("New file created at: " + targetFile.getPath());
+            data.setUrl(targetFile.getPath());
+
+            BufferedWriter bw = Files.newBufferedWriter(targetFile.toPath(), StandardCharsets.UTF_8);
+            bw.write(line);
+            bw.close();
+
+            dataList.add(data);
+        }
+
+        bf.close();
     }
 
     private static void readDirectory(File file, String dataType) throws IOException {
