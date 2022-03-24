@@ -184,7 +184,7 @@
       </el-tab-pane>
 
       <!-- Import ML -->
-      <el-tab-pane name="3" >
+      <el-tab-pane name="3" :disabled="operateType == 'edit'" >
           <span slot="label">Import ML model</span>
           <!-- Import ML Model -->
           <div>
@@ -201,35 +201,40 @@
           </el-upload>
           </div>
       </el-tab-pane>
-      <!-- Import Data -->
-      <el-tab-pane name="4">
-          <span slot="label">Import Data</span>
-          <span>Please upload the appropriate type of file</span>
-          <el-upload
-            class="upload-demo"
-            ref="upload"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :file-list="fileList"
-            :auto-upload="false">
-            <el-button slot="trigger" size="small" type="primary">Select</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
-            <div slot="tip" class="el-upload__tip">Please upload the appropriate type of file</div>
-          </el-upload>
 
-          <!-- Import dataset -->
-          <!-- <el-upload
-          class="upload-demo"
-          drag
-          action="/api/dataset"
-          v-model="form.data" 
-          multiple>
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">Drag & drop files here</div>
-          <div class="el-upload__text"><em>Click to add</em></div>
-          <div class="el-upload__tip" slot="tip">( The format of uploading file should be <span style="font-style:italic; color: #719DDD">.txt, .jpg, .png, .gif, .bmp, .svg, .webp, .csv, .tsv, .json</span> )</div>
-          </el-upload> -->
+      <!-- Import Data -->
+      <el-tab-pane name="4" :disabled="operateType == 'edit'">
+          <span slot="label">Import Data</span>
+          <div style="display:flex">
+            <div>
+              Please enter the path to the folder where you want to use the file:
+
+              <el-input
+                type="textarea"
+                :rows="2"
+                placeholder="Address"
+                v-model="folderURL"
+                >
+              </el-input>
+              <div slot="tip" class="el-upload__tip">If there are multiple paths please separate them with commas(",").</div>
+            </div>
+            <div>
+              Please upload the appropriate type of file
+              <el-upload
+                class="upload-demo"
+                ref="upload"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">Select</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
+                <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt format, and individual file sizes should not exceed 3M)</div>
+                <div slot="tip" class="el-upload__tip">It is highly recommended to use the pass path method!</div>
+              </el-upload>
+            </div>
+          </div>
       </el-tab-pane>
 
   </el-tabs>
@@ -247,6 +252,8 @@
     props: {
       inline: Boolean,
       form: Object,
+      folderURL: String,
+      operateType: String
     },
 
     data:() => ({
@@ -351,7 +358,7 @@
         },
     },
     mounted() {
-        this.form.projectId = 12;
+      console.log('inline',this.inline)
         console.log(this.form.projectId)
     },
   }

@@ -662,17 +662,16 @@
               })
           } else {
               console.log("add test",this.operateForm)
+              let projectId = this.operateForm.projectId
+              var folderURL = this.folderURL.split(",")
+              console.log('address', folderURL)
               this.$axios.post('/project/add', this.operateForm)
               .then(res => {
                   console.log("new", res)
                   this.isShow = false
                   this.getList()
               })
-              //upload folder address
-              // var projectId = this.operateForm.projectId
-              var folderURL = this.folderURL.split(",")
-              console.log('address', folderURL)
-              this.$axios.post('/project/1/data_file', folderURL) 
+              this.$axios.post('/project/' + projectId + '/data_file', folderURL) 
               .then(res => {
                 console.log('folderURL', res)
               })
@@ -681,7 +680,7 @@
               let inputElement = document.getElementById("input");
               inputElement.addEventListener("change", this.fileList = this.files, false);
 
-              this.$axios.post('/project/1/data_url', this.upload) 
+              this.$axios.post('/project/' + projectId + '/data_url', this.upload) 
               .then(res => {
                 console.log('fileList', res)
               })
