@@ -57,16 +57,16 @@ class KpLabModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/keypointrcnn/keypointrcnn.pth'
+    modelPath = '../../ml/models/KeypointLabeling/keypointrcnn.pth'
     modelVersion = 'one'
-    modelRoot = 'C:/Users/Leon/Desktop/Keypoint-Labeling'
+    modelRoot = '../../ml/models/KeypointLabeling'
     fromName = 'kp-1'
     toName = 'img-1'
     toolType = 'keypointlabels'
-    labelsPath = '../cocoKp.txt'
+    labelsPath = '../../ml/resources/cocoKp.txt'
     threashold = 0.9
 
-    imgPath = '../kid.jpg'
+    imgPath = '../../ml/resources/kid.jpg'
 
     kpLabModel = KpLabModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
 

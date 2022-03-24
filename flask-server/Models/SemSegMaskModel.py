@@ -55,17 +55,17 @@ class SemSegMaskModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/fcn/fcn.pth'
+    modelPath = '../../ml/models/SemanticSegmentation/fcn.pth'
     modelVersion = 'one'
     modelRoot = './'
     fromName = 'tag'
     toName = 'image'
     type = 'brushlabels'
-    labelsPath = '../voc2007.txt'
+    labelsPath = '../../ml/resources/voc2007.txt'
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
-    imgPath = '../puppy.webp'
+    imgPath = '../../ml/resources/puppy.webp'
 
 
     semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, modelRoot, fromName, toName, type, labelsPath, mean, std)

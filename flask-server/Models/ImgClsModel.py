@@ -14,7 +14,6 @@ class ImgClsModel(Model):
         # Preprocessing operations
         self.transforms = tf.Compose([
             tf.Resize(256),
-            # TODO: Get the image size for center crop from user
             tf.CenterCrop(imgSize),
             tf.ToTensor(),
             tf.Normalize(mean=mean,
@@ -49,19 +48,19 @@ class ImgClsModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/resnet101/resnet101.pth'
+    modelPath = '../../ml/models/ImageClassification/resnet101.pth'
     modelVersion = 'one'
     modelRoot = './'
     fromName = 'choice'
     toName = 'image'
     toolType = 'choices'
-    labelsPath = '../../ml/models/resnet101/ImageNetClasses.txt'
+    labelsPath = '../../ml/resources/ImageNetClasses.txt'
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
     imgSize = 224
 
-    imgPath = '../puppy.webp'
+    imgPath = '../../ml/resources/puppy.webp'
 
     imgClsModel = ImgClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize)
 

@@ -32,11 +32,11 @@ class TextClsModel(Model):
             return seq
 
 
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, textsPath, tokenNum, sequenceLen):
+    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, vocabPath, tokenNum, sequenceLen):
         super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Initialize the preprocess object
-        self.preprocess = self.Preprocess(textsPath, tokenNum, sequenceLen)
+        self.preprocess = self.Preprocess(vocabPath, tokenNum, sequenceLen)
 
 
 
@@ -65,20 +65,20 @@ class TextClsModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/lstm/lstm.pth'
+    modelPath = '../../ml/models/TextClassification/lstm.pth'
     modelVersion = 'one'
-    modelRoot = 'C:/Users/Leon/Desktop/Text-Classification-LSTMs'
+    modelRoot = '../../ml/models/TextClassification'
     fromName = 'sentiment'
     toName = 'text'
     toolType = 'choices'
-    labelsPath = '../textCls.txt'
+    labelsPath = '../../ml/resources/textCls.txt'
 
-    textsPath = '../vocab.csv'
+    vocabPath = '../../ml/resources/vocab.csv'
     tokenNum = 1000
     sequenceLen = 20
 
-    textClsModel = TextClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, textsPath, tokenNum, sequenceLen)
+    textClsModel = TextClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, vocabPath, tokenNum, sequenceLen)
 
-    textPath = '../tweets.txt'
+    textPath = '../../ml/resources/tweets.txt'
     predictionItem = textClsModel.predict(textPath)
     print(predictionItem)

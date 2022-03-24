@@ -69,7 +69,7 @@ class ModelDriver():
         elif project_type == 'Semantic Segmentation Mask':
             model = SemSegMaskModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['mean'], kwargs['std'])
         elif project_type == 'Text Classification':
-            model = TextClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['textsPath'], kwargs['tokenNum'], kwargs['sequenceLen'])
+            model = TextClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['vocabPath'], kwargs['tokenNum'], kwargs['sequenceLen'])
         elif project_type == 'Named Entity Recognition':
             model = NERModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['sequenceLen'])
         else:
@@ -99,12 +99,12 @@ if __name__ == '__main__':
                                 </View>"""
 
     predictions = []  # this is not necessary in here
-    model_path = '../ml/models/fcn/fcn.pth'
+    model_path = '../ml/models/SemanticSegmentation/fcn.pth'
     model_version = 'undefined'
     model_root = './'
-    labelsPath = './voc2007.txt'
+    labelsPath = '../ml/resources/voc2007.txt'
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
 
-    ModelDriver.run_model_on_data('Semantic Segmentation Mask', './puppy.webp', configs, model_path,
+    ModelDriver.run_model_on_data('Semantic Segmentation Mask', '../ml/resources/puppy.webp', configs, model_path,
                                   model_version, model_root, labelsPath, mean=mean, std=std)
