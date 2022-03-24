@@ -267,11 +267,9 @@
                                 :limit="3"
                                 :on-preview="handlePreview"
                                 :on-remove="handleRemove"
-                                :http-request = "uploadFile"
-                                :file-list = "fileList"
                                 :auto-upload="false"
+                                :on-change="handleChange"
                                 :before-upload="beforeAvatarUpload">
-                                <button @click="shown">show</button>
                                 <el-button slot="trigger" size="small" type="primary">Select</el-button>
                                 <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button> -->
                                 <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt/.doc format, and individual file sizes should not exceed 2M)</div>
@@ -513,6 +511,7 @@
         addNum:0,
         fileList: [],
         i : 0,
+        newestId: 0,
 
       // Create Project
       file:'',
@@ -613,8 +612,12 @@
               })
               .then(res => {
                 console.log('tag', res)
+                let temp = res
+                console.log('temp',temp)
+                let newest = temp.data.pop()
+                this.newestId = newest.projectId
+                console.log('newr', this.newestId)
                   this.tableData = res.data.map(item => {
-                    console.log('tag11', item)
                     let projectId = item.projectId
                       item.updateTime = this.convertTime(item.updateTime)
                       item.createTime = this.convertTime(item.createTime)
@@ -662,29 +665,36 @@
               })
           } else {
               console.log("add test",this.operateForm)
+              this.operateForm.type = 'image classification'
               this.$axios.post('/project/add', this.operateForm)
               .then(res => {
                   console.log("new", res)
                   this.isShow = false
                   this.getList()
               })
-              //upload folder address
-              // var projectId = this.operateForm.projectId
-              var folderURL = this.folderURL.split(",")
-              console.log('address', folderURL)
-              this.$axios.post('/project/1/data_url', folderURL)
-              .then(res => {
-                console.log('folderURL', res)
-              })
+              setTimeout(()=>{
+                //upload folder address
+                var projectId = this.newestId
+                console.log('newestId', projectId)
+                var folderURL = this.folderURL.split(",")
+                console.log('address', folderURL)
+                if(folderURL != ''){
+                  this.$axios.post('/project/'+ projectId +'/data_file', folderURL)
+                  .then(res => {
+                    console.log('folderURL', res)
+                  })
+                }
 
-              //upload file
-              let inputElement = document.getElementById("input");
-              inputElement.addEventListener("change", this.fileList = this.files, false);
-
-              this.$axios.post('/project/1/data_file', this.upload)
-              .then(res => {
-                console.log('fileList', res)
-              })
+                //upload file
+                let fileList = this.fileList
+                console.log('fileList', fileList)
+                if( fileList != ''){
+                  this.$axios.post('/project/'+ projectId +'/data_url', fileList)
+                  .then(res => {
+                    console.log('fileList', res)
+                  })
+                }
+              },1000)
           }
           this.isShow = false
           this.active = '1'
@@ -770,12 +780,9 @@
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
-      uploadFile(fileObj) {
-        console.log('fileObj', fileObj)
-
-      },
-      shown(){
-        console.log('fileList', this.fileList)
+      handleChange(file, fileList){
+        console.log(file, fileList);
+        this.fileList = fileList
       }
     },
     created() {

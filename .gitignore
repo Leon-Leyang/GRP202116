@@ -1,5 +1,7 @@
 # image
 frontend/src/assets/new
+files/
+
 ### Maven template
 target/
 pom.xml.tag

@@ -513,6 +513,7 @@
         addNum:0,
         fileList: [],
         i : 0,
+        newestId: 0,
 
       // Create Project
       file:'',
@@ -613,6 +614,11 @@
               })
               .then(res => {
                 console.log('tag', res)
+                let temp = res
+                console.log('temp',temp)
+                let newest = temp.data.pop()
+                this.newestId = newest.projectId
+                console.log('newr', this.newestId)
                   this.tableData = res.data.map(item => {
                     console.log('tag11', item)
                     let projectId = item.projectId
@@ -662,28 +668,31 @@
               })
           } else {
               console.log("add test",this.operateForm)
-              let projectId = this.operateForm.projectId
-              var folderURL = this.folderURL.split(",")
-              console.log('address', folderURL)
               this.$axios.post('/project/add', this.operateForm)
               .then(res => {
                   console.log("new", res)
                   this.isShow = false
                   this.getList()
               })
-              this.$axios.post('/project/' + projectId + '/data_file', folderURL) 
-              .then(res => {
-                console.log('folderURL', res)
-              })
+              setTimeout(()=>{
+                //upload folder address
+                var projectId = this.newestId
+                var folderURL = this.folderURL.split(",")
+                console.log('address', folderURL)
+                this.$axios.post('/project/'+ projectId +'/data_file', folderURL)
+                .then(res => {
+                  console.log('folderURL', res)
+                })
 
-              //upload file
-              let inputElement = document.getElementById("input");
-              inputElement.addEventListener("change", this.fileList = this.files, false);
+                //upload file
+                // let inputElement = document.getElementById("input");
+                // inputElement.addEventListener("change", this.fileList = this.files, false);
 
-              this.$axios.post('/project/' + projectId + '/data_url', this.upload) 
-              .then(res => {
-                console.log('fileList', res)
-              })
+                // this.$axios.post('/project/'+ projectId +'/data_url', this.upload)
+                // .then(res => {
+                //   console.log('fileList', res)
+                // })
+              },1000)
           }
           this.isShow = false
           this.active = '1'
