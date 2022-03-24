@@ -1,11 +1,16 @@
 package com.grp202116.backend.controller;
 
 import com.grp202116.backend.mapper.DataMapper;
+import com.grp202116.backend.mapper.ProjectMapper;
 import com.grp202116.backend.pojo.DataDO;
+import com.grp202116.backend.pojo.ProjectDO;
+import com.grp202116.backend.util.DataUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +22,9 @@ import java.util.List;
 public class DataController {
     @Resource
     private DataMapper dataMapper;
+
+    @Resource
+    private ProjectMapper projectMapper;
 
     /**
      * Get the Data by the corresponding id
@@ -43,8 +51,30 @@ public class DataController {
      * Add the Data to the database
      * @param dataList the uploaded data
      */
+    @Deprecated
     @PutMapping("/data/add")
     public void addDataList(@RequestBody List<DataDO> dataList){
+        dataMapper.insertAll(dataList);
+    }
+
+    /**
+     * Upload data to project path
+     * @param urlList a list of data urls
+     */
+    @PostMapping("/project/{projectId}/data_url")
+    public void uploadDataURL(@RequestBody List<String> urlList, @PathVariable BigInteger projectId) {
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        List<File> fileList = new ArrayList<>();
+        for (String url: urlList) fileList.add(new File(url));
+
+        List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
+        dataMapper.insertAll(dataList);
+    }
+
+    @PostMapping("/project/{projectId}/data_file")
+    public void uploadDataFile(@RequestBody List<File> fileList, @PathVariable BigInteger projectId) {
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
         dataMapper.insertAll(dataList);
     }
 

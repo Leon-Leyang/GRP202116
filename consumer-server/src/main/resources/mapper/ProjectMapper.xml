@@ -21,7 +21,7 @@
         where project_id = #{id}
     </select>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="projectId" parameterType="ProjectDO">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="projectId" keyColumn="projectId" parameterType="ProjectDO">
         insert into project (create_time, update_time, type, name, description)
         values (#{createTime}, #{updateTime}, #{type}, #{name}, #{description})
     </insert>

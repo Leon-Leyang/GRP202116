@@ -230,6 +230,7 @@ import Create from '../components/ProjectManage/Create.vue';
         operateType: 'add',
         isShow: false,
         tableData: [],
+        tempProcess:0.0,
         operateForm: {
             configs:'',
             createTime: '',
@@ -269,9 +270,14 @@ import Create from '../components/ProjectManage/Create.vue';
                 .then(res => {
                   console.log('tag', res)
                     this.tableData = res.data.map(item => {
-                        // item.updateTime = this.convertTime(item.updateTime)
-                        // item.createTime = this.convertTime(item.createTime)
-                        return {...item,process:12}
+                      console.log('tag11', item)
+                        item.updateTime = this.convertTime(item.updateTime)
+                        item.createTime = this.convertTime(item.createTime)
+                        this.$axios.get('/project/' + item.projectId + '/process')
+                          .then(res => {
+                            this.tempProcess = res
+                          })
+                        return {...item,process:this.tempProcess}
                     })
 
                     // this.config.total = res.data.length
@@ -307,7 +313,6 @@ import Create from '../components/ProjectManage/Create.vue';
                 })
             } else {
                 console.log("add test",this.operateForm)
-                this.operateForm.projectId = 12
                 this.$axios.post('/project/add', this.operateForm)
                 .then(res => {
                     console.log("new", res.data)
