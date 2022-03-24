@@ -68,7 +68,7 @@ public class DataController {
         for (String url: urlList) fileList.add(new File(url));
 
         List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
-        dataMapper.insertAll(dataList);
+        if (dataList.size() != 0) dataMapper.insertAll(dataList);
     }
 
     @PostMapping("/project/{projectId}/data_file")

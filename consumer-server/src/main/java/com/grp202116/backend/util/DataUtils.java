@@ -22,9 +22,15 @@ public class DataUtils {
         dataList = new ArrayList<>();
         DataUtils.projectId = projectId;
         projectPath = "../files/" + projectId + "/";
+        File project = new File(projectPath);
+        if (!project.exists()) if (project.mkdirs()) System.out.println("New directory created at: " + projectPath);
 
         for (File file : fileList) {
             try {
+                if (!file.exists()) {
+                    System.out.println(file.getPath() + " is not a file or directory");
+                    continue;
+                }
                 moveToLocal(file, type);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -50,14 +56,11 @@ public class DataUtils {
      */
     private static void moveToLocal(File file, String type) throws IOException {
 
-        if (!file.exists()) throw new FileNotFoundException();
-
         if (type.equals("image classification") || type.equals("object detection")
                 || type.equals("semantic segmentation") || type.equals("keypoint labeling")) {
             if (file.isDirectory()) readDirectory(file, "image");
             else readSingleFile(file, "image");
-        } else if (type.equals("text classification") || type.equals("taxonomy")
-                || type.equals("named entity recognition") || type.equals("machine translation")) {
+        } else if (type.equals("text classification") || type.equals("named entity recognition")) {
             if (file.isDirectory()) readDirectory(file, "text");
             else readSingleFile(file, "text");
         }

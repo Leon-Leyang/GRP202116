@@ -672,7 +672,7 @@
               // var projectId = this.operateForm.projectId
               var folderURL = this.folderURL.split(",")
               console.log('address', folderURL)
-              this.$axios.post('/project/1/data_file', folderURL) 
+              this.$axios.post('/project/1/data_url', folderURL)
               .then(res => {
                 console.log('folderURL', res)
               })
@@ -681,7 +681,7 @@
               let inputElement = document.getElementById("input");
               inputElement.addEventListener("change", this.fileList = this.files, false);
 
-              this.$axios.post('/project/1/data_url', this.upload) 
+              this.$axios.post('/project/1/data_file', this.upload)
               .then(res => {
                 console.log('fileList', res)
               })
