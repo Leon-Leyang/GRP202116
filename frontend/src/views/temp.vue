@@ -267,11 +267,9 @@
                                 :limit="3"
                                 :on-preview="handlePreview"
                                 :on-remove="handleRemove"
-                                :http-request = "uploadFile"
-                                :file-list = "fileList"
                                 :auto-upload="false"
+                                :on-change="handleChange"
                                 :before-upload="beforeAvatarUpload">
-                                <button @click="shown">show</button>
                                 <el-button slot="trigger" size="small" type="primary">Select</el-button>
                                 <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button> -->
                                 <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt/.doc format, and individual file sizes should not exceed 2M)</div>
@@ -354,6 +352,7 @@
           </template>
         </v-card-title>
       </template>
+      <button @click="test">test</button>
 
       <template>
         <v-row dense>
@@ -620,7 +619,6 @@
                 this.newestId = newest.projectId
                 console.log('newr', this.newestId)
                   this.tableData = res.data.map(item => {
-                    console.log('tag11', item)
                     let projectId = item.projectId
                       item.updateTime = this.convertTime(item.updateTime)
                       item.createTime = this.convertTime(item.createTime)
@@ -642,9 +640,9 @@
 
               })
               .catch((error) => {
-      // here you will have access to error.response
-      console.log(error.response)
-  });
+              // here you will have access to error.response
+                console.log(error.response)
+                });
       },
       addProject() {
           this.operateForm = {}
@@ -668,6 +666,7 @@
               })
           } else {
               console.log("add test",this.operateForm)
+              this.operateForm.type = 'image classification'
               this.$axios.post('/project/add', this.operateForm)
               .then(res => {
                   console.log("new", res)
@@ -677,21 +676,25 @@
               setTimeout(()=>{
                 //upload folder address
                 var projectId = this.newestId
+                console.log('newestId', projectId)
                 var folderURL = this.folderURL.split(",")
                 console.log('address', folderURL)
-                this.$axios.post('/project/'+ projectId +'/data_file', folderURL)
-                .then(res => {
-                  console.log('folderURL', res)
-                })
+                if(folderURL != ''){
+                  this.$axios.post('/project/'+ projectId +'/data_file', folderURL)
+                  .then(res => {
+                    console.log('folderURL', res)
+                  })
+                }
 
                 //upload file
-                // let inputElement = document.getElementById("input");
-                // inputElement.addEventListener("change", this.fileList = this.files, false);
-
-                // this.$axios.post('/project/'+ projectId +'/data_url', this.upload)
-                // .then(res => {
-                //   console.log('fileList', res)
-                // })
+                let fileList = this.fileList
+                console.log('fileList', fileList)
+                if( fileList != ''){
+                  this.$axios.post('/project/'+ projectId +'/data_url', fileList)
+                  .then(res => {
+                    console.log('fileList', res)
+                  })
+                }
               },1000)
           }
           this.isShow = false
@@ -778,12 +781,26 @@
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
-      uploadFile(fileObj) {
-        console.log('fileObj', fileObj)
-
+      handleChange(file, fileList){
+        console.log(file, fileList);
+        // var a_list  = fileList.map(function (item) { return item.raw; });
+        // console.log('a_list',a_list)
+        // console.log('type_a_list',typeof(a_list[0]))
+        this.fileList = JSON.stringify(fileList)
       },
-      shown(){
-        console.log('fileList', this.fileList)
+      test(){
+          this.$axios.get('/data/1', {
+                  params: {
+                  }
+              })
+              .then(res => {
+                console.log('rws', res)
+                console.log('type', typeof(res))
+              })
+              .catch((error) => {
+              // here you will have access to error.response
+                console.log(error.response)
+                });
       }
     },
     created() {

@@ -352,6 +352,7 @@
           </template>
         </v-card-title>
       </template>
+      <button @click="test">test</button>
 
       <template>
         <v-row dense>
@@ -362,7 +363,7 @@
             md="4"
           >
             <v-card>
-                <v-card-title class="text-h5">
+                <v-card-title class="text-h5" @click="enterProject(item.projectId)">
                     {{ item.name }}
                 </v-card-title>
 
@@ -639,9 +640,9 @@
 
               })
               .catch((error) => {
-      // here you will have access to error.response
-      console.log(error.response)
-  });
+              // here you will have access to error.response
+                console.log(error.response)
+                });
       },
       addProject() {
           this.operateForm = {}
@@ -782,7 +783,38 @@
       },
       handleChange(file, fileList){
         console.log(file, fileList);
-        this.fileList = fileList
+        this.fileList  = fileList.map(function (item) { return item.raw; });
+        // console.log('a_list',a_list)
+        // console.log('type_a_list',typeof(a_list[0]))
+        // this.fileList = JSON.parse(JSON.stringify(fileList))
+        // this.fileList = JSON.stringify(a_list)
+        // this.fileList = a_list
+        console.log('this.fileList', this.fileList)
+      },
+      test(){
+          this.$axios.get('/data/1', {
+                  params: {
+                  }
+              })
+              .then(res => {
+                console.log('rws', res)
+                console.log('type', typeof(res))
+              })
+              .catch((error) => {
+              // here you will have access to error.response
+                console.log(error.response)
+                });
+      },
+
+      //enter project
+      enterProject(projectId){
+        this.$router.push({  
+                    path: '/project-manage',
+                    name: 'ProjectManage', 
+                    params: {   
+                        projectId: projectId,    
+                    }  
+                }) 
       }
     },
     created() {
