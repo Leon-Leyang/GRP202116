@@ -92,18 +92,18 @@ class NERModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/bert/bert.pth'
+    modelPath = '../../ml/models/NamedEntityRecognition/bert.pth'
     modelVersion = 'one'
-    modelRoot = 'C:/Users/Leon/Desktop/Named-Entity-Recognition'
+    modelRoot = '../../ml/models/NamedEntityRecognition'
     fromName = 'label'
     toName = 'text'
     toolType = 'labels'
-    labelsPath = '../bio.txt'
+    labelsPath = '../../ml/resources/bio.txt'
 
     sequenceLen = 128
 
     nERModel = NERModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen)
 
-    textPath = '../ner.txt'
+    textPath = '../../ml/resources/ner.txt'
     predictionItem = nERModel.predict(textPath)
     print(predictionItem)

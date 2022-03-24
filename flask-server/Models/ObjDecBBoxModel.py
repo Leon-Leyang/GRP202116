@@ -63,17 +63,17 @@ class ObjDecBBoxModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/frcnn-resnet/frcnn-resnet.pth'
+    modelPath = '../../ml/models/ObjectDetection/frcnn-resnet.pth'
     modelVersion = 'one'
     modelRoot = './'
     fromName = 'label'
     toName = 'image'
     toolType = 'rectanglelabels'
-    labelsPath = '../coco.txt'
+    labelsPath = '../../ml/resources/coco.txt'
 
     threashold = 0.75
 
-    imgPath = '../puppy.webp'
+    imgPath = '../../ml/resources/puppy.webp'
 
     objDecBBoxModel = ObjDecBBoxModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
 
