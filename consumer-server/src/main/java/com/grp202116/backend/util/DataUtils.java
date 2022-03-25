@@ -142,7 +142,9 @@ public class DataUtils {
 
         try {
             for (MultipartFile multipartFile : multipart) {
-                File convertFile = new File(System.getProperty("java.io.tmpdir") + "/" + multipartFile.getName());
+                System.out.println(multipartFile.getOriginalFilename());
+                File convertFile = new File(System.getProperty("java.io.tmpdir") + "/"
+                        + multipartFile.getOriginalFilename());
                 multipartFile.transferTo(convertFile);
                 fileList.add(convertFile);
             }

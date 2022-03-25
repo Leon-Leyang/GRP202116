@@ -74,7 +74,10 @@ public class DataController {
         for (String url : urlList) fileList.add(new File(url));
 
         List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
-        if (dataList.size() != 0) dataMapper.insertAll(dataList);
+        if (dataList.size() != 0) {
+            dataMapper.alter();
+            dataMapper.insertAll(dataList);
+        }
     }
 
     @PostMapping("/project/{projectId}/data_file")
@@ -82,7 +85,10 @@ public class DataController {
         ProjectDO project = projectMapper.getByProjectId(projectId);
         List<File> fileList = DataUtils.multipartToFile(multiFileList);
         List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
-        dataMapper.insertAll(dataList);
+        if (dataList.size() != 0) {
+            dataMapper.alter();
+            dataMapper.insertAll(dataList);
+        }
     }
 
     /**

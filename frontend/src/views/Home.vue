@@ -289,22 +289,25 @@
                             </div>
                             <div>
                               Please upload the appropriate type of file
-                              <el-upload
-                                class="upload-demo"
-                                action
-                                id="input"
-                                ref="upload"
-                                :limit="3"
-                                :on-preview="handlePreview"
-                                :on-remove="handleRemove"
-                                :auto-upload="false"
-                                :on-change="handleChange"
-                                :before-upload="beforeAvatarUpload">
-                                <el-button slot="trigger" size="small" type="primary">Select</el-button>
-                                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button> -->
-                                <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt/.doc format, and individual file sizes should not exceed 2M)</div>
-                                <div slot="tip" class="el-upload__tip">It is highly recommended to use the pass path method!</div>
-                              </el-upload>
+<!--                              <el-upload-->
+<!--                                class="upload-demo"-->
+<!--                                action-->
+<!--                                name="fileList"-->
+<!--                                id="input"-->
+<!--                                ref="upload"-->
+<!--                                :multiple="true"-->
+<!--                                :limit="3"-->
+<!--                                :on-preview="handlePreview"-->
+<!--                                :on-remove="handleRemove"-->
+<!--                                :auto-upload="false"-->
+<!--                                :on-change="handleChange"-->
+<!--                                :before-upload="beforeAvatarUpload">-->
+<!--                                <el-button slot="trigger" size="small" type="primary">Select</el-button>-->
+<!--                                &lt;!&ndash; <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button> &ndash;&gt;-->
+<!--                                <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt/.doc format, and individual file sizes should not exceed 2M)</div>-->
+<!--                                <div slot="tip" class="el-upload__tip">It is highly recommended to use the pass path method!</div>-->
+<!--                              </el-upload>-->
+                              <input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />
                             </div>
                           </div>
                       </el-tab-pane>
@@ -721,10 +724,14 @@
                 console.log('fileList', fileList)
                 if( fileList != ''){
                   let formData = new FormData()
-                  for (let i = 0; i < this.files.length; i++) {
-                    formData.append('fileList', this.fileList[i])
+                  for (let i = 0; i < fileList.length; i++) {
+                    formData.append('fileList', fileList[i])
                   }
-                  this.$axios.post('/project/'+ projectId +'/data_file', formData)
+                  this.$axios.post('/project/'+ projectId +'/data_file', formData,{
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  })
                   .then(res => {
                     console.log('fileList', res)
                   })
@@ -809,21 +816,28 @@
         return isLt2M;
       },
       handlePreview(file) {
-        this.fileList[this.i] = file
-        this.i++
+        console.log(file)
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
       handleChange(file, fileList){
         console.log(file, fileList);
-        this.fileList  = fileList.map(function (item) { return item.raw; });
+        //this.fileList  = fileList.map(function (item) { return item.raw; });
+        this.fileList.push(file);
         // console.log('a_list',a_list)
         // console.log('type_a_list',typeof(a_list[0]))
         // this.fileList = JSON.parse(JSON.stringify(fileList))
         // this.fileList = JSON.stringify(a_list)
         // this.fileList = a_list
         console.log('this.fileList', this.fileList)
+      },
+      getFiles: function(event) {
+        this.fileList = [];
+        let files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+          this.fileList.push(files[i]);
+        }
       },
       test(){
           this.$axios.get('/data/1', {

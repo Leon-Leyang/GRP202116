@@ -13,6 +13,10 @@
         <result column="is_annotated" property="isAnnotated"/>
     </resultMap>
 
+    <update id="alter">
+        alter table data AUTO_INCREMENT=1;
+    </update>
+
     <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="dataId" keyColumn="data_id">
         insert into data (url,update_time,type,project_id)
         values

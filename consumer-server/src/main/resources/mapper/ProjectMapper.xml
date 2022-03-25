@@ -15,6 +15,10 @@
         <result column="labels" property="labels"/>
     </resultMap>
 
+    <update id="alter">
+        alter table project AUTO_INCREMENT=1;
+    </update>
+
     <select id="getByProjectId" resultMap="projectMap">
         select *
         from project

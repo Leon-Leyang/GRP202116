@@ -86,6 +86,7 @@ public class ProjectController {
         project.setCreateTime(date);
         project.setUpdateTime(date);
 
+        projectMapper.alter();
         projectMapper.insert(project);
     }
 
