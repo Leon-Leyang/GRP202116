@@ -710,7 +710,7 @@
                 var folderURL = this.folderURL.split(",")
                 console.log('address', folderURL)
                 if(folderURL != ''){
-                  this.$axios.post('/project/'+ projectId +'/data_file', folderURL)
+                  this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
                   .then(res => {
                     console.log('folderURL', res)
                   })
@@ -720,7 +720,11 @@
                 let fileList = this.fileList
                 console.log('fileList', fileList)
                 if( fileList != ''){
-                  this.$axios.post('/project/'+ projectId +'/data_url', fileList)
+                  let formData = new FormData()
+                  for (let i = 0; i < this.files.length; i++) {
+                    formData.append('fileList', this.fileList[i])
+                  }
+                  this.$axios.post('/project/'+ projectId +'/data_file', formData)
                   .then(res => {
                     console.log('fileList', res)
                   })

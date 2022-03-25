@@ -6,7 +6,7 @@ package com.grp202116.backend.pojo;
  */
 public class ModelDO extends ProjectDistinguishableDO{
     private String url;
-    private String name;
+    private String version;
     private String description;
     private String modelRoot;
 
@@ -30,16 +30,16 @@ public class ModelDO extends ProjectDistinguishableDO{
      * Get the name value of the ml model
      * @return the name value of the model
      */
-    public String getName() {
-        return name;
+    public String getVersion() {
+        return version;
     }
 
     /**
      * Set the name value of the model
-     * @param name the set name value
+     * @param version the set name value
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     /**

@@ -51,9 +51,11 @@ CREATE TABLE `data` (
   PRIMARY KEY (`data_id`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `data_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `data` */
+
+insert  into `data`(`url`,`data_id`,`type`,`update_time`,`project_id`,`is_annotated`) values ('..\\files\\24\\a4a060fe-42d2-4d44-9776-3b16070b334f.png',7,'png','2022-03-25',24,0),('..\\files\\24\\cbc2d940-9ebd-46e2-9baa-324f7a98aaf2.png',8,'png','2022-03-25',24,0),('..\\files\\24\\ec13c6b4-0b88-4c2a-8eb5-ea83a8b809f4.png',9,'png','2022-03-25',24,0),('..\\files\\25\\859c3587-0ef0-477c-aeec-902466dc9542.png',10,'png','2022-03-25',25,0),('..\\files\\25\\594b2829-ba82-4f84-b4c7-c645852ab65b.png',11,'png','2022-03-25',25,0),('..\\files\\25\\ce48c14f-5f31-43f6-8057-fb0344e81b6a.png',12,'png','2022-03-25',25,0),('..\\files\\28\\eb7f89e8-390d-404b-97b3-3bfe10be5606.png',13,'png','2022-03-25',28,0),('..\\files\\28\\6d229fe4-02bb-4072-ae86-52cc139e6122.png',14,'png','2022-03-25',28,0),('..\\files\\28\\8cda23f8-c824-43ab-a2a7-2b0c920bb98f.png',15,'png','2022-03-25',28,0);
 
 /*Table structure for table `labelinterface` */
 
@@ -76,7 +78,7 @@ DROP TABLE IF EXISTS `model`;
 
 CREATE TABLE `model` (
   `url` varchar(100) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
+  `version` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   `project_id` int DEFAULT NULL,
   `create_time` date DEFAULT NULL,
@@ -126,11 +128,11 @@ CREATE TABLE `project` (
   `configs` varchar(500) DEFAULT NULL,
   `labels` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `project` */
 
-insert  into `project`(`project_id`,`create_time`,`update_time`,`type`,`name`,`description`,`configs`,`labels`) values (1,'2022-02-15','2022-02-23',NULL,'34',NULL,NULL,NULL),(3,'2022-02-23','2022-02-23',NULL,'test','this is a test',NULL,NULL),(7,'2022-02-26','2022-03-21',NULL,'seven id','scidd',NULL,NULL),(8,'2022-03-21','2022-03-21',NULL,'4','12345',NULL,NULL),(9,'2022-03-21','2022-03-21',NULL,'4','44444',NULL,NULL),(10,'2022-03-21','2022-03-21',NULL,'123',NULL,NULL,NULL);
+insert  into `project`(`project_id`,`create_time`,`update_time`,`type`,`name`,`description`,`configs`,`labels`) values (1,'2022-02-15','2022-02-23','semantic segmentation','34',NULL,NULL,NULL),(3,'2022-02-23','2022-02-23',NULL,'test','this is a test',NULL,NULL),(7,'2022-02-26','2022-03-21',NULL,'seven id','scidd',NULL,NULL),(8,'2022-03-21','2022-03-21',NULL,'4','12345',NULL,NULL),(9,'2022-03-21','2022-03-21',NULL,'4','44444',NULL,NULL),(10,'2022-03-21','2022-03-21',NULL,'123',NULL,NULL,NULL),(16,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(17,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(18,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(19,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(20,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(21,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(22,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(23,'2022-03-24','2022-03-24',NULL,NULL,NULL,NULL,NULL),(24,'2022-03-25','2022-03-25','image classification',NULL,NULL,NULL,NULL),(25,'2022-03-25','2022-03-25','image classification',NULL,NULL,NULL,NULL),(26,'2022-03-25','2022-03-25','image classification',NULL,NULL,NULL,NULL),(27,'2022-03-25','2022-03-25','image classification',NULL,NULL,NULL,NULL),(28,'2022-03-25','2022-03-25','image classification',NULL,NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

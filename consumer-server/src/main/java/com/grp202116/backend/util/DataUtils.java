@@ -2,6 +2,7 @@ package com.grp202116.backend.util;
 
 import com.grp202116.backend.pojo.DataDO;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -52,7 +53,6 @@ public class DataUtils {
      * taxonomy
      * named entity recognition
      * machine translation
-     *
      */
     private static void moveToLocal(File file, String type) throws IOException {
 
@@ -135,6 +135,22 @@ public class DataUtils {
             else if (inFile.isDirectory()) readDirectory(inFile, dataType);
             else readSingleFile(inFile, dataType);
         }
+    }
+
+    public static List<File> multipartToFile(MultipartFile[] multipart) {
+        List<File> fileList = new ArrayList<>();
+
+        try {
+            for (MultipartFile multipartFile : multipart) {
+                File convertFile = new File(System.getProperty("java.io.tmpdir") + "/" + multipartFile.getName());
+                multipartFile.transferTo(convertFile);
+                fileList.add(convertFile);
+            }
+        } catch (IllegalStateException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return fileList;
     }
 }
 
