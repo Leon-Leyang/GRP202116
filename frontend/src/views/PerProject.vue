@@ -61,6 +61,7 @@ import Setting from '@/views/PerProject/Setting'
     },
     data () {
       return {
+        projectId:0,
         tabs: null,
         tableData:[],
         config: {          //重要的地方
@@ -69,6 +70,23 @@ import Setting from '@/views/PerProject/Setting'
               loading: false
           },
       }
+    },
+    methods: {
+      getData() {
+          this.$axios.get('/data/project/'+this.projectId)
+              .then(res => {
+                console.log('data', res)
+              })
+              .catch((error) => {
+              // here you will have access to error.response
+                console.log(error.response)
+                });
+      },
+    },
+    mounted() {
+      this.projectId = this.$route.params.projectId
+      console.log('projectId',this.projectId)
+      this.getData()
     },
   }
 </script>

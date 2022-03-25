@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import ProjectManage from '../views/ProjectManage'
+// import ProjectManage from '../views/ProjectManage'
 import Home from '../views/Home'
 import PerProject from '../views/PerProject'
 // import { LabelStudio } from '@heartexlabs/label-studio'
@@ -13,11 +13,6 @@ const routes = [{
     name: 'Home',
     component: Home,
     },{
-    path: '/project-manage',
-    name: 'ProjectManage',
-    component: ProjectManage
-},
-{
     path: '/per-project',
     name: 'PerProject',
     component: PerProject,
