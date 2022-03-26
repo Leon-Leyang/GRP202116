@@ -15,6 +15,9 @@ class ObjDecBBoxModel(Model):
             tf.ToTensor()
         ])
 
+        # Initialize preprocess object
+        self.preprocess = self.Preprocess(self.transforms)
+
         # Threshold to filter result
         self.threashold = threashold
 
@@ -26,7 +29,7 @@ class ObjDecBBoxModel(Model):
         # Get the width and height of the image
         imgWidth, imgHeight = img.size
 
-        imgVec = self.transforms(img).unsqueeze(0).to(self.device)
+        imgVec = self.preprocess(img).unsqueeze(0).to(self.device)
         modelOutput = self.model(imgVec)[0]
 
         for i in range(len(modelOutput['boxes'])):

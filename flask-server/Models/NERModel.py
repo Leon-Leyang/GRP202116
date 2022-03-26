@@ -11,7 +11,7 @@ from Models.Model import Model
 # Model for named entity recognition task
 class NERModel(Model):
     # Class for preprocessing
-    class Preprocess():
+    class Preprocess(Model.Preprocess):
         def __init__(self, sequenceLen):
             # Initialize the maximum sequence length
             self.sequenceLen = sequenceLen
@@ -19,16 +19,16 @@ class NERModel(Model):
             # Initialize the tokenizer
             self.tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
 
-        # Function to convert given text into index sequence of constant length
-        def __call__(self, data):
-            seq = self.tokenizer(data.split(),
+            def func(data):
+                return self.tokenizer(data.split(),
                                is_split_into_words=True,
                                return_offsets_mapping=True,
                                padding='max_length',
                                truncation=True,
                                max_length=self.sequenceLen,
                                return_tensors="pt")
-            return seq
+
+            self.func = func
 
 
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen):

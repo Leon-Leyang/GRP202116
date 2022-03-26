@@ -7,12 +7,16 @@ from Models.Model import Model
 
 # Model for keypoint labeling task
 class KpLabModel(Model):
+
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold):
         super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
             tf.ToTensor()])
+
+        # Initialize preprocess object
+        self.preprocess = self.Preprocess(self.transforms)
 
         # Threshold to filter result
         self.threashold = threashold
@@ -25,7 +29,7 @@ class KpLabModel(Model):
         # Get the width and height of the image
         imgWidth, imgHeight = img.size
 
-        imgVec = self.transforms(img).unsqueeze(0).to(self.device)
+        imgVec = self.preprocess(img).unsqueeze(0).to(self.device)
         modelOutput = self.model(imgVec)
 
         for item in modelOutput:

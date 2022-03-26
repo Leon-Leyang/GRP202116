@@ -8,6 +8,7 @@ from Models.Model import Model
 
 # Model for image classification task
 class ImgClsModel(Model):
+
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize):
         super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
@@ -19,12 +20,16 @@ class ImgClsModel(Model):
             tf.Normalize(mean=mean,
                          std=std)])
 
+        # Initialize preprocess object
+        self.preprocess = self.Preprocess(self.transforms)
+
+
     def predict(self, imgPath):
         super().predict()
 
         img = Image.open(imgPath)
 
-        imgVec = self.transforms(img).unsqueeze(0).to(self.device)
+        imgVec = self.preprocess(img).unsqueeze(0).to(self.device)
         modelOutput = self.model(imgVec)
 
         # Get the index of the most likely class

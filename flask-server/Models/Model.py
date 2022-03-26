@@ -2,6 +2,16 @@ import torch
 import sys
 
 class Model():
+
+    # Class for preprocessing
+    # Initialized with function that does the real preprocessing job
+    class Preprocess():
+        def __init__(self, func):
+            self.func = func
+
+        def __call__(self, data):
+            return self.func(data)
+
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath):
         # Add the model root path to environment variable path
         sys.path.append(modelRoot)

@@ -12,8 +12,9 @@ from Models.Model import Model
 
 # Model for image classification task
 class TextClsModel(Model):
+
     # Class for preprocessing
-    class Preprocess():
+    class Preprocess(Model.Preprocess):
         def __init__(self, textsPath, tokenNum, sequenceLen):
             # Read the whole dataset(without label)
             textsFile = pd.read_csv(textsPath, header=None)
@@ -25,12 +26,11 @@ class TextClsModel(Model):
             # Initialize the maximum sequence length
             self.sequenceLen = sequenceLen
 
-        # Function to convert given text into index sequence of constant length
-        def __call__(self, data):
-            sequences = self.tokenizer.texts_to_sequences([data])
-            seq = sequence.pad_sequences(sequences, maxlen=self.sequenceLen)[0]
-            return seq
+            def func(data):
+                sequences = self.tokenizer.texts_to_sequences([data])
+                return sequence.pad_sequences(sequences, maxlen=self.sequenceLen)[0]
 
+            self.func = func
 
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, vocabPath, tokenNum, sequenceLen):
         super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
