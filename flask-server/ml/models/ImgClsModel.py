@@ -4,10 +4,12 @@ import uuid
 import torch
 import torchvision.transforms as tf
 
-from Models.Model import Model
+from ml import Preprocess
+from ml.models.Model import Model
 
 # Model for image classification task
 class ImgClsModel(Model):
+
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize):
         super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
@@ -19,12 +21,16 @@ class ImgClsModel(Model):
             tf.Normalize(mean=mean,
                          std=std)])
 
+        # Initialize preprocess object
+        self.preprocess = Preprocess(self.transforms)
+
+
     def predict(self, imgPath):
         super().predict()
 
         img = Image.open(imgPath)
 
-        imgVec = self.transforms(img).unsqueeze(0).to(self.device)
+        imgVec = self.preprocess(img).unsqueeze(0).to(self.device)
         modelOutput = self.model(imgVec)
 
         # Get the index of the most likely class
@@ -46,21 +52,26 @@ class ImgClsModel(Model):
 
         return self.predictionItem
 
+    # def train(self):
+    #     super().train()
+
+
+
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/ImageClassification/resnet101.pth'
+    modelPath = '../../../ml/models/ImageClassification/resnet101.pth'
     modelVersion = 'one'
     modelRoot = './'
     fromName = 'choice'
     toName = 'image'
     toolType = 'choices'
-    labelsPath = '../../ml/resources/ImageNetClasses.txt'
+    labelsPath = '../../../ml/resources/ImageNetClasses.txt'
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
     imgSize = 224
 
-    imgPath = '../../ml/resources/puppy.webp'
+    imgPath = '../../../ml/resources/puppy.webp'
 
     imgClsModel = ImgClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize)
 
