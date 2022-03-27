@@ -3,17 +3,17 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router/index.js'
 import axios from 'axios'
+import Vuex from 'vuex'
+import store from './vuex/store'
 
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 Vue.config.productionTip = false
-    //import axios from 'axios'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 // import moment from "moment";
-import Vuex from 'vuex'
 // import http from './api/config'  //axios
 // import './mock'   // mockjs
 
@@ -60,7 +60,9 @@ Vue.use(uploader)
 // }).$mount('#app')
 
 new Vue({
-    vuetify,
-    router,
-    render: h => h(App),
+  el:'#app',
+  vuetify,
+  store,
+  router,
+  render: h => h(App),
 }).$mount('#app')

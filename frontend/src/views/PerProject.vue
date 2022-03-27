@@ -24,7 +24,7 @@
     <v-tabs-items v-model="tabs">
       <v-tab-item>
         <v-card flat>
-          <Table :tableData="tableData" :tableLabel="tableLabel" :config="config" @changePage="getList()" />
+          <Table :dataList="dataList" :config="config" />
         </v-card>
       </v-tab-item>
       <v-tab-item>
@@ -52,6 +52,7 @@ import Table from '../components/ProjectManage/DataTable';
 import Statistics from '@/views/PerProject/Statistics'
 import ML from '@/views/PerProject/ML'
 import Setting from '@/views/PerProject/Setting'
+
   export default {
     components: {
       Statistics,
@@ -63,30 +64,18 @@ import Setting from '@/views/PerProject/Setting'
       return {
         projectId:0,
         tabs: null,
-        tableData:[],
-        config: {          //重要的地方
+        dataList:[],
+        config: {          //Important
               page: 1,
               total: 30,
               loading: false
           },
       }
     },
-    methods: {
-      getData() {
-          this.$axios.get('/data/project/'+this.projectId)
-              .then(res => {
-                console.log('data', res)
-              })
-              .catch((error) => {
-              // here you will have access to error.response
-                console.log(error.response)
-                });
-      },
-    },
     mounted() {
-      this.projectId = this.$route.params.projectId
+      this.projectId = this.$store.state.currentProjectId
       console.log('projectId',this.projectId)
-      this.getData()
+      this.$store.commit('changeDataList', this.projectId)
     },
   }
 </script>
