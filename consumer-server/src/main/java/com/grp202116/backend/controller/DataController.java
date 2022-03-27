@@ -80,6 +80,11 @@ public class DataController {
         }
     }
 
+    /**
+     * Upload data by sending files directly
+     * @param multiFileList the list of file
+     * @param projectId project id
+     */
     @PostMapping("/project/{projectId}/data_file")
     public void uploadDataFile(@RequestParam("fileList") MultipartFile[] multiFileList, @PathVariable BigInteger projectId) {
         ProjectDO project = projectMapper.getByProjectId(projectId);

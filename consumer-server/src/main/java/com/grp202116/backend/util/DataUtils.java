@@ -22,7 +22,7 @@ public class DataUtils {
     public static List<DataDO> uploadProjectData(List<File> fileList, BigInteger projectId, String type) {
         dataList = new ArrayList<>();
         DataUtils.projectId = projectId;
-        projectPath = "../files/" + projectId + "/";
+        projectPath = ".." + File.separator +"files" + File.separator + projectId + File.separator;
         File project = new File(projectPath);
         if (!project.exists()) if (project.mkdirs()) System.out.println("New directory created at: " + projectPath);
 
@@ -143,7 +143,7 @@ public class DataUtils {
         try {
             for (MultipartFile multipartFile : multipart) {
                 System.out.println(multipartFile.getOriginalFilename());
-                File convertFile = new File(System.getProperty("java.io.tmpdir") + "/"
+                File convertFile = new File(System.getProperty("java.io.tmpdir") + File.separator
                         + multipartFile.getOriginalFilename());
                 multipartFile.transferTo(convertFile);
                 fileList.add(convertFile);

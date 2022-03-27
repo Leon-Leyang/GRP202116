@@ -31,4 +31,17 @@ public class PredictionDO extends LabelDO {
     public void setModel(String model) {
         this.model = model;
     }
+
+    @Override
+    public String toString() {
+        return "Annotation{" +
+                "predictionId=" + predictionId +
+                ", type=" + getType() +
+                ", value=" + getValue() +
+                ", from_name=" + getFromName() +
+                ", to_name=" + getToName() +
+                ", create_time=" + getCreateTime() +
+                ", update_time=" + getUpdateTime() +
+                '}';
+    }
 }

@@ -1,14 +1,23 @@
 package com.grp202116.backend.controller;
 
+import com.grp202116.backend.mapper.AnnotationMapper;
 import com.grp202116.backend.mapper.DataMapper;
+import com.grp202116.backend.mapper.PredictionMapper;
 import com.grp202116.backend.mapper.ProjectMapper;
 import com.grp202116.backend.pojo.DataDO;
 import com.grp202116.backend.pojo.ProjectDO;
+import com.grp202116.backend.util.ExportUtils;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +32,12 @@ public class ProjectController {
 
     @Resource
     private DataMapper dataMapper;
+
+    @Resource
+    private AnnotationMapper annotationMapper;
+
+    @Resource
+    private PredictionMapper predictionMapper;
 
     /**
      * Get the Project by the id
@@ -98,5 +113,51 @@ public class ProjectController {
     @DeleteMapping("/project/{projectId}")
     public void deleteProject(@PathVariable BigInteger projectId) {
         projectMapper.deleteByProjectId(projectId);
+    }
+
+    /**
+     * Export project annotations
+     *
+     * @param format    csv, tsv or json
+     * @param projectId project id
+     */
+    @PostMapping("/project/{projectId}/data_export/annotations")
+    public ResponseEntity<ByteArrayResource> exportAnnotation(@RequestParam("format") String format,
+                                                              @PathVariable BigInteger projectId) {
+        ByteArrayResource resource = ExportUtils.exportFile(true, format,
+                Collections.singletonList(annotationMapper.listByProjectId(projectId)));
+
+        return getResponse(resource);
+    }
+
+    /**
+     * Export project predictions
+     *
+     * @param format    csv, tsv or json
+     * @param projectId project id
+     */
+    @PostMapping("/project/{projectId}/data_export/predictions")
+    public ResponseEntity<ByteArrayResource> exportPrediction(@RequestParam("format") String format,
+                                                              @PathVariable BigInteger projectId) {
+
+        ByteArrayResource resource = ExportUtils.exportFile(false, format,
+                Collections.singletonList(predictionMapper.listByProjectId(projectId)));
+
+        return getResponse(resource);
+    }
+
+    /**
+     * Helper method for the response entity creation
+     * @param resource byte source of a certain file
+     * @return response of success or failure
+     */
+    private ResponseEntity<ByteArrayResource> getResponse(ByteArrayResource resource) {
+        if (resource == null) return ResponseEntity.badRequest().body(null);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="
+                        + ExportUtils.getTargetFile().getName())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(ExportUtils.getTargetFile().length())
+                .body(resource);
     }
 }

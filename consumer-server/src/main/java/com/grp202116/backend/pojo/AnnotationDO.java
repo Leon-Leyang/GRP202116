@@ -25,4 +25,17 @@ public class AnnotationDO extends LabelDO {
     public void setAnnotationId(BigInteger annotationId) {
         this.annotationId = annotationId;
     }
+
+    @Override
+    public String toString() {
+        return "Annotation{" +
+                "annotationId=" + annotationId +
+                ", type=" + getType() +
+                ", value=" + getValue() +
+                ", from_name=" + getFromName() +
+                ", to_name=" + getToName() +
+                ", create_time=" + getCreateTime() +
+                ", update_time=" + getUpdateTime() +
+                '}';
+    }
 }
