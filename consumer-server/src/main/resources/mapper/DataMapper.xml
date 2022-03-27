@@ -14,7 +14,20 @@
     </resultMap>
 
     <update id="alter">
-        alter table data AUTO_INCREMENT=1;
+        alter table data
+            AUTO_INCREMENT = 1;
+    </update>
+
+    <update id="setAnnotated">
+        update data
+        set is_annotated = true
+        where data_id = #{dataId}
+    </update>
+
+    <update id="setNotAnnotated">
+        update data
+        set is_annotated = false
+        where data_id = #{dataId}
     </update>
 
     <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="dataId" keyColumn="data_id">
