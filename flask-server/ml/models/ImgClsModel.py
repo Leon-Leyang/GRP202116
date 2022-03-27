@@ -4,7 +4,8 @@ import uuid
 import torch
 import torchvision.transforms as tf
 
-from Models.Model import Model
+from ml import Preprocess
+from ml.models.Model import Model
 
 # Model for image classification task
 class ImgClsModel(Model):
@@ -21,7 +22,7 @@ class ImgClsModel(Model):
                          std=std)])
 
         # Initialize preprocess object
-        self.preprocess = self.Preprocess(self.transforms)
+        self.preprocess = Preprocess(self.transforms)
 
 
     def predict(self, imgPath):
@@ -51,21 +52,26 @@ class ImgClsModel(Model):
 
         return self.predictionItem
 
+    # def train(self):
+    #     super().train()
+
+
+
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/ImageClassification/resnet101.pth'
+    modelPath = '../../../ml/models/ImageClassification/resnet101.pth'
     modelVersion = 'one'
     modelRoot = './'
     fromName = 'choice'
     toName = 'image'
     toolType = 'choices'
-    labelsPath = '../../ml/resources/ImageNetClasses.txt'
+    labelsPath = '../../../ml/resources/ImageNetClasses.txt'
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
     imgSize = 224
 
-    imgPath = '../../ml/resources/puppy.webp'
+    imgPath = '../../../ml/resources/puppy.webp'
 
     imgClsModel = ImgClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize)
 

@@ -3,7 +3,8 @@ from PIL import Image
 import uuid
 import torchvision.transforms as tf
 
-from Models.Model import Model
+from ml import Preprocess
+from ml.models.Model import Model
 
 # Model for keypoint labeling task
 class KpLabModel(Model):
@@ -16,7 +17,7 @@ class KpLabModel(Model):
             tf.ToTensor()])
 
         # Initialize preprocess object
-        self.preprocess = self.Preprocess(self.transforms)
+        self.preprocess = Preprocess(self.transforms)
 
         # Threshold to filter result
         self.threashold = threashold
@@ -61,16 +62,16 @@ class KpLabModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/KeypointLabeling/keypointrcnn.pth'
+    modelPath = '../../../ml/models/KeypointLabeling/keypointrcnn.pth'
     modelVersion = 'one'
-    modelRoot = '../../ml/models/KeypointLabeling'
+    modelRoot = '../../../ml/models/KeypointLabeling'
     fromName = 'kp-1'
     toName = 'img-1'
     toolType = 'keypointlabels'
-    labelsPath = '../../ml/resources/cocoKp.txt'
+    labelsPath = '../../../ml/resources/cocoKp.txt'
     threashold = 0.9
 
-    imgPath = '../../ml/resources/kid.jpg'
+    imgPath = '../../../ml/resources/kid.jpg'
 
     kpLabModel = KpLabModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
 

@@ -3,7 +3,8 @@ from PIL import Image
 import uuid
 import torchvision.transforms as tf
 
-from Models.Model import Model
+from ml import Preprocess
+from ml.models.Model import Model
 
 # Model for image classification task
 class ObjDecBBoxModel(Model):
@@ -16,7 +17,7 @@ class ObjDecBBoxModel(Model):
         ])
 
         # Initialize preprocess object
-        self.preprocess = self.Preprocess(self.transforms)
+        self.preprocess = Preprocess(self.transforms)
 
         # Threshold to filter result
         self.threashold = threashold
@@ -66,17 +67,17 @@ class ObjDecBBoxModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/ObjectDetection/frcnn-resnet.pth'
+    modelPath = '../../../ml/models/ObjectDetection/frcnn-resnet.pth'
     modelVersion = 'one'
     modelRoot = './'
     fromName = 'label'
     toName = 'image'
     toolType = 'rectanglelabels'
-    labelsPath = '../../ml/resources/coco.txt'
+    labelsPath = '../../../ml/resources/coco.txt'
 
     threashold = 0.75
 
-    imgPath = '../../ml/resources/puppy.webp'
+    imgPath = '../../../ml/resources/puppy.webp'
 
     objDecBBoxModel = ObjDecBBoxModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
 

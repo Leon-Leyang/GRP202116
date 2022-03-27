@@ -6,7 +6,8 @@ import torch
 import torchvision.transforms as tf
 import numpy as np
 
-from Models.Model import Model
+from ml import Preprocess
+from ml.models.Model import Model
 
 # Model for semantic segmentation task with mask
 class SemSegMaskModel(Model):
@@ -20,7 +21,7 @@ class SemSegMaskModel(Model):
                          std=std)])
 
         # Initialize preprocess object
-        self.preprocess = self.Preprocess(self.transforms)
+        self.preprocess = Preprocess(self.transforms)
 
     def predict(self, imgPath):
         super().predict()
@@ -58,17 +59,17 @@ class SemSegMaskModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/SemanticSegmentation/fcn.pth'
+    modelPath = '../../../ml/models/SemanticSegmentation/fcn.pth'
     modelVersion = 'one'
     modelRoot = './'
     fromName = 'tag'
     toName = 'image'
     type = 'brushlabels'
-    labelsPath = '../../ml/resources/voc2007.txt'
+    labelsPath = '../../../ml/resources/voc2007.txt'
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
-    imgPath = '../../ml/resources/puppy.webp'
+    imgPath = '../../../ml/resources/puppy.webp'
 
 
     semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, modelRoot, fromName, toName, type, labelsPath, mean, std)

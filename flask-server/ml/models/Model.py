@@ -3,15 +3,6 @@ import sys
 
 class Model():
 
-    # Class for preprocessing
-    # Initialized with function that does the real preprocessing job
-    class Preprocess():
-        def __init__(self, func):
-            self.func = func
-
-        def __call__(self, data):
-            return self.func(data)
-
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath):
         # Add the model root path to environment variable path
         sys.path.append(modelRoot)
@@ -22,9 +13,6 @@ class Model():
         # Flash the model to GPU if available
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.model = self.model.to(self.device)
-
-        # Set the model to evaluation mode
-        self.model.eval()
 
         self.modelVersion = modelVersion
         self.fromName = fromName
@@ -40,8 +28,15 @@ class Model():
     # Fill in the basic information of a prediction item
     # Specific result items shall be appended to predictionItem['result'] in corresponding subclasses
     def predict(self):
+        # Set the model to evaluation mode
+        self.model.eval()
 
         self.predictionItem['model_version'] = self.modelVersion
 
         result = []
         self.predictionItem['result'] = result
+
+
+    def train(self):
+        # Set the model to training mode
+        self.model.train()
