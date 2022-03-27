@@ -1,20 +1,23 @@
 <!--用代码设置label interface-->
 <template>
-
-
+<div>
   <div style="display: flex">
       <!-- Two-way Data-Binding -->
   <!-- <codemirror v-model="code" :options="cmOptions" /> -->
 
-  <!-- Or manually control the data synchronization -->
-  <codemirror
-    ref="cmEditor"
-    :value="code"
-    :options="cmOptions"
-    @ready="onCmReady"
-    @focus="onCmFocus"
-    @input="onCmCodeChange"
-  />
+    <!-- Or manually control the data synchronization -->
+  <div style="width:40%">
+    <codemirror
+      ref="cmEditor"
+      :value="code"
+      :options="cmOptions"
+      @ready="onCmReady"
+      @focus="onCmFocus"
+      @input="onCmCodeChange"
+    />
+    <v-btn @click="confirmConfig">Confirm</v-btn>
+  </div>
+
     <!-- <button @click="prev">prev</button> -->
 
     <!-- <button @click="next">next</button> -->
@@ -22,6 +25,7 @@
     <!-- Create the Label Studio container -->
     <div id="label-studio"></div>
   </div>
+</div>
 </template>
 
 <script>
@@ -58,9 +62,6 @@ export default {
         line: true,
         // more CodeMirror options...
       },
-
-
-
       labelStudio: '',
       id:0,
       config: `
@@ -109,140 +110,147 @@ export default {
       console.log('this is new code', newCode)
       this.code = newCode
       this.config = newCode
-    this.labelStudio.destroy()
-    this.labelStudio = new LabelStudio("label-studio", {
-      config: newCode,
+      this.$store.state.currentConfig = this.config
+      this.labelStudio.destroy()
+      this.labelStudio = new LabelStudio("label-studio", {
+        config: this.$store.state.currentConfig,
 
-      interfaces: [
-        "panel",
-        // "update",
-        // "submit",
-        // "skip",
-        // "controls",
-        //"review",
-        // "infobar",
-        // "topbar",
-        // "instruction",
-        // "side-column",
-        // "ground-truth",
-        // "annotations:history",
-        // "annotations:tabs",
-        // "annotations:menu",
-        // "annotations:current",
-        // "annotations:add-new",
-        // "annotations:delete",
-        // 'annotations:view-all',
-        // "predictions:tabs",
-        // "predictions:menu",
-        // "auto-annotation",
-        // "edit-history",
-        //"topbar:prevnext",
-      ],
+        interfaces: [
+          "panel",
+          // "update",
+          // "submit",
+          // "skip",
+          // "controls",
+          //"review",
+          // "infobar",
+          // "topbar",
+          // "instruction",
+          // "side-column",
+          // "ground-truth",
+          // "annotations:history",
+          // "annotations:tabs",
+          // "annotations:menu",
+          // "annotations:current",
+          // "annotations:add-new",
+          // "annotations:delete",
+          // 'annotations:view-all',
+          // "predictions:tabs",
+          // "predictions:menu",
+          // "auto-annotation",
+          // "edit-history",
+          //"topbar:prevnext",
+        ],
 
-      user: {
-        pk: 1,
-        firstName: "James",
-        lastName: "Dean",
-      },
-
-      task: {
-        annotations: [{
-          id: "1001",
-          lead_time: 15.053,
-          result: [
-            {
-              "original_width": 2242,
-              "original_height": 2802,
-              "image_rotation": 0,
-              "origin": "manual",
-              "value": {
-                "x": 17.46666666666666,
-                "y": 79.29562433297758,
-                "width": 23.6,
-                "height": 13.447171824973319,
-                "rotation": 0,
-                "rectanglelabels": [
-                  "Hello"
-                ]
-              },
-              "id": "dYjaasY56i",
-              "from_name": "tag",
-              "to_name": "img",
-              "type": "rectanglelabels"
-            },
-            {
-              "original_width": 2242,
-              "original_height": 2802,
-              "image_rotation": 0,
-              "origin": "prediction",
-              "value": {
-                "x": 37.46666666666666,
-                "y": 79.29562433297758,
-                "width": 23.6,
-                "height": 13.447171824973319,
-                "rotation": 0,
-                "rectanglelabels": [
-                  "World"
-                ]
-              },
-              "id": "dYjaasY57i",
-              "from_name": "tag",
-              "to_name": "img",
-              "type": "rectanglelabels"
-            },
-          ]
-        }],
-        predictions: [{
-          id: "1001",
-          lead_time: 15.053,
-          result: [
-            {
-              "original_width": 2242,
-              "original_height": 2802,
-              "image_rotation": 0,
-              "origin": "prediction",
-              "value": {
-                "x": 87.46666666666666,
-                "y": 79.29562433297758,
-                "width": 23.6,
-                "height": 13.447171824973319,
-                "rotation": 0,
-                "rectanglelabels": [
-                  "Hello"
-                ]
-              },
-              "id": "dYjaasY56i",
-              "from_name": "tag",
-              "to_name": "img",
-              "type": "rectanglelabels"
-            },
-          ]
-        }],
-        id: 1,
-        data: {
-          image:
-              "https://cdn.mos.cms.futurecdn.net/C9JVYkqCELkdERaqd9gFbj-1200-80.jpg",
+        user: {
+          pk: 1,
+          firstName: "James",
+          lastName: "Dean",
         },
-      },
+
+        task: {
+          annotations: [{
+            id: "1001",
+            lead_time: 15.053,
+            result: [
+              {
+                "original_width": 2242,
+                "original_height": 2802,
+                "image_rotation": 0,
+                "origin": "manual",
+                "value": {
+                  "x": 17.46666666666666,
+                  "y": 79.29562433297758,
+                  "width": 23.6,
+                  "height": 13.447171824973319,
+                  "rotation": 0,
+                  "rectanglelabels": [
+                    "Hello"
+                  ]
+                },
+                "id": "dYjaasY56i",
+                "from_name": "tag",
+                "to_name": "img",
+                "type": "rectanglelabels"
+              },
+              {
+                "original_width": 2242,
+                "original_height": 2802,
+                "image_rotation": 0,
+                "origin": "prediction",
+                "value": {
+                  "x": 37.46666666666666,
+                  "y": 79.29562433297758,
+                  "width": 23.6,
+                  "height": 13.447171824973319,
+                  "rotation": 0,
+                  "rectanglelabels": [
+                    "World"
+                  ]
+                },
+                "id": "dYjaasY57i",
+                "from_name": "tag",
+                "to_name": "img",
+                "type": "rectanglelabels"
+              },
+            ]
+          }],
+          predictions: [{
+            id: "1001",
+            lead_time: 15.053,
+            result: [
+              {
+                "original_width": 2242,
+                "original_height": 2802,
+                "image_rotation": 0,
+                "origin": "prediction",
+                "value": {
+                  "x": 87.46666666666666,
+                  "y": 79.29562433297758,
+                  "width": 23.6,
+                  "height": 13.447171824973319,
+                  "rotation": 0,
+                  "rectanglelabels": [
+                    "Hello"
+                  ]
+                },
+                "id": "dYjaasY56i",
+                "from_name": "tag",
+                "to_name": "img",
+                "type": "rectanglelabels"
+              },
+            ]
+          }],
+          id: 1,
+          data: {
+            image:
+                "https://cdn.mos.cms.futurecdn.net/C9JVYkqCELkdERaqd9gFbj-1200-80.jpg",
+          },
+        },
 
 
-      onLabelStudioLoad: function (LS) {
-        var c = LS.annotationStore.addAnnotation({
-          userGenerate: true,
-        });
-        LS.annotationStore.selectAnnotation(c.id);
-      },
+        onLabelStudioLoad: function (LS) {
+          var c = LS.annotationStore.addAnnotation({
+            userGenerate: true,
+          });
+          LS.annotationStore.selectAnnotation(c.id);
+        },
 
-      onUpdateAnnotation: function (LS, annotation) {
-        // retrive an annotation 
-        console.log(annotation.serializeAnnotation())
-        console.log(annotation._initialAnnotationObj)
-        console.log(JSON.stringify(annotation.serializeAnnotation()))
-        console.log('this', LS.task)
-        console.log('tag', this.LabelStudio.task)
-        this.$axios.post('/annotations/data/1', annotation.serializeAnnotation())
-      }
-    });
+        onUpdateAnnotation: function (LS, annotation) {
+          // retrive an annotation 
+          console.log(annotation.serializeAnnotation())
+          console.log(annotation._initialAnnotationObj)
+          console.log(JSON.stringify(annotation.serializeAnnotation()))
+          console.log('this', LS.task)
+          console.log('tag', this.LabelStudio.task)
+          this.$axios.post('/annotations/data/1', annotation.serializeAnnotation())
+        }
+      });
+    },
+    confirmConfig() {
+        this.$router.push({  
+                    path: '/per-project',
+                    name: 'PerProject', 
+                }) 
     }
   },
   computed: {

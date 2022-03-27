@@ -5,6 +5,7 @@ import Home from '../views/Home'
 import PerProject from '../views/PerProject'
 // import { LabelStudio } from '@heartexlabs/label-studio'
 import LabelStudio from '@/views/LabelStudio/LabelStudio'
+import Data from '@/views/Data'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,11 @@ const routes = [{
     name: 'LabelStudio',
     component: LabelStudio,
   },
+  {
+    path: '/data',
+    name: 'Data',
+    component: Data,
+  }
 ]
 
 const router = new VueRouter({
