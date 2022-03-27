@@ -1,10 +1,11 @@
 from xml.dom.minidom import parseString, Node
-from Models import *
-from Models.ImgClsModel import ImgClsModel
-from Models.KpLabModel import KpLabModel
-from Models.NERModel import NERModel
-from Models.ObjDecBBoxModel import ObjDecBBoxModel
-from Models.TextClsModel import TextClsModel
+from ml import *
+from ml.models.SemSegMaskModel import SemSegMaskModel
+from ml.models.ImgClsModel import ImgClsModel
+from ml.models.KpLabModel import KpLabModel
+from ml.models.NERModel import NERModel
+from ml.models.ObjDecBBoxModel import ObjDecBBoxModel
+from ml.models.TextClsModel import TextClsModel
 
 
 class ModelDriver():

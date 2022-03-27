@@ -6,36 +6,37 @@ from spacy.training import biluo_tags_to_offsets, iob_to_biluo
 import uuid
 import torch
 
-from Models.Model import Model
+from ml import Preprocess
+from ml.models.Model import Model
+
+# Override Preprocess
+class Preprocess(Preprocess):
+    def __init__(self, sequenceLen):
+        # Initialize the maximum sequence length
+        self.sequenceLen = sequenceLen
+
+        # Initialize the tokenizer
+        self.tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
+
+        def func(data):
+            return self.tokenizer(data.split(),
+                           is_split_into_words=True,
+                           return_offsets_mapping=True,
+                           padding='max_length',
+                           truncation=True,
+                           max_length=self.sequenceLen,
+                           return_tensors="pt")
+
+        self.func = func
 
 # Model for named entity recognition task
 class NERModel(Model):
-    # Class for preprocessing
-    class Preprocess():
-        def __init__(self, sequenceLen):
-            # Initialize the maximum sequence length
-            self.sequenceLen = sequenceLen
-
-            # Initialize the tokenizer
-            self.tokenizer = BertTokenizerFast.from_pretrained('bert-base-uncased')
-
-        # Function to convert given text into index sequence of constant length
-        def __call__(self, data):
-            seq = self.tokenizer(data.split(),
-                               is_split_into_words=True,
-                               return_offsets_mapping=True,
-                               padding='max_length',
-                               truncation=True,
-                               max_length=self.sequenceLen,
-                               return_tensors="pt")
-            return seq
-
 
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen):
         super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Initialize the preprocess object
-        self.preprocess = self.Preprocess(sequenceLen)
+        self.preprocess = Preprocess(sequenceLen)
 
 
     def predict(self, textPath):
@@ -92,18 +93,18 @@ class NERModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/NamedEntityRecognition/bert.pth'
+    modelPath = '../../../ml/models/NamedEntityRecognition/bert.pth'
     modelVersion = 'one'
-    modelRoot = '../../ml/models/NamedEntityRecognition'
+    modelRoot = '../../../ml/models/NamedEntityRecognition'
     fromName = 'label'
     toName = 'text'
     toolType = 'labels'
-    labelsPath = '../../ml/resources/bio.txt'
+    labelsPath = '../../../ml/resources/bio.txt'
 
     sequenceLen = 128
 
     nERModel = NERModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen)
 
-    textPath = '../../ml/resources/ner.txt'
+    textPath = '../../../ml/resources/ner.txt'
     predictionItem = nERModel.predict(textPath)
     print(predictionItem)

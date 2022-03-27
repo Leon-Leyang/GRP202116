@@ -3,16 +3,21 @@ from PIL import Image
 import uuid
 import torchvision.transforms as tf
 
-from Models.Model import Model
+from ml import Preprocess
+from ml.models.Model import Model
 
 # Model for keypoint labeling task
 class KpLabModel(Model):
+
     def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold):
         super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
             tf.ToTensor()])
+
+        # Initialize preprocess object
+        self.preprocess = Preprocess(self.transforms)
 
         # Threshold to filter result
         self.threashold = threashold
@@ -25,7 +30,7 @@ class KpLabModel(Model):
         # Get the width and height of the image
         imgWidth, imgHeight = img.size
 
-        imgVec = self.transforms(img).unsqueeze(0).to(self.device)
+        imgVec = self.preprocess(img).unsqueeze(0).to(self.device)
         modelOutput = self.model(imgVec)
 
         for item in modelOutput:
@@ -57,16 +62,16 @@ class KpLabModel(Model):
 
 
 if __name__ == '__main__':
-    modelPath = '../../ml/models/KeypointLabeling/keypointrcnn.pth'
+    modelPath = '../../../ml/models/KeypointLabeling/keypointrcnn.pth'
     modelVersion = 'one'
-    modelRoot = '../../ml/models/KeypointLabeling'
+    modelRoot = '../../../ml/models/KeypointLabeling'
     fromName = 'kp-1'
     toName = 'img-1'
     toolType = 'keypointlabels'
-    labelsPath = '../../ml/resources/cocoKp.txt'
+    labelsPath = '../../../ml/resources/cocoKp.txt'
     threashold = 0.9
 
-    imgPath = '../../ml/resources/kid.jpg'
+    imgPath = '../../../ml/resources/kid.jpg'
 
     kpLabModel = KpLabModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
 
