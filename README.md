@@ -17,19 +17,17 @@ is of concern to modern deep learning based techniques.
 
 ### Backend
 
-Build and run the backend in this order:
-
-1. flask-server
-
-   **If you use the PyCharm, make sure to add  `--host=0.0.0.0 --port=6000` to the `Additional optiions` of configuration**
-
-2. eureka-server
-
-3. sidecar-server
-
-4. consumer-server
++ You can directly use the jar files under the [deploy](./deploy/) directory.
++ Or use the source code under the [backend](./backend/) directory.
++ Build and run the backend in this order:
+  + flask-server
+  + eureka-server
+  + sidecar-server
+  + consumer-server
 
 ### Frontend
+
++ Inside the [frontend](./frontend/) directory, open the terminal and run:
 
 ```
 ## Project setup
@@ -46,5 +44,3 @@ npm run lint
 ```
 
 
-
-## Test Report

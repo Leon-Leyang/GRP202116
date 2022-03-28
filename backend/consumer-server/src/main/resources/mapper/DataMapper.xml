@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grp202116.consumerserver.mapper.DataMapper">
+
+    <resultMap id="dataMap" type="com.grp202116.consumerserver.pojo.DataDO">
+        <id column="data_id" property="dataId"/>
+        <result column="url" property="url"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="type" property="type"/>
+        <result column="project_id" property="projectId"/>
+        <result column="is_annotated" property="isAnnotated"/>
+    </resultMap>
+
+    <update id="alter">
+        alter table data
+            AUTO_INCREMENT = 1;
+    </update>
+
+    <update id="setAnnotated">
+        update data
+        set is_annotated = true
+        where data_id = #{dataId}
+    </update>
+
+    <update id="setNotAnnotated">
+        update data
+        set is_annotated = false
+        where data_id = #{dataId}
+    </update>
+
+    <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="dataId" keyColumn="data_id">
+        insert into data (url,update_time,type,project_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.url},#{item.updateTime},#{item.type},#{item.projectId})
+        </foreach>
+    </insert>
+
+    <select id="getByDataId" resultMap="dataMap">
+        select *
+        from data
+        where data_id = #{dataId}
+    </select>
+
+    <select id="listByProjectId" resultMap="dataMap">
+        select *
+        from data
+        where project_id = #{projectId}
+    </select>
+
+    <select id="getAnnotateStatus" parameterType="String" resultType="Boolean">
+        select is_annotated
+        from data
+        where data_id = #{dataId}
+    </select>
+
+    <delete id="deleteByProjectId">
+        delete
+        from data
+        where project_id = #{projectId}
+    </delete>
+
+    <delete id="deleteByDataId">
+        delete
+        from data
+        where data_id = #{dataId}
+    </delete>
+
+</mapper>

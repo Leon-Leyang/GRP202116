@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grp202116.consumerserver.mapper.ModelMapper">
+
+    <resultMap id="modelMap" type="com.grp202116.consumerserver.pojo.ModelDO">
+        <id column="url" property="url"/>
+        <result column="version" property="version"/>
+        <result column="description" property="description"/>
+        <result column="project_id" property="projectId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="model_root" property="modelRoot"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="ModelDO">
+        insert into model (url, version, description, project_id, create_time, model_root)
+        values (#{url}, #{version}, #{description}, #{projectId}, #{createTime}, #{modelRoot})
+    </insert>
+
+    <select id="getByProjectId" resultMap="modelMap">
+        select *
+        from model
+        where project_id = #{projectId}
+    </select>
+
+    <delete id="deleteByProjectId">
+        delete
+        from model
+        where project_id = #{projectId}
+    </delete>
+
+</mapper>
