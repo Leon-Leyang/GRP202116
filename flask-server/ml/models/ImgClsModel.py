@@ -1,6 +1,6 @@
 from PIL import Image
 from torch.utils.data import DataLoader, random_split
-from torch.optim import Adam
+from torch.optim import *
 from torch.autograd import Variable
 
 import uuid
@@ -60,7 +60,7 @@ class ImgClsModel(Model):
 
 
 
-    def train(self, epochNum, splitParam, batchSize, shuffle, workerNum, learningRate):
+    def train(self, epochNum, splitParam, batchSize, shuffle, workerNum, learningRate, lossFunc, optimizer):
         # Function to test the model with the test dataset and print the accuracy for the test images
         def testAccuracy():
 
@@ -115,13 +115,36 @@ class ImgClsModel(Model):
         self.trainLoader = DataLoader(trainSet, batch_size=batchSize, shuffle=shuffle, num_workers=workerNum)
         self.testLoader = DataLoader(testSet, batch_size=batchSize, shuffle=shuffle, num_workers=workerNum)
 
-        loss_fn = nn.CrossEntropyLoss()
-        #TODO: Generalize optimizer
-        optimizer = Adam(self.model.parameters(), lr=learningRate, weight_decay=0.0001)
+        # Initialize loss function
+        if(lossFunc == 'Cross Entropy'):
+            loss_fn = nn.CrossEntropyLoss()
+        elif(lossFunc == 'NLL'):
+            loss_fn = nn.NLLLoss()
+
+        # Initialize the optimizer
+        if (optimizer == 'SGD'):
+            optimizer = SGD(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'ASGD'):
+            optimizer = ASGD(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'Rprop'):
+            optimizer = Rprop(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'Adagrad'):
+            optimizer = Adagrad(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'Adadelta'):
+            optimizer = Adadelta(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'RMSprop'):
+            optimizer = RMSprop(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'Adam'):
+            optimizer = Adam(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'Adamax'):
+            optimizer = Adamax(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'SparseAdam'):
+            optimizer = SparseAdam(self.model.parameters(), lr=learningRate)
+        elif (optimizer == 'LBFGS'):
+            optimizer = LBFGS(self.model.parameters(), lr=learningRate)
+
 
         for epoch in range(epochNum):  # loop over the dataset multiple times
-            running_loss = 0.0
-            running_acc = 0.0
 
             for i, (images, truths) in enumerate(self.trainLoader, 0):
 
@@ -139,15 +162,6 @@ class ImgClsModel(Model):
                 loss.backward()
                 # adjust parameters based on the calculated gradients
                 optimizer.step()
-
-                # Let's print statistics for every 1,000 images
-                # running_loss += loss.item()  # extract the loss value
-                # if i % 1 == 0:
-                #     # print every 1000
-                #     print('[%d, %5d] loss: %.3f' %
-                #           (epoch + 1, i + 1, running_loss / 1))
-                #     # zero the loss
-                #     running_loss = 0.0
 
             # Compute and print the average accuracy fo this epoch when tested over all 10000 test images
             accuracy = testAccuracy()
@@ -178,4 +192,4 @@ if __name__ == '__main__':
     # predictionItem = imgClsModel.predict(imgPath)
     # print(predictionItem)
 
-    imgClsModel.train(10, 0.1, 1, False, 1, 0.001)
+    imgClsModel.train(10, 0.1, 1, False, 1, 0.001, 'Cross Entropy', 'Adam')
