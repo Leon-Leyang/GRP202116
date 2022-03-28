@@ -44,6 +44,12 @@
         where data_id = #{dataId}
     </select>
 
+    <select id="getAnnotatedList" resultMap="dataMap">
+        select *
+        from data
+        where data_id = #{dataId}
+    </select>
+
     <select id="listByProjectId" resultMap="dataMap">
         select *
         from data

@@ -18,7 +18,7 @@ def get_user():
                     mimetype='application/json')
 
 
-@app.route('/model', methods=["post"])
+@app.route('/model/run', methods=["post"])
 def test_model():
     print("Model is running.")
     print(request.json)

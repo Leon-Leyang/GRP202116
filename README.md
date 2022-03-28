@@ -17,16 +17,18 @@ is of concern to modern deep learning based techniques.
 
 ### Backend
 
-+ You can directly use the jar files under the [deploy](./deploy/) directory.
-+ Or use the source code under the [backend](./backend/) directory.
++ You could directly use the jar files under the releases...
++ ...or use the source code under the [backend](./backend/) directory.
 + Build and run the backend in this order:
   + flask-server
   + eureka-server
   + sidecar-server
   + consumer-server
++ _TODO: Build executable files for the flask-server._
 
 ### Frontend
 
++ _TODO: Build executable files for the frontend._
 + Inside the [frontend](./frontend/) directory, open the terminal and run:
 
 ```

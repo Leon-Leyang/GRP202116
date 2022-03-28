@@ -70,12 +70,14 @@ public class DataUtils {
         String realType = FilenameUtils.getExtension(file.getName());
 
         if (dataType.equals("image")) {
-            if (!realType.equals("jpg") && !realType.equals("png") && !realType.equals("gif")
-                    && !realType.equals("bmp") && !realType.equals("svg") && !realType.equals("webp"))
+            if (!realType.equalsIgnoreCase("jpg") && !realType.equalsIgnoreCase("png")
+                    && !realType.equalsIgnoreCase("gif") && !realType.equalsIgnoreCase("jpeg")
+                    && !realType.equalsIgnoreCase("bmp") && !realType.equalsIgnoreCase("svg")
+                    && !realType.equalsIgnoreCase("webp"))
                 return;
         } else {
-            if (!realType.equals("txt") && !realType.equals("csv") && !realType.equals("tsv")
-                    && !realType.equals("json"))
+            if (!realType.equalsIgnoreCase("txt") && !realType.equalsIgnoreCase("csv")
+                    && !realType.equalsIgnoreCase("tsv") && !realType.equalsIgnoreCase("json"))
                 return;
             else splitText(file, realType);
         }
