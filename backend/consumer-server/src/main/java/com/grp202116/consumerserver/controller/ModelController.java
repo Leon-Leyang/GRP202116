@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.AnnotationMapper;
+import com.grp202116.consumerserver.mapper.DataMapper;
 import com.grp202116.consumerserver.mapper.ModelMapper;
 import com.grp202116.consumerserver.mapper.PredictionMapper;
 import com.grp202116.consumerserver.ml.ModelDriver;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
+import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.util.HttpUtils;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The Class ModelController, control the ml Model of the project
@@ -28,6 +33,9 @@ public class ModelController {
 
     @Resource
     AnnotationMapper annotationMapper;
+
+    @Resource
+    DataMapper dataMapper;
 
     private final RestTemplate restTemplate;
 
@@ -91,8 +99,16 @@ public class ModelController {
     @GetMapping("/model/train/{projectId}")
     public void trainModel(@PathVariable BigInteger projectId) {
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
-        //
-//        restTemplate.postForObject("http://sidecar-server/model/run",
-//                HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.parseConfig())), String.class);
+        if (annotationList.size() < 1) return;
+
+        List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
+        if (annotatedDataList.size() < 1) return;
+
+        JSONObject param = new JSONObject();
+        param.put("annotation_list", annotationList);
+        param.put("data_list", annotatedDataList);
+
+        restTemplate.postForObject("http://sidecar-server/model/train",
+                HttpUtils.parseJsonToFlask(JSONObject.toJSONString(param)), String.class);
     }
 }

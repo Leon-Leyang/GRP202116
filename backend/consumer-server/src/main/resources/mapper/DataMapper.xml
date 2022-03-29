@@ -38,13 +38,22 @@
         </foreach>
     </insert>
 
-    <select id="getByDataId" resultMap="dataMap">
+    <select id="getAnnotatedIdList" parameterType="List" resultMap="dataMap">
         select *
         from data
-        where data_id = #{dataId}
+        where data_id in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </select>
 
     <select id="getAnnotatedList" resultMap="dataMap">
+        select *
+        from data
+        where is_annotated = 1
+    </select>
+
+    <select id="getByDataId" resultMap="dataMap">
         select *
         from data
         where data_id = #{dataId}

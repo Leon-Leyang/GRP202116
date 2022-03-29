@@ -27,7 +27,9 @@ public interface DataMapper extends BaseMapper {
      */
     DataDO getByDataId(BigInteger id);
 
-    List<DataDO> getAnnotatedList(List<BigInteger> dataId);
+    List<DataDO> getAnnotatedIdList(List<BigInteger> dataIdList);
+
+    List<DataDO> getAnnotatedList();
 
     /**
      * List the Data of the certain project by the projectId
