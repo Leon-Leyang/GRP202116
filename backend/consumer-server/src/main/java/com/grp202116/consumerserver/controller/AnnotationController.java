@@ -66,6 +66,7 @@ public class AnnotationController {
                 annotation.setUpdateTime(date);
             }
             dataMapper.setAnnotated(dataId);
+            annotationMapper.alter();
             annotationMapper.insertAll(annotations);
         } else dataMapper.setNotAnnotated(dataId);
     }

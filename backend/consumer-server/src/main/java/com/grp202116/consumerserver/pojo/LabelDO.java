@@ -9,6 +9,8 @@ public class LabelDO extends DataDistinguishableDO{
     private String fromName;
     private String toName;
     private String value;
+    private Integer originalWidth;
+    private Integer originalHeight;
 
     /**
      * Get the fromName information of the label
@@ -48,5 +50,21 @@ public class LabelDO extends DataDistinguishableDO{
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public Integer getOriginalWidth() {
+        return originalWidth;
+    }
+
+    public void setOriginalWidth(Integer originalWidth) {
+        this.originalWidth = originalWidth;
+    }
+
+    public Integer getOriginalHeight() {
+        return originalHeight;
+    }
+
+    public void setOriginalHeight(Integer originalHeight) {
+        this.originalHeight = originalHeight;
     }
 }

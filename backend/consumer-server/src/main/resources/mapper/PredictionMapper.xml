@@ -5,7 +5,7 @@
 <mapper namespace="com.grp202116.consumerserver.mapper.PredictionMapper">
 
     <resultMap id="predictionMap" type="com.grp202116.consumerserver.pojo.PredictionDO">
-        <id column="prediction_id" property="annotationId"/>
+        <id column="prediction_id" property="predictionId"/>
         <result column="project_id" property="projectId"/>
         <result column="data_id" property="dataId"/>
         <result column="type" property="type"/>
@@ -15,15 +15,23 @@
         <result column="update_time" property="updateTime"/>
         <result column="from_name" property="fromName"/>
         <result column="to_name" property="toName"/>
+        <result column="original_width" property="originalWidth"/>
+        <result column="original_height" property="originalHeight"/>
     </resultMap>
 
-    <insert id="insertAll" parameterType="java.util.List">
+    <update id="alter">
+        alter table annotation
+            AUTO_INCREMENT = 1;
+    </update>
+
+    <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="predictionId"
+            keyColumn="prediction_id">
         SET FOREIGN_KEY_CHECKS = 0;
         insert into prediction
-        (prediction_id,project_id,data_id,type,value,model_version,create_time,update_time,from_name,to_name)
+        (project_id,data_id,type,value,model_version,create_time,update_time,from_name,to_name)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.predictionId},#{item.projectId},#{item.dataId},#{item.type},
+            (#{item.projectId},#{item.dataId},#{item.type},
             #{item.value},#{item.model},#{item.createTime},#{item.updateTime},#{item.fromName},#{item.toName})
         </foreach>;
         SET FOREIGN_KEY_CHECKS = 1;

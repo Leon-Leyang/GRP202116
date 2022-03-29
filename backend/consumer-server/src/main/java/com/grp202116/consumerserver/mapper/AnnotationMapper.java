@@ -43,4 +43,6 @@ public interface AnnotationMapper extends BaseMapper {
      * @return the Annotations in the project by corresponding id
      */
     List<AnnotationDO> listByProjectId(BigInteger projectId);
+
+    void alter();
 }

@@ -93,6 +93,7 @@ public class ModelController {
                 HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.parseConfig())), String.class));
         JSONArray predictions = JSONObject.parseArray(object.getString("result"));
 
+        predictionMapper.alter();
         predictionMapper.insertAll(modelDriver.savePredictions(predictions));
     }
 

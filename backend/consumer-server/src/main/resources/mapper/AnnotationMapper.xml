@@ -8,21 +8,31 @@
         <id column="annotation_id" property="annotationId"/>
         <result column="project_id" property="projectId"/>
         <result column="data_id" property="dataId"/>
+        <result column="result_id" property="resultId"/>
         <result column="type" property="type"/>
         <result column="value" property="value"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="from_name" property="fromName"/>
         <result column="to_name" property="toName"/>
+        <result column="original_width" property="originalWidth"/>
+        <result column="original_height" property="originalHeight"/>
     </resultMap>
 
-    <insert id="insertAll" parameterType="java.util.List">
+    <update id="alter">
+        alter table annotation
+            AUTO_INCREMENT = 1;
+    </update>
+
+    <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyColumn="annotation_id"
+            keyProperty="annotationId">
         insert into annotation
-        (annotation_id,project_id,data_id,type,value,create_time,update_time,from_name,to_name)
+        (project_id,data_id, result_id,type,value,create_time,update_time,from_name,to_name, original_width, original_height)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.annotationId},#{item.projectId},#{item.dataId},#{item.type},#{item.value},
-            #{item.createTime},#{item.updateTime},#{item.fromName},#{item.toName})
+            (#{item.projectId}, #{item.resultId},#{item.dataId},#{item.type},#{item.value},
+            #{item.createTime},#{item.updateTime},#{item.fromName},#{item.toName},
+            #{item.originalWidth}, #{item.originalHeight})
         </foreach>
     </insert>
 
