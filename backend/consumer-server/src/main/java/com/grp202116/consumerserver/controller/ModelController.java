@@ -15,10 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The Class ModelController, control the ml Model of the project
@@ -86,14 +83,15 @@ public class ModelController {
      *
      * @param projectId the projectId fetched from the mapper
      */
-    @GetMapping("/model/run/{projectId}")
-    public void runModel(@PathVariable BigInteger projectId) {
+    @PostMapping("/model/run/{projectId}")
+    public void runModel(@PathVariable BigInteger projectId, @RequestBody JSONObject kwargs) {
         ProjectDO project = projectMapper.getByProjectId(projectId);
         ModelDO model = modelMapper.getByProjectId(projectId);
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
+        ModelDriver modelDriver = new ModelDriver(project, model, kwargs);
 
         for (DataDO data: dataList) {
-            ModelDriver modelDriver = new ModelDriver(project, model, data);
+            modelDriver.setData(data);
             JSONObject object = JSONObject.parseObject(restTemplate.postForObject("http://sidecar-server/model/run",
                     HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.parseConfig())), String.class));
             JSONArray predictions = JSONObject.parseArray(object.getString("result"));
@@ -116,5 +114,13 @@ public class ModelController {
 
         restTemplate.postForObject("http://sidecar-server/model/train",
                 HttpUtils.parseJsonToFlask(JSONObject.toJSONString(param)), String.class);
+    }
+
+    @PostMapping("/model/save/{projectId}")
+    public void saveModel(@PathVariable BigInteger projectId, @RequestBody ModelDO model) {
+
+        model.setProjectId(projectId);
+        model.setCreateTime(new Date());
+        modelMapper.insert(model);
     }
 }

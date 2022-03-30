@@ -112,7 +112,7 @@ public class DataController {
      * @param dataId the dataId fetched from the mapper
      */
     @DeleteMapping("/data/{dataId}")
-    public void deleteDataById(@PathVariable String dataId) {
+    public void deleteDataById(@PathVariable BigInteger dataId) {
         dataMapper.deleteDataById(dataId);
     }
 }

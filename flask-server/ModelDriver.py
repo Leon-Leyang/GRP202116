@@ -57,22 +57,28 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-    def run_model_on_data(project_type, data, configs, model_path, model_version, model_root, labelsPath, **kwargs):
+    def run_model_on_data(project_type, data, configs, model_path, model_version, model_root, labelsPath, kwargs):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
         if project_type == 'Image Classification':
-            model = ImgClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['mean'], kwargs['std'], kwargs['imgSize'])
+            model = ImgClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath,
+                                kwargs["mean"], kwargs["std"], kwargs["imgSize"])
         elif project_type == 'Object Detection':
-            model = ObjDecBBoxModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['threashold'])
+            model = ObjDecBBoxModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath,
+                                    kwargs["threashold"])
         elif project_type == 'Keypoint Labeling':
-            model = KpLabModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['threashold'])
+            model = KpLabModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath,
+                               kwargs["threashold"])
         elif project_type == 'Semantic Segmentation Mask':
-            model = SemSegMaskModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['mean'], kwargs['std'])
+            model = SemSegMaskModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath,
+                                    kwargs["mean"], kwargs["std"])
         elif project_type == 'Text Classification':
-            model = TextClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['vocabPath'], kwargs['tokenNum'], kwargs['sequenceLen'])
+            model = TextClsModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath,
+                                 kwargs["vocabPath"], kwargs["tokenNum"], kwargs["sequenceLen"])
         elif project_type == 'Named Entity Recognition':
-            model = NERModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath, kwargs['sequenceLen'])
+            model = NERModel(model_path, model_version, model_root, from_name, to_name, tool_type, labelsPath,
+                             kwargs["sequenceLen"])
         else:
             print("model undefined")
             pass
@@ -85,9 +91,11 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a list of data
-    def run_model_on_data_set(project_type, data_set, configs, model_path, model_version, model_root, labelsPath, **kwargs):
+    def run_model_on_data_set(project_type, data_set, configs, model_path, model_version, model_root, labelsPath,
+                              **kwargs):
         for data in data_set:
-            ModelDriver.run_model_on_data(project_type, data, configs, model_path, model_version, model_root, labelsPath, **kwargs)
+            ModelDriver.run_model_on_data(project_type, data, configs, model_path, model_version, model_root,
+                                          labelsPath, **kwargs)
 
 
 if __name__ == '__main__':

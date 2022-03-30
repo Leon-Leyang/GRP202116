@@ -13,6 +13,11 @@
         <result column="model_root" property="modelRoot"/>
     </resultMap>
 
+    <update id="alter">
+        alter table annotation
+            AUTO_INCREMENT = 1;
+    </update>
+
     <insert id="insert" parameterType="ModelDO">
         insert into model (url, version, description, project_id, create_time, model_root)
         values (#{url}, #{version}, #{description}, #{projectId}, #{createTime}, #{modelRoot})

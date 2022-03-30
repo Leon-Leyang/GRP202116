@@ -83,7 +83,7 @@
         where project_id = #{projectId}
     </delete>
 
-    <delete id="deleteByDataId">
+    <delete id="deleteDataById">
         delete
         from data
         where data_id = #{dataId}

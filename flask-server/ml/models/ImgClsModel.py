@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
     imgClsModel = ImgClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std, imgSize)
 
-    # predictionItem = imgClsModel.predict(imgPath)
-    # print(predictionItem)
+    predictionItem = imgClsModel.predict(imgPath)
+    print(predictionItem)
 
-    imgClsModel.train(10, 0.1, 1, False, 1, 0.001, 'Cross Entropy', 'Adam')
+    # imgClsModel.train(10, 0.1, 1, False, 1, 0.001, 'Cross Entropy', 'Adam')

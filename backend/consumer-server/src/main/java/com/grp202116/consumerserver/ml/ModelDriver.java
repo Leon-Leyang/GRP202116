@@ -2,29 +2,31 @@ package com.grp202116.consumerserver.ml;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.grp202116.consumerserver.mapper.ProjectMapper;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.PredictionDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-//Todo: combine with the frontend to retrieve requested project id and data id;
 public class ModelDriver {
 
     static ModelDO model;
     static ProjectDO project;
-    static DataDO data;
+    DataDO data;
+    static JSONObject kwargs;
 
-    public ModelDriver(ProjectDO project, ModelDO model, DataDO data) {
+    public ModelDriver(ProjectDO project, ModelDO model, JSONObject kwargs) {
         ModelDriver.model = model;
         ModelDriver.project = project;
-        ModelDriver.data = data;
+        ModelDriver.kwargs = kwargs;
+    }
+
+    public void setData(DataDO data) {
+        this.data = data;
     }
 
     public JSONObject parseConfig() {
@@ -56,12 +58,21 @@ public class ModelDriver {
         param.put("model_path", model.getUrl());
         param.put("model_version", model.getVersion());
         param.put("model_root", model.getModelRoot());
-        param.put("labels", project);
+        param.put("labels_path", project.getLabelsPath());
+
+
+        JSONObject test = new JSONObject();
+
+        test.put("mean", new double[]{0.485, 0.456, 0.406});
+        test.put("std", new double[]{0.229, 0.224, 0.225});
+        test.put("imgSize", 224);
+        param.put("kwargs", test);
 
         return param;
     }
 
     public List<PredictionDO> savePredictions(JSONArray predictions) {
+        System.out.println(predictions);
         List<PredictionDO> predictionList = new ArrayList<>();
         for (int i = 0; i < Objects.requireNonNull(predictions).size(); i++) {
             JSONObject predictionJSONObject = predictions.getJSONObject(i);
