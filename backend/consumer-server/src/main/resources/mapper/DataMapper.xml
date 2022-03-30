@@ -71,6 +71,12 @@
         where data_id = #{dataId}
     </select>
 
+    <select id="getProjectId" >
+        select project_id
+        from data
+        where data_id = #{dataId}
+    </select>
+
     <delete id="deleteByProjectId">
         delete
         from data

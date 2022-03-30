@@ -3,14 +3,12 @@ package com.grp202116.consumerserver.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.grp202116.consumerserver.mapper.AnnotationMapper;
-import com.grp202116.consumerserver.mapper.DataMapper;
-import com.grp202116.consumerserver.mapper.ModelMapper;
-import com.grp202116.consumerserver.mapper.PredictionMapper;
+import com.grp202116.consumerserver.mapper.*;
 import com.grp202116.consumerserver.ml.ModelDriver;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
+import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.util.HttpUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -35,6 +33,12 @@ public class ModelController {
     AnnotationMapper annotationMapper;
 
     @Resource
+    ModelMapper modelMapper;
+
+    @Resource
+    ProjectMapper projectMapper;
+
+    @Resource
     DataMapper dataMapper;
 
     private final RestTemplate restTemplate;
@@ -42,9 +46,6 @@ public class ModelController {
     public ModelController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
-    @Resource
-    private ModelMapper modelMapper;
 
     /**
      * Get the Model of certain project
@@ -87,14 +88,18 @@ public class ModelController {
      */
     @GetMapping("/model/run/{projectId}")
     public void runModel(@PathVariable BigInteger projectId) {
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        ModelDO model = modelMapper.getByProjectId(projectId);
+        List<DataDO> dataList = dataMapper.listByProjectId(projectId);
 
-        ModelDriver modelDriver = new ModelDriver(projectId);
-        JSONObject object = JSONObject.parseObject(restTemplate.postForObject("http://sidecar-server/model/run",
-                HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.parseConfig())), String.class));
-        JSONArray predictions = JSONObject.parseArray(object.getString("result"));
-
-        predictionMapper.alter();
-        predictionMapper.insertAll(modelDriver.savePredictions(predictions));
+        for (DataDO data: dataList) {
+            ModelDriver modelDriver = new ModelDriver(project, model, data);
+            JSONObject object = JSONObject.parseObject(restTemplate.postForObject("http://sidecar-server/model/run",
+                    HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.parseConfig())), String.class));
+            JSONArray predictions = JSONObject.parseArray(object.getString("result"));
+            predictionMapper.alter();
+            predictionMapper.insertAll(modelDriver.savePredictions(predictions));
+        }
     }
 
     @GetMapping("/model/train/{projectId}")

@@ -12,6 +12,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
     private String name;
     private String description;
     private String configs;
+    private String labels;
 
     /**
      * Get the type of the project object

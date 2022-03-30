@@ -56,6 +56,8 @@ public interface DataMapper extends BaseMapper {
 
     Boolean getAnnotateStatus(String dataId);
 
+    int getProjectId(BigInteger dataId);
+
     void alter();
 
     void setAnnotated(BigInteger dataId);

@@ -3,8 +3,10 @@ package com.grp202116.consumerserver.ml;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.ProjectMapper;
+import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.PredictionDO;
+import com.grp202116.consumerserver.pojo.ProjectDO;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -15,35 +17,46 @@ import java.util.Objects;
 //Todo: combine with the frontend to retrieve requested project id and data id;
 public class ModelDriver {
 
-    ModelDO model;
-    ProjectMapper projectMapper;
+    static ModelDO model;
+    static ProjectDO project;
+    static DataDO data;
 
-    public ModelDriver(BigInteger projectId) {
-        this.model = new ModelDO();
+    public ModelDriver(ProjectDO project, ModelDO model, DataDO data) {
+        ModelDriver.model = model;
+        ModelDriver.project = project;
+        ModelDriver.data = data;
     }
 
     public JSONObject parseConfig() {
-        String configs = "<View>" +
-                "  <Image name=\" image \" value=\" $image \" zoom=\" true \"/>" +
-                " <BrushLabels name=\" tag \" toName=\" image \">" +
-                "     <Label value=\" Airplane \" background=\" rgba(255, 0, 0, 0.7) \"/>" +
-                "                               <Label value=\" Car \" background=\" rgba(0, 0, 255, 0.7) \"/>" +
-                "                           </BrushLabels>" +
-                "                       </View>";
-
-        String labels = "Background, Aeroplane, Bicycle, Bird, Boat, Bottle, Bus, Car, Cat, Chair, Cow," +
-                "Dining table, Dog, Horse, Motorbike, Person, Potted plant, Sheep, Sofa, Train," +
-                " Tv/monitor";
-
+//        String configs = "<View>" +
+//                "  <Image name=\" image \" value=\" $image \" zoom=\" true \"/>" +
+//                " <BrushLabels name=\" tag \" toName=\" image \">" +
+//                "     <Label value=\" Airplane \" background=\" rgba(255, 0, 0, 0.7) \"/>" +
+//                "                               <Label value=\" Car \" background=\" rgba(0, 0, 255, 0.7) \"/>" +
+//                "                           </BrushLabels>" +
+//                "                       </View>";
+//
+//        String labels = "Background, Aeroplane, Bicycle, Bird, Boat, Bottle, Bus, Car, Cat, Chair, Cow," +
+//                "Dining table, Dog, Horse, Motorbike, Person, Potted plant, Sheep, Sofa, Train," +
+//                " Tv/monitor";
+//
+//        JSONObject param = new JSONObject();
+//
+//        param.put("project_type", "Semantic Segmentation Mask");
+//        param.put("data", "./puppy.webp");
+//        param.put("configs", configs);
+//        param.put("model_path", "../ml/models/fcn/fcn.pth");
+//        param.put("model_version", "undefined");
+//        param.put("model_root", "./");
+//        param.put("labels", labels);
         JSONObject param = new JSONObject();
-
-        param.put("project_type", "Semantic Segmentation Mask");
-        param.put("data", "./puppy.webp");
-        param.put("configs", configs);
-        param.put("model_path", "../ml/models/fcn/fcn.pth");
-        param.put("model_version", "undefined");
-        param.put("model_root", "./");
-        param.put("labels", labels);
+        param.put("project_type", project.getType());
+        param.put("data", data.getUrl());
+        param.put("configs", project.getConfigs());
+        param.put("model_path", model.getUrl());
+        param.put("model_version", model.getVersion());
+        param.put("model_root", model.getModelRoot());
+        param.put("labels", project);
 
         return param;
     }
@@ -62,8 +75,9 @@ public class ModelDriver {
             Date date = new Date();
             prediction.setCreateTime(date);
             prediction.setUpdateTime(date);
-            prediction.setDataId(new BigInteger(String.valueOf(1)));
-            prediction.setProjectId(new BigInteger(String.valueOf(1)));
+            prediction.setDataId(data.getDataId());
+            prediction.setModel(model.getVersion());
+            prediction.setProjectId(project.getProjectId());
 
             predictionList.add(prediction);
         }
