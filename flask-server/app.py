@@ -22,13 +22,10 @@ def get_user():
 def test_model():
     print("Model is running.")
     print(request.json)
-    predictions = ModelDriver.run_model_on_data(request.json.get("project_type"),
-                                                request.json.get("data"),
-                                                request.json.get("configs"),
-                                                request.json.get("model_path"),
-                                                request.json.get("model_version"),
-                                                request.json.get("model_root"),
-                                                request.json.get("labels").split(', '))
+    predictions = ModelDriver.run_model_on_data(request.json.get("project_type"), request.json.get("data").replace('\\','/'),
+                                                request.json.get("configs"), request.json.get("model_path").replace('\\','/'),
+                                                request.json.get("model_root").replace('\\','/'), request.json.get("labels_path").replace('\\','/'),
+                                                request.json.get("model_version"))
     print("Running finished.")
     return Response(json.dumps(predictions), mimetype='application/json')
 

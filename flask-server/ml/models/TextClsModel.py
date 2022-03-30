@@ -32,8 +32,9 @@ class Preprocess(Preprocess):
 # Model for image classification task
 class TextClsModel(Model):
 
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, vocabPath, tokenNum, sequenceLen):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, vocabPath, tokenNum,
+                 sequenceLen):
+        super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Initialize the preprocess object
         self.preprocess = Preprocess(vocabPath, tokenNum, sequenceLen)
@@ -75,7 +76,8 @@ if __name__ == '__main__':
     tokenNum = 1000
     sequenceLen = 20
 
-    textClsModel = TextClsModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, vocabPath, tokenNum, sequenceLen)
+    textClsModel = TextClsModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, vocabPath,
+                                tokenNum, sequenceLen)
 
     textPath = '../../../ml/resources/tweets.txt'
     predictionItem = textClsModel.predict(textPath)

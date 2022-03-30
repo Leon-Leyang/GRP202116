@@ -32,8 +32,9 @@ class Preprocess(Preprocess):
 # Model for named entity recognition task
 class NERModel(Model):
 
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion=None, fromName=None, toName=None, toolType=None,
+                 sequenceLen=128):
+        super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Initialize the preprocess object
         self.preprocess = Preprocess(sequenceLen)
@@ -103,7 +104,7 @@ if __name__ == '__main__':
 
     sequenceLen = 128
 
-    nERModel = NERModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, sequenceLen)
+    nERModel = NERModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, sequenceLen)
 
     textPath = '../../../ml/resources/ner.txt'
     predictionItem = nERModel.predict(textPath)

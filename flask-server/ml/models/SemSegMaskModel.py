@@ -11,8 +11,8 @@ from ml.models.Model import Model
 
 # Model for semantic segmentation task with mask
 class SemSegMaskModel(Model):
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, mean, std):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, mean, std):
+        super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -72,6 +72,6 @@ if __name__ == '__main__':
     imgPath = '../../../ml/resources/puppy.webp'
 
 
-    semSegMaskModel = SemSegMaskModel(modelPath, modelVersion, modelRoot, fromName, toName, type, labelsPath, mean, std)
+    semSegMaskModel = SemSegMaskModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, type, mean, std)
     predictionItem = semSegMaskModel.predict(imgPath)
     print(predictionItem)

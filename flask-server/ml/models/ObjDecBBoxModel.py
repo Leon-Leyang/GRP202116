@@ -8,8 +8,8 @@ from ml.models.Model import Model
 
 # Model for image classification task
 class ObjDecBBoxModel(Model):
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, threashold):
+        super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -79,7 +79,8 @@ if __name__ == '__main__':
 
     imgPath = '../../../ml/resources/puppy.webp'
 
-    objDecBBoxModel = ObjDecBBoxModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
+    objDecBBoxModel = ObjDecBBoxModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType,
+                                      threashold)
 
     predictionItem = objDecBBoxModel.predict(imgPath)
     print(predictionItem)

@@ -3,7 +3,7 @@ import sys
 
 class Model():
 
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath):
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion=None, fromName=None, toName=None, toolType=None):
         # Add the model root path to environment variable path
         sys.path.append(modelRoot)
 
