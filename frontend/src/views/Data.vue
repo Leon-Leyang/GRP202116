@@ -119,6 +119,7 @@ export default {
                 }) 
     },
     getAnno(){
+      console.log("currentid",this.$store.state.currentDataId)
       this.$axios.get('/annotation/data/' + this.$store.state.currentDataId, {
               params: {
                   // page: this.config.page,
@@ -129,18 +130,18 @@ export default {
               this.annoDataList = res.data.map(item => {
                   return {...item}
               })
-              for(var i = 0; i < this.annoDataList.length; i++){
+              for(let i = 0; i < this.annoDataList.length; i++){
                 this.annoIdList[i] = this.annoDataList[i].annotation_id
               }
               var arr=[]
-              for(var i = 0; i < this.annoIdList.length; i++){
+              for(let i = 0; i < this.annoIdList.length; i++){
                 if(arr.indexOf(this.annoIdList[i]) == -1){
                   arr.push(this.annoIdList[i]); 
                 }
               }
               this.annoIdList = arr
-              for(var j = 0; j < this.annoIdList.length; j++){
-                for(var i = 0; i < this.annoDataList.length; i++){
+              for(let j = 0; j < this.annoIdList.length; j++){
+                for(let i = 0; i < this.annoDataList.length; i++){
                   if(this.annoDataList[i].annotation_id == this.annoIdList[j]){
                     this.annoPerResult[i].original_width = this.annoDataList[i].original_width
                     this.annoPerResult[i].original_height = this.annoDataList[i].original_height
@@ -152,12 +153,12 @@ export default {
                   }
                   this.annos[j].id = this.annoIdList[j]
                   this.annos[j].result = this.annoPerResult
-                  annoPerResult = []
+                  this.annoPerResult = []
                 }                
               }
               // this.config.total = res.data.length
               // this.config.loading = false
-              console.log(" this.annos", annos)
+              console.log(" this.annos", this.annos)
           // console.log("dew",row)
 
           })
