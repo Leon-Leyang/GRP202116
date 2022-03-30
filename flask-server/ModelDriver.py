@@ -83,7 +83,7 @@ class ModelDriver():
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                              kwargs['sequenceLen'])
         elif project_type == 'Custom':
-            moduleName = 'ml.models.' + kwargs['name']
+            moduleName = 'ml.models.' + kwargs['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type)
         else:
@@ -110,7 +110,7 @@ class ModelDriver():
                                 imgSize=kwargs['imgSize'])
             model.train(datas, annotations, savePath, kwargs['epochNum'], kwargs['trainFrac'], kwargs['batchSize'], kwargs['shuffle'], kwargs['workerNum'], kwargs['learningRate'], kwargs['lossFunc'], kwargs['optimizer'])
         elif project_type == 'Custom':
-            moduleName = 'ml.models.' + kwargs['name']
+            moduleName = 'ml.models.' + kwargs['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath)
             model.train(datas, annotations, savePath)
@@ -169,22 +169,22 @@ if __name__ == '__main__':
     model_root = './'
     labelsPath = '../ml/resources/ImageNetClasses.txt'
 
-    # mean = [0.485, 0.456, 0.406]
-    # std = [0.229, 0.224, 0.225]
-    # imgSize = 224
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
+    imgSize = 224
 
     savePath = 'C:/Users/Leon/Desktop'
 
-    # epochNum = 10
-    # trainFrac = 0.1
-    # batchSize = 1
-    # shuffle = False
-    # workerNum = 1
-    # learningRate = 0.001
-    # lossFunc = 'Cross Entropy'
-    # optimizer = 'Adam'
+    epochNum = 10
+    trainFrac = 0.1
+    batchSize = 1
+    shuffle = False
+    workerNum = 1
+    learningRate = 0.001
+    lossFunc = 'Cross Entropy'
+    optimizer = 'Adam'
 
     name = 'CustomModel'
 
-    # ModelDriver.train_model_on_data_set('Image Classification', datas, annotations, model_path, model_root, labelsPath, savePath, mean=mean, std=std, imgSize=imgSize, epochNum=epochNum, trainFrac=trainFrac, batchSize=batchSize, shuffle=shuffle, workerNum=workerNum, learningRate=learningRate, lossFunc=lossFunc, optimizer=optimizer)
+    ModelDriver.train_model_on_data_set('Image Classification', datas, annotations, model_path, model_root, labelsPath, savePath, mean=mean, std=std, imgSize=imgSize, epochNum=epochNum, trainFrac=trainFrac, batchSize=batchSize, shuffle=shuffle, workerNum=workerNum, learningRate=learningRate, lossFunc=lossFunc, optimizer=optimizer)
     ModelDriver.train_model_on_data_set('Custom', datas, annotations, model_path, model_root, labelsPath, savePath, scriptName=name)
