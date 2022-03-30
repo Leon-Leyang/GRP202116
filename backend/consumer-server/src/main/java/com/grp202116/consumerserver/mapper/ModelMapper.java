@@ -29,4 +29,6 @@ public interface ModelMapper extends BaseMapper {
      */
     @Override
     void deleteByProjectId(BigInteger projectId);
+
+    void alter();
 }

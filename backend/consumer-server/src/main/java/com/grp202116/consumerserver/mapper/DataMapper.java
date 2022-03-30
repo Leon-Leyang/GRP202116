@@ -52,9 +52,9 @@ public interface DataMapper extends BaseMapper {
      *
      * @param dataId dataId
      */
-    void deleteDataById(String dataId);
+    void deleteDataById(BigInteger dataId);
 
-    Boolean getAnnotateStatus(String dataId);
+    Boolean getAnnotateStatus(BigInteger dataId);
 
     int getProjectId(BigInteger dataId);
 

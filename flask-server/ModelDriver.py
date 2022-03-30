@@ -57,6 +57,7 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
+
     def run_model_on_data(project_type, data, configs, model_path, model_root, labelsPath, model_version, **kwargs):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
@@ -79,6 +80,7 @@ class ModelDriver():
         elif project_type == 'Named Entity Recognition':
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                              kwargs['sequenceLen'])
+
         else:
             print("model undefined")
 
@@ -105,6 +107,7 @@ class ModelDriver():
             print("model undefined")
 
         model.train(datas, annotations, savePath, epochNum, trainFrac, batchSize, shuffle, workerNum, learningRate, lossFunc, optimizer)
+
 
 
 

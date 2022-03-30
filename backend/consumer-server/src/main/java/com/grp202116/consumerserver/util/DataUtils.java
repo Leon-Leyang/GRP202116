@@ -56,11 +56,11 @@ public class DataUtils {
      */
     private static void moveToLocal(File file, String type) throws IOException {
 
-        if (type.equals("image classification") || type.equals("object detection")
-                || type.equals("semantic segmentation") || type.equals("keypoint labeling")) {
+        if (type.equalsIgnoreCase("image classification") || type.equalsIgnoreCase("object detection")
+                || type.equalsIgnoreCase("semantic segmentation") || type.equalsIgnoreCase("keypoint labeling")) {
             if (file.isDirectory()) readDirectory(file, "image");
             else readSingleFile(file, "image");
-        } else if (type.equals("text classification") || type.equals("named entity recognition")) {
+        } else if (type.equalsIgnoreCase("text classification") || type.equalsIgnoreCase("named entity recognition")) {
             if (file.isDirectory()) readDirectory(file, "text");
             else readSingleFile(file, "text");
         }

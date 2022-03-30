@@ -12,7 +12,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
     private String name;
     private String description;
     private String configs;
-    private String labels;
+    private String labelsPath;
 
     /**
      * Get the type of the project object
@@ -84,5 +84,13 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     public void setConfigs(String configs) {
         this.configs = configs;
+    }
+
+    public String getLabelsPath() {
+        return labelsPath;
+    }
+
+    public void setLabelsPath(String labelsPath) {
+        this.labelsPath = labelsPath;
     }
 }
