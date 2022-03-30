@@ -84,6 +84,10 @@
             this.tableData[i].url = this.tableData[i].url.replace(".jpg", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.jpg' )
           }
+          else if(this.tableData[i].url.indexOf(".JPEG")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".JPEG", "")
+            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.JPEG' )
+          }
           else if(this.tableData[i].url.indexOf(".png")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".png", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.png' )

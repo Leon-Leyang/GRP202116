@@ -2,7 +2,7 @@
 <template>
 <div>
   <div>
-    <button @click="prev" style="width:100px;color:red">prev</button>
+    <button @click="test" style="width:100px;color:red">prev</button>
 
     <button @click="next" style="width:100px;color:red">next</button>
   </div>
@@ -37,6 +37,7 @@
 // @ is an alias to /src
 import LabelStudio from "@heartexlabs/label-studio";
 import "@heartexlabs/label-studio/build/static/css/main.css";
+import axios  from "axios";
 
 export default {
   name: "Home",
@@ -51,7 +52,12 @@ export default {
       tableData:[],
       labelStudio: '',
       currentDataId:0,
-
+      LS:[],
+      projectId:0,
+      annoDataList:[],
+      annoPerResult:[],
+      annos:[],
+      annoIdList:[],
       //test param
       id:0,
       config: `
@@ -106,6 +112,61 @@ export default {
       this.$store.state.currentDataId++
       this.newLS(this.$store.state.currentDataId)
     },
+    test(){
+              this.$router.push({  
+                    path: '/test',
+                    name: 'Test',  
+                }) 
+    },
+    getAnno(){
+      this.$axios.get('/annotation/data/' + this.$store.state.currentDataId, {
+              params: {
+                  // page: this.config.page,
+              }
+          })
+          .then(res => {
+            console.log('Anno', res)
+              this.annoDataList = res.data.map(item => {
+                  return {...item}
+              })
+              for(var i = 0; i < this.annoDataList.length; i++){
+                this.annoIdList[i] = this.annoDataList[i].annotation_id
+              }
+              var arr=[]
+              for(var i = 0; i < this.annoIdList.length; i++){
+                if(arr.indexOf(this.annoIdList[i]) == -1){
+                  arr.push(this.annoIdList[i]); 
+                }
+              }
+              this.annoIdList = arr
+              for(var j = 0; j < this.annoIdList.length; j++){
+                for(var i = 0; i < this.annoDataList.length; i++){
+                  if(this.annoDataList[i].annotation_id == this.annoIdList[j]){
+                    this.annoPerResult[i].original_width = this.annoDataList[i].original_width
+                    this.annoPerResult[i].original_height = this.annoDataList[i].original_height
+                    this.annoPerResult[i].value = this.annoDataList[i].value
+                    this.annoPerResult[i].id = this.annoDataList[i].result_id
+                    this.annoPerResult[i].from_name = this.annoDataList[i].from_name
+                    this.annoPerResult[i].to_name = this.annoDataList[i].to_name
+                    this.annoPerResult[i].type = this.annoDataList[i].type
+                  }
+                  this.annos[j].id = this.annoIdList[j]
+                  this.annos[j].result = this.annoPerResult
+                  annoPerResult = []
+                }                
+              }
+              // this.config.total = res.data.length
+              // this.config.loading = false
+              console.log(" this.annos", annos)
+          // console.log("dew",row)
+
+          })
+          .catch((error) => {
+  // here you will have access to error.response
+              console.log(error.response)
+          });
+    },
+
 
     newLS(dataId){
       this.labelStudio.destroy()
@@ -251,8 +312,10 @@ export default {
 
 
   mounted() {
+    this.getAnno(),
     this.currentDataId = this.$store.state.currentDataId
     console.log('project', this.$store.state.currentProject)
+    this.projectId = this.$store.state.currentProjectId
     this.tableData = this.$store.state.currentDataList
     console.log('tisada', this.tableData)
       this.labelStudio = new LabelStudio("label-studio", {
@@ -264,7 +327,7 @@ export default {
           "submit",
           "skip",
           "controls",
-          "review",
+          // "review", //==> the problem to show update!!!
           "infobar",
           "topbar",
           "instruction",
@@ -273,14 +336,14 @@ export default {
           "annotations:history",
           "annotations:tabs",
           "annotations:menu",
-          "annotations:current",
+          // "annotations:current", //==>show the name in the rightbar
           "annotations:add-new",
           "annotations:delete",
           'annotations:view-all',
-          "predictions:tabs",
-          "predictions:menu",
-          "auto-annotation",
-          "edit-history",
+          "predictions:tabs", //==> Reject | Fix+Accept
+          "predictions:menu", //==> Reject | Accept
+          // "auto-annotation",
+          // "edit-history",
           "topbar:prevnext",
         ],
 
@@ -291,7 +354,8 @@ export default {
         },
 
         task: {
-          annotations: [{
+          annotations: this.annos,
+          predictions: [{
             id: "1001",
             lead_time: 15.053,
             result: [
@@ -337,34 +401,9 @@ export default {
               },
             ]
           }],
-          predictions: [{
-            id: "1001",
-            lead_time: 15.053,
-            result: [
-              {
-                "original_width": 2242,
-                "original_height": 2802,
-                "image_rotation": 0,
-                "origin": "prediction",
-                "value": {
-                  "x": 87.46666666666666,
-                  "y": 79.29562433297758,
-                  "width": 23.6,
-                  "height": 13.447171824973319,
-                  "rotation": 0,
-                  "rectanglelabels": [
-                    "Hello"
-                  ]
-                },
-                "id": "dYjaasY56i",
-                "from_name": "tag",
-                "to_name": "img",
-                "type": "rectanglelabels"
-              },
-            ]
-          }],
           id: 2,
           data: {
+            // image:"https://www.helpguide.org/wp-content/uploads/king-charles-spaniel-resting-head-768.jpg" 
             image: this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url
           },
         },
@@ -377,25 +416,29 @@ export default {
         //   LS.annotationStore.selectAnnotation(c.id);
         // },
 
-        onSubmmitAnnotation: function (LS, annotation) {
+        onUpdateAnnotation: function (LS, annotation) {
           // retrive an annotation 
-
+          console.log('tag', LS,annotation)
         
           var myDate = new Date();
           myDate.toLocaleDateString();                    
           myDate.toLocaleString( ); 
+          // var id = this.projectId;
           var annotationObject = annotation.serializeAnnotation()
           var previousAnnotations= LS.task.app.annotationStore.annotations.target
-        
+          console.log('tin', annotationObject)
           var annotationlist = []
           for(var i = 0; i < annotationObject.length; i++){
             annotationlist[i]=new Object()
-            annotationlist[i].annotation_id = annotationObject[i].id
-            annotationlist[i].project_id = LS.task.app.project
+            annotationlist[i].result_id = annotationObject[i].id
+            // annotationlist[i].project_id = this.projectId
             annotationlist[i].data_id = LS.task.id
             annotationlist[i].type = annotationObject[i].type
             annotationlist[i].result = annotationObject[i].value
             annotationlist[i].create_time = myDate.toLocaleString()
+            annotationlist[i].annotation_id = annotation.pk
+            annotationlist[i].original_width = annotation._initialAnnotationObj[i].original_width
+            annotationlist[i].original_height = annotation._initialAnnotationObj[i].original_height
             
             for(annotation in previousAnnotations ){
               if(annotation.value.id==annotationObject[i].id){
@@ -407,19 +450,26 @@ export default {
             annotationlist[i].from_name = annotationObject[i].from_name
             annotationlist[i].to_name = annotationObject[i].to_name          
           }
+
         
-          console.log(annotationlist)
+          console.log('nuy',annotationlist)
           console.log(annotation.serializeAnnotation())
           
-          console.log('this', LS.task)
-          console.log('tag', this.LabelStudio.task)
+          // console.log('this', LS.task)
+          // console.log('tag', this.LabelStudio.task)
+          axios.put('/annotation/data/'+ LS.task.id, annotationlist)
+              .then((res) => {
+                    console.log('annotation', res)
+              })
           
           
-          this.$axios.post('/annotations/data/1', annotationlist)
+          // this.$axios.post('/annotations/data/1', annotationlist)
 
         }
       });
-    console.log(this.labelStudio)
+      this.labelStudio.destroy()
+    console.log(this.labelStudio.options)
+    this.$store.state.nowLS = this.labelStudio
   },
 };
 </script>
