@@ -75,6 +75,7 @@ import Setting from '@/views/PerProject/Setting'
     mounted() {
       this.projectId = this.$store.state.currentProjectId
       console.log('projectId',this.projectId)
+      console.log('list$', this.$store.state.currentDataList)
       this.$store.commit('changeDataList', this.projectId)
     },
   }
