@@ -88,6 +88,18 @@
             this.tableData[i].url = this.tableData[i].url.replace(".png", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.png' )
           }
+          else if(this.tableData[i].url.indexOf(".webp")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
+            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.webp' )
+          }
+          else if(this.tableData[i].url.indexOf("txt")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".txt", "")
+            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.txt' )
+          }  
+          else if(this.tableData[i].url.indexOf(".doc")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".doc", "")
+            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.doc' )
+          }                  
           console.log('tabelda',this.tableData[i].url)
         }
         this.$store.state.currentDataList = this.tableData

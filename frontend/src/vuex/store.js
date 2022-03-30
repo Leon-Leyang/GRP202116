@@ -9,8 +9,11 @@ const store = new Vuex.Store({
         currentProjectId: 0,
         currentDataList: [],
         currentDataId: 0,
+        realDataId: 0,
         currentProject: [],
         currentConfig: ``,
+        nowLS:[],
+        prevLS:[],
     },
     getters: {
         getProjectId(state){

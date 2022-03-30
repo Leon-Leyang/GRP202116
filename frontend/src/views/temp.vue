@@ -227,17 +227,7 @@
                           <span slot="label">Import ML model</span>
                           <!-- Import ML Model -->
                           <div>
-                          <el-upload
-                          class="upload-demo"
-                          drag
-                          action="/api/ml"
-                          v-model="operateForm.ml" 
-                          multiple>
-                          <i class="el-icon-upload"></i>
-                          <div class="el-upload__text">Drag & drop files here</div>
-                          <div class="el-upload__text"><em>Click to add</em></div>
-                          <div class="el-upload__tip" slot="tip">( The format of uploading file should be <span style="font-style:italic; color: #719DDD">.pth</span> )</div>
-                          </el-upload>
+
                           </div>
                       </el-tab-pane>
 
@@ -259,22 +249,25 @@
                             </div>
                             <div>
                               Please upload the appropriate type of file
-                              <el-upload
-                                class="upload-demo"
-                                action
-                                id="input"
-                                ref="upload"
-                                :limit="3"
-                                :on-preview="handlePreview"
-                                :on-remove="handleRemove"
-                                :auto-upload="false"
-                                :on-change="handleChange"
-                                :before-upload="beforeAvatarUpload">
-                                <el-button slot="trigger" size="small" type="primary">Select</el-button>
-                                <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button> -->
-                                <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt/.doc format, and individual file sizes should not exceed 2M)</div>
-                                <div slot="tip" class="el-upload__tip">It is highly recommended to use the pass path method!</div>
-                              </el-upload>
+<!--                              <el-upload-->
+<!--                                class="upload-demo"-->
+<!--                                action-->
+<!--                                name="fileList"-->
+<!--                                id="input"-->
+<!--                                ref="upload"-->
+<!--                                :multiple="true"-->
+<!--                                :limit="3"-->
+<!--                                :on-preview="handlePreview"-->
+<!--                                :on-remove="handleRemove"-->
+<!--                                :auto-upload="false"-->
+<!--                                :on-change="handleChange"-->
+<!--                                :before-upload="beforeAvatarUpload">-->
+<!--                                <el-button slot="trigger" size="small" type="primary">Select</el-button>-->
+<!--                                &lt;!&ndash; <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button> &ndash;&gt;-->
+<!--                                <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt/.doc format, and individual file sizes should not exceed 2M)</div>-->
+<!--                                <div slot="tip" class="el-upload__tip">It is highly recommended to use the pass path method!</div>-->
+<!--                              </el-upload>-->
+                              <input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />
                             </div>
                           </div>
                       </el-tab-pane>
@@ -363,7 +356,7 @@
             md="4"
           >
             <v-card>
-                <v-card-title class="text-h5">
+                <v-card-title class="text-h5" @click="enterProject(item.projectId)">
                     {{ item.name }}
                 </v-card-title>
 
@@ -612,30 +605,33 @@
                   }
               })
               .then(res => {
-                console.log('tag', res)
+                console.log('tag', res.data)
                 let temp = res
                 console.log('temp',temp)
-                let newest = temp.data.pop()
+                let length = temp.data.length
+                let newest = temp.data[length-1]
                 this.newestId = newest.projectId
                 console.log('newr', this.newestId)
-                  this.tableData = res.data.map(item => {
-                    let projectId = item.projectId
-                      item.updateTime = this.convertTime(item.updateTime)
-                      item.createTime = this.convertTime(item.createTime)
-                      this.$axios.get('/project/' + projectId + '/process',{
-                        params: {
-                              projectId
-                          }
+                this.tableData = res.data.map(item => {
+                  console.log('noew', item)
+                  let projectId = item.projectId
+                    item.updateTime = this.convertTime(item.updateTime)
+                    item.createTime = this.convertTime(item.createTime)
+                    this.$axios.get('/project/' + projectId + '/process',{
+                      params: {
+                            projectId
+                        }
+                    })
+                      .then(res => {
+                        this.tempProcess = res.data
+                        console.log('temp',res.data)
                       })
-                        .then(res => {
-                          this.tempProcess = res
-                        })
-                      return {...item,process:this.tempProcess}
-                  })
+                    return {...item,process:this.tempProcess}
+                })
 
-                  // this.config.total = res.data.length
-                  // this.config.loading = false
-                  console.log("table",this.tableData)
+                // this.config.total = res.data.length
+                // this.config.loading = false
+                console.log("table",this.tableData)
               // console.log("dew",row)
 
               })
@@ -680,7 +676,7 @@
                 var folderURL = this.folderURL.split(",")
                 console.log('address', folderURL)
                 if(folderURL != ''){
-                  this.$axios.post('/project/'+ projectId +'/data_file', folderURL)
+                  this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
                   .then(res => {
                     console.log('folderURL', res)
                   })
@@ -690,7 +686,15 @@
                 let fileList = this.fileList
                 console.log('fileList', fileList)
                 if( fileList != ''){
-                  this.$axios.post('/project/'+ projectId +'/data_url', fileList)
+                  let formData = new FormData()
+                  for (let i = 0; i < fileList.length; i++) {
+                    formData.append('fileList', fileList[i])
+                  }
+                  this.$axios.post('/project/'+ projectId +'/data_file', formData,{
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  })
                   .then(res => {
                     console.log('fileList', res)
                   })
@@ -775,18 +779,28 @@
         return isLt2M;
       },
       handlePreview(file) {
-        this.fileList[this.i] = file
-        this.i++
+        console.log(file)
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
       handleChange(file, fileList){
         console.log(file, fileList);
-        // var a_list  = fileList.map(function (item) { return item.raw; });
+        //this.fileList  = fileList.map(function (item) { return item.raw; });
+        this.fileList.push(file);
         // console.log('a_list',a_list)
         // console.log('type_a_list',typeof(a_list[0]))
-        this.fileList = JSON.stringify(fileList)
+        // this.fileList = JSON.parse(JSON.stringify(fileList))
+        // this.fileList = JSON.stringify(a_list)
+        // this.fileList = a_list
+        console.log('this.fileList', this.fileList)
+      },
+      getFiles: function(event) {
+        this.fileList = [];
+        let files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+          this.fileList.push(files[i]);
+        }
       },
       test(){
           this.$axios.get('/data/1', {
@@ -801,6 +815,17 @@
               // here you will have access to error.response
                 console.log(error.response)
                 });
+      },
+
+      //enter project
+      enterProject(projectId){
+        console.log(projectId)
+        this.$store.state.currentProjectId = projectId
+        this.$store.state.currentProject = this.tableData[projectId-1]
+        this.$router.push({  
+                    path: '/per-project',
+                    name: 'PerProject', 
+                }) 
       }
     },
     created() {
