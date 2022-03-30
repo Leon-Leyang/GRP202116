@@ -37,9 +37,7 @@ public class PredictionDO extends LabelDO {
         return "Annotation{" +
                 "predictionId=" + predictionId +
                 ", type=" + getType() +
-                ", value=" + getValue() +
-                ", from_name=" + getFromName() +
-                ", to_name=" + getToName() +
+                ", result=" + getResult() +
                 ", create_time=" + getCreateTime() +
                 ", update_time=" + getUpdateTime() +
                 '}';
