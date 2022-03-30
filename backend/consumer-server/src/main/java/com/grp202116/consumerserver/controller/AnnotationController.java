@@ -58,12 +58,14 @@ public class AnnotationController {
         if (annotations == null) return;
 
         annotationMapper.deleteByDataId(dataId);
+        BigInteger projectId = BigInteger.valueOf(dataMapper.getProjectId(dataId));
 
         if (annotations.size() != 0) {
             Date date = new Date();
             for (AnnotationDO annotation : annotations) {
                 if (annotation.getCreateTime() == null) annotation.setCreateTime(date);
                 annotation.setUpdateTime(date);
+                annotation.setProjectId(projectId);
             }
             dataMapper.setAnnotated(dataId);
             annotationMapper.alter();
