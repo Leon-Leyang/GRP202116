@@ -6,65 +6,14 @@ package com.grp202116.consumerserver.pojo;
  * controls the value, fromName and toName value by getter and setter method
  */
 public class LabelDO extends DataDistinguishableDO{
-    private String fromName;
-    private String toName;
-    private String value;
-    private Integer originalWidth;
-    private Integer originalHeight;
+    private String result;
 
-    /**
-     * Get the fromName information of the label
-     * @return the fromName of the label
-     */
-    public String getFromName() {
-        return fromName;
+    public String getResult() {
+        return result;
     }
 
-    /**
-     * Set the formName information of the label
-     * @param fromName the newly set formName
-     */
-    public void setFromName(String fromName) {
-        this.fromName = fromName;
+    public void setResult(String result) {
+        this.result = result;
     }
 
-    /**
-     * Get the toName information of the label
-     * @return the toName value of the label
-     */
-    public String getToName() {
-        return toName;
-    }
-
-    /**
-     * Set the toName information of the label
-     * @param toName the newly set toName value
-     */
-    public void setToName(String toName) {
-        this.toName = toName;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Integer getOriginalWidth() {
-        return originalWidth;
-    }
-
-    public void setOriginalWidth(Integer originalWidth) {
-        this.originalWidth = originalWidth;
-    }
-
-    public Integer getOriginalHeight() {
-        return originalHeight;
-    }
-
-    public void setOriginalHeight(Integer originalHeight) {
-        this.originalHeight = originalHeight;
-    }
 }

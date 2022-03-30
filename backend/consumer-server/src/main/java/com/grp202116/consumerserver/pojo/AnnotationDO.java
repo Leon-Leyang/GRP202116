@@ -9,7 +9,6 @@ import java.math.BigInteger;
  */
 public class AnnotationDO extends LabelDO {
     private BigInteger annotationId;
-    private BigInteger resultId;
 
     /**
      * Get the id information of the Annotation data object
@@ -27,22 +26,12 @@ public class AnnotationDO extends LabelDO {
         this.annotationId = annotationId;
     }
 
-    public BigInteger getResultId() {
-        return resultId;
-    }
-
-    public void setResultId(BigInteger resultId) {
-        this.resultId = resultId;
-    }
-
     @Override
     public String toString() {
         return "Annotation{" +
                 "annotationId=" + annotationId +
                 ", type=" + getType() +
-                ", value=" + getValue() +
-                ", from_name=" + getFromName() +
-                ", to_name=" + getToName() +
+                ", result=" + getResult() +
                 ", create_time=" + getCreateTime() +
                 ", update_time=" + getUpdateTime() +
                 '}';

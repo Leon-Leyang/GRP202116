@@ -2,11 +2,10 @@ package com.grp202116.consumerserver.ml;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.grp202116.consumerserver.mapper.ProjectMapper;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.PredictionDO;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +16,7 @@ import java.util.Objects;
 public class ModelDriver {
 
     ModelDO model;
+    ProjectMapper projectMapper;
 
     public ModelDriver(BigInteger projectId) {
         this.model = new ModelDO();
@@ -55,9 +55,9 @@ public class ModelDriver {
             PredictionDO prediction = new PredictionDO();
             prediction.setPredictionId(predictionJSONObject.getString("id"));
             prediction.setType(predictionJSONObject.getString("type"));
-            prediction.setValue(predictionJSONObject.getString("value"));
-            prediction.setFromName(predictionJSONObject.getString("from_name"));
-            prediction.setToName(predictionJSONObject.getString("to_name"));
+            prediction.setResult(predictionJSONObject.getString("value"));
+//            prediction.setFromName(predictionJSONObject.getString("from_name"));
+//            prediction.setToName(predictionJSONObject.getString("to_name"));
 
             Date date = new Date();
             prediction.setCreateTime(date);
