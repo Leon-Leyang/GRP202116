@@ -27,7 +27,7 @@ class Model():
 
     # Fill in the basic information of a prediction item
     # Specific result items shall be appended to predictionItem['result'] in corresponding subclasses
-    def predict(self):
+    def predict(self, dataPath):
         # Set the model to evaluation mode
         self.model.eval()
 
@@ -37,6 +37,6 @@ class Model():
         self.predictionItem['result'] = result
 
 
-    def train(self):
+    def train(self, datas, annotations, savePath):
         # Set the model to training mode
         self.model.train()
