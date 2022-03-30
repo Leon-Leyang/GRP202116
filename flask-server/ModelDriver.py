@@ -187,4 +187,4 @@ if __name__ == '__main__':
     name = 'CustomModel'
 
     # ModelDriver.train_model_on_data_set('Image Classification', datas, annotations, model_path, model_root, labelsPath, savePath, mean=mean, std=std, imgSize=imgSize, epochNum=epochNum, trainFrac=trainFrac, batchSize=batchSize, shuffle=shuffle, workerNum=workerNum, learningRate=learningRate, lossFunc=lossFunc, optimizer=optimizer)
-    ModelDriver.train_model_on_data_set('Custom', datas, annotations, model_path, model_root, labelsPath, savePath, name=name)
+    ModelDriver.train_model_on_data_set('Custom', datas, annotations, model_path, model_root, labelsPath, savePath, scriptName=name)
