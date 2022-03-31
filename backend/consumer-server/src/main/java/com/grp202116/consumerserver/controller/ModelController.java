@@ -86,7 +86,6 @@ public class ModelController {
      *
      * @param projectId project id
      * @param model     model
-     * @param params    params
      */
     @PostMapping("/model/create/{projectId}")
     public void createModel(@PathVariable BigInteger projectId,
@@ -178,30 +177,15 @@ public class ModelController {
                 else modelTrainer.setScriptName(scriptName);
             }
         }
-
-        JSONObject object = modelTrainer.trainModelConfig();
-
-
-
-        for (DataDO data : dataList) {
-            JSONObject object = modelDriver.runModelConfig(data);
-
-            JSONObject result = JSONObject.parseObject(
-                    restTemplate.postForObject("http://sidecar-server/model/run",
-                            HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
-            JSONArray predictions = JSONObject.parseArray(result.getString("result"));
-            predictionMapper.alter();
-            predictionMapper.insertAll(modelDriver.savePredictions(predictions));
-        }
-
-        ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDriver modelDriver = new ModelDriver(project, params.getJSONObject("params"));
-        JSONObject param = modelDriver.trainModelConfig(params.getString("save_path"));
-        param.put("annotation_list", annotationList);
-        param.put("data_list", annotatedDataList);
+        JSONObject object = new JSONObject();
+        object.putAll(trainParams);
+        object.putAll(modelTrainer.trainModelConfig());
+        object.put("annotation_list", annotationList);
+        object.put("data_list", annotatedDataList);
 
         return restTemplate.postForObject("http://sidecar-server/model/train",
-                HttpUtils.parseJsonToFlask(JSONObject.toJSONString(param)), String.class);
+                HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class);
+
     }
 
     @Deprecated

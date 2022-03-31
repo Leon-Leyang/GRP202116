@@ -10,7 +10,7 @@ from ml.models.Model import Model
 class KpLabModel(Model):
 
     def __init__(self, modelPath, modelRoot, labelsPath, modelVersion=None, fromName=None, toName=None, toolType=None,
-                 threashold=0.9):
+                 threshold=0.9):
         super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Preprocessing operations
@@ -21,7 +21,7 @@ class KpLabModel(Model):
         self.preprocess = Preprocess(self.transforms)
 
         # Threshold to filter result
-        self.threashold = threashold
+        self.threshold = threshold
 
     def predict(self, imgPath):
         super().predict()
@@ -35,7 +35,7 @@ class KpLabModel(Model):
         modelOutput = self.model(imgVec)
 
         for item in modelOutput:
-            if(item['scores'] > self.threashold):
+            if(item['scores'] > self.threshold):
                 keypoints = item['keypoints'].cpu().detach().numpy().squeeze()
                 for idx, keypoint in enumerate(keypoints):
                     label = self.labels[idx]
@@ -69,11 +69,11 @@ if __name__ == '__main__':
     toName = 'img-1'
     toolType = 'keypointlabels'
     labelsPath = '../../../ml/resources/cocoKp.txt'
-    threashold = 0.9
+    threshold = 0.9
 
     imgPath = '../../../ml/resources/kid.jpg'
 
-    kpLabModel = KpLabModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, threashold)
+    kpLabModel = KpLabModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, threshold)
 
     predictionItem = kpLabModel.predict(imgPath)
     print(predictionItem)

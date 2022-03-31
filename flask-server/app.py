@@ -21,9 +21,11 @@ def get_user():
 @app.route('/model/run', methods=["post"])
 def run_model():
     print("Running started.")
-    print(request.json.get("kwargs"))
-    predictions = ModelDriver.run_model_on_data(request.json.get("model_type"),
-                                                request.json.get("data").replace('\\', '/'),
+
+    print(request.json.get("params"))
+
+    predictions = ModelDriver.run_model_on_data(request.json.get("script_type"),
+                                                request.json.get("data").replace('\\','/'),
                                                 request.json.get("configs"),
                                                 request.json.get("model_path").replace('\\', '/'),
                                                 request.json.get("model_root").replace('\\', '/'),
@@ -44,13 +46,13 @@ def train_model():
     annotation_list = request.json.get("annotation_list")
     print(data_list)
     print(annotation_list)
-    accuracy = ModelDriver.train_model_on_data_set(request.json.get("model_type"),
+
+    accuracy = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
                                                    request.json.get("data_list"),
                                                    request.json.get("annotation_list"),
                                                    request.json.get("model_path").replace('\\', '/'),
                                                    request.json.get("model_root").replace('\\', '/'),
                                                    request.json.get("labels_path").replace('\\', '/'),
-                                                   request.json.get("save_path").replace('\\', '/'),
                                                    request.json.get("params"))
     print("Training finished.")
     print("Accuracy: " + str(accuracy))

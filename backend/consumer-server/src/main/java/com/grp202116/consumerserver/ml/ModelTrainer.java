@@ -32,7 +32,7 @@ public class ModelTrainer {
 
     public JSONObject trainModelConfig() {
         JSONObject object = new JSONObject();
-        object.put("model_type", model.getType());
+        object.put("script_type", model.getType());
         object.put("model_path", model.getUrl());
         object.put("model_root", model.getModelRoot());
         object.put("labels_path", model.getLabelsPath());
