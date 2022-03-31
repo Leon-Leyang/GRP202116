@@ -44,7 +44,16 @@ def train_model():
     annotation_list = request.json.get("annotation_list")
     print(data_list)
     print(annotation_list)
+    accuracy = ModelDriver.train_model_on_data_set(request.json.get("project_type"),
+                                                   request.json.get("data_list"),
+                                                   request.json.get("annotation_list"),
+                                                   request.json.get("model_path").replace('\\', '/'),
+                                                   request.json.get("model_root").replace('\\', '/'),
+                                                   request.json.get("labels_path").replace('\\', '/'),
+                                                   request.json.get("save_path").replace('\\', '/'),
+                                                   request.json.get("kwargs"))
     print("Training finished.")
+    print("Accuracy: " + str(accuracy))
     return Response("Success")
 
 

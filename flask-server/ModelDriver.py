@@ -108,14 +108,17 @@ class ModelDriver():
         if project_type == 'Image Classification':
             model = ImgClsModel(model_path, model_root, labelsPath, mean=kwargs['mean'], std=kwargs['std'],
                                 imgSize=kwargs['imgSize'])
-            model.train(datas, annotations, savePath, kwargs['epochNum'], kwargs['trainFrac'], kwargs['batchSize'], kwargs['shuffle'], kwargs['workerNum'], kwargs['learningRate'], kwargs['lossFunc'], kwargs['optimizer'])
+            accuracy = model.train(datas, annotations, savePath, kwargs['epochNum'], kwargs['trainFrac'], kwargs['batchSize'], kwargs['shuffle'], kwargs['workerNum'], kwargs['learningRate'], kwargs['lossFunc'], kwargs['optimizer'])
         elif project_type == 'Custom':
             moduleName = 'ml.models.' + kwargs['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath)
-            model.train(datas, annotations, savePath)
+            accuracy = model.train(datas, annotations, savePath)
         else:
             print("model undefined")
+            return
+
+        return accuracy
 
 
 
@@ -184,7 +187,7 @@ if __name__ == '__main__':
     lossFunc = 'Cross Entropy'
     optimizer = 'Adam'
 
-    name = 'CustomModel'
+    scriptName = 'CustomModel'
 
     ModelDriver.train_model_on_data_set('Image Classification', datas, annotations, model_path, model_root, labelsPath, savePath, mean=mean, std=std, imgSize=imgSize, epochNum=epochNum, trainFrac=trainFrac, batchSize=batchSize, shuffle=shuffle, workerNum=workerNum, learningRate=learningRate, lossFunc=lossFunc, optimizer=optimizer)
-    ModelDriver.train_model_on_data_set('Custom', datas, annotations, model_path, model_root, labelsPath, savePath, scriptName=name)
+    ModelDriver.train_model_on_data_set('Custom', datas, annotations, model_path, model_root, labelsPath, savePath, scriptName=scriptName)
