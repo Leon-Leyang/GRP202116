@@ -9,6 +9,7 @@ public class ModelDO extends ProjectDistinguishableDO{
     private String version;
     private String description;
     private String modelRoot;
+    private String type;
 
     /**
      * Get the url value of the ml model
@@ -64,5 +65,13 @@ public class ModelDO extends ProjectDistinguishableDO{
 
     public void setModelRoot(String modelRoot) {
         this.modelRoot = modelRoot;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

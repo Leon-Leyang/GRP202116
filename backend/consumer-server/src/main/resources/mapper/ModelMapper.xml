@@ -11,6 +11,7 @@
         <result column="project_id" property="projectId"/>
         <result column="create_time" property="createTime"/>
         <result column="model_root" property="modelRoot"/>
+        <result column="type" property="type"/>
     </resultMap>
 
     <update id="alter">
@@ -19,8 +20,8 @@
     </update>
 
     <insert id="insert" parameterType="ModelDO">
-        insert into model (url, version, description, project_id, create_time, model_root)
-        values (#{url}, #{version}, #{description}, #{projectId}, #{createTime}, #{modelRoot})
+        insert into model (url, version, description, project_id, create_time, model_root, type)
+        values (#{url}, #{version}, #{description}, #{projectId}, #{createTime}, #{modelRoot}, #{type})
     </insert>
 
     <select id="getByProjectId" resultMap="modelMap">

@@ -29,7 +29,7 @@ public class ModelDriver {
     }
 
     private void parseConfig() {
-        param.put("project_type", project.getType());
+        param.put("model_type", model.getType());
         param.put("model_path", model.getUrl());
         param.put("model_root", model.getModelRoot());
         param.put("labels_path", project.getLabelsPath());
