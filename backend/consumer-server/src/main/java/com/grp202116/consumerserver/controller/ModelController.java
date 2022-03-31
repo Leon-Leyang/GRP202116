@@ -103,21 +103,21 @@ public class ModelController {
      * Train custom model
      * @param projectId id of the specified project
      */
-    @GetMapping("/model/train/{projectId}")
-    public void trainModel(@PathVariable BigInteger projectId) {
+    @PostMapping("/model/train/{projectId}")
+    public String trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject params) {
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
-        if (annotationList.size() < 1) return;
+        if (annotationList.size() < 1) return "";
 
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
-        if (annotatedDataList.size() < 1) return;
+        if (annotatedDataList.size() < 1) return "";
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDriver modelDriver = new ModelDriver(project, "kwargs");
-        JSONObject param = new JSONObject();
+        ModelDriver modelDriver = new ModelDriver(project, params.getJSONObject("kwargs"));
+        JSONObject param = modelDriver.trainModelConfig(params.getString("save_path"));
         param.put("annotation_list", annotationList);
         param.put("data_list", annotatedDataList);
 
-        restTemplate.postForObject("http://sidecar-server/model/train",
+        return restTemplate.postForObject("http://sidecar-server/model/train",
                 HttpUtils.parseJsonToFlask(JSONObject.toJSONString(param)), String.class);
     }
 

@@ -21,6 +21,7 @@ def get_user():
 @app.route('/model/run', methods=["post"])
 def run_model():
     print("Running started.")
+
     print(request.json.get("params"))
 
     predictions = ModelDriver.run_model_on_data(request.json.get("script_type"),
@@ -45,6 +46,7 @@ def train_model():
     annotation_list = request.json.get("annotation_list")
     print(data_list)
     print(annotation_list)
+
     accuracy = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
                                                    request.json.get("data_list"),
                                                    request.json.get("annotation_list"),
@@ -55,7 +57,7 @@ def train_model():
                                                    request.json.get("params"))
     print("Training finished.")
     print("Accuracy: " + str(accuracy))
-    return Response(json.dumps(accuracy), mimetype='application/json')
+    return make_response(accuracy)
 
 
 @app.errorhandler(404)

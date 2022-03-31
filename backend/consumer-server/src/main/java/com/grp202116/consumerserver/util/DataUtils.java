@@ -23,7 +23,7 @@ public class DataUtils {
     public static List<DataDO> uploadProjectData(List<File> fileList, BigInteger projectId, String type) {
         dataList = new ArrayList<>();
         DataUtils.projectId = projectId;
-        projectPath = ".." + File.separator +"files" + File.separator + projectId + File.separator;
+        projectPath = ".." + File.separator + "files" + File.separator + projectId + File.separator;
         File project = new File(projectPath);
         if (!project.exists()) if (project.mkdirs()) System.out.println("New directory created at: " + projectPath);
 
@@ -56,15 +56,23 @@ public class DataUtils {
      * machine translation
      */
     private static void moveToLocal(File file, String type) throws IOException {
-
-        if (type.equalsIgnoreCase("image classification") || type.equalsIgnoreCase("object detection")
-                || type.equalsIgnoreCase("semantic segmentation") || type.equalsIgnoreCase("keypoint labeling")) {
-            if (file.isDirectory()) readDirectory(file, "image");
-            else readSingleFile(file, "image");
-        } else if (type.equalsIgnoreCase("text classification") || type.equalsIgnoreCase("named entity recognition")) {
-            if (file.isDirectory()) readDirectory(file, "text");
-            else readSingleFile(file, "text");
+        if (type.equals("image")) {
+            if (file.isDirectory()) readDirectory(file, type);
+            else readSingleFile(file, type);
+        } else if (type.equals("text")) {
+            if (file.isDirectory()) readDirectory(file, type);
+            else readSingleFile(file, type);
         }
+
+
+//        if (type.equalsIgnoreCase("image classification") || type.equalsIgnoreCase("object detection")
+//                || type.equalsIgnoreCase("semantic segmentation") || type.equalsIgnoreCase("keypoint labeling")) {
+//            if (file.isDirectory()) readDirectory(file, "image");
+//            else readSingleFile(file, "image");
+//        } else if (type.equalsIgnoreCase("text classification") || type.equalsIgnoreCase("named entity recognition")) {
+//            if (file.isDirectory()) readDirectory(file, "text");
+//            else readSingleFile(file, "text");
+//        }
     }
 
     private static void readSingleFile(File file, String dataType) throws IOException {

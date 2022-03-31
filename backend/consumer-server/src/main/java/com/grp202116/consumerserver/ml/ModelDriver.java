@@ -29,7 +29,7 @@ public class ModelDriver {
     }
 
     private void parseConfig() {
-        param.put("project_type", project.getType());
+        param.put("model_type", model.getType());
         param.put("model_path", model.getUrl());
         param.put("model_root", model.getModelRoot());
         param.put("labels_path", project.getLabelsPath());
@@ -100,11 +100,9 @@ public class ModelDriver {
         return predictionList;
     }
 
-    public JSONObject trainModelConfig(String savePath, List<DataDO> dataList, List<AnnotationDO> annotationList) {
+    public JSONObject trainModelConfig(String savePath) {
         parseConfig();
         param.put("save_path", savePath);
-        param.put("data_list", dataList);
-        param.put("annotation_list", annotationList);
 
         return param;
     }

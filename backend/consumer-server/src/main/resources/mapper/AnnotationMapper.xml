@@ -19,7 +19,7 @@
             AUTO_INCREMENT = 1;
     </update>
 
-    <update id="update" parameterType="annotationMap">
+    <update id="update">
         update annotation
         set result      = #{result},
             update_time = #{updateTime}
