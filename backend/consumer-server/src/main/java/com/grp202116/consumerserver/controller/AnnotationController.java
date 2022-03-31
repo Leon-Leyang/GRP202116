@@ -47,31 +47,20 @@ public class AnnotationController {
     }
 
     /**
-     * Update the Annotations in certain data by first delete the origin Annotations,
-     * then insert all the new Annotations
+     * Update the Annotations in certain data
      *
      * @param dataId      the dataId fetched from the mapper
-     * @param annotations the newly set Annotations
      */
     @PutMapping("/annotation/data/{dataId}")
-    public void updateDataAnnotations(@PathVariable BigInteger dataId, @RequestBody List<AnnotationDO> annotations) {
-        if (annotations == null) return;
-        BigInteger projectId = BigInteger.valueOf(dataMapper.getProjectId(dataId));
+    public void updateDataAnnotations(@PathVariable BigInteger dataId, @RequestBody AnnotationDO annotation) {
 
-        if (annotations.size() != 0) {
-            Date date = new Date();
-            for (AnnotationDO annotation : annotations) {
-                if (annotation.getCreateTime() == null) annotation.setCreateTime(date);
-                annotation.setUpdateTime(date);
-                annotation.setProjectId(projectId);
-            }
-            dataMapper.setAnnotated(dataId);
-            annotationMapper.deleteByDataId(dataId);
-            annotationMapper.alter();
-            annotationMapper.insertAll(annotations);
-        } else {
-            annotationMapper.deleteByDataId(dataId);
+        if (annotation.getResult() == null || annotation.getResult().equals("")) {
             dataMapper.setNotAnnotated(dataId);
+        } else {
+            Date date = new Date();
+            annotation.setUpdateTime(date);
+            annotationMapper.update(annotation);
+            dataMapper.setAnnotated(dataId);
         }
     }
 

@@ -19,6 +19,13 @@
             AUTO_INCREMENT = 1;
     </update>
 
+    <update id="update" parameterType="annotationMap">
+        update annotation
+        set result      = #{result},
+            update_time = #{updateTime}
+        where annotation_id = #{annotationId}
+    </update>
+
     <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyColumn="annotation_id"
             keyProperty="annotationId">
         insert into annotation

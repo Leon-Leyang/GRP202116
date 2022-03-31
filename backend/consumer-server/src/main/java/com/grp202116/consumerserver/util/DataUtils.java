@@ -18,6 +18,7 @@ public class DataUtils {
     private static List<DataDO> dataList;
     private static BigInteger projectId;
     private static String projectPath;
+    private static final String customPath = "../ml/models";
 
     public static List<DataDO> uploadProjectData(List<File> fileList, BigInteger projectId, String type) {
         dataList = new ArrayList<>();
@@ -155,6 +156,21 @@ public class DataUtils {
         }
 
         return fileList;
+    }
+
+    public static void saveCustom(String customFilePath) {
+        File customFile = new File(customFilePath);
+        if (!FilenameUtils.getExtension(customFile.getName()).equals("py")) {
+            System.out.println("Not a python file.");
+            return;
+        }
+        File targetFile = new File(customPath + File.separator + customFile.getName());
+        try {
+            if (targetFile.createNewFile()) System.out.println("New file created.");
+            Files.copy(customFile.toPath(), targetFile.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

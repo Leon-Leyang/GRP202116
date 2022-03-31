@@ -59,8 +59,7 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-
-    def run_model_on_data(project_type, data, configs, model_path, model_root, labelsPath, model_version, **kwargs):
+    def run_model_on_data(project_type, data, configs, model_path, model_root, labelsPath, model_version, kwargs):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
@@ -104,7 +103,7 @@ class ModelDriver():
                                           model_version, **kwargs)
 
     @staticmethod
-    def train_model_on_data_set(project_type, datas, annotations, model_path, model_root, labelsPath, savePath, **kwargs):
+    def train_model_on_data_set(project_type, datas, annotations, model_path, model_root, labelsPath, savePath, kwargs):
         if project_type == 'Image Classification':
             model = ImgClsModel(model_path, model_root, labelsPath, mean=kwargs['mean'], std=kwargs['std'],
                                 imgSize=kwargs['imgSize'])
@@ -119,8 +118,6 @@ class ModelDriver():
             return
 
         return accuracy
-
-
 
 
 if __name__ == '__main__':

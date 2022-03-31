@@ -1,6 +1,5 @@
 package com.grp202116.consumerserver.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.*;
@@ -9,6 +8,7 @@ import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
+import com.grp202116.consumerserver.util.DataUtils;
 import com.grp202116.consumerserver.util.HttpUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -91,15 +91,18 @@ public class ModelController {
         ModelDriver modelDriver = new ModelDriver(project, model, kwargs);
 
         for (DataDO data: dataList) {
-            modelDriver.setData(data);
             JSONObject object = JSONObject.parseObject(restTemplate.postForObject("http://sidecar-server/model/run",
-                    HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.parseConfig())), String.class));
+                    HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.runModelConfig(data))), String.class));
             JSONArray predictions = JSONObject.parseArray(object.getString("result"));
             predictionMapper.alter();
             predictionMapper.insertAll(modelDriver.savePredictions(predictions));
         }
     }
 
+    /**
+     * Train custom model
+     * @param projectId id of the specified project
+     */
     @GetMapping("/model/train/{projectId}")
     public void trainModel(@PathVariable BigInteger projectId) {
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
@@ -108,6 +111,8 @@ public class ModelController {
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
         if (annotatedDataList.size() < 1) return;
 
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        ModelDriver modelDriver = new ModelDriver(project, "kwargs");
         JSONObject param = new JSONObject();
         param.put("annotation_list", annotationList);
         param.put("data_list", annotatedDataList);
@@ -122,5 +127,13 @@ public class ModelController {
         model.setProjectId(projectId);
         model.setCreateTime(new Date());
         modelMapper.insert(model);
+    }
+
+    /**
+     * Copy the custom model to our address
+     */
+    @PostMapping("/model/custom/save")
+    public void saveCustomModel(@RequestBody String customPath) {
+        DataUtils.saveCustom(customPath);
     }
 }
