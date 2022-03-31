@@ -2,8 +2,10 @@ package com.grp202116.consumerserver.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.grp202116.consumerserver.mapper.AnnotationMapper;
 import com.grp202116.consumerserver.mapper.DataMapper;
 import com.grp202116.consumerserver.mapper.ProjectMapper;
+import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.util.DataUtils;
@@ -12,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +29,9 @@ import java.util.List;
 public class DataController {
     @Resource
     private DataMapper dataMapper;
+
+    @Resource
+    private AnnotationMapper annotationMapper;
 
     @Resource
     private ProjectMapper projectMapper;
@@ -77,6 +84,7 @@ public class DataController {
         if (dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
+            createAnnotations(dataList);
         }
     }
 
@@ -93,6 +101,7 @@ public class DataController {
         if (dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
+            createAnnotations(dataList);
         }
     }
 
@@ -114,5 +123,26 @@ public class DataController {
     @DeleteMapping("/data/{dataId}")
     public void deleteDataById(@PathVariable BigInteger dataId) {
         dataMapper.deleteDataById(dataId);
+    }
+
+    /**
+     * requires the annotations to be inserted at the beginning
+     * @param dataList the list of data that inserted
+     */
+    private void createAnnotations(List<DataDO> dataList) {
+        if (dataList.size() < 1) return;
+        List<AnnotationDO> annotationList = new ArrayList<>();
+
+        for (DataDO data: dataList) {
+            AnnotationDO annotation = new AnnotationDO();
+            annotation.setDataId(data.getDataId());
+            annotation.setProjectId(data.getProjectId());
+            Date date = new Date();
+            annotation.setCreateTime(date);
+            annotation.setUpdateTime(date);
+            annotationList.add(annotation);
+        }
+        annotationMapper.alter();
+        annotationMapper.insertAll(annotationList);
     }
 }

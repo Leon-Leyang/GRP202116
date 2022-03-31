@@ -59,31 +59,30 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a single data and update its predictions
-
-    def run_model_on_data(script_type, data, configs, model_path, model_root, labelsPath, model_version, **kwargs):
+    def run_model_on_data(script_type, data, configs, model_path, model_root, labelsPath, model_version, params):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
         if script_type == 'Image Classification':
             model = ImgClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                kwargs['mean'], kwargs['std'], kwargs['imgSize'])
+                                params['mean'], params['std'], params['imgSize'])
         elif script_type == 'Object Detection':
             model = ObjDecBBoxModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                    kwargs['threshold'])
+                                    params['threshold'])
         elif script_type == 'Keypoint Labeling':
             model = KpLabModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                               kwargs['threshold'])
+                               params['threshold'])
         elif script_type == 'Semantic Segmentation Mask':
             model = SemSegMaskModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                    kwargs['mean'], kwargs['std'])
+                                    params['mean'], params['std'])
         elif script_type == 'Text Classification':
             model = TextClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                 kwargs['vocabPath'], kwargs['tokenNum'], kwargs['sequenceLen'])
+                                 params['vocabPath'], params['tokenNum'], params['sequenceLen'])
         elif script_type == 'Named Entity Recognition':
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                             kwargs['sequenceLen'])
+                             params['sequenceLen'])
         elif script_type == 'Custom':
-            moduleName = 'ml.models.' + kwargs['scriptName']
+            moduleName = 'ml.models.' + params['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type)
         else:
@@ -97,23 +96,22 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a list of data
-    def run_model_on_data_set(script_type, data_set, configs, model_path, model_root, labelsPath, model_version,
-                              **kwargs):
+    def run_model_on_data_set(script_type, data_set, configs, model_path, model_root, labelsPath, model_version, params):
         for data in data_set:
             ModelDriver.run_model_on_data(script_type, data, configs, model_path, model_root, labelsPath,
-                                          model_version, **kwargs)
+                                          model_version, params)
 
     @staticmethod
-    def train_model_on_data_set(script_type, datas, annotations, model_path, model_root, labelsPath, savePath, **kwargs):
+    def train_model_on_data_set(script_type, datas, annotations, model_path, model_root, labelsPath, params):
         if script_type == 'Image Classification':
-            model = ImgClsModel(model_path, model_root, labelsPath, mean=kwargs['mean'], std=kwargs['std'],
-                                imgSize=kwargs['imgSize'])
-            accuracy = model.train(datas, annotations, savePath, kwargs['epochNum'], kwargs['trainFrac'], kwargs['batchSize'], kwargs['shuffle'], kwargs['workerNum'], kwargs['learningRate'], kwargs['lossFunc'], kwargs['optimizer'])
+            model = ImgClsModel(model_path, model_root, labelsPath, mean=params['mean'], std=params['std'],
+                                imgSize=params['imgSize'])
+            accuracy = model.train(datas, annotations, params['savePath'], params['epochNum'], params['trainFrac'], params['batchSize'], params['shuffle'], params['workerNum'], params['learningRate'], params['lossFunc'], params['optimizer'])
         elif script_type == 'Custom':
-            moduleName = 'ml.models.' + kwargs['scriptName']
+            moduleName = 'ml.models.' + params['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath)
-            accuracy = model.train(datas, annotations, savePath)
+            accuracy = model.train(datas, annotations, params['savePath'])
         else:
             print("model undefined")
             return
@@ -121,27 +119,7 @@ class ModelDriver():
         return accuracy
 
 
-
-
 if __name__ == '__main__':
-    # configs = """<View>
-    #                                 <Image name="image" value="$image" zoom="true"/>
-    #                                 <BrushLabels name="tag" toName="image">
-    #                                     <Label value="Airplane" background="rgba(255, 0, 0, 0.7)"/>
-    #                                     <Label value="Car" background="rgba(0, 0, 255, 0.7)"/>
-    #                                 </BrushLabels>
-    #                             </View>"""
-    #
-    # predictions = []  # this is not necessary in here
-    # model_path = '../ml/models/SemanticSegmentation/fcn.pth'
-    # model_version = 'undefined'
-    # model_root = './'
-    # labelsPath = '../ml/resources/voc2007.txt'
-    # mean = [0.485, 0.456, 0.406]
-    # std = [0.229, 0.224, 0.225]
-    #
-    # ModelDriver.run_model_on_data('Semantic Segmentation Mask', '../ml/resources/puppy.webp', configs, model_path, model_root, labelsPath, model_version, mean=mean, std=std)
-
     datas = [
                 {'url': 'C:/Users/Leon/Desktop/GRP/GRP202116/ml/resources/golden-retriever-1.jpg'},
                 {'url': 'C:/Users/Leon/Desktop/GRP/GRP202116/ml/resources/golden-retriever-2.jpg'},
@@ -189,5 +167,26 @@ if __name__ == '__main__':
 
     scriptName = 'CustomModel'
 
-    ModelDriver.train_model_on_data_set('Image Classification', datas, annotations, model_path, model_root, labelsPath, savePath, mean=mean, std=std, imgSize=imgSize, epochNum=epochNum, trainFrac=trainFrac, batchSize=batchSize, shuffle=shuffle, workerNum=workerNum, learningRate=learningRate, lossFunc=lossFunc, optimizer=optimizer)
-    ModelDriver.train_model_on_data_set('Custom', datas, annotations, model_path, model_root, labelsPath, savePath, scriptName=scriptName)
+
+    # params = {
+    #     'mean': mean,
+    #     'std': std,
+    #     'imgSize': imgSize,
+    #     'epochNum': epochNum,
+    #     'trainFrac': trainFrac,
+    #     'batchSize': batchSize,
+    #     'shuffle': shuffle,
+    #     'workerNum': workerNum,
+    #     'learningRate': learningRate,
+    #     'lossFunc': lossFunc,
+    #     'optimizer': optimizer,
+    #     'savePath': savePath
+    # }
+
+    params = {
+        'scriptName' : 'CustomModel',
+        'savePath': savePath
+    }
+
+    # ModelDriver.train_model_on_data_set('Image Classification', datas, annotations, model_path, model_root, labelsPath, params)
+    ModelDriver.train_model_on_data_set('Custom', datas, annotations, model_path, model_root, labelsPath, params)

@@ -21,15 +21,16 @@ def get_user():
 @app.route('/model/run', methods=["post"])
 def run_model():
     print("Running started.")
-    print(request.json.get("kwargs"))
+    print(request.json.get("params"))
+
     predictions = ModelDriver.run_model_on_data(request.json.get("script_type"),
                                                 request.json.get("data").replace('\\','/'),
                                                 request.json.get("configs"),
-                                                request.json.get("model_path").replace('\\','/'),
+                                                request.json.get("model_path").replace('\\', '/'),
                                                 request.json.get("model_root").replace('\\', '/'),
                                                 request.json.get("labels_path").replace('\\', '/'),
                                                 request.json.get("model_version"),
-                                                request.json.get("kwargs"))
+                                                request.json.get("params"))
 
     print("Running finished.")
     print(predictions)
@@ -51,10 +52,10 @@ def train_model():
                                                    request.json.get("model_root").replace('\\', '/'),
                                                    request.json.get("labels_path").replace('\\', '/'),
                                                    request.json.get("save_path").replace('\\', '/'),
-                                                   request.json.get("kwargs"))
+                                                   request.json.get("params"))
     print("Training finished.")
     print("Accuracy: " + str(accuracy))
-    return Response("Success")
+    return Response(json.dumps(accuracy), mimetype='application/json')
 
 
 @app.errorhandler(404)

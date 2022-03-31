@@ -2,10 +2,7 @@ package com.grp202116.consumerserver.ml;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.grp202116.consumerserver.pojo.DataDO;
-import com.grp202116.consumerserver.pojo.ModelDO;
-import com.grp202116.consumerserver.pojo.PredictionDO;
-import com.grp202116.consumerserver.pojo.ProjectDO;
+import com.grp202116.consumerserver.pojo.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,10 +11,11 @@ import java.util.Objects;
 
 public class ModelDriver {
 
-    static ModelDO model;
-    static ProjectDO project;
-    DataDO data;
-    static JSONObject kwargs;
+    private static ModelDO model;
+    private static ProjectDO project;
+    private DataDO data;
+    private static JSONObject kwargs;
+    private static JSONObject param;
 
     public ModelDriver(ProjectDO project, ModelDO model, JSONObject kwargs) {
         ModelDriver.model = model;
@@ -25,11 +23,20 @@ public class ModelDriver {
         ModelDriver.kwargs = kwargs;
     }
 
-    public void setData(DataDO data) {
-        this.data = data;
+    public ModelDriver(ProjectDO project, JSONObject kwargs) {
+        ModelDriver.project = project;
+        ModelDriver.kwargs = kwargs;
     }
 
-    public JSONObject parseConfig() {
+    private void parseConfig() {
+        param.put("project_type", project.getType());
+        param.put("model_path", model.getUrl());
+        param.put("model_root", model.getModelRoot());
+        param.put("labels_path", project.getLabelsPath());
+        param.put("kwargs", kwargs);
+    }
+
+    public JSONObject runModelConfig(DataDO data) {
 //        String configs = "<View>" +
 //                "  <Image name=\" image \" value=\" $image \" zoom=\" true \"/>" +
 //                " <BrushLabels name=\" tag \" toName=\" image \">" +
@@ -51,14 +58,11 @@ public class ModelDriver {
 //        param.put("model_version", "undefined");
 //        param.put("model_root", "./");
 //        param.put("labels", labels);
-        JSONObject param = new JSONObject();
-        param.put("project_type", project.getType());
+        this.data = data;
+        parseConfig();
         param.put("data", data.getUrl());
         param.put("configs", project.getConfigs());
-        param.put("model_path", model.getUrl());
         param.put("model_version", model.getVersion());
-        param.put("model_root", model.getModelRoot());
-        param.put("labels_path", project.getLabelsPath());
 
 
         JSONObject test = new JSONObject();
@@ -66,7 +70,7 @@ public class ModelDriver {
         test.put("mean", new double[]{0.485, 0.456, 0.406});
         test.put("std", new double[]{0.229, 0.224, 0.225});
         test.put("imgSize", 224);
-        param.put("kwargs", test);
+
 
         return param;
     }
@@ -94,5 +98,14 @@ public class ModelDriver {
         }
 
         return predictionList;
+    }
+
+    public JSONObject trainModelConfig(String savePath, List<DataDO> dataList, List<AnnotationDO> annotationList) {
+        parseConfig();
+        param.put("save_path", savePath);
+        param.put("data_list", dataList);
+        param.put("annotation_list", annotationList);
+
+        return param;
     }
 }

@@ -45,4 +45,6 @@ public interface AnnotationMapper extends BaseMapper {
     List<AnnotationDO> listByProjectId(BigInteger projectId);
 
     void alter();
+
+    void update(AnnotationDO annotationDO);
 }
