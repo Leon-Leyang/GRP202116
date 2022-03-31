@@ -103,8 +103,8 @@ public class ModelController {
      * Train custom model
      * @param projectId id of the specified project
      */
-    @GetMapping("/model/train/{projectId}")
-    public void trainModel(@PathVariable BigInteger projectId) {
+    @PostMapping("/model/train/{projectId}")
+    public void trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject params) {
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
         if (annotationList.size() < 1) return;
 
@@ -112,8 +112,8 @@ public class ModelController {
         if (annotatedDataList.size() < 1) return;
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDriver modelDriver = new ModelDriver(project, "kwargs");
-        JSONObject param = new JSONObject();
+        ModelDriver modelDriver = new ModelDriver(project, params.getJSONObject("kwargs"));
+        JSONObject param = modelDriver.trainModelConfig(params.getString("save_path"));
         param.put("annotation_list", annotationList);
         param.put("data_list", annotatedDataList);
 

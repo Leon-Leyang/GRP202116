@@ -100,11 +100,9 @@ public class ModelDriver {
         return predictionList;
     }
 
-    public JSONObject trainModelConfig(String savePath, List<DataDO> dataList, List<AnnotationDO> annotationList) {
+    public JSONObject trainModelConfig(String savePath) {
         parseConfig();
         param.put("save_path", savePath);
-        param.put("data_list", dataList);
-        param.put("annotation_list", annotationList);
 
         return param;
     }
