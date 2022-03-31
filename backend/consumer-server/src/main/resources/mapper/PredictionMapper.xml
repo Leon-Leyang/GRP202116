@@ -16,8 +16,20 @@
     </resultMap>
 
     <update id="alter">
-        alter table annotation
+        alter table prediction
             AUTO_INCREMENT = 1;
+    </update>
+
+    <update id="setAccepted">
+        update prediction
+        set is_accepted = true
+        where prediction_id = #{predictionId}
+    </update>
+
+    <update id="setNotAnnotated">
+        update prediction
+        set is_accepted = false
+        where prediction_id = #{predictionId}
     </update>
 
     <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="predictionId"

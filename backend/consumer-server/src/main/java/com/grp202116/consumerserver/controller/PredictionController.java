@@ -48,4 +48,10 @@ public class PredictionController {
     public void deleteProjectPredictions(@PathVariable BigInteger projectId){
         predictionMapper.deleteByProjectId(projectId);
     }
+
+    @GetMapping("prediction/{predictionId}/{status}")
+    public void setAcceptStatus(@PathVariable BigInteger predictionId, @PathVariable int status) {
+        if (status == 0) predictionMapper.setNotAccepted(predictionId);
+        else if (status == 1) predictionMapper.setAccepted(predictionId);
+    }
 }

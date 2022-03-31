@@ -39,4 +39,8 @@ public interface PredictionMapper extends BaseMapper {
     void deleteByProjectId(BigInteger projectId);
 
     void alter();
+
+    void setAccepted(BigInteger predictionId);
+
+    void setNotAccepted(BigInteger predictionId);
 }

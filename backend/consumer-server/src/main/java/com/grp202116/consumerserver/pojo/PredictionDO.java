@@ -7,6 +7,7 @@ package com.grp202116.consumerserver.pojo;
 public class PredictionDO extends LabelDO {
     private String predictionId;
     private String model;
+    private boolean isAccepted;
 
     /**
      * Get the id of the Prediction label object
@@ -32,12 +33,21 @@ public class PredictionDO extends LabelDO {
         this.model = model;
     }
 
+    public boolean isAccepted() {
+        return isAccepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        isAccepted = accepted;
+    }
+
     @Override
     public String toString() {
         return "Annotation{" +
                 "predictionId=" + predictionId +
                 ", type=" + getType() +
                 ", result=" + getResult() +
+                ", is_accepted=" + isAccepted +
                 ", create_time=" + getCreateTime() +
                 ", update_time=" + getUpdateTime() +
                 '}';

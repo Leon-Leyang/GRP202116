@@ -56,8 +56,6 @@ public class AnnotationController {
     @PutMapping("/annotation/data/{dataId}")
     public void updateDataAnnotations(@PathVariable BigInteger dataId, @RequestBody List<AnnotationDO> annotations) {
         if (annotations == null) return;
-
-        annotationMapper.deleteByDataId(dataId);
         BigInteger projectId = BigInteger.valueOf(dataMapper.getProjectId(dataId));
 
         if (annotations.size() != 0) {
@@ -68,9 +66,13 @@ public class AnnotationController {
                 annotation.setProjectId(projectId);
             }
             dataMapper.setAnnotated(dataId);
+            annotationMapper.deleteByDataId(dataId);
             annotationMapper.alter();
             annotationMapper.insertAll(annotations);
-        } else dataMapper.setNotAnnotated(dataId);
+        } else {
+            annotationMapper.deleteByDataId(dataId);
+            dataMapper.setNotAnnotated(dataId);
+        }
     }
 
     /**
