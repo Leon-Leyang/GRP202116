@@ -9,8 +9,9 @@ from ml.models.Model import Model
 # Model for keypoint labeling task
 class KpLabModel(Model):
 
-    def __init__(self, modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold):
-        super().__init__(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath)
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion=None, fromName=None, toName=None, toolType=None,
+                 threashold=0.9):
+        super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
@@ -46,7 +47,6 @@ class KpLabModel(Model):
                     value['keypointlabels'] = [label]
                     value['x'] = xPix
                     value['y'] = yPix
-                    # TODO: Set the width as defined in the frontend
                     value['width'] = 0.3
 
                     resultItem = {}
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
     imgPath = '../../../ml/resources/kid.jpg'
 
-    kpLabModel = KpLabModel(modelPath, modelVersion, modelRoot, fromName, toName, toolType, labelsPath, threashold)
+    kpLabModel = KpLabModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, threashold)
 
     predictionItem = kpLabModel.predict(imgPath)
     print(predictionItem)

@@ -23,13 +23,14 @@ def run_model():
     print("Running started.")
     print(request.json.get("kwargs"))
     predictions = ModelDriver.run_model_on_data(request.json.get("project_type"),
-                                                request.json.get("data"),
+                                                request.json.get("data").replace('\\','/'),
                                                 request.json.get("configs"),
-                                                request.json.get("model_path"),
+                                                request.json.get("model_path").replace('\\','/'),
                                                 request.json.get("model_version"),
-                                                request.json.get("model_root"),
-                                                request.json.get("labels_path"),
+                                                request.json.get("model_root").replace('\\','/'),
+                                                request.json.get("labels_path").replace('\\','/'),
                                                 request.json.get("kwargs"))
+
     print("Running finished.")
     print(predictions)
     return Response(json.dumps(predictions), mimetype='application/json')

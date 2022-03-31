@@ -13,19 +13,18 @@ from ml import Preprocess
 from ml.models.Model import Model
 
 # Model for image classification task
-class ImgClsModel(Model):
+class CustomModel(Model):
 
-    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion=None, fromName=None, toName=None, toolType=None,
-                 mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], imgSize=224):
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion=None, fromName=None, toName=None, toolType=None):
         super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Preprocessing operations
         self.transforms = tf.Compose([
             tf.Resize(256),
-            tf.CenterCrop(imgSize),
+            tf.CenterCrop(224),
             tf.ToTensor(),
-            tf.Normalize(mean=mean,
-                         std=std)])
+            tf.Normalize(mean=[0.485, 0.456, 0.406],
+                         std=[0.229, 0.224, 0.225])])
 
         # Initialize preprocess object
         self.preprocess = Preprocess(self.transforms)
@@ -34,7 +33,7 @@ class ImgClsModel(Model):
 
 
     def predict(self, imgPath):
-        super().predict()
+        super().predict(imgPath)
 
         img = Image.open(imgPath)
 
@@ -63,7 +62,7 @@ class ImgClsModel(Model):
 
 
 
-    def train(self, datas, annotations, savePath, epochNum, trainFrac, batchSize, shuffle, workerNum, learningRate, lossFunc, optimizer):
+    def train(self, datas, annotations, savePath):
         # Function to test the model with the test dataset and print the accuracy for the test images
         def testAccuracy():
 
@@ -92,40 +91,25 @@ class ImgClsModel(Model):
 
         super().train(datas, annotations, savePath)
 
-        imgClsSet = ImgClsDataset(datas, annotations, self.preprocess, self.labels)
+        epochNum = 10
+        trainFrac = 0.1
+        batchSize = 1
+        shuffle = False
+        workerNum = 1
+        learningRate = 0.001
+
+        imgClsSet = CustomDataset(datas, annotations, self.preprocess, self.labels)
         trainNum = round(len(imgClsSet) * trainFrac)
         testNum = len(imgClsSet) - trainNum
         trainSet, testSet = random_split(imgClsSet, lengths=[trainNum, testNum])
         self.trainLoader = DataLoader(trainSet, batch_size=batchSize, shuffle=shuffle, num_workers=workerNum)
         self.testLoader = DataLoader(testSet, batch_size=batchSize, shuffle=shuffle, num_workers=workerNum)
 
-        # Initialize loss function
-        if(lossFunc == 'Cross Entropy'):
-            loss_fn = nn.CrossEntropyLoss()
-        elif(lossFunc == 'NLL'):
-            loss_fn = nn.NLLLoss()
 
-        # Initialize the optimizer
-        if (optimizer == 'SGD'):
-            optimizer = SGD(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'ASGD'):
-            optimizer = ASGD(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'Rprop'):
-            optimizer = Rprop(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'Adagrad'):
-            optimizer = Adagrad(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'Adadelta'):
-            optimizer = Adadelta(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'RMSprop'):
-            optimizer = RMSprop(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'Adam'):
-            optimizer = Adam(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'Adamax'):
-            optimizer = Adamax(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'SparseAdam'):
-            optimizer = SparseAdam(self.model.parameters(), lr=learningRate)
-        elif (optimizer == 'LBFGS'):
-            optimizer = LBFGS(self.model.parameters(), lr=learningRate)
+        loss_fn = nn.CrossEntropyLoss()
+
+
+        optimizer = Adam(self.model.parameters(), lr=learningRate)
 
 
         for epoch in range(epochNum):  # loop over the dataset multiple times
@@ -153,7 +137,7 @@ class ImgClsModel(Model):
 
         torch.save(self.model, savePath + '/test.pth')
 
-class ImgClsDataset(Dataset):
+class CustomDataset(Dataset):
     def __init__(self, datas, annotations, preprocess, labels):
         self.datas = datas
         self.annotations = annotations
@@ -183,15 +167,10 @@ if __name__ == '__main__':
     toolType = 'choices'
     labelsPath = '../../../ml/resources/ImageNetClasses.txt'
 
-    mean = [0.485, 0.456, 0.406]
-    std = [0.229, 0.224, 0.225]
-    imgSize = 224
-
     imgPath = '../../../ml/resources/puppy.webp'
     # imgPath = './persian-cat-5.jpg'
 
-    imgClsModel = ImgClsModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, mean, std,
-                              imgSize)
+    imgClsModel = CustomModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
     predictionItem = imgClsModel.predict(imgPath)
     print(predictionItem)
