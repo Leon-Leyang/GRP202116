@@ -60,29 +60,29 @@ class ModelDriver():
     @staticmethod
     # Run model on a single data and update its predictions
 
-    def run_model_on_data(project_type, data, configs, model_path, model_root, labelsPath, model_version, **kwargs):
+    def run_model_on_data(script_type, data, configs, model_path, model_root, labelsPath, model_version, **kwargs):
 
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
-        if project_type == 'Image Classification':
+        if script_type == 'Image Classification':
             model = ImgClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                 kwargs['mean'], kwargs['std'], kwargs['imgSize'])
-        elif project_type == 'Object Detection':
+        elif script_type == 'Object Detection':
             model = ObjDecBBoxModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                     kwargs['threshold'])
-        elif project_type == 'Keypoint Labeling':
+        elif script_type == 'Keypoint Labeling':
             model = KpLabModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                kwargs['threshold'])
-        elif project_type == 'Semantic Segmentation Mask':
+        elif script_type == 'Semantic Segmentation Mask':
             model = SemSegMaskModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                     kwargs['mean'], kwargs['std'])
-        elif project_type == 'Text Classification':
+        elif script_type == 'Text Classification':
             model = TextClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                  kwargs['vocabPath'], kwargs['tokenNum'], kwargs['sequenceLen'])
-        elif project_type == 'Named Entity Recognition':
+        elif script_type == 'Named Entity Recognition':
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                              kwargs['sequenceLen'])
-        elif project_type == 'Custom':
+        elif script_type == 'Custom':
             moduleName = 'ml.models.' + kwargs['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type)
@@ -97,19 +97,19 @@ class ModelDriver():
 
     @staticmethod
     # Run model on a list of data
-    def run_model_on_data_set(project_type, data_set, configs, model_path, model_root, labelsPath, model_version,
+    def run_model_on_data_set(script_type, data_set, configs, model_path, model_root, labelsPath, model_version,
                               **kwargs):
         for data in data_set:
-            ModelDriver.run_model_on_data(project_type, data, configs, model_path, model_root, labelsPath,
+            ModelDriver.run_model_on_data(script_type, data, configs, model_path, model_root, labelsPath,
                                           model_version, **kwargs)
 
     @staticmethod
-    def train_model_on_data_set(project_type, datas, annotations, model_path, model_root, labelsPath, savePath, **kwargs):
-        if project_type == 'Image Classification':
+    def train_model_on_data_set(script_type, datas, annotations, model_path, model_root, labelsPath, savePath, **kwargs):
+        if script_type == 'Image Classification':
             model = ImgClsModel(model_path, model_root, labelsPath, mean=kwargs['mean'], std=kwargs['std'],
                                 imgSize=kwargs['imgSize'])
             accuracy = model.train(datas, annotations, savePath, kwargs['epochNum'], kwargs['trainFrac'], kwargs['batchSize'], kwargs['shuffle'], kwargs['workerNum'], kwargs['learningRate'], kwargs['lossFunc'], kwargs['optimizer'])
-        elif project_type == 'Custom':
+        elif script_type == 'Custom':
             moduleName = 'ml.models.' + kwargs['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath)

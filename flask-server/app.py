@@ -22,7 +22,7 @@ def get_user():
 def run_model():
     print("Running started.")
     print(request.json.get("kwargs"))
-    predictions = ModelDriver.run_model_on_data(request.json.get("project_type"),
+    predictions = ModelDriver.run_model_on_data(request.json.get("script_type"),
                                                 request.json.get("data").replace('\\','/'),
                                                 request.json.get("configs"),
                                                 request.json.get("model_path").replace('\\','/'),
@@ -44,7 +44,7 @@ def train_model():
     annotation_list = request.json.get("annotation_list")
     print(data_list)
     print(annotation_list)
-    accuracy = ModelDriver.train_model_on_data_set(request.json.get("project_type"),
+    accuracy = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
                                                    request.json.get("data_list"),
                                                    request.json.get("annotation_list"),
                                                    request.json.get("model_path").replace('\\', '/'),
