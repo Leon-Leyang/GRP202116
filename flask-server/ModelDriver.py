@@ -69,10 +69,10 @@ class ModelDriver():
                                 kwargs['mean'], kwargs['std'], kwargs['imgSize'])
         elif project_type == 'Object Detection':
             model = ObjDecBBoxModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                    kwargs['threashold'])
+                                    kwargs['threshold'])
         elif project_type == 'Keypoint Labeling':
             model = KpLabModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                               kwargs['threashold'])
+                               kwargs['threshold'])
         elif project_type == 'Semantic Segmentation Mask':
             model = SemSegMaskModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                     kwargs['mean'], kwargs['std'])

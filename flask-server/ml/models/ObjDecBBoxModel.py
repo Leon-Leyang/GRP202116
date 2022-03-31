@@ -8,7 +8,7 @@ from ml.models.Model import Model
 
 # Model for image classification task
 class ObjDecBBoxModel(Model):
-    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, threashold):
+    def __init__(self, modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, threshold):
         super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Preprocessing operations
@@ -20,7 +20,7 @@ class ObjDecBBoxModel(Model):
         self.preprocess = Preprocess(self.transforms)
 
         # Threshold to filter result
-        self.threashold = threashold
+        self.threshold = threshold
 
     def predict(self, imgPath):
         super().predict()
@@ -36,7 +36,7 @@ class ObjDecBBoxModel(Model):
         for i in range(len(modelOutput['boxes'])):
             index = int(modelOutput["labels"][i])
             confidence = modelOutput['scores'][i]
-            if(confidence > self.threashold):
+            if(confidence > self.threshold):
                 # Get the bounding box
                 box = modelOutput["boxes"][i].detach().cpu().numpy()
                 (startX, startY, endX, endY) = box.astype("int")
@@ -75,12 +75,12 @@ if __name__ == '__main__':
     toolType = 'rectanglelabels'
     labelsPath = '../../../ml/resources/coco.txt'
 
-    threashold = 0.75
+    threshold = 0.75
 
     imgPath = '../../../ml/resources/puppy.webp'
 
     objDecBBoxModel = ObjDecBBoxModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType,
-                                      threashold)
+                                      threshold)
 
     predictionItem = objDecBBoxModel.predict(imgPath)
     print(predictionItem)
