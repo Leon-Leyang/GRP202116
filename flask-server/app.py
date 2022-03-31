@@ -53,7 +53,6 @@ def train_model():
                                                    request.json.get("model_path").replace('\\', '/'),
                                                    request.json.get("model_root").replace('\\', '/'),
                                                    request.json.get("labels_path").replace('\\', '/'),
-                                                   request.json.get("save_path").replace('\\', '/'),
                                                    request.json.get("params"))
     print("Training finished.")
     print("Accuracy: " + str(accuracy))
