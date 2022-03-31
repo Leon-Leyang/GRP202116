@@ -71,7 +71,7 @@
         where data_id = #{dataId}
     </select>
 
-    <select id="getProjectId" >
+    <select id="getProjectId" resultType="int">
         select project_id
         from data
         where data_id = #{dataId}
