@@ -29,7 +29,7 @@ def run_model():
                                                 request.json.get("model_root").replace('\\', '/'),
                                                 request.json.get("labels_path").replace('\\', '/'),
                                                 request.json.get("model_version"),
-                                                request.json.get("kwargs"))
+                                                request.json.get("params"))
 
     print("Running finished.")
     print(predictions)
@@ -51,7 +51,7 @@ def train_model():
                                                    request.json.get("model_root").replace('\\', '/'),
                                                    request.json.get("labels_path").replace('\\', '/'),
                                                    request.json.get("save_path").replace('\\', '/'),
-                                                   request.json.get("kwargs"))
+                                                   request.json.get("params"))
     print("Training finished.")
     print("Accuracy: " + str(accuracy))
     return make_response(accuracy)

@@ -10,6 +10,8 @@ public class ModelDO extends ProjectDistinguishableDO{
     private String description;
     private String modelRoot;
     private String type;
+    private String params;
+    private String labelsPath;
 
     /**
      * Get the url value of the ml model
@@ -73,5 +75,21 @@ public class ModelDO extends ProjectDistinguishableDO{
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
+
+    public String getLabelsPath() {
+        return labelsPath;
+    }
+
+    public void setLabelsPath(String labelsPath) {
+        this.labelsPath = labelsPath;
     }
 }

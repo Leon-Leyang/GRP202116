@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.*;
 import com.grp202116.consumerserver.ml.ModelDriver;
+import com.grp202116.consumerserver.ml.ModelSaver;
+import com.grp202116.consumerserver.ml.ModelTrainer;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
-import com.grp202116.consumerserver.util.DataUtils;
 import com.grp202116.consumerserver.util.HttpUtils;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -78,22 +80,68 @@ public class ModelController {
         modelMapper.deleteByProjectId(projectId);
     }
 
+
+    /**
+     * Save model and params
+     *
+     * @param projectId project id
+     * @param model     model
+     * @param params    params
+     */
+    @PostMapping("/model/create/{projectId}")
+    public void createModel(@PathVariable BigInteger projectId,
+                            @RequestParam("model") ModelDO model) {
+
+        model.setCreateTime(new Date());
+        model.setProjectId(projectId);
+
+        ModelSaver modelSaver = new ModelSaver(model.getType());
+        String modelPath = modelSaver.saveModel(model.getUrl());
+        if (modelPath == null) return;
+        else model.setUrl(modelPath);
+
+        String labelPath = modelSaver.saveLabels(model.getLabelsPath());
+        if (labelPath == null) return;
+        else model.setLabelsPath(labelPath);
+
+        modelMapper.insert(model);
+    }
+
     /**
      * Run the ml Model in the certain project
+     * requires the version of model and corresponding params
+     * if it is a custom model, requires a .py script file .
      *
      * @param projectId the projectId fetched from the mapper
      */
     @PostMapping("/model/run/{projectId}")
-    public void runModel(@PathVariable BigInteger projectId, @RequestBody JSONObject kwargs) {
-        ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDO model = modelMapper.getByProjectId(projectId);
-        List<DataDO> dataList = dataMapper.listByProjectId(projectId);
-        ModelDriver modelDriver = new ModelDriver(project, model, kwargs);
+    public void runModel(@PathVariable BigInteger projectId,
+                         @RequestParam("model_version") String version,
+                         @RequestParam("script_url") String scriptPath) {
 
-        for (DataDO data: dataList) {
-            JSONObject object = JSONObject.parseObject(restTemplate.postForObject("http://sidecar-server/model/run",
-                    HttpUtils.parseJsonToFlask(JSONObject.toJSONString(modelDriver.runModelConfig(data))), String.class));
-            JSONArray predictions = JSONObject.parseArray(object.getString("result"));
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        ModelDO model = modelMapper.getByVersion(version);
+
+        List<DataDO> dataList = dataMapper.listByProjectId(projectId);
+        ModelDriver modelDriver = new ModelDriver(project, model);
+
+        String scriptName;
+        if (model.getType().equals("Custom")) {
+            if (scriptPath == null) return;
+            else {
+                scriptName = ModelSaver.saveCustom(scriptPath);
+                if (scriptName == null) return;
+                else modelDriver.setScriptName(scriptName);
+            }
+        }
+
+        for (DataDO data : dataList) {
+            JSONObject object = modelDriver.runModelConfig(data);
+
+            JSONObject result = JSONObject.parseObject(
+                    restTemplate.postForObject("http://sidecar-server/model/run",
+                            HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
+            JSONArray predictions = JSONObject.parseArray(result.getString("result"));
             predictionMapper.alter();
             predictionMapper.insertAll(modelDriver.savePredictions(predictions));
         }
@@ -101,18 +149,53 @@ public class ModelController {
 
     /**
      * Train custom model
+     *
      * @param projectId id of the specified project
      */
     @PostMapping("/model/train/{projectId}")
-    public String trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject params) {
+    public String trainModel(@PathVariable BigInteger projectId,
+                             @RequestParam("model_version") String version,
+                             @RequestParam("params") JSONObject trainParams,
+                             @RequestParam("script_url") String scriptPath) {
+
+        ProjectDO project = projectMapper.getByProjectId(projectId);
+        ModelDO model = modelMapper.getByVersion(version);
+
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
         if (annotationList.size() < 1) return "";
 
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
         if (annotatedDataList.size() < 1) return "";
 
+        ModelTrainer modelTrainer = new ModelTrainer(project, model);
+
+        String scriptName;
+        if (model.getType().equals("Custom")) {
+            if (scriptPath == null) return null;
+            else {
+                scriptName = ModelSaver.saveCustom(scriptPath);
+                if (scriptName == null) return null;
+                else modelTrainer.setScriptName(scriptName);
+            }
+        }
+
+        JSONObject object = modelTrainer.trainModelConfig();
+
+
+
+        for (DataDO data : dataList) {
+            JSONObject object = modelDriver.runModelConfig(data);
+
+            JSONObject result = JSONObject.parseObject(
+                    restTemplate.postForObject("http://sidecar-server/model/run",
+                            HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
+            JSONArray predictions = JSONObject.parseArray(result.getString("result"));
+            predictionMapper.alter();
+            predictionMapper.insertAll(modelDriver.savePredictions(predictions));
+        }
+
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDriver modelDriver = new ModelDriver(project, params.getJSONObject("kwargs"));
+        ModelDriver modelDriver = new ModelDriver(project, params.getJSONObject("params"));
         JSONObject param = modelDriver.trainModelConfig(params.getString("save_path"));
         param.put("annotation_list", annotationList);
         param.put("data_list", annotatedDataList);
@@ -121,19 +204,12 @@ public class ModelController {
                 HttpUtils.parseJsonToFlask(JSONObject.toJSONString(param)), String.class);
     }
 
+    @Deprecated
     @PostMapping("/model/save/{projectId}")
     public void saveModel(@PathVariable BigInteger projectId, @RequestBody ModelDO model) {
 
         model.setProjectId(projectId);
         model.setCreateTime(new Date());
         modelMapper.insert(model);
-    }
-
-    /**
-     * Copy the custom model to our address
-     */
-    @PostMapping("/model/custom/save")
-    public void saveCustomModel(@RequestBody String customPath) {
-        DataUtils.saveCustom(customPath);
     }
 }

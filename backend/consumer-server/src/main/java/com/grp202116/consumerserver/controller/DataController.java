@@ -1,20 +1,17 @@
 package com.grp202116.consumerserver.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.AnnotationMapper;
 import com.grp202116.consumerserver.mapper.DataMapper;
 import com.grp202116.consumerserver.mapper.ProjectMapper;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
-import com.grp202116.consumerserver.util.DataUtils;
+import com.grp202116.consumerserver.util.FileUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.lang.annotation.Annotation;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +77,7 @@ public class DataController {
         List<File> fileList = new ArrayList<>();
         for (String url : urlList) fileList.add(new File(url));
 
-        List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
+        List<DataDO> dataList = FileUtils.uploadProjectData(fileList, projectId, project.getType());
         if (dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
@@ -96,8 +93,8 @@ public class DataController {
     @PostMapping("/project/{projectId}/data_file")
     public void uploadDataFile(@RequestParam("fileList") MultipartFile[] multiFileList, @PathVariable BigInteger projectId) {
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        List<File> fileList = DataUtils.multipartToFile(multiFileList);
-        List<DataDO> dataList = DataUtils.uploadProjectData(fileList, projectId, project.getType());
+        List<File> fileList = FileUtils.multipartToFile(multiFileList);
+        List<DataDO> dataList = FileUtils.uploadProjectData(fileList, projectId, project.getType());
         if (dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);

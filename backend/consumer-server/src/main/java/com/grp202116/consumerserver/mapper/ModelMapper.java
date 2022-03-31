@@ -2,6 +2,7 @@ package com.grp202116.consumerserver.mapper;
 
 import com.grp202116.consumerserver.pojo.ModelDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.maven.model.Model;
 
 import java.math.BigInteger;
 
@@ -31,4 +32,9 @@ public interface ModelMapper extends BaseMapper {
     void deleteByProjectId(BigInteger projectId);
 
     void alter();
+
+    ModelDO getByVersion(String version);
+
+    void updateParams(ModelDO model);
+
 }

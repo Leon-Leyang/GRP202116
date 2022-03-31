@@ -77,21 +77,22 @@ CREATE TABLE `labelinterface` (
 DROP TABLE IF EXISTS `model`;
 
 CREATE TABLE `model` (
-  `url` varchar(100) NOT NULL,
-  `version` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `model_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `version` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `project_id` int DEFAULT NULL,
   `create_time` date DEFAULT NULL,
   `model_root` varchar(100) DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`url`),
+  `params` mediumtext,
+  PRIMARY KEY (`version`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `model_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `model` */
 
-insert  into `model`(`url`,`version`,`description`,`project_id`,`create_time`,`model_root`,`type`) values ('../ml/models/fcn/fcn.pth','undefined',NULL,1,NULL,'./',NULL);
+insert  into `model`(`model_path`,`version`,`description`,`project_id`,`create_time`,`model_root`,`type`,`params`) values ('../ml/models/fcn/fcn.pth','undefined',NULL,1,NULL,'./',NULL,NULL);
 
 /*Table structure for table `prediction` */
 

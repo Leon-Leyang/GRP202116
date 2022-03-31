@@ -5,13 +5,15 @@
 <mapper namespace="com.grp202116.consumerserver.mapper.ModelMapper">
 
     <resultMap id="modelMap" type="com.grp202116.consumerserver.pojo.ModelDO">
-        <id column="url" property="url"/>
-        <result column="version" property="version"/>
+        <id column="version" property="version"/>
+        <result column="model_path" property="modelPath"/>
         <result column="description" property="description"/>
         <result column="project_id" property="projectId"/>
         <result column="create_time" property="createTime"/>
         <result column="model_root" property="modelRoot"/>
         <result column="type" property="type"/>
+        <result column="params" property="params"/>
+        <result column="labels_path" property="labelsPath"/>
     </resultMap>
 
     <update id="alter">
@@ -19,15 +21,29 @@
             AUTO_INCREMENT = 1;
     </update>
 
+    <update id="updateParams">
+        update model
+        set params = #{params}
+        where version = #{version}
+    </update>
+
     <insert id="insert" parameterType="ModelDO">
-        insert into model (url, version, description, project_id, create_time, model_root, type)
-        values (#{url}, #{version}, #{description}, #{projectId}, #{createTime}, #{modelRoot}, #{type})
+        insert into model (model_path, version, description, project_id,
+                           create_time, model_root, type, params, labels_path)
+        values (#{url}, #{version}, #{description}, #{projectId},
+                #{createTime}, #{modelRoot}, #{type}, #{params}, #{labelsPath})
     </insert>
 
     <select id="getByProjectId" resultMap="modelMap">
         select *
         from model
         where project_id = #{projectId}
+    </select>
+
+    <select id="getByProjectId" resultMap="modelMap">
+        select *
+        from model
+        where version = #{versioin}
     </select>
 
     <delete id="deleteByProjectId">

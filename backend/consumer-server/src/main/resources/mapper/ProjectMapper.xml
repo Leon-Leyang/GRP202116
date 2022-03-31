@@ -12,7 +12,6 @@
         <result column="name" property="name"/>
         <result column="description" property="description"/>
         <result column="configs" property="configs"/>
-        <result column="labels_path" property="labelsPath"/>
     </resultMap>
 
     <update id="alter">
