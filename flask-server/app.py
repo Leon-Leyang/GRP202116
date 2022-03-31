@@ -26,9 +26,9 @@ def run_model():
                                                 request.json.get("data").replace('\\','/'),
                                                 request.json.get("configs"),
                                                 request.json.get("model_path").replace('\\','/'),
+                                                request.json.get("model_root").replace('\\', '/'),
+                                                request.json.get("labels_path").replace('\\', '/'),
                                                 request.json.get("model_version"),
-                                                request.json.get("model_root").replace('\\','/'),
-                                                request.json.get("labels_path").replace('\\','/'),
                                                 request.json.get("kwargs"))
 
     print("Running finished.")
