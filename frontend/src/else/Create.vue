@@ -1,19 +1,19 @@
 <template>
 <div>
   <!-- Basic information -->
-  <el-form :inline="inline" :model="form" ref="form" :rules="rules" label-width="100px" class="demo-ruleForm"  style=" padding: 30px 60px 30px 30px;">
+  <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="100px" class="demo-ruleForm"  style=" padding: 30px 60px 30px 30px;">
   <el-tabs v-model="active">
       <!-- Basic information -->
       <el-tab-pane name="1" >
           <span slot="label">Basic Info</span>
                   <!-- Project Name -->
                   <el-form-item label="Project Name" prop="name">
-                      <el-input v-model="form.name"></el-input>
+                      <el-input v-model="operateForm.name"></el-input>
                   </el-form-item>
 
                   <!-- Project Description -->
                   <el-form-item label="Description" style="margin-top:50px">
-                      <el-input type="textarea" v-model="form.description" placeholder="(Optional)" rows="10"></el-input>
+                      <el-input type="textarea" v-model="operateForm.description" placeholder="(Optional)" rows="10"></el-input>
                   </el-form-item>   
       </el-tab-pane>
 
@@ -51,9 +51,9 @@
         <template v-for="(item, i) in imageTool">
           <v-col
             :key="i"
-            cols="12"
+            cols="8"
             md="4"
-          >
+          ><!--cols-->
             <v-hover v-slot="{ hover }">
               <v-card
                 :elevation="hover ? 12 : 2"
@@ -184,7 +184,7 @@
       </el-tab-pane>
 
       <!-- Import ML -->
-      <el-tab-pane name="3" :disabled="operateType == 'edit'" >
+      <el-tab-pane name="3" >
           <span slot="label">Import ML model</span>
           <!-- Import ML Model -->
           <div>
@@ -192,7 +192,7 @@
           class="upload-demo"
           drag
           action="/api/ml"
-          v-model="form.ml" 
+          v-model="operateForm.ml" 
           multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">Drag & drop files here</div>
@@ -201,40 +201,35 @@
           </el-upload>
           </div>
       </el-tab-pane>
-
       <!-- Import Data -->
-      <el-tab-pane name="4" :disabled="operateType == 'edit'">
+      <el-tab-pane name="4">
           <span slot="label">Import Data</span>
-          <div style="display:flex">
-            <div>
-              Please enter the path to the folder where you want to use the file:
+          <span>Please upload the appropriate type of file</span>
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+            :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">Select</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
+            <div slot="tip" class="el-upload__tip">Please upload the appropriate type of file</div>
+          </el-upload>
 
-              <el-input
-                type="textarea"
-                :rows="2"
-                placeholder="Address"
-                v-model="folderURL"
-                >
-              </el-input>
-              <div slot="tip" class="el-upload__tip">If there are multiple paths please separate them with commas(",").</div>
-            </div>
-            <div>
-              Please upload the appropriate type of file
-              <el-upload
-                class="upload-demo"
-                ref="upload"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
-                :file-list="fileList"
-                :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">Select</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
-                <div slot="tip" class="el-upload__tip">(Please only upload files in .png/.jpg or .txt format, and individual file sizes should not exceed 3M)</div>
-                <div slot="tip" class="el-upload__tip">It is highly recommended to use the pass path method!</div>
-              </el-upload>
-            </div>
-          </div>
+          <!-- Import dataset -->
+          <!-- <el-upload
+          class="upload-demo"
+          drag
+          action="/api/dataset"
+          v-model="form.data" 
+          multiple>
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">Drag & drop files here</div>
+          <div class="el-upload__text"><em>Click to add</em></div>
+          <div class="el-upload__tip" slot="tip">( The format of uploading file should be <span style="font-style:italic; color: #719DDD">.txt, .jpg, .png, .gif, .bmp, .svg, .webp, .csv, .tsv, .json</span> )</div>
+          </el-upload> -->
       </el-tab-pane>
 
   </el-tabs>
@@ -251,9 +246,7 @@
     name: "Create",
     props: {
       inline: Boolean,
-      form: Object,
-      folderURL: String,
-      operateType: String
+      operateForm: Object,
     },
 
     data:() => ({
@@ -262,81 +255,132 @@
       imageTool: [
         {
           title: 'Polygons',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
           img: '/images/1.jpg',
           config:`<View>
-                  <Image name="img" value="$image" showMousePos="true" zoom="true"></Image>
-                  <PolygonLabels name="tag" toName="img" strokewidth="5" fillcolor="red" pointstyle="circle" pointsize="small">
-                    <Label value="Hello" background="red"></Label>
-                    <Label value="World" background="blue"></Label>  
-                  </PolygonLabels>
-                </View>`
+                   <Image name="img" value="$image" showMousePos="true" zoom="true"></Image>
+                   <PolygonLabels name="tag" toName="img" strokewidth="5" fillcolor="red" pointstyle="circle" pointsize="small">
+                       <Label value="Hello" background="red"></Label>
+                       <Label value="World" background="blue"></Label>  
+                   </PolygonLabels>
+                 </View>`
         },
         {
           title: 'Masks',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
           img: '/images/2.jpg',
-          config:''
+          config:`<View>
+                   <Image name="image" value="$image" zoom="true"/>
+                   <BrushLabels name="tag" toName="image">
+                        <Label value="Airplane" background="rgba(255, 0, 0, 0.7)"/>
+                        <Label value="Car" background="rgba(0, 0, 255, 0.7)"/>
+                   </BrushLabels>
+                  </View>`
         },
         {
           title: 'Bounding Boxes',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
           img: '/images/3.jpg',
           config:`<View>
-                  <Image name="img" value="$image"></Image>
-                  <RectangleLabels name="tag" toName="img" fillOpacity="0.5" strokeWidth="5">
-                    <Label value="Planet"></Label>
-                    <Label value="Moonwalker" background="blue"></Label>
-                  </RectangleLabels>
-                </View>`
+                   <Image name="img" value="$image"></Image>
+                   <RectangleLabels name="tag" toName="img" fillOpacity="0.5" strokeWidth="5">
+                        <Label value="Planet"></Label>
+                        <Label value="Moonwalker" background="blue"></Label>
+                   </RectangleLabels>
+                 </View>`
         },
         {
           title: 'Keypoints',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
           img: '/images/4.jpg',
           config:`<View>
-                  <Image name="img" value="$image" zoom="true"></Image>
-                  <KeyPointLabels name="tag" toName="img" fillcolor="red">
-                    <Label value="Hello" background="yellow"></Label>
-                    <Label value="World" background="blue"></Label>
-                  </KeyPointLabels>
+                   <Image name="img" value="$image" zoom="true"></Image>
+                   <KeyPointLabels name="tag" toName="img" fillcolor="red">
+                       <Label value="Hello" background="yellow"></Label>
+                       <Label value="World" background="blue"></Label>
+                   </KeyPointLabels>
                 </View>`
         },
+        {
+          title: 'Image Classification',
+          img: '/images/5.jpg',
+          config:` <View>
+                     <Image name="image" value="$image"/>
+                     <Choices name="choice" toName="image">
+                         <Choice value="Adult content"/>
+                         <Choice value="Weapons" />
+                     <Choice value="Violence" />
+                     </Choices>
+                   </View>`
+        }
       ],
 
       textTool: [
         {
           title: 'Highlighter',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
           img: '/images/a.jpg',
-          config:''
+          config:`<View>
+                    <Labels name="label" toName="text">
+                        <Label value="PER" background="red"/>
+                        <Label value="ORG" background="darkorange"/>
+                        <Label value="LOC" background="orange"/>
+                        <Label value="MISC" background="green"/>
+                    </Labels>
+                    <Text name="text" value="$text"/>
+                  </View>`
         },
         {
           title: 'Input Text',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
-          img: '/images/2.jpg',
-          config:''
+          img: '/images/b.jpg',
+          config:`<View>
+                     <Header value="Please read the text" />
+                     <Text name="text" value="$text" />
+                     <Header value="Provide one sentence summary" />
+                     <TextArea name="answer" toName="text" showSubmitButton="true" maxSubmissions="1" editable="true" required="true" />
+                  </View>`
         },
         {
           title: 'Radio Button',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
-          img: '/images/3.jpg',
-          config:''
+          img: '/images/c.jpg',
+          config:`<View>
+                    <Text name="text" value="$text"/>
+                    <View style="box-shadow: 2px 2px 5px #999; padding: 20px; margin-top: 2em; border-radius: 5px;">
+                       <Header value="Choose text sentiment"/>
+                       <Choices name="sentiment" toName="text" choice="single" showInLine="true">
+                           <Choice value="Positive"/>
+                           <Choice value="Negative"/>
+                           <Choice value="Neutral"/>
+                       </Choices>
+                    </View>
+                 </View>`
         },
         {
           title: 'Checklist',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
           img: '/images/d.jpg',
-          config:''
-        }
+          config:`<View>
+                     <Text name="text" value="$text"/>
+                     <Taxonomy name="taxonomy" toName="text">
+                        <Choice value="Archaea" />
+                        <Choice value="Bacteria" />
+                        <Choice value="Eukarya">
+                            <Choice value="Human" />
+                            <Choice value="Oppossum" />
+                            <Choice value="Extraterrestial" />
+                        </Choice>
+                     </Taxonomy>
+                   </View>`
+        },
+        /*
+        {
+          title: 'Qustion Answering',
+          img: '/images/e.jpg',
+          config:`<View>
+                     <Header value="Please read the passage" />
+                     <Text name="text" value="$text" granularity="word"/>
+                     <Header value="Select a text span answering the following question:"/>
+                     <Text name="question" value="$question"/>
+                     <Labels name="answer" toName="text">
+                         <Label value="Answer" maxUsage="1" background="red"/>
+                     </Labels>
+                  </View>`
+        },
+        */
       ],
 
 
@@ -358,8 +402,8 @@
         },
     },
     mounted() {
-      console.log('inline',this.inline)
-        console.log(this.form.projectId)
+        this.operateForm.projectId = 12;
+        console.log(this.operateForm.projectId)
     },
   }
 </script>
@@ -372,7 +416,7 @@
 }
 
 .v-card:not(.on-hover) {
-  opacity: 0.7;
+  opacity: 0.8;
  }
 
 .show-btns-1 {
@@ -385,13 +429,17 @@
 
 
 .con{
-    height: 380px;/*500px也一样*/
+    height: 100%;/*500px也一样*/
     overflow-y:scroll;
 }
 
 .v-tab{
     justify-content:left;
     padding: 6px;/* */
+}
+
+.el-form{
+  padding: 20px 50px 0px 50px!important;
 }
 
 </style>

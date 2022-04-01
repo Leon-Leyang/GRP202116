@@ -3,20 +3,15 @@
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant.sync="mini"
-      permanent
     >
       <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title>John Leider</v-list-item-title>
-
         <v-btn
           icon
           @click.stop="mini = !mini"
         >
-          <v-icon>mdi-chevron-left</v-icon>
+          <v-icon v-if="mini==false">mdi-arrow-left</v-icon>
+          <v-icon v-if="mini!=false">mdi-arrow-right</v-icon>
+
         </v-btn>
       </v-list-item>
 
@@ -55,3 +50,6 @@
     },
   }
 </script>
+<style>
+
+</style>
