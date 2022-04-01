@@ -61,43 +61,13 @@ export default {
       LS:[],
       projectId:0,
       annoDataList:[],
-      annos:[{id:null,result:null}],
+      annos:[{id:null,result:[]}],
       predictDataList:[],
-      predicts:[{id:null,result:null}],
+      predicts:[{id:null,result:[]}],
       preState: 'accept',
       //test param
       id:0,
-      config: `
-        <View>
-
-          <!-- Image with Polygons -->
-          <View style="padding: 25px;
-                      box-shadow: 2px 2px 8px #AAA">
-            <Header value="Label the image with polygons"/>
-            <Image name="img" value="$image"/>
-            <Text name="text1"
-                  value="Select label, start to click on image"/>
-
-            <PolygonLabels name="tag" toName="img">
-              <Label value="Airbus" background="blue"/>
-              <Label value="Boeing" background="red"/>
-            </PolygonLabels>
-          </View>
-
-          <!-- Text with multi-choices -->
-          <View style="margin-top: 20px; padding: 25px;
-                      box-shadow: 2px 2px 8px #AAA;">
-            <Header value="Classify the text"/>
-            <Text name="text2" value="$text"/>
-
-            <Choices name="" toName="img" choice="multiple">
-              <Choice alias="wisdom" value="Wisdom"/>
-              <Choice alias="long" value="Long"/>
-            </Choices>
-          </View>
-
-        </View>
-      `,
+      config: ``,
       //logic param
       // config: this.configInterface,
     }
@@ -196,9 +166,30 @@ export default {
     },
 
     newLS(data){
+      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0 ){
+        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0){
+          var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+          axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist)
+          .then((res)=>{
+            console.log('annotalist up', res)
+          })
+          clearTimeout(this.timer);
+          this.timer = setTimeout(()=>{
+            this.getAnno()
+          },500)
+        }
+        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0){
+          this.predicts = []
+        }
+      }else{
       this.getAnno()
       this.getPredict()
+      }
       this.labelStudio.destroy()
+      console.log('this', this.annos[0].result.length)
+      if(this.annos[0].result.length == 0 & this.predicts != []){
+        this.annos = this.predicts
+      }
       this.labelStudio = new LabelStudio("label-studio", {
         config: this.$store.state.currentConfig,
         interfaces: [
@@ -291,18 +282,37 @@ export default {
 
 
   mounted() {
-    this.getAnno()
-    this.getPredict()
     this.currentDataId = this.$store.state.currentDataId
     this.tableData = this.$store.state.currentDataList
     console.log('curren', this.$store.state.currentDataList,this.$store.state.currentDataId)
     console.log('tisada', this.tableData)
     // console.log('confi', this.$store.state.currentConfig)
     console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url)
+    if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0 ){
+      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0){
+        var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+        axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist)
+        .then((res)=>{
+          console.log('annotalist up', res)
+        })
+        clearTimeout(this.timer);
+        this.timer = setTimeout(()=>{
+          this.getAnno()
+        },500)
+      }
+      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0){
+        this.predicts = []
+      }
+    }else{
+    this.getAnno()
+    this.getPredict()
+    }
     clearTimeout(this.timer);
     this.timer = setTimeout(()=>{
+
+      //lack the multi people condition
       console.log('this', this.annos[0].result.length)
-      if(this.annos[0].result.length == 0){
+      if(this.annos[0].result.length == 0 & this.predicts != []){
         this.annos = this.predicts
       }
       this.labelStudio = new LabelStudio("label-studio", {
@@ -359,7 +369,7 @@ export default {
         // },
         onSubmitAnnotation: function(ls, annotation) {
           var result = annotation.serializeAnnotation()
-          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+          var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
           // annotationlist[0].annotationId = annotation.pk
           annotationlist[0].dataId = ls.task.id
           annotationlist[0].result = JSON.stringify(result)
@@ -391,7 +401,7 @@ export default {
           })
         },
       });
-    },500)
+    },700)
     console.log(this.labelStudio.options)
     this.$store.state.nowLS = this.labelStudio
   },
