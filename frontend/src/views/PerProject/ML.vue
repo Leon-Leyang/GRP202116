@@ -24,11 +24,25 @@
                 ></el-option>
     </el-select>-->
 
-     <el-select v-model="type" clearable @change="c1">
+     <!--
+     <el-select v-model="type" clearable @change="c1" style="width: 70px">
     <el-option  v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
- </el-select>
-  </el-form-item>
-
+ </el-select>-->
+ 
+   <el-select v-model="value"  clearable placeholder="please select the ML model type" @change="c1">
+    <el-option-group
+      v-for="group in options"
+      :key="group.label"
+      :label="group.label">
+      <el-option
+        v-for="item in group.options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-option-group>
+  </el-select>
+ </el-form-item>
 
 <!--If choosing others, then it will not display the following ??-->
   <el-form-item label="Model Project Root Path:">
@@ -200,6 +214,34 @@
      {label:'Name Entity Recognition',value:5},
      {label:'Customization',value:6},
   ],
+
+  options: [{
+          label: 'Existing Types',
+          options: [{
+            value: '0',
+            label: 'Image Classification'
+          }, {
+            value: '1',
+            label: 'Object Detection'
+          }]
+        }, {
+          label: 'Others',
+          options: [{
+            value: '2',
+            label: 'Keypoint Labeling'
+          }, {
+            value: '3',
+            label: 'Semantic Segmentation with Masks'
+          }, {
+            value: '4',
+            label: 'Text Classification'
+          }, {
+            value: '5',
+            label: 'Name Entity Recognition'
+          },
+          {label:'Customization',value:6}]
+        }],
+        value: ''
       }
     },
     methods: {
