@@ -34,7 +34,7 @@
   </el-table-column> 
   <el-table-column show-overflow-tooltip label="Anno" width="100" prop="sta" align="center">
     <template slot-scope="tableData">
-      <button @click="enterData(tableData.row.dataId)">Enter</button>
+      <button @click="enterData(tableData.row)">Enter</button>
     </template>
   </el-table-column> 
   <!-- <el-table-column label="Annotation" width="100" prop="anno" align="center"></el-table-column>  -->
@@ -57,10 +57,12 @@
       config: Object,
     },
     methods: {
-      enterData(dataId){
-        console.log('dataId', dataId)
-        this.$store.state.currentDataId = dataId
+      enterData(data){
+        console.log('data', data)
+        this.$store.state.currentDataId = data.dataId
+        this.$store.state.realDataId = data.realDataId
         console.log('cur', this.$store.state.currentDataId)
+        console.log('real', this.$store.state.realDataId)
         console.log('culist', this.$store.state.currentDataList)
         console.log('lisy', this.$store.state.currentDataList[this.$store.state.currentDataId - 1].dataId)
         this.$router.push({  
@@ -76,6 +78,7 @@
         console.log('currentDataList', this.$store.state.currentDataList)
         this.tableData = this.$store.state.currentDataList
         for(var i=0; i<this.tableData.length; i++){
+          this.tableData[i].realDataId = this.tableData[i].dataId
           this.tableData[i].dataId = i + 1
           this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
           this.tableData[i].url = this.tableData[i].url.replace("../", "")
@@ -96,19 +99,20 @@
             this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.webp' )
           }
-          else if(this.tableData[i].url.indexOf("txt")!=-1){
-            this.tableData[i].url = this.tableData[i].url.replace(".txt", "")
-            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.txt' )
-          }  
-          else if(this.tableData[i].url.indexOf(".doc")!=-1){
-            this.tableData[i].url = this.tableData[i].url.replace(".doc", "")
-            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.doc' )
-          }                  
+          // else if(this.tableData[i].url.indexOf("txt")!=-1){
+          //   this.tableData[i].url = this.tableData[i].url.replace(".txt", "")
+          //   this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.txt' )
+          // }  
+          // else if(this.tableData[i].url.indexOf(".doc")!=-1){
+          //   this.tableData[i].url = this.tableData[i].url.replace(".doc", "")
+          //   this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.doc' )
+          // }                  
           console.log('tabelda',this.tableData[i].url)
         }
         this.$store.state.currentDataList = this.tableData
+
         console.log('asd', this.$store.state.currentDataList)
-      },500);
+      },1000);
 
     },  
 

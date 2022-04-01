@@ -2,9 +2,15 @@
 <template>
 <div>
   <div>
+    <button @click="back" style="width:100px;color:red">Back</button>
+
     <button @click="prev" style="width:100px;color:red">prev</button>
 
     <button @click="next" style="width:100px;color:red">next</button>
+
+    <button @click="accept" style="width:100px;color:red">accept</button>
+
+    <button @click="reject" style="width:100px;color:red">reject</button>
   </div>
   <div style="display:flex">
     <div style="width:10%">
@@ -17,7 +23,7 @@
         >
         <el-table-column label="Preview" prop="url" align="center">
           <template slot-scope="scope">
-            <img :src="scope.row.url" @click="enterData(scope.row.dataId)" style="width:100%"/>
+            <img :src="scope.row.url" @click="enterData(scope.row)" style="width:100%"/>
           </template>
         </el-table-column> 
 
@@ -37,6 +43,7 @@
 // @ is an alias to /src
 import LabelStudio from "@heartexlabs/label-studio";
 import "@heartexlabs/label-studio/build/static/css/main.css";
+import axios  from "axios";
 
 export default {
   name: "Home",
@@ -51,7 +58,13 @@ export default {
       tableData:[],
       labelStudio: '',
       currentDataId:0,
-
+      LS:[],
+      projectId:0,
+      annoDataList:[],
+      annos:[],
+      predictDataList:[],
+      predicts:[],
+      preState: 'accept',
       //test param
       id:0,
       config: `
@@ -91,33 +104,99 @@ export default {
   },
 
   methods: {
-    enterData(dataId){
-      console.log('dataId', dataId)
-      this.$store.state.currentDataId = dataId
-      console.log('cur', this.$store.state.currentDataId)
+    enterData(data){
+      console.log('dataId', data.dataId)
+      this.$store.state.currentDataId = data.dataId
+      this.$store.state.realDataId = data.realDataId
+      console.log('cur', this.$store.state.currentDataId,this.$store.state.realDataId)
       console.log('culist', this.$store.state.currentDataList)
-      this.newLS(dataId)
+      this.newLS(data)
     },
     prev(){
       this.$store.state.currentDataId--
-      this.newLS(this.$store.state.currentDataId)
+      this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1]
+      this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
     },
     next(){
       this.$store.state.currentDataId++
-      this.newLS(this.$store.state.currentDataId)
+      this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1]
+      this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
     },
-
-    newLS(dataId){
+    accept(){
+      this.preState = 'accept'
+      //接口
+      this.next()
+    },
+    reject(){
+      this.preState = 'reject'
+      //接口
+      this.next()
+    },
+    back(){
+      this.$router.push({  
+                  path: '/per-project',
+                  name: 'PerProject', 
+              }) 
+    },
+    getAnno(){
+      console.log("currentid",this.$store.state.realDataId)
+      this.$axios.get('/annotation/data/' + this.$store.state.realDataId, {
+              params: {
+                  // page: this.config.page,
+              }
+          })
+          .then(res => {
+            console.log('Anno', res)
+            this.annoDataList = res.data.map(item => {
+                return {...item}
+            })
+            for(var i = 0; i < this.annoDataList.length; i++){
+              this.annos[i].id = this.annoDataList[i].annotationId
+              this.annos[i].result = this.annoDataList[i].result
+            }
+            console.log('annos:', this.annos)
+          })
+          .catch((error) => {
+  // here you will have access to error.response
+              console.log(error.response)
+          });
+    },
+    getPredict(){
+      console.log("currentid",this.$store.state.realDataId)
+      this.$axios.get('/prediction/data/' + this.$store.state.realDataId, {
+              params: {
+                  // page: this.config.page,
+              }
+          })
+          .then(res => {
+            console.log('Predict', res)
+            this.predictDataList = res.data.map(item => {
+                return {...item}
+            })
+            for(var j = 0; j < this.predictDataList.length; j++){
+              this.predicts[j].id = this.predictDataList[j].predictId
+              this.predicts[j].result = this.predictDataList[j].result
+            }
+            console.log('predicts:', this.predicts)            
+          })
+          .catch((error) => {
+  // here you will have access to error.response
+              console.log(error.response)
+          });
+    },
+    newLS(data){
+      this.getAnno()
+      this.getPredict()
       this.labelStudio.destroy()
       this.labelStudio = new LabelStudio("label-studio", {
-        config: this.config,
+        config: this.$store.state.currentConfig,
         interfaces: [
           "panel",
           "update",
           "submit",
-          "skip",
+          // "skip",
           "controls",
-          "review",
+          // "review",
           "infobar",
           "topbar",
           "instruction",
@@ -144,85 +223,29 @@ export default {
         },
 
         task: {
-          annotations: [{
-            id: "1001",
-            lead_time: 15.053,
-            result: [
-              {
-                "original_width": 2242,
-                "original_height": 2802,
-                "image_rotation": 0,
-                "origin": "manual",
-                "value": {
-                  "x": 17.46666666666666,
-                  "y": 79.29562433297758,
-                  "width": 23.6,
-                  "height": 13.447171824973319,
-                  "rotation": 0,
-                  "rectanglelabels": [
-                    "Hello"
-                  ]
-                },
-                "id": "dYjaasY56i",
-                "from_name": "tag",
-                "to_name": "img",
-                "type": "rectanglelabels"
-              },
-              {
-                "original_width": 2242,
-                "original_height": 2802,
-                "image_rotation": 0,
-                "origin": "prediction",
-                "value": {
-                  "x": 37.46666666666666,
-                  "y": 79.29562433297758,
-                  "width": 23.6,
-                  "height": 13.447171824973319,
-                  "rotation": 0,
-                  "rectanglelabels": [
-                    "World"
-                  ]
-                },
-                "id": "dYjaasY57i",
-                "from_name": "tag",
-                "to_name": "img",
-                "type": "rectanglelabels"
-              },
-            ]
-          }],
-          predictions: [{
-            id: "1001",
-            lead_time: 15.053,
-            result: [
-              {
-                "original_width": 2242,
-                "original_height": 2802,
-                "image_rotation": 0,
-                "origin": "prediction",
-                "value": {
-                  "x": 87.46666666666666,
-                  "y": 79.29562433297758,
-                  "width": 23.6,
-                  "height": 13.447171824973319,
-                  "rotation": 0,
-                  "rectanglelabels": [
-                    "Hello"
-                  ]
-                },
-                "id": "dYjaasY56i",
-                "from_name": "tag",
-                "to_name": "img",
-                "type": "rectanglelabels"
-              },
-            ]
-          }],
-          id: dataId,
+          annotations: this.annos,
+          predictions: this.predicts,
+          id: this.$store.state.realDataId,
           data: {
-            image: this.$store.state.currentDataList[dataId - 1].url
+            image: this.$store.state.currentDataList[data.dataId - 1].url
           },
         },
 
   //steam vr  lagecy vr
+
+        onSubmitAnnotation: function(ls, annotation) {
+          var result = annotation.serializeAnnotation()
+          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+          // annotationlist[0].annotationId = annotation.pk
+          annotationlist[0].dataId = ls.task.id
+          annotationlist[0].result = result
+          console.log('re', annotationlist)
+
+          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
+          .then((res)=>{
+            console.log('annotalist sub', res)
+          })
+        },
 
         onLabelStudioLoad: function (LS) {
           var c = LS.annotationStore.addAnnotation({
@@ -233,33 +256,48 @@ export default {
 
         onUpdateAnnotation: function (LS, annotation) {
           // retrive an annotation 
-          console.log(annotation.serializeAnnotation())
-          console.log(annotation._initialAnnotationObj)
-          console.log(JSON.stringify(annotation.serializeAnnotation()))
-          console.log('this', LS.task)
-          console.log('tag', this.LabelStudio.task)
-          this.$axios.post('/annotations/data/1', annotation.serializeAnnotation())
-        }
+          console.log('xiaw', annotation.serializeAnnotation())
+          console.log('LS', LS)
+          console.log('annotation',annotation)
+
+          
+          var result = annotation.serializeAnnotation()
+          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+          // annotationlist[0].annotationId = annotation.pk
+          annotationlist[0].dataId = LS.task.id
+          annotationlist[0].result = result
+          console.log('re', annotationlist)
+
+          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
+          .then((res)=>{
+            console.log('annotalist up', res)
+          })
+        },
       });
-    }
+    },
+
+  
   },
 
 
   mounted() {
+    this.getAnno()
+    this.getPredict()
     this.currentDataId = this.$store.state.currentDataId
+    
     console.log('project', this.$store.state.currentProject)
+    this.projectId = this.$store.state.currentProjectId
     this.tableData = this.$store.state.currentDataList
     console.log('tisada', this.tableData)
       this.labelStudio = new LabelStudio("label-studio", {
         config: this.config,
-
         interfaces: [
           "panel",
           "update",
           "submit",
-          "skip",
+          // "skip",
           "controls",
-          "review",
+          // "review", //==> the problem to show update!!!
           "infobar",
           "topbar",
           "instruction",
@@ -268,15 +306,15 @@ export default {
           "annotations:history",
           "annotations:tabs",
           "annotations:menu",
-          "annotations:current",
+          // "annotations:current", //==>show the name in the rightbar
           "annotations:add-new",
           "annotations:delete",
           'annotations:view-all',
-          "predictions:tabs",
-          "predictions:menu",
-          "auto-annotation",
-          "edit-history",
-          //"topbar:prevnext",
+          "predictions:tabs", //==> Reject | Fix+Accept
+          "predictions:menu", //==> Reject | Accept
+          // "auto-annotation",
+          // "edit-history",
+          "topbar:prevnext",
         ],
 
         user: {
@@ -358,63 +396,47 @@ export default {
               },
             ]
           }],
-          id: 2,
+          id: 30,
           data: {
             image: this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url
           },
         },
 
 
-        onLabelStudioLoad: function (LS) {
-          var c = LS.annotationStore.addAnnotation({
-            userGenerate: true,
-          });
-          LS.annotationStore.selectAnnotation(c.id);
-        },
+        // onLabelStudioLoad: function (LS) {
+        //   var c = LS.annotationStore.addAnnotation({
+        //     userGenerate: true,
+        //   });
+        //   LS.annotationStore.selectAnnotation(c.id);
+        // },
+ 
 
         onUpdateAnnotation: function (LS, annotation) {
           // retrive an annotation 
+          console.log('xiaw', annotation.serializeAnnotation())
+          console.log('LS', LS)
+          console.log('annotation',annotation)
 
-        
-          var myDate = new Date();
-          myDate.toLocaleDateString();                    
-          myDate.toLocaleString( ); 
-          var annotationObject = annotation.serializeAnnotation()
-          var previousAnnotations= LS.task.app.annotationStore.annotations.target
-        
-          var annotationlist = []
-          for(var i = 0; i < annotationObject.length; i++){
-            annotationlist[i]=new Object()
-            annotationlist[i].annotation_id = annotationObject[i].id
-            annotationlist[i].project_id = LS.task.app.project
-            annotationlist[i].data_id = LS.task.id
-            annotationlist[i].type = annotationObject[i].type
-            annotationlist[i].result = annotationObject[i].value
-            annotationlist[i].create_time = myDate.toLocaleString()
-            
-            for(annotation in previousAnnotations ){
-              if(annotation.value.id==annotationObject[i].id){
-                  annotationlist[i].create_time = annotation.value.createdDate
-              }
-            }
-            
-            annotationlist[i].update_time = myDate.toLocaleString()
-            annotationlist[i].from_name = annotationObject[i].from_name
-            annotationlist[i].to_name = annotationObject[i].to_name          
-          }
-        
-          console.log(annotationlist)
-          console.log(annotation.serializeAnnotation())
           
-          console.log('this', LS.task)
-          console.log('tag', this.LabelStudio.task)
-          
-          
-          this.$axios.post('/annotations/data/1', annotationlist)
+          var result = annotation.serializeAnnotation()
+          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+          // annotationlist[0].annotationId = annotation.pk
+          annotationlist[0].dataId = LS.task.id
+          annotationlist[0].result = JSON.stringify(result)
+          console.log('type', annotationlist[0].result)
+          // var myobj = eval(annotationlist[0].result)
+          console.log('re', annotationlist)
 
-        }
+          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
+          .then((res)=>{
+            console.log('annotalist up', res)
+          })
+        },
       });
-    console.log(this.labelStudio)
+
+      this.labelStudio.destroy()
+    console.log(this.labelStudio.options)
+    this.$store.state.nowLS = this.labelStudio
   },
 };
 </script>

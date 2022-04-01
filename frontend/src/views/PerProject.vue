@@ -1,7 +1,7 @@
 <!-- 项目进入后的具体页面 -->
 <template>
   <v-card id="problock">
-
+<button @click="back">Back</button>
     <v-tabs
         v-model="tabs"
         centered
@@ -72,11 +72,31 @@ import Setting from '@/views/PerProject/Setting'
           },
       }
     },
+    methods: {
+      back(){
+        this.$router.push({  
+            path: '/',
+            name: 'Home', 
+        }) 
+      }
+    },
     mounted() {
+      console.log('label', this.$store.state.currentConfig)
       this.projectId = this.$store.state.currentProjectId
       console.log('projectId',this.projectId)
-      console.log('list$', this.$store.state.currentDataList)
-      this.$store.commit('changeDataList', this.projectId)
+            this.$axios.get('/data/project/'+ this.projectId)
+                .then(res => {
+                    console.log('res', res)
+                    this.$store.state.currentDataList = res.data
+                    // this.$store.state.currentDataList.
+                    console.log('store datalist', this.$store.state.currentDataList)
+                })
+                .catch((error) => {
+                // here you will have access to error.response
+                console.log(error.response)
+                });
+      console.log('liugo', this.$store.state.currentDataList)
+      
     },
   }
 </script>
