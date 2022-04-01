@@ -69,7 +69,7 @@
 
   <v-divider></v-divider>
 
-  <el-form-item label="image size:" > <!--style="margin-bottom:0"-->
+  <el-form-item v-if="isImgCla" label="image size:"> <!--style="margin-bottom:0"-->
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification)"></el-input>
   </el-form-item>
  <v-divider></v-divider>
@@ -79,35 +79,35 @@
   </el-form-item>
  <v-divider></v-divider>
 
-  <el-form-item label="mean:">
+  <el-form-item v-if="isSemSeg" label="mean:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default"></el-input>
   </el-form-item>
-  <el-form-item label="standard deviation:">
+  <el-form-item v-if="isSemSeg" label="standard deviation:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="[0.229, 0.224, 0.225] by default"></el-input>
   </el-form-item>
    <v-divider></v-divider>
 
-  <el-form-item label="threashold:">
+  <el-form-item v-if="isKpLb" label="threashold:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For keypoint labeling)"></el-input>
   </el-form-item>
    <v-divider></v-divider>
 
-  <el-form-item label="vocabulary file:" style="margin-top:20px">
+  <el-form-item v-if="isTC" label="vocabulary file:" style="margin-top:20px">
     <v-file-input
                 label="File Input"
                 outlined
                 dense
                 ></v-file-input>
   </el-form-item>
-  <el-form-item label="token number:">
+  <el-form-item v-if="isTC" label="token number:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For text classification)"></el-input>
   </el-form-item>
-   <el-form-item label="sequence length:">
+   <el-form-item v-if="isTC" label="sequence length:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For text classification)"></el-input>
   </el-form-item>
    <v-divider></v-divider>
 
-  <el-form-item label="sequence length:">
+  <el-form-item v-if="isNER" label="sequence length:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For named entity recognition)"></el-input>
   </el-form-item>
 
@@ -207,12 +207,32 @@
         console.log('submit!');
       },
       c1(selectValue) {
+          this.isObjDetect = false;
+          this.isImgCla = false;
+          this.isSemSeg = false;
+          this.isKpLb = false;
+          this.isTC = false;
+          this.isNER = false;
+      if (selectValue == 0) {
+        this.isImgCla = true;
+      } 
       if (selectValue == 1) {
         this.isObjDetect = true;
-      } else {
-        this.isObjDetect = false;
+      } 
+      if (selectValue == 3) {
+        this.isSemSeg = true;
+      } 
+      if (selectValue == 2) {
+        this.isKpLb = true;
+      } 
+      if (selectValue == 4) {
+        this.isTC = true;
+      }
+      if (selectValue == 5) {
+        this.isNER = true;
       }
     },
+
     }
   }
 </script>

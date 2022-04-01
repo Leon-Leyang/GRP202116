@@ -7,23 +7,35 @@ import PerProject from '../views/PerProject'
 // import LabelStudio from '@/views/LabelStudio/LabelStudio'
 import Data from '@/views/Data'
 // import Test from '@/views/Test';
+import MLTest from '@/views/PerProject/ML/ML-Test-'
+import MLTrain from '@/views/PerProject/ML/ML-Train-'
 
 Vue.use(VueRouter)
 
 const routes = [{
-    path: '/',
-    name: 'Home',
-    component: Home,
-    },{
-    path: '/per-project',
-    name: 'PerProject',
-    component: PerProject,
-  },
-  {
-    path: '/data',
-    name: 'Data',
-    component: Data,
-  },
+        path: '/',
+        name: 'Home',
+        component: Home,
+    }, {
+        path: '/per-project',
+        name: 'PerProject',
+        component: PerProject,
+    },
+    {
+        path: '/data',
+        name: 'Data',
+        component: Data,
+    },
+    {
+        path: '/ML-Test',
+        name: 'ML-Test',
+        component: MLTest,
+    },
+    {
+        path: '/ML-Train',
+        name: 'ML-Train',
+        component: MLTrain,
+    },
 
 ]
 
