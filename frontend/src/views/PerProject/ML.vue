@@ -189,7 +189,7 @@
           resource: ''
         },
 
-       type:0,
+       type:null,
 
  typeOptions:[
      {label:'Image Classification',value:0},
