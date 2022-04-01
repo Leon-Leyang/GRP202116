@@ -4,7 +4,7 @@
     >
         <v-card
         width="1250px"
-        height="630px"
+        height="500px"
         style="margin-top:30px; margin-left:10px;"
         >
         <v-row justify="center">
@@ -26,8 +26,6 @@
                 
             <!--1st-->
                 <v-tab-item class="tabitem"> <!--删掉tabitem,card-->
-                
-                    
                 <v-container class="con">
 
                 <v-row
@@ -56,10 +54,11 @@
                             class="fill-height flex-column"
                             justify="space-between"
                             >
+                             <div style="white-space:pre">
                             <p class="mt-4 subheading text-left">
                                 {{ item.title }}
                             </p>
-                            
+                            </div> 
                             <!-- 
                             <div><p></p><p></p></div>
                             <div><p></p></div>
@@ -206,7 +205,7 @@ export default {
             icons: ['mdi-arrow-right'],
             imageTool: [
                 {
-                title: 'Polygons',
+                title: 'Semantic Segmentation'+"\n"+' with Polygons',
                 img: './images/1.jpg',
                 config:`<View>
     <Image name="img" value="$image" showMousePos="true" zoom="true"></Image>
@@ -217,7 +216,7 @@ export default {
 </View>`
                 },
                 {
-                title: 'Masks',
+                title: 'Semantic Segmentation'+"\n"+' with Masks',
                 img: './images/2.jpg',
                 config:`<View>
     <Image name="image" value="$image" zoom="true"/>
@@ -228,7 +227,7 @@ export default {
 </View>`
                 },
                 {
-                title: 'Bounding Boxes',
+                title: 'Object Detection'+"\n"+' with Bounding Boxes',
                 img: './images/3.jpg',
                 config:`<View>
     <Image name="img" value="$image"></Image>
@@ -239,7 +238,7 @@ export default {
 </View>`
                 },
                 {
-                title: 'Keypoints',
+                title: 'Keypoint Labeling',
                 img: './images/4.jpg',
                 config:`<View>
     <Image name="img" value="$image" zoom="true"></Image>
@@ -265,7 +264,7 @@ export default {
 
             textTool: [
                 {
-                title: 'Highlighter',
+                title: 'Named Entity Recognition',
                 img: './images/a.jpg',
                 config:`<View>
     <Labels name="label" toName="text">
@@ -278,7 +277,7 @@ export default {
 </View>`
                 },
                 {
-                title: 'Input Text',
+                title: 'Machine Translation',
                 img: './images/b.jpg',
                 config:`<View>
     <Header value="Please read the text" />
@@ -288,7 +287,7 @@ export default {
 </View>`
                 },
                 {
-                title: 'Radio Button',
+                title: 'Text Classification',
                 img: './images/c.jpg',
                 config:`<View>
     <Text name="text" value="$text"/>
@@ -303,7 +302,7 @@ export default {
 </View>`
                 },
                 {
-                title: 'Checklist',
+                title: 'Text Taxonomy',
                 img: './images/d.jpg',
                 config:`<View>
     <Text name="text" value="$text"/>

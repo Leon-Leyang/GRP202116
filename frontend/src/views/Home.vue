@@ -32,15 +32,15 @@
               </v-btn>
           </template>
           <v-card
-          height="850px">
+          height="700px">
               <v-card-title class="text-h5">
               {{operateType === 'add' ? 'New' : 'Update'}}
               </v-card-title>
-              <v-card-text>
+              <v-card-text style="padding:0">
 
               <!-- Create Project -->
               <div>
-                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="200px" class="demo-ruleForm"  style=" padding: 30px 60px 30px 30px;height:650px">
+                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="200px" class="demo-ruleForm"  style="padding: 30px 60px 0px 30px; height: 620px;">
                 <el-tabs v-model="active">
                     <!-- Basic information -->
                     <el-tab-pane name="1" >
@@ -59,20 +59,20 @@
                     <!-- Import ML -->
                   <el-tab-pane name="2" >
                       <span slot="label">Import ML model</span>
+                      <v-card
+                        v-scroll.self="onScroll"
+                        class="overflow-y-auto"
+                        max-height="400"
+                      >
+                        <v-card-text>
+                          <div
+                            class="mb-4"
+                          >
+                          <ML></ML>
+                          </div>
+                        </v-card-text>
+                      </v-card>
                       <!-- Import ML Model -->
-                      <div>
-                      <el-upload
-                      class="upload-demo"
-                      drag
-                      action="/api/ml"
-                      v-model="operateForm.ml" 
-                      multiple>
-                      <i class="el-icon-upload"></i>
-                      <div class="el-upload__text">Drag & drop files here</div>
-                      <div class="el-upload__text"><em>Click to add</em></div>
-                      <div class="el-upload__tip" slot="tip">( The format of uploading file should be <span style="font-style:italic; color: #719DDD">.pth</span> )</div>
-                      </el-upload>
-                      </div>
                   </el-tab-pane>
 
                     <!-- Import Data -->
@@ -298,13 +298,16 @@
 
 <script>
 import SettingLS from '../components/ProjectManage/SettingLS.vue'
+import ML from './PerProject/ML.vue'
 // import Create from '../components/ProjectManage/Create.vue';
   export default {
       components:{
-          SettingLS
+          SettingLS,
+          ML
       },
     data () {
       return {
+        scrollInvoked: 0,
         operateType: 'add',
         folderURL: '',
         isShow: false,
@@ -315,7 +318,6 @@ import SettingLS from '../components/ProjectManage/SettingLS.vue'
             createTime: '',
             description: '',
             name: '',
-            process: '',
             projectId: '',
             type:'',
             updateTime: '',
@@ -348,6 +350,9 @@ import SettingLS from '../components/ProjectManage/SettingLS.vue'
       }
     },
     methods: {
+      onScroll () {
+        this.scrollInvoked++
+      },
       getList() {
           // this.config.loading = true
           // name ? (this.config.page = 1) : ''
@@ -406,7 +411,7 @@ import SettingLS from '../components/ProjectManage/SettingLS.vue'
       confirm() {
         console.log('this.operateType', this.operateType)
           if (this.operateType === 'edit') {
-              this.operateForm.configs = this.$router.state.currentConfig
+              this.operateForm.configs = this.$store.state.currentConfig
               console.log("test",this.operateForm)
               this.$axios.post(`/project/edit`, JSON.stringify(this.operateForm))
                   .then(res => {

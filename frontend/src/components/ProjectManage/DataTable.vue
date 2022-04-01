@@ -27,7 +27,7 @@
                     slot="reference"
                     :src="scope.row.url"
                     :alt="scope.row.url"
-                    style="height: 50px; width: 130px"
+                    style="max-height: 50px; max-width: 130px"
                   />
                 </el-popover>
       </template>
