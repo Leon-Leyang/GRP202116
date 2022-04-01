@@ -63,4 +63,6 @@ public interface DataMapper extends BaseMapper {
     void setAnnotated(BigInteger dataId);
 
     void setNotAnnotated(BigInteger dataId);
+
+    void updateDataPredict(DataDO dataDO);
 }

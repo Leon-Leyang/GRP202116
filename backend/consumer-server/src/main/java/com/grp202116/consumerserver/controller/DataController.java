@@ -81,7 +81,6 @@ public class DataController {
         if (dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
-            createAnnotations(dataList);
         }
     }
 
@@ -98,7 +97,6 @@ public class DataController {
         if (dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
-            createAnnotations(dataList);
         }
     }
 

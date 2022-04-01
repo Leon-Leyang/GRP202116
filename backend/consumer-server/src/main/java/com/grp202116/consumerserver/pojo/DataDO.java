@@ -7,6 +7,7 @@ package com.grp202116.consumerserver.pojo;
 public class DataDO extends DataDistinguishableDO {
     private String url;
     private boolean isAnnotated;
+    private boolean isPredicted;
 
     /**
      * Get the Url value of the data
@@ -30,5 +31,13 @@ public class DataDO extends DataDistinguishableDO {
 
     public void setAnnotated(boolean annotated) {
         isAnnotated = annotated;
+    }
+
+    public boolean isPredicted() {
+        return isPredicted;
+    }
+
+    public void setPredicted(boolean predicted) {
+        isPredicted = predicted;
     }
 }

@@ -11,11 +11,18 @@
         <result column="type" property="type"/>
         <result column="project_id" property="projectId"/>
         <result column="is_annotated" property="isAnnotated"/>
+        <result column="is_predicted" property="isPredicted"/>
     </resultMap>
 
     <update id="alter">
         alter table data
             AUTO_INCREMENT = 1;
+    </update>
+
+    <update id="updateDataPredict" parameterType="DataDO">
+        update data
+        set is_predicted = #{isPredicted}
+        where data_id = #{dataId}
     </update>
 
     <update id="setAnnotated">
