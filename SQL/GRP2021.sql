@@ -85,6 +85,7 @@ CREATE TABLE `model` (
   `model_root` varchar(100) DEFAULT NULL,
   `type` varchar(100) DEFAULT NULL,
   `params` mediumtext,
+  `labels_path` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`version`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `model_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
@@ -92,7 +93,7 @@ CREATE TABLE `model` (
 
 /*Data for the table `model` */
 
-insert  into `model`(`model_path`,`version`,`description`,`project_id`,`create_time`,`model_root`,`type`,`params`) values ('../ml/models/fcn/fcn.pth','undefined',NULL,1,NULL,'./',NULL,NULL);
+insert  into `model`(`model_path`,`version`,`description`,`project_id`,`create_time`,`model_root`,`type`,`params`,`labels_path`) values ('../ml/models/fcn/fcn.pth','undefined',NULL,1,NULL,'./',NULL,NULL,NULL);
 
 /*Table structure for table `prediction` */
 
@@ -131,13 +132,12 @@ CREATE TABLE `project` (
   `name` varchar(100) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   `configs` varchar(500) DEFAULT NULL,
-  `labels_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`project_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `project` */
 
-insert  into `project`(`project_id`,`create_time`,`update_time`,`type`,`name`,`description`,`configs`,`labels_path`) values (1,'2022-02-15','2022-02-23','image','34',NULL,'<View>  <Image name=\" image \" value=\" $image \" zoom=\" true \"/> <BrushLabels name=\" tag \" toName=\" image \">     <Label value=\" Airplane \" background=\" rgba(255, 0, 0, 0.7) \"/>                               <Label value=\" Car \" background=\" rgba(0, 0, 255, 0.7) \"/>                           </BrushLabels>                    </View>','../ml/resources/ImageNetClasses.txt'),(2,'2022-03-28','2022-03-28','image',NULL,NULL,NULL,NULL),(3,'2022-03-28','2022-03-28','image',NULL,NULL,NULL,NULL),(4,'2022-03-28','2022-03-28','image',NULL,NULL,NULL,NULL),(5,'2022-03-28','2022-03-28','image',NULL,NULL,NULL,NULL),(6,'2022-03-28','2022-03-28','image',NULL,NULL,NULL,NULL),(7,'2022-03-28','2022-03-28','image',NULL,NULL,NULL,NULL),(8,'2022-03-28','2022-03-28','image','ssss',NULL,NULL,NULL),(45,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+insert  into `project`(`project_id`,`create_time`,`update_time`,`type`,`name`,`description`,`configs`) values (1,'2022-02-15','2022-02-23','image','34',NULL,'<View>  <Image name=\" image \" value=\" $image \" zoom=\" true \"/> <BrushLabels name=\" tag \" toName=\" image \">     <Label value=\" Airplane \" background=\" rgba(255, 0, 0, 0.7) \"/>                               <Label value=\" Car \" background=\" rgba(0, 0, 255, 0.7) \"/>                           </BrushLabels>                    </View>'),(2,'2022-03-28','2022-03-28','image',NULL,NULL,NULL),(3,'2022-03-28','2022-03-28','image',NULL,NULL,NULL),(4,'2022-03-28','2022-03-28','image',NULL,NULL,NULL),(5,'2022-03-28','2022-03-28','image',NULL,NULL,NULL),(6,'2022-03-28','2022-03-28','image',NULL,NULL,NULL),(7,'2022-03-28','2022-03-28','image',NULL,NULL,NULL),(8,'2022-03-28','2022-03-28','image','ssss',NULL,NULL),(45,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
