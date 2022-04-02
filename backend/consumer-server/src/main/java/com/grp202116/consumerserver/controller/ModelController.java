@@ -90,7 +90,7 @@ public class ModelController {
      */
     @PostMapping("/model/create/{projectId}")
     public void createModel(@PathVariable BigInteger projectId,
-                            @RequestParam("model") ModelDO model) {
+                            @RequestBody ModelDO model) {
 
         model.setCreateTime(new Date());
         model.setProjectId(projectId);
