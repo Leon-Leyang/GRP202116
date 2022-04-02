@@ -8,9 +8,6 @@
 
     <button @click="next" style="width:100px;color:red">next</button>
 
-    <button @click="accept" style="width:100px;color:red">accept</button>
-
-    <button @click="reject" style="width:100px;color:red">reject</button>
   </div>
   <div style="display:flex">
     <div style="width:10%">
