@@ -29,7 +29,7 @@
     <el-option  v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
  </el-select>-->
  
-   <el-select v-model="value"  clearable placeholder="please select the ML model type" @change="c1">
+   <el-select v-model="value" placeholder="please select the ML model type" @change="c1">
     <el-option-group
       v-for="group in options"
       :key="group.label"
