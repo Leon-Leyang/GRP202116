@@ -178,7 +178,7 @@
     width:90%;
     margin: 0 auto;
   }
-*/
+
 
 .v-input--selection-controls {
    margin-top:0!important;
@@ -196,7 +196,7 @@
 
 .v-messages{
     min-height: 0!important;
-}
+}*/
 </style>
 
 <script>
