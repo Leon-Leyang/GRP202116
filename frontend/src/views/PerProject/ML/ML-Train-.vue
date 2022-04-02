@@ -1,4 +1,5 @@
 <template>
+<v-container>
   <v-row justify="center">
     <v-dialog
       v-model="dialog"
@@ -7,10 +8,11 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="primary"
+          color="green"
           dark
           v-bind="attrs"
           v-on="on"
+          width="72px"
         >
           Train
         </v-btn>
@@ -61,12 +63,13 @@
               </v-col>
 
             <v-col cols="12">
+              
                  <v-switch
       v-model="switch1"
       :label="`Shuffle`"
     ></v-switch>
               </v-col>
-
+             
               <v-col cols="12">
                 <v-text-field
                   label="Epoch Number:"
@@ -75,6 +78,7 @@
                   required
                 ></v-text-field>
               </v-col>
+              
               <v-col cols="12">
                 <v-text-field
                   label="Learning Rate:"
@@ -116,11 +120,12 @@
               </v-col>
 
               <v-col cols="12">
+                <div style="margin-top:30px">
                 <v-file-input
                 label="Upload the Customized Train Script Here"
                 outlined
                 dense
-                ></v-file-input>
+                ></v-file-input></div>
               </v-col>
               
             </v-row>
@@ -149,6 +154,7 @@
       </v-card>
     </v-dialog>
   </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -161,7 +167,5 @@
 </script>
 
 <style>
-.col{
-    padding: 0!important;
-}
+
 </style>
