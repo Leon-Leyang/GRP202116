@@ -71,27 +71,17 @@
     <el-input type="textarea" v-model="form.desc"></el-input>
   </el-form-item>
   
-  <!--
-  <el-form-item label="Upload Customized Backend:" style="margin-top:10px">
-  <v-file-input
-    label="File Input"
-    outlined
-    dense
-  ></v-file-input>
-  </el-form-item>
-  -->
-
-  <v-divider></v-divider>
+ 
 
   <el-form-item v-if="isImgCla" label="image size:"> <!--style="margin-bottom:0"-->
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification)"></el-input>
   </el-form-item>
- <v-divider></v-divider>
+ 
 
   <el-form-item v-if="isObjDetect" label="threashold:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For object detection)"></el-input>
   </el-form-item>
- <v-divider></v-divider>
+
 
   <el-form-item v-if="isSemSeg" label="mean:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default"></el-input>
@@ -99,12 +89,12 @@
   <el-form-item v-if="isSemSeg" label="standard deviation:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="[0.229, 0.224, 0.225] by default"></el-input>
   </el-form-item>
-   <v-divider></v-divider>
+  
 
   <el-form-item v-if="isKpLb" label="threashold:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For keypoint labeling)"></el-input>
   </el-form-item>
-   <v-divider></v-divider>
+ 
 
   <el-form-item v-if="isTC" label="vocabulary file:" style="margin-top:20px">
     <v-file-input
@@ -119,7 +109,7 @@
    <el-form-item v-if="isTC" label="sequence length:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For text classification)"></el-input>
   </el-form-item>
-   <v-divider></v-divider>
+  
 
   <el-form-item v-if="isNER" label="sequence length:">
     <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For named entity recognition)"></el-input>
@@ -215,7 +205,7 @@
      {label:'Customization',value:6},
   ],
 
-  options: [{
+    options: [{
           label: 'Existing Types',
           options: [{
             value: '0',
@@ -223,25 +213,27 @@
           }, {
             value: '1',
             label: 'Object Detection'
-          }]
-        }, {
-          label: 'Others',
-          options: [{
+          },{
             value: '2',
             label: 'Keypoint Labeling'
-          }, {
+          },{
             value: '3',
             label: 'Semantic Segmentation with Masks'
-          }, {
+          },{
             value: '4',
             label: 'Text Classification'
-          }, {
+          },{
             value: '5',
             label: 'Name Entity Recognition'
-          },
-          {label:'Customization',value:6}]
+          },]
+        }, 
+        {
+          label: 'Others',
+          options: [  
+          {label:'Customization',value: '6'}]
         }],
-        value: ''
+        value: '',
+        /*item: null,*/
       }
     },
     methods: {

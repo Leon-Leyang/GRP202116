@@ -12,7 +12,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          Open Dialog
+          Train
         </v-btn>
       </template>
       <v-card>
