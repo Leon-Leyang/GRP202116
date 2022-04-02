@@ -1,5 +1,6 @@
 package com.grp202116.consumerserver.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.*;
@@ -89,7 +90,7 @@ public class ModelController {
      */
     @PostMapping("/model/create/{projectId}")
     public void createModel(@PathVariable BigInteger projectId,
-                            @RequestParam("model") ModelDO model) {
+                            @RequestBody ModelDO model) {
 
         model.setCreateTime(new Date());
         model.setProjectId(projectId);
@@ -102,6 +103,17 @@ public class ModelController {
         String labelPath = modelSaver.saveLabels(model.getLabelsPath());
         if (labelPath == null) return;
         else model.setLabelsPath(labelPath);
+
+        JSONObject params = JSON.parseObject(model.getParams());
+        String vocPath = params.getString("vocabPath");
+        if (vocPath != null) {
+            String targetPath = modelSaver.saveLabels(vocPath);
+            if (targetPath == null) return;
+            else {
+                params.put("vocabPath", targetPath);
+                model.setParams(JSONObject.toJSONString(params));
+            }
+        }
 
         modelMapper.insert(model);
     }
