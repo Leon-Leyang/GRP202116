@@ -40,7 +40,7 @@ class TextClsModel(Model):
         self.preprocess = Preprocess(vocabPath, tokenNum, sequenceLen)
 
     def predict(self, textPath):
-        super().predict()
+        super().predict(textPath)
 
         with open(textPath, 'r') as f:
             text = f.read()

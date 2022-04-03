@@ -24,7 +24,7 @@ class SemSegMaskModel(Model):
         self.preprocess = Preprocess(self.transforms)
 
     def predict(self, imgPath):
-        super().predict()
+        super().predict(imgPath)
 
         img = Image.open(imgPath)
 
