@@ -115,12 +115,12 @@ public class ProjectController {
      */
     @DeleteMapping("/project/{projectId}")
     public void deleteProject(@PathVariable BigInteger projectId) {
-        String projectDirectory = "../.." + File.separator + "files" + File.separator + projectId;
+        String projectDirectory = ".." + File.separator + "files" + File.separator + projectId;
         FileUtils.deleteDirectory(projectDirectory);
         List<ModelDO> modelList = modelMapper.getByProjectId(projectId);
 
         for (ModelDO model: modelList) {
-            String modelDirectory = "../../ml/models" + File.separator + model.getProjectId() +
+            String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
                     "_" + model.getVersion();
             FileUtils.deleteDirectory(modelDirectory);
         }

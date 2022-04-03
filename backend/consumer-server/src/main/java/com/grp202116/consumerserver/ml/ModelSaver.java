@@ -14,7 +14,7 @@ public class ModelSaver {
     private static String modelPath;
 
     public ModelSaver(ModelDO model) {
-        String modelDirectory = "../../ml/models" + File.separator + model.getProjectId() +
+        String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
                 "_" + model.getVersion() + File.separator;
         File directory = new File(modelDirectory);
         ModelSaver.modelPath = modelDirectory;
@@ -61,7 +61,7 @@ public class ModelSaver {
             System.out.println("Not a python file.");
             return null;
         }
-        File targetFile = new File("../../flask-server/ml/models" + File.separator + customFile.getName());
+        File targetFile = new File("../flask-server/ml/models" + File.separator + customFile.getName());
         try {
             if (targetFile.exists()) Files.delete(targetFile.toPath());
             Files.copy(customFile.toPath(), targetFile.toPath());
