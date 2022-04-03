@@ -415,6 +415,7 @@ import ML from './Create_ML.vue'
         console.log('this.operateType', this.operateType)
           if (this.operateType === 'edit') {
               this.operateForm.configs = this.$store.state.currentConfig
+              console.log('confifg', this.operateForm.configs,this.$store.state.currentConfig)
               console.log("test",this.operateForm)
               this.$axios.post(`/project/edit`, JSON.stringify(this.operateForm))
                   .then(res => {
@@ -427,6 +428,8 @@ import ML from './Create_ML.vue'
               this.operateForm.type = 'image'
               console.log('this.operateForm.type', this.operateForm.type)
               this.operateForm.configs = this.$store.state.currentConfig
+              console.log('confifg', this.operateForm.configs,this.$store.state.currentConfig)
+              
               console.log("add test",this.operateForm)
               this.$axios.post('/project/add', this.operateForm)
               .then(res => {
