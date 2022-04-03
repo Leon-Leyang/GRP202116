@@ -346,6 +346,7 @@ import ML from './Create_ML.vue'
         this.scrollInvoked++
       },
       getList() {
+          // this.tableData = null
           // this.config.loading = true
           // name ? (this.config.page = 1) : ''
           this.$axios.get('/project/list', {
@@ -358,6 +359,10 @@ import ML from './Create_ML.vue'
                 let temp = res
                 console.log('temp',temp)
                 let length = temp.data.length
+                console.log('lenth', length)
+                if(length == 0){
+                  this.tableData = []
+                }else{
                 let newest = temp.data[length-1]
                 this.newestId = newest.projectId
                 console.log('newr', this.newestId)
@@ -381,13 +386,15 @@ import ML from './Create_ML.vue'
                 // this.config.total = res.data.length
                 // this.config.loading = false
                 console.log("table",this.tableData)
-              // console.log("dew",row)
+              // console.log("dew",row)                  
+                }
 
               })
               .catch((error) => {
               // here you will have access to error.response
                 console.log(error.response)
                 });
+                
       },
       addProject() {
           this.importAllow = true
@@ -415,7 +422,8 @@ import ML from './Create_ML.vue'
                   this.isShow = false
                   this.getList()
               })
-          } else {
+          } else 
+          {
               this.operateForm.type = 'image'
               console.log('this.operateForm.type', this.operateForm.type)
               this.operateForm.configs = this.$store.state.currentConfig
@@ -429,28 +437,31 @@ import ML from './Create_ML.vue'
               setTimeout(()=>{
 
                 console.log('now!!!',this.$store.state.currentMLList)
+
                 //post ml
-                for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
-                  console.log('mln', mln)
-                  console.log('params', this.$store.state.currentMLList[mln].params)
+                if(this.$store.state.currentMLList != []){
+                  for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
+                    console.log('mln', mln)
+                    console.log('params', this.$store.state.currentMLList[mln].params)
 
-                  this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
-                  console.log('params', this.$store.state.currentMLList[mln].params)
-                  this.$axios.post(`/model/create/`+ projectId, JSON.stringify(this.$store.state.currentMLList[mln]))
-                      .then(res => {
-                      console.log("ml", res)
+                    this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
+                    console.log('params', this.$store.state.currentMLList[mln].params)
+                    this.$axios.post(`/model/create/`+ projectId, JSON.stringify(this.$store.state.currentMLList[mln]))
+                        .then(res => {
+                        console.log("ml", res)
 
-                  })
+                    })
+                  }
+                  this.$store.state.currentMLList = null
+                  console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)                  
                 }
-                this.$store.state.currentMLList = null
-                console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
 
                 //upload folder address
-                var projectId = this.newestId
-                console.log('newestId', projectId)
-                var folderURL = this.folderURL.split(",")
-                console.log('address', folderURL)
-                if(folderURL != ''){
+                if(folderURL != ''){                
+                  var projectId = this.newestId
+                  console.log('newestId', projectId)
+                  var folderURL = this.folderURL.split(",")
+                  console.log('address', folderURL)
                   this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
                   .then(res => {
                     console.log('folderURL', res)
@@ -479,13 +490,17 @@ import ML from './Create_ML.vue'
           this.isShow = false
           this.active = '1'
           this.refresh = false
-
+          this.$store.state.currentProjectId = null
+          this.$store.state.currentMLList = null
       },
       cancelChange(){
         this.isShow = false 
         this.active = '1'
         this.$store.state.currentMLList = null
         this.refresh = false
+        this.$store.state.currentProjectId = null
+        this.$store.state.currentMLList = null
+        this.$store.state.currentConfig = null   
       },
       delProject(row) {
           this.$confirm('This operation will permanently delete the file, are you sure you want to continue?', 'Hint', {
@@ -503,13 +518,13 @@ import ML from './Create_ML.vue'
                           }
                       })
                       .then(res => {
-                          console.log(res.data)
+                          console.log("as",res.data)
                           this.$message({
                               type: 'success',
                               message: 'Delete success!'
                           })
-                          this.getList()
                       })
+                      this.getList()
               })
               .catch(() => {
                   this.$message({
@@ -517,6 +532,8 @@ import ML from './Create_ML.vue'
                       message: 'Cancel delete'
                   })
               })
+
+
       },
       convertTime(oldTime){
           var newTime = new Date(oldTime)
@@ -601,6 +618,8 @@ import ML from './Create_ML.vue'
         this.$store.state.currentProjectId = projectId
         console.log('tabel',this.tableData)
         this.$store.state.currentProject = this.tableData[projectId-1]
+        this.$store.state.currentConfig = this.tableData[projectId-1].configs
+        this.$store.state.currentProject = this.tableData[projectId-1]
         console.log('newwjin',this.$store.state.currentProject )
         this.$router.push({  
                     path: '/per-project',
@@ -608,9 +627,12 @@ import ML from './Create_ML.vue'
                 }) 
       }
     },
-    created() {
+    mounted() {
         // console.log('tag', '')
         this.getList()
+    },
+    activated: function() {
+      this.getList()
     },
     computed: {
       numberOfPages () {
