@@ -77,9 +77,9 @@ import Create from '../components/ProjectManage/Create.vue';
 
                 })
                 .catch((error) => {
-        // here you will have access to error.response
-        console.log(error.response)
-    });
+                    // here you will have access to error.response
+                    console.log(error.response)
+                });
         },
         addProject() {
             this.operateForm = {}

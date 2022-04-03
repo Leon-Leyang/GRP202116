@@ -173,58 +173,12 @@
     width:100%; 
   }
 
-  .el-select .el-input {
-    width: 270px;
-  }
-  .input-with-select .el-input-group__prepend {
-    background-color: #fff;
-  }
-  .content{
-      margin-left:20px;
-      width:90%;
-      margin-top:6px;
-  }
-
-.v-text-field--outlined fieldset {
-    border-collapse: collapse;
-    border-style: solid;
-    border-color: #DCDFE6!important;
-    border-width: 1px;
-    bottom: 0;/* */
-    top: -5px;/* */
-    /*height: 32px;*/
-    left: 0;
-    right: 0;
-    pointer-events: none;
-    position: absolute;
-    transition-duration: 0.15s;
-    transition-property: color;
-    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-  .v-input {
-    height: 40px;
-}
-  
-  .el-form-item {
-    margin-bottom: 0px!important;
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
- 
     
 </style>
 
 <script>
-  /*import MLTest from '@/views/PerProject/ML/ML-Test-';*/
-  import MLTest from './ML/ML-Test-.vue';
-  import MLTrain from './ML/ML-Train-.vue';
   export default {
-    components: {
-        MLTest,
-        MLTrain
-    },
+
     data() {
     return {
         form: {
@@ -291,26 +245,26 @@
       }
     },
     watch:{
-      value: function(val){
-          if(val == 0){
-              this.$store.state.currentMLType = 'Image Classification'
-          }else if(val == 1){
-              this.$store.state.currentMLType = 'Object Detection'
-          }else if(val == 2){
-              this.$store.state.currentMLType = 'Keypoint Labeling'
-          }else if(val == 3){
-              this.$store.state.currentMLType = 'Semantic Segmentation with Masks'
-          }else if(val == 4){
-              this.$store.state.currentMLType = 'Text Classification'
-          }else if(val == 5){
-              this.$store.state.currentMLType = 'Name Entity Recognition'
-          }else if(val == 6){
-              this.$store.state.currentMLType = 'Customization'
-          }
-          this.form.type = this.$store.state.currentMLType
-      }
+        value: function(val){
+            if(val == 0){
+                this.$store.state.currentMLType = 'Image Classification'
+            }else if(val == 1){
+                this.$store.state.currentMLType = 'Object Detection'
+            }else if(val == 2){
+                this.$store.state.currentMLType = 'Keypoint Labeling'
+            }else if(val == 3){
+                this.$store.state.currentMLType = 'Semantic Segmentation with Masks'
+            }else if(val == 4){
+                this.$store.state.currentMLType = 'Text Classification'
+            }else if(val == 5){
+                this.$store.state.currentMLType = 'Name Entity Recognition'
+            }else if(val == 6){
+                this.$store.state.currentMLType = 'Customization'
+            }
+            this.form.type = this.$store.state.currentMLType
+        }
     },
-    methods:{
+    methods: {
       onSubmit() {
           console.log('submit!');
           this.$store.state.currentMLList.push(this.form)
@@ -367,20 +321,6 @@
     },
     
     },
-    mounted() {
-      // this.$axios.get('/model/'+ this.$store.state.currentProjectId, {
-      //         params: {
-      //             page: this.config.page,
-      //             name
-      //         }
-      //     })
-      //     .then(res => {
-            
-      //     })
-      //     .catch((error) => {
-      //         // here you will have access to error.response
-      //         console.log(error.response)
-      //     });
-    },
+
   }
 </script>

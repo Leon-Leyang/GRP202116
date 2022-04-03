@@ -8,33 +8,36 @@
 
     <button @click="next" style="width:100px;color:red">next</button>
 
-    <button @click="accept" style="width:100px;color:red">accept</button>
-
-    <button @click="reject" style="width:100px;color:red">reject</button>
   </div>
   <div style="display:flex">
-    <div style="width:10%">
-      <el-table
-        :data="tableData"
-        style="width: 100%"
-        :default-sort = "{prop: 'id', order: 'ascending'}" 
-        v-cloak
-        stripe
+    <div id="label-studio" style="width: 90%"></div>
+    <div style="width: 10%">
+      <v-card
+        elevation="16"
+        max-width="400"
+        class="mx-auto"
+      >
+        <v-virtual-scroll
+          :bench="benched"
+          :items="tableData"
+          height="650"
+          item-height="64"
         >
-        <el-table-column label="Preview" prop="url" align="center">
-          <template slot-scope="scope">
-            <img :src="scope.row.url" @click="enterData(scope.row)" style="width:100%"/>
-          </template>
-        </el-table-column> 
+          <template v-slot:default="{ item }">
+            <v-list-item :key="item">
+              <v-list-item-action>
+            <img :src="item.url" @click="enterData(item)" style="width:100%"/>
+              </v-list-item-action>
+            </v-list-item>
 
-        <!-- <el-table-column label="Annotation" width="100" prop="anno" align="center"></el-table-column>  -->
-        <!-- <el-table-column label="Prediction" width="100" prop="predi" align="center"></el-table-column>        -->
-      </el-table>
+            <v-divider></v-divider>
+          </template>
+        </v-virtual-scroll>
+      </v-card>
     </div>
 
     <!-- Create the Label Studio container -->
 
-    <div id="label-studio"></div>
   </div>
 </div>
 </template>
@@ -91,17 +94,6 @@ export default {
       this.$store.state.currentDataId++
       this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1]
       this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
-    },
-    accept(){
-      this.preState = 'accept'
-      // this.$axios.post('prediction/'+{predictionId}/{status})
-      //接口
-      this.next()
-    },
-    reject(){
-      this.preState = 'reject'
-      //接口
-      this.next()
     },
     back(){
       this.$router.push({  
