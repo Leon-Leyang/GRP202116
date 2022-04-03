@@ -77,6 +77,8 @@
       this.timer = setTimeout(()=>{  
         console.log('currentDataList', this.$store.state.currentDataList)
         this.tableData = this.$store.state.currentDataList
+        console.log('curraList', this.tableData)
+
         for(var i=0; i<this.tableData.length; i++){
           this.tableData[i].realDataId = this.tableData[i].dataId
           this.tableData[i].dataId = i + 1
