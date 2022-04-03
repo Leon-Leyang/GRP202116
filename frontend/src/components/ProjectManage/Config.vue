@@ -24,7 +24,7 @@
     <v-row
       v-scroll:#scroll-target="onScroll"
       align="center"
-      style="height: 1000px"
+      style="height: 600px"
     >
     <div>
       <div id="label-studio" style="width:60%;margin-right:30px"></div>
@@ -98,6 +98,7 @@ export default {
       this.code = newCode
       this.config = newCode
       this.$store.state.currentConfig = this.config
+      console.log('tag', this.$store.state.currentConfig, this.config, this.code)
       this.labelStudio.destroy()
       this.labelStudio = new LabelStudio("label-studio", {
         config: this.$store.state.currentConfig,
@@ -245,7 +246,7 @@ export default {
       return this.$refs.cmEditor.codemirror
     }
   },
-  mounted() {
+  created() {
     this.code = this.$store.state.currentConfig
     this.config = this.$store.state.currentConfig
     console.log('tagnow', this.config)

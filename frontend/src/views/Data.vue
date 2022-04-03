@@ -116,7 +116,7 @@ export default {
             for(var i = 0; i < this.annoDataList.length; i++){
               console.log('i', this.annoDataList[i])
               this.annos[i].id = this.annoDataList[i].annotationId
-              this.annos[i].result = eval(this.annoDataList[i].result)
+              this.annos[i].result = JSON.parse(this.annoDataList[i].result)
               console.log('tag', this.annos[i].result)
 
             }
@@ -143,10 +143,9 @@ export default {
             for(var j = 0; j < this.predictDataList.length; j++){
               console.log('j', j)
               this.predicts[j].id = this.predictDataList[j].predictionId
-              console.log('jas', this.predictDataList[j].predictionId)
               
-              this.predicts[j].result = eval(this.predictDataList[j].result)
-            console.log('preasd', this.predictDataList[j].result)
+              this.predicts[j].result = JSON.parse(this.predictDataList[j].result)
+              console.log('preasd', this.predictDataList[j].result)
 
             }
             console.log('predicts:', this.predicts)            

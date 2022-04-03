@@ -442,6 +442,7 @@ import ML from './Create_ML.vue'
                 console.log('now!!!',this.$store.state.currentMLList)
 
                 //post ml
+                console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
                 if(this.$store.state.currentMLList != []){
                   for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
                     console.log('mln', mln)
@@ -459,12 +460,13 @@ import ML from './Create_ML.vue'
                   console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)                  
                 }
 
+                console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
                 //upload folder address
+                var folderURL = this.folderURL.split(",")
+                console.log('address', folderURL)                
                 if(folderURL != ''){                
                   var projectId = this.newestId
                   console.log('newestId', projectId)
-                  var folderURL = this.folderURL.split(",")
-                  console.log('address', folderURL)
                   this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
                   .then(res => {
                     console.log('folderURL', res)
@@ -474,7 +476,7 @@ import ML from './Create_ML.vue'
                 //upload file
                 let fileList = this.fileList
                 console.log('fileList', fileList)
-                if( fileList != ''){
+                if(fileList != ''){
                   let formData = new FormData()
                   for (let i = 0; i < fileList.length; i++) {
                     formData.append('fileList', fileList[i])

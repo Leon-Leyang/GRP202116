@@ -144,7 +144,52 @@
                                 ></v-progress-linear>  -->
 
                             <v-card-actions>
-                                <MLTest></MLTest>
+
+                              <!-- ML Test -->
+                              <v-dialog
+                                v-model="dialog"
+                                persistent
+                                max-width="600px"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  
+                                  <v-btn
+                                    color="yellow"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    width="72px"
+                                    @click="MLTest(item.version)"
+                                  >
+                                    TEST
+                                  </v-btn>
+                                  
+                                </template>
+
+
+                                <v-card>
+                                  <v-card-title>
+                                    <span class="text-h5">Test</span>
+                                  </v-card-title>
+                                  <v-card-text>
+                                    <v-container>
+                                      <v-row>   
+                                        <v-col cols="12">
+                                        </v-col>
+                                      </v-row>
+                                    </v-container>
+                                  </v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                      color="blue darken-1"
+                                      text
+                                      @click="dialog = false"
+                                    >
+                                      Run
+                                    </v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
                                 <MLTrain></MLTrain>
                                 </v-card-actions>
 
@@ -226,9 +271,12 @@
 <script>
   /*import MLTest from '@/views/PerProject/ML/ML-Test-';*/
   // import MLTest from './ML/ML-Test-.vue';
-  // import MLTrain from './ML/ML-Train-.vue';
+  import MLTrain from './ML/ML-Train-.vue';
   export default {
-
+    components:{
+      // MLTest,
+      MLTrain
+    },
     data() {
     return {
       form: {
@@ -290,6 +338,9 @@
         {label:'Customization',value: '6'}]
         }],
       value: '',
+      testScript: '',
+
+      dialog:false,
 
       items: [ ],
       }
@@ -380,7 +431,8 @@
               }
           })
           .then(res => {
-            console.log('tag', res)
+            console.log('have get ML', res)
+            this.items = res.data
           })
           .catch((error) => {
               // here you will have access to error.response
