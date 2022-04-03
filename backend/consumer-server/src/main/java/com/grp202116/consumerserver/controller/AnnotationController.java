@@ -3,6 +3,7 @@ package com.grp202116.consumerserver.controller;
 import com.grp202116.consumerserver.mapper.AnnotationMapper;
 import com.grp202116.consumerserver.mapper.DataMapper;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
+import com.grp202116.consumerserver.pojo.ProjectDO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -48,18 +49,20 @@ public class AnnotationController {
 
     /**
      * Update the Annotations in certain data
+     * delete first, then insert all annotations
      *
      * @param dataId      the dataId fetched from the mapper
      */
     @PutMapping("/annotation/data/{dataId}")
     public void updateDataAnnotations(@PathVariable BigInteger dataId, @RequestBody AnnotationDO annotation) {
+        if (annotation == null) return;
 
         if (annotation.getResult() == null || annotation.getResult().equals("")) {
             dataMapper.setNotAnnotated(dataId);
         } else {
             Date date = new Date();
             annotation.setUpdateTime(date);
-            annotationMapper.update(annotation);
+            annotationMapper.insert(annotation);
             dataMapper.setAnnotated(dataId);
         }
     }

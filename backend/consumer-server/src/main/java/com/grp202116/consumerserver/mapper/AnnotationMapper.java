@@ -17,6 +17,8 @@ public interface AnnotationMapper extends BaseMapper {
      */
     void insertAll(List<AnnotationDO> annotations);
 
+    void insert(AnnotationDO annotation);
+
     /**
      * List all the Annotations in certain data by the dataId
      * @param dataId the dataId

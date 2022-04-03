@@ -37,6 +37,14 @@
         </foreach>
     </insert>
 
+    <insert id="insert" parameterType="AnnotationDO" useGeneratedKeys="true" keyColumn="annotation_id"
+            keyProperty="annotationId">
+        insert into annotation
+            (project_id, data_id, type, create_time, update_time, result)
+        values (#{item.projectId}, #{item.dataId}, #{item.type},
+                #{item.createTime}, #{item.updateTime}, #{item.result})
+    </insert>
+
     <select id="listByDataId" resultMap="annotationMap">
         select *
         from annotation

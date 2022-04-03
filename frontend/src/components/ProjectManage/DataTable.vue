@@ -93,9 +93,9 @@
             this.tableData[i].url = this.tableData[i].url.replace(".JPEG", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.JPEG' )
           }
-          else if(this.tableData[i].url.indexOf(".png")!=-1){
-            this.tableData[i].url = this.tableData[i].url.replace(".png", "")
-            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.png' )
+          else if(this.tableData[i].url.indexOf(".PNG")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".PNG", "")
+            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.PNG' )
           }
           else if(this.tableData[i].url.indexOf(".webp")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
