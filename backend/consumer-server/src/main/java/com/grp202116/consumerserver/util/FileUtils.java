@@ -22,9 +22,14 @@ public class FileUtils {
     public static List<DataDO> uploadProjectData(List<File> fileList, BigInteger projectId, String type) {
         dataList = new ArrayList<>();
         FileUtils.projectId = projectId;
-        projectPath = "../.." + File.separator + "files" + File.separator + projectId + File.separator;
+        projectPath = ".." + File.separator + "files" + File.separator + projectId + File.separator;
         File project = new File(projectPath);
-        if (!project.exists()) if (project.mkdirs()) System.out.println("New directory created at: " + projectPath);
+        try {
+            Files.createDirectories(project.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //if (!project.exists()) if (project.mkdirs()) System.out.println("New directory created at: " + projectPath);
 
         for (File file : fileList) {
             try {

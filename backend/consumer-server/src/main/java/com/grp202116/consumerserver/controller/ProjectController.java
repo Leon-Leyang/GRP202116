@@ -6,6 +6,7 @@ import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.util.ExportUtils;
 import com.grp202116.consumerserver.util.FileUtils;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -114,12 +115,15 @@ public class ProjectController {
      */
     @DeleteMapping("/project/{projectId}")
     public void deleteProject(@PathVariable BigInteger projectId) {
-        String projectPath = "../.." + File.separator + "files" + File.separator + projectId;
-        FileUtils.deleteDirectory(projectPath);
-        ModelDO model = modelMapper.getByProjectId(projectId);
+        String projectDirectory = ".." + File.separator + "files" + File.separator + projectId;
+        FileUtils.deleteDirectory(projectDirectory);
+        List<ModelDO> modelList = modelMapper.getByProjectId(projectId);
 
-        FileUtils.deleteFile(model.getModelPath());
-        FileUtils.deleteFile(model.getLabelsPath());
+        for (ModelDO model: modelList) {
+            String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
+                    "_" + model.getVersion();
+            FileUtils.deleteDirectory(modelDirectory);
+        }
 
         projectMapper.deleteByProjectId(projectId);
     }

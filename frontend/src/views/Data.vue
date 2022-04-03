@@ -143,9 +143,11 @@ export default {
             for(var j = 0; j < this.predictDataList.length; j++){
               console.log('j', j)
               this.predicts[j].id = this.predictDataList[j].predictionId
-              
+              console.log('jas', this.predictDataList[j].predictionId)
+              console.log(this.predictDataList[j].result)
               this.predicts[j].result = JSON.parse(this.predictDataList[j].result)
-              console.log('preasd', this.predictDataList[j].result)
+            console.log('preasd', this.predictDataList[j].result)
+
 
             }
             console.log('predicts:', this.predicts)            
