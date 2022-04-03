@@ -151,6 +151,7 @@ public class ModelController {
 
         for (DataDO data : dataList) {
             JSONObject object = modelDriver.runModelConfig(data);
+            if (object == null) return;
 
             JSONObject result = JSONObject.parseObject(
                     restTemplate.postForObject("http://sidecar-server/model/run",
@@ -208,14 +209,5 @@ public class ModelController {
         return restTemplate.postForObject("http://sidecar-server/model/train",
                 HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class);
 
-    }
-
-    @Deprecated
-    @PostMapping("/model/save/{projectId}")
-    public void saveModel(@PathVariable BigInteger projectId, @RequestBody ModelDO model) {
-
-        model.setProjectId(projectId);
-        model.setCreateTime(new Date());
-        modelMapper.insert(model);
     }
 }

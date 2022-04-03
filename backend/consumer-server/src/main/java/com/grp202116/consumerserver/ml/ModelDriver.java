@@ -36,6 +36,10 @@ public class ModelDriver {
         object.put("model_root", model.getModelRoot());
         object.put("labels_path", model.getLabelsPath());
         object.put("data", data.getUrl());
+        if (project.getConfigs() == null) {
+            System.out.println("There is no configs in the project.");
+            return null;
+        }
         object.put("configs", project.getConfigs());
         object.put("model_version", model.getVersion());
 

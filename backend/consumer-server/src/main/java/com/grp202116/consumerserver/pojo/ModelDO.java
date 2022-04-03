@@ -1,10 +1,13 @@
 package com.grp202116.consumerserver.pojo;
 
+import java.math.BigInteger;
+
 /**
  * The class ModelDO contains the basic information of the ml Model object
  * control the url, name and description value of the Model by setter and getter methods
  */
 public class ModelDO extends ProjectDistinguishableDO{
+    private BigInteger modelId;
     private String modelPath;
     private String version;
     private String description;
@@ -12,6 +15,14 @@ public class ModelDO extends ProjectDistinguishableDO{
     private String type;
     private String params;
     private String labelsPath;
+
+    public BigInteger getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(BigInteger modelId) {
+        this.modelId = modelId;
+    }
 
     /**
      * Get the url value of the ml model

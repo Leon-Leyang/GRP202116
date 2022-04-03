@@ -7,8 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +22,7 @@ public class FileUtils {
     public static List<DataDO> uploadProjectData(List<File> fileList, BigInteger projectId, String type) {
         dataList = new ArrayList<>();
         FileUtils.projectId = projectId;
-        projectPath = ".." + File.separator + "files" + File.separator + projectId + File.separator;
+        projectPath = "../.." + File.separator + "files" + File.separator + projectId + File.separator;
         File project = new File(projectPath);
         if (!project.exists()) if (project.mkdirs()) System.out.println("New directory created at: " + projectPath);
 
@@ -163,6 +163,39 @@ public class FileUtils {
         }
 
         return fileList;
+    }
+
+    public static void deleteDirectory(String directoryPath) {
+        Path directory = Paths.get(directoryPath);
+
+        try {
+            Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFile(String filePath) {
+        if (filePath == null) return;
+        Path file = Paths.get(filePath);
+
+        try {
+            Files.delete(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
