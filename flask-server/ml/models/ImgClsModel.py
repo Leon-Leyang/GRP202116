@@ -34,7 +34,7 @@ class ImgClsModel(Model):
 
 
     def predict(self, imgPath):
-        super().predict()
+        super().predict(imgPath)
 
         img = Image.open(imgPath)
 
