@@ -1,17 +1,9 @@
 package com.grp202116.consumerserver.ml;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
-import com.grp202116.consumerserver.pojo.PredictionDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 
 public class ModelTrainer {
@@ -33,7 +25,7 @@ public class ModelTrainer {
     public JSONObject trainModelConfig() {
         JSONObject object = new JSONObject();
         object.put("script_type", model.getType());
-        object.put("model_path", model.getUrl());
+        object.put("model_path", model.getModelPath());
         object.put("model_root", model.getModelRoot());
         object.put("labels_path", model.getLabelsPath());
 

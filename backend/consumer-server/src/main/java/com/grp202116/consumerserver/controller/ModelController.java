@@ -12,7 +12,6 @@ import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.util.HttpUtils;
-import org.bouncycastle.math.raw.Mod;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -95,10 +94,10 @@ public class ModelController {
         model.setCreateTime(new Date());
         model.setProjectId(projectId);
 
-        ModelSaver modelSaver = new ModelSaver(model.getType());
-        String modelPath = modelSaver.saveModel(model.getUrl());
+        ModelSaver modelSaver = new ModelSaver(model);
+        String modelPath = modelSaver.saveModel(model.getModelPath());
         if (modelPath == null) return;
-        else model.setUrl(modelPath);
+        else model.setModelPath(modelPath);
 
         String labelPath = modelSaver.saveLabels(model.getLabelsPath());
         if (labelPath == null) return;
@@ -126,12 +125,16 @@ public class ModelController {
      * @param projectId the projectId fetched from the mapper
      */
     @PostMapping("/model/run/{projectId}")
-    public void runModel(@PathVariable BigInteger projectId,
-                         @RequestParam("model_version") String version,
-                         @RequestParam("script_url") String scriptPath) {
+    public void runModel(@PathVariable BigInteger projectId, @RequestBody JSONObject runObject) {
+
+        if (!runObject.containsKey("version") || !runObject.containsKey("script_url")) return;
+        String version = runObject.getString("version");
+        String scriptPath = runObject.getString("script_url");
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
         ModelDO model = modelMapper.getByVersion(version);
+
+        if (model == null) return;
 
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(project, model);
@@ -167,10 +170,14 @@ public class ModelController {
      * @param projectId id of the specified project
      */
     @PostMapping("/model/train/{projectId}")
-    public String trainModel(@PathVariable BigInteger projectId,
-                             @RequestParam("model_version") String version,
-                             @RequestParam("params") JSONObject trainParams,
-                             @RequestParam("script_url") String scriptPath) {
+    public String trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject trainObject) {
+
+        if (!trainObject.containsKey("version") && !trainObject.containsKey("params") &&
+        !trainObject.containsKey("script_url")) return null;
+
+        String version = trainObject.getString("version");
+        String scriptPath = trainObject.getString("script_url");
+        JSONObject trainParams = trainObject.getJSONObject("params");
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
         ModelDO model = modelMapper.getByVersion(version);

@@ -1,3 +1,4 @@
+import json
 from xml.dom.minidom import parseString, Node
 from importlib import import_module
 
@@ -65,22 +66,22 @@ class ModelDriver():
 
         if script_type == 'Image Classification':
             model = ImgClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                params['mean'], params['std'], params['imgSize'])
+                                json.loads(params['mean']), json.loads(params['std']), json.loads(params['imgSize']))
         elif script_type == 'Object Detection':
             model = ObjDecBBoxModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                    params['threshold'])
+                                    json.loads(params['threshold']))
         elif script_type == 'Keypoint Labeling':
             model = KpLabModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                               params['threshold'])
+                               json.loads(params['threshold']))
         elif script_type == 'Semantic Segmentation Mask':
             model = SemSegMaskModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                    params['mean'], params['std'])
+                                    json.loads(params['mean']), json.loads(params['std']))
         elif script_type == 'Text Classification':
             model = TextClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                                 params['vocabPath'], params['tokenNum'], params['sequenceLen'])
+                                 params['vocabPath'], json.loads(params['tokenNum']), json.loads(params['sequenceLen']))
         elif script_type == 'Named Entity Recognition':
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
-                             params['sequenceLen'])
+                             json.loads(params['sequenceLen']))
         elif script_type == 'Custom':
             moduleName = 'ml.models.' + params['scriptName']
             module = import_module(moduleName)
@@ -104,9 +105,9 @@ class ModelDriver():
     @staticmethod
     def train_model_on_data_set(script_type, datas, annotations, model_path, model_root, labelsPath, params):
         if script_type == 'Image Classification':
-            model = ImgClsModel(model_path, model_root, labelsPath, mean=params['mean'], std=params['std'],
-                                imgSize=params['imgSize'])
-            accuracy = model.train(datas, annotations, params['savePath'], params['epochNum'], params['trainFrac'], params['batchSize'], params['shuffle'], params['workerNum'], params['learningRate'], params['lossFunc'], params['optimizer'])
+            model = ImgClsModel(model_path, model_root, labelsPath, mean=json.loads(params['mean']), std=json.loads(params['std']),
+                                imgSize=json.loads(params['imgSize']))
+            accuracy = model.train(datas, annotations, params['savePath'], json.loads(params['epochNum']), json.loads(params['trainFrac']), json.loads(params['batchSize']), json.loads(params['shuffle']), json.loads(params['workerNum']), json.loads(params['learningRate']), params['lossFunc'], params['optimizer'])
         elif script_type == 'Custom':
             moduleName = 'ml.models.' + params['scriptName']
             module = import_module(moduleName)

@@ -55,6 +55,12 @@
                             <el-form-item v-if="isImgCla" label="Image Size:" > <!--style="margin-bottom:0"-->
                                 <el-input v-model="form.params.imgSize" clearable maxlength="" size="mini" placeholder="(For image classification)"></el-input>
                             </el-form-item>
+                            <el-form-item v-if="isImgCla" label="Mean:">
+                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
+                            </el-form-item>
+                            <el-form-item v-if="isImgCla" label="Standard Deviation:">
+                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
+                            </el-form-item>
                             
 
                             <el-form-item v-if="isObjDetect" label="Threashold:">
@@ -66,7 +72,7 @@
                                 <el-input v-model="form.params.mean" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isSemSeg" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="[0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.229, 0.224, 0.225] by default"></el-input>
                             </el-form-item>
                             
 
