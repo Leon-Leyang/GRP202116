@@ -5,7 +5,8 @@
 <mapper namespace="com.grp202116.consumerserver.mapper.ModelMapper">
 
     <resultMap id="modelMap" type="com.grp202116.consumerserver.pojo.ModelDO">
-        <id column="version" property="version"/>
+        <id column="model_id" property="modelId"/>
+        <result column="version" property="version"/>
         <result column="model_path" property="modelPath"/>
         <result column="description" property="description"/>
         <result column="project_id" property="projectId"/>
@@ -27,7 +28,7 @@
         where version = #{version}
     </update>
 
-    <insert id="insert" parameterType="ModelDO">
+    <insert id="insert" parameterType="ModelDO" useGeneratedKeys="true" keyColumn="model_id" keyProperty="modelId">
         insert into model (model_path, version, description, project_id,
                            create_time, model_root, type, params, labels_path)
         values (#{modelPath}, #{version}, #{description}, #{projectId},

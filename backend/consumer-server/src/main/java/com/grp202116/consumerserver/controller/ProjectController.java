@@ -1,12 +1,11 @@
 package com.grp202116.consumerserver.controller;
 
-import com.grp202116.consumerserver.mapper.AnnotationMapper;
-import com.grp202116.consumerserver.mapper.DataMapper;
-import com.grp202116.consumerserver.mapper.PredictionMapper;
-import com.grp202116.consumerserver.mapper.ProjectMapper;
+import com.grp202116.consumerserver.mapper.*;
 import com.grp202116.consumerserver.pojo.DataDO;
+import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.util.ExportUtils;
+import com.grp202116.consumerserver.util.FileUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -28,6 +28,9 @@ import java.util.List;
 public class ProjectController {
     @Resource
     private ProjectMapper projectMapper;
+
+    @Resource
+    private ModelMapper modelMapper;
 
     @Resource
     private DataMapper dataMapper;
@@ -111,6 +114,13 @@ public class ProjectController {
      */
     @DeleteMapping("/project/{projectId}")
     public void deleteProject(@PathVariable BigInteger projectId) {
+        String projectPath = "../.." + File.separator + "files" + File.separator + projectId;
+        FileUtils.deleteDirectory(projectPath);
+        ModelDO model = modelMapper.getByProjectId(projectId);
+
+        FileUtils.deleteFile(model.getModelPath());
+        FileUtils.deleteFile(model.getLabelsPath());
+
         projectMapper.deleteByProjectId(projectId);
     }
 

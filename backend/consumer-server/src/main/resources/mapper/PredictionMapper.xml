@@ -40,7 +40,9 @@
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.projectId},#{item.dataId},#{item.type},
             #{item.model},#{item.createTime},#{item.updateTime},#{item.result})
-        </foreach>;
+        </foreach>
+        ON DUPLICATE KEY UPDATE data_id = VALUES(data_id), type = VALUES(type),
+        update_time = VALUES(update_time), result = VALUES(result);
     </insert>
 
     <select id="listByDataId" resultMap="predictionMap">
