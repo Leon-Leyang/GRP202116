@@ -218,76 +218,73 @@
 
 <script>
   /*import MLTest from '@/views/PerProject/ML/ML-Test-';*/
-  import MLTest from './ML/ML-Test-.vue';
-  import MLTrain from './ML/ML-Train-.vue';
+  // import MLTest from './ML/ML-Test-.vue';
+  // import MLTrain from './ML/ML-Train-.vue';
   export default {
-    components: {
-        MLTest,
-        MLTrain
-    },
+
     data() {
     return {
-        form: {
-            modelRoot:'',
-            version: '',
-            description:'',
-            modelPath:'',
-            labelsPath:'',
-            type: '',
-            resource: '',
-            params:{
-                mean:null,
-                std:null,
-                imgSize:null,
-                threshold:null,
-                vocabPath:null,
-                tokenNum:null,
-                sequenceLen:null,
-            }
-        },
+      form: {
+        modelRoot:'',
+        version: '',
+        description:'',
+        modelPath:'',
+        labelsPath:'',
+        type: '',
+        resource: '',
+        params:{
+            mean:null,
+            std:null,
+            imgSize:null,
+            threshold:null,
+            vocabPath:null,
+            tokenNum:null,
+            sequenceLen:null,
+        }
+      },
 
-        type:null,
+      type:null,
 
-        typeOptions:[
-        {label:'Image Classification',value:0},
-        {label:'Object Detection',value:1},
-        {label:'Keypoint Labeling',value:2},
-        {label:'Semantic Segmentation with Masks',value:3},
-        {label:'Text Classification',value:4},
-        {label:'Name Entity Recognition',value:5},
-        {label:'Customization',value:6},
-        ],
+      typeOptions:[
+      {label:'Image Classification',value:0},
+      {label:'Object Detection',value:1},
+      {label:'Keypoint Labeling',value:2},
+      {label:'Semantic Segmentation with Masks',value:3},
+      {label:'Text Classification',value:4},
+      {label:'Name Entity Recognition',value:5},
+      {label:'Customization',value:6},
+      ],
 
+      options: [{
+        label: 'Basic Types',
         options: [{
-            label: 'Basic Types',
-            options: [{
-                value: '0',
-                label: 'Image Classification'
-            }, {
-                value: '1',
-                label: 'Object Detection'
-            },{
-                value: '2',
-                label: 'Keypoint Labeling'
-            },{
-                value: '3',
-                label: 'Semantic Segmentation with Masks'
-            },{
-                value: '4',
-                label: 'Text Classification'
-            },{
-                value: '5',
-                label: 'Name Entity Recognition'
-            },]
-            }, 
-            {
-            label: 'Others',
-            options: [  
-            {label:'Customization',value: '6'}]
-            }],
-        value: '',
+            value: '0',
+            label: 'Image Classification'
+        }, {
+            value: '1',
+            label: 'Object Detection'
+        },{
+            value: '2',
+            label: 'Keypoint Labeling'
+        },{
+            value: '3',
+            label: 'Semantic Segmentation with Masks'
+        },{
+            value: '4',
+            label: 'Text Classification'
+        },{
+            value: '5',
+            label: 'Name Entity Recognition'
+        },]
+        }, 
+        {
+        label: 'Others',
+        options: [  
+        {label:'Customization',value: '6'}]
+        }],
+      value: '',
 
-        items: [ ],
+      items: [ ],
       }
     },
     watch:{
@@ -368,19 +365,20 @@
     
     },
     mounted() {
-      // this.$axios.get('/model/'+ this.$store.state.currentProjectId, {
-      //         params: {
-      //             page: this.config.page,
-      //             name
-      //         }
-      //     })
-      //     .then(res => {
-            
-      //     })
-      //     .catch((error) => {
-      //         // here you will have access to error.response
-      //         console.log(error.response)
-      //     });
+      console.log('ml.currentProjectId', this.$store.state.currentProjectId)
+      this.$axios.get('/model/'+ this.$store.state.currentProjectId, {
+              params: {
+                  page: this.config.page,
+                  name
+              }
+          })
+          .then(res => {
+            console.log('tag', res)
+          })
+          .catch((error) => {
+              // here you will have access to error.response
+              console.log(error.response)
+          });
     },
   }
 </script>

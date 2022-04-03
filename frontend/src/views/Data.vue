@@ -174,8 +174,8 @@ export default {
           this.predicts = []
         }
       }else{
-      this.getAnno()
-      this.getPredict()
+        this.getAnno()
+        this.getPredict()
       }
       this.labelStudio.destroy()
       console.log('this', this.annos[0].result.length)
@@ -262,7 +262,7 @@ export default {
           annotationlist[0].result = JSON.stringify(result)
           console.log('re', annotationlist)
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
+          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
           .then((res)=>{
             console.log('annotalist up', res)
           })
@@ -294,10 +294,11 @@ export default {
       }
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0){
         this.predicts = []
+        console.log('empty pre', this.predicts)
       }
     }else{
-    this.getAnno()
-    this.getPredict()
+      this.getAnno()
+      this.getPredict()
     }
     clearTimeout(this.timer);
     this.timer = setTimeout(()=>{
@@ -381,13 +382,13 @@ export default {
 
           
           var result = annotation.serializeAnnotation()
-          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":null}]
           // annotationlist[0].annotationId = annotation.pk
           annotationlist[0].dataId = LS.task.id
           annotationlist[0].result = JSON.stringify(result)
-          console.log('re', annotationlist)
+          console.log('re', annotationlist, annotationlist[0].dataId, JSON.stringify(annotationlist))
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
+          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
           .then((res)=>{
             console.log('annotalist up', res)
           })

@@ -427,6 +427,24 @@ import ML from './Create_ML.vue'
                   this.getList()
               })
               setTimeout(()=>{
+
+                console.log('now!!!',this.$store.state.currentMLList)
+                //post ml
+                for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
+                  console.log('mln', mln)
+                  console.log('params', this.$store.state.currentMLList[mln].params)
+
+                  this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
+                  console.log('params', this.$store.state.currentMLList[mln].params)
+                  this.$axios.post(`/model/create/`+ projectId, JSON.stringify(this.$store.state.currentMLList[mln]))
+                      .then(res => {
+                      console.log("ml", res)
+
+                  })
+                }
+                this.$store.state.currentMLList = null
+                console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
+
                 //upload folder address
                 var projectId = this.newestId
                 console.log('newestId', projectId)
@@ -438,22 +456,6 @@ import ML from './Create_ML.vue'
                     console.log('folderURL', res)
                   })
                 }
-                console.log('now!!!', '')
-                //post ml
-                for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
-                  console.log('mln', mln)
-                  console.log('params', this.$store.state.currentMLList[mln].params)
-
-                  this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
-                  console.log('params', this.$store.state.currentMLList[mln].params)
-                  this.$axios.post(`/model/create/`+ projectId, JSON.stringify(this.$store.state.currentMLList[mln]))
-                      .then(res => {
-                      console.log("ml", res.data)
-
-                  })
-                }
-                this.$store.state.currentMLList = null
-                console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
 
                 //upload file
                 let fileList = this.fileList
