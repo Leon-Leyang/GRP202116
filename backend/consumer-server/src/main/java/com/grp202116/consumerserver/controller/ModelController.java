@@ -156,7 +156,7 @@ public class ModelController {
             JSONObject result = JSONObject.parseObject(
                     restTemplate.postForObject("http://sidecar-server/model/run",
                             HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
-            JSONArray predictions = JSONObject.parseArray(result.getString("result"));
+            JSONArray predictions = result.getJSONArray("result");
 
             data.setPredicted(true);
             dataMapper.updateDataPredict(data);

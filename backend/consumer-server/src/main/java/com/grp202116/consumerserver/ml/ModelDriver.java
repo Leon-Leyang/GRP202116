@@ -51,14 +51,14 @@ public class ModelDriver {
     }
 
     public List<PredictionDO> savePredictions(JSONArray predictions) {
-        System.out.println(predictions);
+
         List<PredictionDO> predictionList = new ArrayList<>();
         for (int i = 0; i < Objects.requireNonNull(predictions).size(); i++) {
             JSONObject predictionJSONObject = predictions.getJSONObject(i);
             PredictionDO prediction = new PredictionDO();
             prediction.setPredictionId(predictionJSONObject.getString("id"));
             prediction.setType(predictionJSONObject.getString("type"));
-            prediction.setResult(predictionJSONObject.getString("value"));
+            prediction.setResult(predictionJSONObject.toJSONString());
 
             Date date = new Date();
             prediction.setCreateTime(date);
