@@ -51,7 +51,7 @@ public class ModelDriver {
     }
 
     public List<PredictionDO> savePredictions(JSONArray predictions) {
-        System.out.println(predictions);
+
         List<PredictionDO> predictionList = new ArrayList<>();
         for (int i = 0; i < Objects.requireNonNull(predictions).size(); i++) {
             JSONObject predictionJSONObject = predictions.getJSONObject(i);
