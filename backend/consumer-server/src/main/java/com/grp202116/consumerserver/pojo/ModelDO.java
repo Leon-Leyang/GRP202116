@@ -5,7 +5,7 @@ package com.grp202116.consumerserver.pojo;
  * control the url, name and description value of the Model by setter and getter methods
  */
 public class ModelDO extends ProjectDistinguishableDO{
-    private String url;
+    private String modelPath;
     private String version;
     private String description;
     private String modelRoot;
@@ -17,16 +17,16 @@ public class ModelDO extends ProjectDistinguishableDO{
      * Get the url value of the ml model
      * @return the url value
      */
-    public String getUrl() {
-        return url;
+    public String getModelPath() {
+        return modelPath;
     }
 
     /**
      * Set the url value of the ml model
-     * @param url the given url value
+     * @param modelPath the given url value
      */
-    public void setUrl(String url) {
-        this.url = url;
+    public void setModelPath(String modelPath) {
+        this.modelPath = modelPath;
     }
 
     /**

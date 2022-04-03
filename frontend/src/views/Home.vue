@@ -32,7 +32,9 @@
               </v-btn>
           </template>
           <v-card
-          height="700px">
+          height="700px"
+          v-if="refresh"
+          >
               <v-card-title class="text-h5">
               {{operateType === 'add' ? 'New' : 'Update'}}
               </v-card-title>
@@ -57,26 +59,14 @@
                     </el-tab-pane>
 
                     <!-- Import ML -->
-                  <el-tab-pane name="2" >
+                  <el-tab-pane name="2" v-if="importAllow">
                       <span slot="label">Import ML model</span>
-                      <v-card
-                        v-scroll.self="onScroll"
-                        class="overflow-y-auto"
-                        max-height="400"
-                      >
-                        <v-card-text>
-                          <div
-                            class="mb-4"
-                          >
-                          <ML></ML>
-                          </div>
-                        </v-card-text>
-                      </v-card>
+                      <ML></ML>
                       <!-- Import ML Model -->
                   </el-tab-pane>
 
                     <!-- Import Data -->
-                    <el-tab-pane name="3" :disabled="operateType == 'edit'">
+                    <el-tab-pane name="3" v-if="importAllow">
                         <span slot="label">Import Data</span>
                         <div style="display:flex">
                           <div>
@@ -298,7 +288,7 @@
 
 <script>
 import SettingLS from '../components/ProjectManage/SettingLS.vue'
-import ML from './PerProject/ML.vue'
+import ML from './Create_ML.vue'
 // import Create from '../components/ProjectManage/Create.vue';
   export default {
       components:{
@@ -322,6 +312,8 @@ import ML from './PerProject/ML.vue'
             type:'',
             updateTime: '',
         },
+        refresh:false,
+        importAllow:false,
 
         itemsPerPageArray: [6, 8, 12],
         search: '',
@@ -398,15 +390,19 @@ import ML from './PerProject/ML.vue'
                 });
       },
       addProject() {
+          this.importAllow = true
           this.operateForm = {}
           this.operateType = 'add'
           this.isShow = true
+          this.refresh = true
       },
       editProject(row) {
+          this.importAllow = false
           this.operateType = 'edit'
           this.isShow = true
           this.operateForm = row
           console.log('tag', row)
+          this.refresh = true
       },
       confirm() {
         console.log('this.operateType', this.operateType)
@@ -442,6 +438,22 @@ import ML from './PerProject/ML.vue'
                     console.log('folderURL', res)
                   })
                 }
+                console.log('now!!!', '')
+                //post ml
+                for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
+                  console.log('mln', mln)
+                  console.log('params', this.$store.state.currentMLList[mln].params)
+
+                  this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
+                  console.log('params', this.$store.state.currentMLList[mln].params)
+                  this.$axios.post(`/model/create/`+ projectId, JSON.stringify(this.$store.state.currentMLList[mln]))
+                      .then(res => {
+                      console.log("ml", res.data)
+
+                  })
+                }
+                this.$store.state.currentMLList = null
+                console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
 
                 //upload file
                 let fileList = this.fileList
@@ -464,11 +476,14 @@ import ML from './PerProject/ML.vue'
           }
           this.isShow = false
           this.active = '1'
+          this.refresh = false
 
       },
       cancelChange(){
         this.isShow = false 
         this.active = '1'
+        this.$store.state.currentMLList = null
+        this.refresh = false
       },
       delProject(row) {
           this.$confirm('This operation will permanently delete the file, are you sure you want to continue?', 'Hint', {

@@ -13,8 +13,9 @@ import java.nio.file.Files;
 public class ModelSaver {
     private static String modelPath;
 
-    public ModelSaver(String type) {
-        String modelDirectory = "../ml/models" + File.separator + type + File.separator;
+    public ModelSaver(ModelDO model) {
+        String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
+                "_" + model.getVersion() + File.separator;
         File directory = new File(modelDirectory);
         ModelSaver.modelPath = modelDirectory;
         if (!directory.exists()) if (directory.mkdirs())
@@ -22,6 +23,7 @@ public class ModelSaver {
     }
 
     public String saveModel(String url) {
+        if (url == null) return null;
         File modelFile = new File(url);
         if (!modelFile.exists()) return null;
         if (!FilenameUtils.getExtension(modelFile.getName()).equals("pth")) {
@@ -34,7 +36,7 @@ public class ModelSaver {
     public String saveLabels(String url) {
         File labelFile = new File(url);
         if (!labelFile.exists()) return null;
-        if (!FilenameUtils.getExtension(labelFile.getName()).equals("txt") ||
+        if (!FilenameUtils.getExtension(labelFile.getName()).equals("txt") &&
                 !FilenameUtils.getExtension(labelFile.getName()).equals("csv")) {
             System.out.println("Not a label file.");
             return null;
@@ -45,7 +47,6 @@ public class ModelSaver {
     private String getFilePath(File modelFile) {
         File targetFile = new File(modelPath + modelFile.getName());
         try {
-            if (targetFile.createNewFile()) System.out.println("New file created.");
             Files.copy(modelFile.toPath(), targetFile.toPath());
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,9 +60,8 @@ public class ModelSaver {
             System.out.println("Not a python file.");
             return null;
         }
-        File targetFile = new File("../ml/models" + File.separator + customFile.getName());
+        File targetFile = new File("../ml/flask-server/ml/models" + File.separator + customFile.getName());
         try {
-            if (targetFile.createNewFile()) System.out.println("New file created.");
             Files.copy(customFile.toPath(), targetFile.toPath());
         } catch (IOException e) {
             e.printStackTrace();
