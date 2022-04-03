@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.maven.model.Model;
 
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * The ModelMapper define the actions or the operations of the ml Model
@@ -22,7 +23,7 @@ public interface ModelMapper extends BaseMapper {
      * @param projectId the projectId
      * @return the Model of the corresponding project
      */
-    ModelDO getByProjectId(BigInteger projectId);
+    List<ModelDO> getByProjectId(BigInteger projectId);
 
     /**
      * Delete the model of the certain project
