@@ -30,7 +30,7 @@
     <insert id="insert" parameterType="ModelDO">
         insert into model (model_path, version, description, project_id,
                            create_time, model_root, type, params, labels_path)
-        values (#{url}, #{version}, #{description}, #{projectId},
+        values (#{modelPath}, #{version}, #{description}, #{projectId},
                 #{createTime}, #{modelRoot}, #{type}, #{params}, #{labelsPath})
     </insert>
 

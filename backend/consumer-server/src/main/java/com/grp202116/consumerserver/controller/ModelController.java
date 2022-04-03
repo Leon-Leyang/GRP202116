@@ -94,7 +94,7 @@ public class ModelController {
         model.setCreateTime(new Date());
         model.setProjectId(projectId);
 
-        ModelSaver modelSaver = new ModelSaver(model.getType());
+        ModelSaver modelSaver = new ModelSaver(model);
         String modelPath = modelSaver.saveModel(model.getModelPath());
         if (modelPath == null) return;
         else model.setModelPath(modelPath);
