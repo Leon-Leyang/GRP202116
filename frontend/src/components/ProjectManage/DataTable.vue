@@ -51,6 +51,7 @@
     data(){
       return{ 
         tableData:[],
+        url: '../../../../../GRP202116/files/5/c7a3ec64-b343-40e7-9944-fb0b20151308.jpg'
       }
     },
     props: {
@@ -88,18 +89,22 @@
           if(this.tableData[i].url.indexOf(".jpg")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".jpg", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.jpg' )
+            console.log('puic', this.tableData[i].url)
           }
           else if(this.tableData[i].url.indexOf(".JPEG")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".JPEG", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.JPEG' )
+            console.log('puic', this.tableData[i].url)
           }
           else if(this.tableData[i].url.indexOf(".PNG")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".PNG", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.PNG' )
+            console.log('puic', this.tableData[i].url)
           }
           else if(this.tableData[i].url.indexOf(".webp")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
             this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.webp' )
+            console.log('puic', this.tableData[i].url)
           }
           // else if(this.tableData[i].url.indexOf("txt")!=-1){
           //   this.tableData[i].url = this.tableData[i].url.replace(".txt", "")
@@ -114,7 +119,7 @@
         this.$store.state.currentDataList = this.tableData
 
         console.log('asd', this.$store.state.currentDataList)
-      },1000);
+      },500);
 
     },  
 

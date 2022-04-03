@@ -116,7 +116,7 @@ export default {
             for(var i = 0; i < this.annoDataList.length; i++){
               console.log('i', this.annoDataList[i])
               this.annos[i].id = this.annoDataList[i].annotationId
-              this.annos[i].result = JSON.parse(this.annoDataList[i].result)
+              this.annos[i].result = eval(this.annoDataList[i].result)
               console.log('tag', this.annos[i].result)
 
             }
@@ -145,7 +145,7 @@ export default {
               this.predicts[j].id = this.predictDataList[j].predictionId
               console.log('jas', this.predictDataList[j].predictionId)
               console.log(this.predictDataList[j].result)
-              this.predicts[j].result = JSON.parse(this.predictDataList[j].result)
+              this.predicts[j].result = eval(this.predictDataList[j].result)
             console.log('preasd', this.predictDataList[j].result)
 
 
@@ -236,7 +236,7 @@ export default {
           annotationlist[0].result = JSON.stringify(result)
           console.log('re', annotationlist)
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
+          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
           .then((res)=>{
             console.log('annotalist sub', res)
           })
@@ -369,7 +369,7 @@ export default {
           annotationlist[0].result = JSON.stringify(result)
           console.log('re', annotationlist)
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
+          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
           .then((res)=>{
             console.log('annotalist sub', res)
           })

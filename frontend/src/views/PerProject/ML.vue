@@ -158,7 +158,6 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
-                                    @click="MLTest(item.version)"
                                   >
                                     TEST
                                   </v-btn>
@@ -174,6 +173,8 @@
                                     <v-container>
                                       <v-row>   
                                         <v-col cols="12">
+                                        Upload the Customized Train Script Here:
+                                        <el-input type="textarea" v-model="testScript"></el-input>
                                         </v-col>
                                       </v-row>
                                     </v-container>
@@ -183,7 +184,7 @@
                                     <v-btn
                                       color="blue darken-1"
                                       text
-                                      @click="dialog = false"
+                                      @click="MLTest(item.version)"
                                     >
                                       Run
                                     </v-btn>
@@ -338,7 +339,8 @@
         {label:'Customization',value: '6'}]
         }],
       value: '',
-      testScript: '',
+      testScript:'',
+      runObject:null,
 
       dialog:false,
 
@@ -393,6 +395,16 @@
         console.log('item', this.items)
           this.value = null
       },
+      MLTest(version){
+        this.dialog = false
+        this.runObject.version = version
+        this.$axios.post('/model/run/'+ this.$store.state.currentProjectId,{
+          params:{
+
+          }
+        })
+      },
+
     
       selectType(selectValue) {
           this.isObjDetect = false;
@@ -420,6 +432,7 @@
         this.isNER = true;
       }
     },
+
     
     },
     mounted() {
