@@ -425,7 +425,7 @@ export default {
           annotationlist[0].result = JSON.stringify(result)
           console.log('type', annotationlist[0].result)
           // var myobj = eval(annotationlist[0].result)
-          console.log('re', annotationlist)
+          console.log('re', annotationlist, annotationlist[0].dataId, JSON.stringify(annotationlist))
 
           axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist)
           .then((res)=>{

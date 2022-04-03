@@ -18,7 +18,7 @@
 
                             <el-form-item label="Model Type:">
 
-                            <el-select v-model="value" placeholder="please select the ML model type" @change="c1">
+                            <el-select v-model="value" placeholder="please select the ML model type" @change="selectType">
                                 <el-option-group
                                 v-for="group in options"
                                 :key="group.label"
@@ -55,6 +55,12 @@
                             <el-form-item v-if="isImgCla" label="Image Size:" > <!--style="margin-bottom:0"-->
                                 <el-input v-model="form.params.imgSize" clearable maxlength="" size="mini" placeholder="(For image classification)"></el-input>
                             </el-form-item>
+                            <el-form-item v-if="isImgCla" label="Mean:">
+                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
+                            </el-form-item>
+                            <el-form-item v-if="isImgCla" label="Standard Deviation:">
+                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
+                            </el-form-item>
                             
 
                             <el-form-item v-if="isObjDetect" label="Threashold:">
@@ -66,7 +72,7 @@
                                 <el-input v-model="form.params.mean" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isSemSeg" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="[0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.229, 0.224, 0.225] by default"></el-input>
                             </el-form-item>
                             
 
@@ -138,7 +144,8 @@
                                 ></v-progress-linear>  -->
 
                             <v-card-actions>
-                                
+                                <MLTest></MLTest>
+                                <MLTrain></MLTrain>
                                 </v-card-actions>
 
                             </v-card>
@@ -174,7 +181,7 @@
   }
 
   .el-select .el-input {
-    width: 270px;
+    width: 280px;
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
@@ -218,76 +225,73 @@
 
 <script>
   /*import MLTest from '@/views/PerProject/ML/ML-Test-';*/
-  import MLTest from './ML/ML-Test-.vue';
-  import MLTrain from './ML/ML-Train-.vue';
+  // import MLTest from './ML/ML-Test-.vue';
+  // import MLTrain from './ML/ML-Train-.vue';
   export default {
-    components: {
-        MLTest,
-        MLTrain
-    },
+
     data() {
     return {
-        form: {
-            modelRoot:'',
-            version: '',
-            description:'',
-            modelPath:'',
-            labelsPath:'',
-            type: '',
-            resource: '',
-            params:{
-                mean:null,
-                std:null,
-                imgSize:null,
-                threshold:null,
-                vocabPath:null,
-                tokenNum:null,
-                sequenceLen:null,
-            }
-        },
+      form: {
+        modelRoot:'',
+        version: '',
+        description:'',
+        modelPath:'',
+        labelsPath:'',
+        type: '',
+        resource: '',
+        params:{
+            mean:null,
+            std:null,
+            imgSize:null,
+            threshold:null,
+            vocabPath:null,
+            tokenNum:null,
+            sequenceLen:null,
+        }
+      },
 
-        type:null,
+      type:null,
 
-        typeOptions:[
-        {label:'Image Classification',value:0},
-        {label:'Object Detection',value:1},
-        {label:'Keypoint Labeling',value:2},
-        {label:'Semantic Segmentation with Masks',value:3},
-        {label:'Text Classification',value:4},
-        {label:'Name Entity Recognition',value:5},
-        {label:'Customization',value:6},
-        ],
+      typeOptions:[
+      {label:'Image Classification',value:0},
+      {label:'Object Detection',value:1},
+      {label:'Keypoint Labeling',value:2},
+      {label:'Semantic Segmentation with Masks',value:3},
+      {label:'Text Classification',value:4},
+      {label:'Name Entity Recognition',value:5},
+      {label:'Customization',value:6},
+      ],
 
+      options: [{
+        label: 'Basic Types',
         options: [{
-            label: 'Basic Types',
-            options: [{
-                value: '0',
-                label: 'Image Classification'
-            }, {
-                value: '1',
-                label: 'Object Detection'
-            },{
-                value: '2',
-                label: 'Keypoint Labeling'
-            },{
-                value: '3',
-                label: 'Semantic Segmentation with Masks'
-            },{
-                value: '4',
-                label: 'Text Classification'
-            },{
-                value: '5',
-                label: 'Name Entity Recognition'
-            },]
-            }, 
-            {
-            label: 'Others',
-            options: [  
-            {label:'Customization',value: '6'}]
-            }],
-        value: '',
+            value: '0',
+            label: 'Image Classification'
+        }, {
+            value: '1',
+            label: 'Object Detection'
+        },{
+            value: '2',
+            label: 'Keypoint Labeling'
+        },{
+            value: '3',
+            label: 'Semantic Segmentation with Masks'
+        },{
+            value: '4',
+            label: 'Text Classification'
+        },{
+            value: '5',
+            label: 'Name Entity Recognition'
+        },]
+        }, 
+        {
+        label: 'Others',
+        options: [  
+        {label:'Customization',value: '6'}]
+        }],
+      value: '',
 
-        items: [ ],
+      items: [ ],
       }
     },
     watch:{
@@ -339,7 +343,7 @@
           this.value = null
       },
     
-      c1(selectValue) {
+      selectType(selectValue) {
           this.isObjDetect = false;
           this.isImgCla = false;
           this.isSemSeg = false;
@@ -368,19 +372,20 @@
     
     },
     mounted() {
-      // this.$axios.get('/model/'+ this.$store.state.currentProjectId, {
-      //         params: {
-      //             page: this.config.page,
-      //             name
-      //         }
-      //     })
-      //     .then(res => {
-            
-      //     })
-      //     .catch((error) => {
-      //         // here you will have access to error.response
-      //         console.log(error.response)
-      //     });
+      console.log('ml.currentProjectId', this.$store.state.currentProjectId)
+      this.$axios.get('/model/'+ this.$store.state.currentProjectId, {
+              params: {
+                  page: this.config.page,
+                  name
+              }
+          })
+          .then(res => {
+            console.log('tag', res)
+          })
+          .catch((error) => {
+              // here you will have access to error.response
+              console.log(error.response)
+          });
     },
   }
 </script>

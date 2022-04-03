@@ -41,7 +41,7 @@ class NERModel(Model):
 
 
     def predict(self, textPath):
-        super().predict()
+        super().predict(textPath)
 
         with open(textPath, 'r') as f:
             text = f.read()
