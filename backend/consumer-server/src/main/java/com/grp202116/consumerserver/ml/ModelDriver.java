@@ -4,11 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.pojo.*;
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +32,7 @@ public class ModelDriver {
         this.data = data;
         JSONObject object = new JSONObject();
         object.put("script_type", model.getType());
-        object.put("model_path", model.getUrl());
+        object.put("model_path", model.getModelPath());
         object.put("model_root", model.getModelRoot());
         object.put("labels_path", model.getLabelsPath());
         object.put("data", data.getUrl());

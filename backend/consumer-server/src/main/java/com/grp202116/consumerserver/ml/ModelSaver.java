@@ -22,6 +22,7 @@ public class ModelSaver {
     }
 
     public String saveModel(String url) {
+        if (url == null) return null;
         File modelFile = new File(url);
         if (!modelFile.exists()) return null;
         if (!FilenameUtils.getExtension(modelFile.getName()).equals("pth")) {

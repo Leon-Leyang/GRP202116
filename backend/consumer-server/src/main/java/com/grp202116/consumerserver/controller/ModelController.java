@@ -12,7 +12,6 @@ import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.util.HttpUtils;
-import org.bouncycastle.math.raw.Mod;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -96,9 +95,9 @@ public class ModelController {
         model.setProjectId(projectId);
 
         ModelSaver modelSaver = new ModelSaver(model.getType());
-        String modelPath = modelSaver.saveModel(model.getUrl());
+        String modelPath = modelSaver.saveModel(model.getModelPath());
         if (modelPath == null) return;
-        else model.setUrl(modelPath);
+        else model.setModelPath(modelPath);
 
         String labelPath = modelSaver.saveLabels(model.getLabelsPath());
         if (labelPath == null) return;
