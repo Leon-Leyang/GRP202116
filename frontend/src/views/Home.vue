@@ -442,19 +442,19 @@ import ML from './Create_ML.vue'
                 console.log('now!!!',this.$store.state.currentMLList)
 
 
-                // var folderURL = this.folderURL.split(",")
+                var folderURL = this.folderURL.split(",")
 
 
-                // //upload folder address
-                // if(folderURL != ''){                
-                //   var projectId = this.newestId
-                //   console.log('newestId', projectId)
-                //   console.log('address', folderURL)
-                //   this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
-                //   .then(res => {
-                //     console.log('folderURL', res)
-                //   })
-                // }
+                //upload folder address
+                if(folderURL != ''){                
+                  var projectId = this.newestId
+                  console.log('newestId', projectId)
+                  console.log('address', folderURL)
+                  this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
+                  .then(res => {
+                    console.log('folderURL', res)
+                  })
+                }
 
 
 
@@ -479,16 +479,16 @@ import ML from './Create_ML.vue'
 
                 console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
                 //upload folder address
-                var folderURL = this.folderURL.split(",")
-                console.log('address', folderURL)                
-                if(folderURL != ''){                
-                  var projectId = this.newestId
-                  console.log('newestId', projectId)
-                  this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
-                  .then(res => {
-                    console.log('folderURL', res)
-                  })
-                }
+                // var folderURL = this.folderURL.split(",")
+                // console.log('address', folderURL)                
+                // if(folderURL != ''){                
+                //   var projectId = this.newestId
+                //   console.log('newestId', projectId)
+                //   this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
+                //   .then(res => {
+                //     console.log('folderURL', res)
+                //   })
+                // }
 
                 //upload file
                 let fileList = this.fileList
