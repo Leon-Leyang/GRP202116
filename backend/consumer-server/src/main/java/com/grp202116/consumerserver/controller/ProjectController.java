@@ -24,21 +24,22 @@ import java.util.List;
 /**
  * The Class ProjectController, contain the operation for the Project
  * including list the Project, edit the Project, add and delete of the Project
+ * as well as methods for exporting data
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ * @see ProjectMapper
  */
 @RestController
 public class ProjectController {
     @Resource
     private ProjectMapper projectMapper;
-
     @Resource
     private ModelMapper modelMapper;
-
     @Resource
     private DataMapper dataMapper;
-
     @Resource
     private AnnotationMapper annotationMapper;
-
     @Resource
     private PredictionMapper predictionMapper;
 
@@ -66,6 +67,7 @@ public class ProjectController {
     /**
      * Get the process of a certain project
      *
+     * @param projectId the id of a project
      * @return the process, retains four decimal
      */
     @GetMapping("/project/{projectId}/process")
@@ -119,7 +121,7 @@ public class ProjectController {
         FileUtils.deleteDirectory(projectDirectory);
         List<ModelDO> modelList = modelMapper.getByProjectId(projectId);
 
-        for (ModelDO model: modelList) {
+        for (ModelDO model : modelList) {
             String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
                     "_" + model.getVersion();
             FileUtils.deleteDirectory(modelDirectory);
@@ -161,6 +163,7 @@ public class ProjectController {
 
     /**
      * Helper method for the response entity creation
+     *
      * @param resource byte source of a certain file
      * @return response of success or failure
      */

@@ -28,6 +28,34 @@
         where version = #{version}
     </update>
 
+    <update id="updateModel">
+        update model
+            <set>
+                <if test="version != '' and version != null">
+                    version = #{version},
+                </if>
+                <if test="modelPath != '' and modelPath != null">
+                    model_path = #{modelPath},
+                </if>
+                <if test="description != '' and description != null">
+                    description = #{description},
+                </if>
+                <if test="modelRoot != '' and modelRoot != null">
+                    model_root = #{model_root},
+                </if>
+                <if test="type != '' and type != null">
+                    type = #{type},
+                </if>
+                <if test="params != '' and params != null">
+                    params = #{params},
+                </if>
+                <if test="labelsPath != '' and labelsPath != null">
+                    labels_path = #{labels_path},
+                </if>
+            </set>
+        where model_id = #{modelId}
+    </update>
+
     <insert id="insert" parameterType="ModelDO" useGeneratedKeys="true" keyColumn="model_id" keyProperty="modelId">
         insert into model (model_path, version, description, project_id,
                            create_time, model_root, type, params, labels_path)
@@ -53,6 +81,12 @@
         where version = #{version}
           AND project_id = #{projectId}
     </select>
+
+    <delete id="deleteById">
+        delete
+        from model
+        where model_id = #{modelId}
+    </delete>
 
     <delete id="deleteByProjectId">
         delete
