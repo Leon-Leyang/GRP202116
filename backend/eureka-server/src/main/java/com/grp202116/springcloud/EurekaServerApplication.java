@@ -8,6 +8,17 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * This is the application class of the eureka server,
+ * which is used as registry of the consumer-server and flask-server.
+ *
+ * For the official eureka service registry guide, visit
+ * https://spring.io/guides/gs/service-registration-and-discovery/
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ *
+ */
 @EnableEurekaServer
 @SpringBootApplication
 public class EurekaServerApplication {
