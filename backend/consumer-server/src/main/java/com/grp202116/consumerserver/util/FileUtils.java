@@ -14,7 +14,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This is the util class which deals with file input or output,
+ * including methods for saving files to a local address.
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ */
 public class FileUtils {
+
     private static List<DataDO> dataList;
     private static BigInteger projectId;
     private static String projectPath;

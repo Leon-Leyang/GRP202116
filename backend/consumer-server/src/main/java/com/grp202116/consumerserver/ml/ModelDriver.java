@@ -16,7 +16,6 @@ public class ModelDriver {
     private static ProjectDO project;
     private DataDO data;
     private String scriptName;
-    private static final String customPath = "../ml/models";
 
     public ModelDriver(ProjectDO project, ModelDO model) {
         ModelDriver.model = model;

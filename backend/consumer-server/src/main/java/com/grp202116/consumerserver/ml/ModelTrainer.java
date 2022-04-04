@@ -11,7 +11,6 @@ public class ModelTrainer {
     private static ModelDO model;
     private static ProjectDO project;
     private String scriptName;
-    private static final String customPath = "../ml/models";
 
     public ModelTrainer(ProjectDO project, ModelDO model) {
         ModelTrainer.model = model;

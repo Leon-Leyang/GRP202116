@@ -54,4 +54,18 @@ public interface ModelMapper extends BaseMapper {
      * @return a {@link ModelDO}
      */
     ModelDO getByVersionProject(@Param("version") String version, @Param("projectId") BigInteger projectId);
+
+    /**
+     * Delete a model by a given id
+     *
+     * @param modelId the id of a model
+     */
+    void deleteById(BigInteger modelId);
+
+    /**
+     * Update a model
+     *
+     * @param model the model to be updated
+     */
+    void updateModel(ModelDO model);
 }
