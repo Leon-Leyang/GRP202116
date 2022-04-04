@@ -170,8 +170,8 @@ export default {
     },
 
     newLS(data){
-      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0 ){
-        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0){
+      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
+        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
           var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
           annotationlist[0].dataId = this.$store.state.realDataId
           axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
@@ -183,7 +183,7 @@ export default {
             this.getAnno()
           },100)
         }
-        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0){
+        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
           this.predicts = []
         }
       }else{
@@ -292,9 +292,9 @@ export default {
     console.log('curren', this.$store.state.currentDataList,this.$store.state.currentDataId)
     console.log('tisada', this.tableData)
     // console.log('confi', this.$store.state.currentConfig)
-    console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url)
-    if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0 ){
-      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0){
+    console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
+    if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
+      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
         var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
         annotationlist[0].dataId = this.$store.state.realDataId
         axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
@@ -306,7 +306,7 @@ export default {
           this.getAnno()
         },500)
       }
-      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0){
+      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
         this.predicts = []
         console.log('empty pre', this.predicts)
       }
