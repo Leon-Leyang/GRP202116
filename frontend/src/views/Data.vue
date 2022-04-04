@@ -26,7 +26,7 @@
           <template v-slot:default="{ item }">
             <v-list-item :key="item">
               <v-list-item-action>
-            <img :src="item.url" @click="enterData(item)" style="width:100%"/>
+              <img :src="item.url" @click="enterData(item)" style="width:100%"/>
               </v-list-item-action>
             </v-list-item>
 
@@ -84,16 +84,28 @@ export default {
       console.log('cur', this.$store.state.currentDataId,this.$store.state.realDataId)
       console.log('culist', this.$store.state.currentDataList)
       this.newLS(data)
+      console.log('enter', data)
     },
     prev(){
-      this.$store.state.currentDataId--
-      this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1]
-      this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
+      if(this.$store.state.currentDataId == 1){
+        console.log('no prev')
+      }else{
+        this.$store.state.currentDataId--
+        this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1].realDataId
+        console.log('prev', this.$store.state.realDataId, this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
+        this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])        
+      }
+
     },
     next(){
-      this.$store.state.currentDataId++
-      this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1]
-      this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
+      if(this.$store.state.currentDataId == (this.$store.state.currentDataList.length)){
+        console.log('no next')
+      }else{
+        this.$store.state.currentDataId++
+        this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1].realDataId
+        console.log('next', this.$store.state.realDataId, this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
+        this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])        
+      }
     },
     back(){
       this.$router.push({  
