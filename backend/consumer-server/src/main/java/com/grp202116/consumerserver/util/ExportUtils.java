@@ -2,6 +2,8 @@ package com.grp202116.consumerserver.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.io.*;
@@ -11,6 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This ExportUtils class contains methods related to file exporting.
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ */
 public class ExportUtils {
 
     private static List<Object> dataList;
@@ -18,6 +26,8 @@ public class ExportUtils {
     private static String format;
     private static boolean isAnnotation;
     private static File targetFile;
+
+    private static final Logger logger = LoggerFactory.getLogger(ExportUtils.class);
 
     /**
      * Create the file to be exported
@@ -35,10 +45,23 @@ public class ExportUtils {
         }
     }
 
+    /**
+     * Get the target file
+     *
+     * @return {@link #targetFile}
+     */
     public static File getTargetFile() {
         return targetFile;
     }
 
+    /**
+     * This is the public interface for exporting a list of {@link Object}
+     *
+     * @param isAnnotation the status of annotation
+     * @param format json or csv
+     * @param dataList the list of data
+     * @return a {@link ByteArrayResource} containing files
+     */
     public static ByteArrayResource exportFile(boolean isAnnotation, String format, List<Object> dataList) {
         ExportUtils.format = format;
         ExportUtils.isAnnotation = isAnnotation;
@@ -48,13 +71,11 @@ public class ExportUtils {
         ByteArrayResource resource = null;
 
         try {
-            if (targetFile.createNewFile()) System.out.println("Temporary File Creation Success");
+            if (targetFile.createNewFile()) logger.info("Temporary File Creation Success");
             else return null;
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
                     targetFile), StandardCharsets.UTF_8));
-            if (format.equals("json")) writeJSON();
-            else if (format.equals("csv")) writeCSV();
-            else writeTSV();
+            writeFormat(format);
             bufferedWriter.close();
 
             resource = new ByteArrayResource(Files.readAllBytes(targetFile.toPath()));
@@ -65,27 +86,35 @@ public class ExportUtils {
         return resource;
     }
 
-    private static void writeJSON() throws IOException {
-        for (Object data : dataList) {
-            String jsonString = JSONObject.toJSONString(data, true);
-            bufferedWriter.write(jsonString);
-            bufferedWriter.newLine();
-        }
-    }
-
-    private static void writeCSV() throws IOException {
-        for (Object data : dataList) {
-            StringBuilder stringBuilder = new StringBuilder();
-            bufferedWriter.write(stringBuilder.append("\"").append(data).append("\",").toString());
-            bufferedWriter.newLine();
-        }
-    }
-
-    private static void writeTSV() throws IOException {
-        for (Object data : dataList) {
-            StringBuilder stringBuilder = new StringBuilder();
-            bufferedWriter.write(stringBuilder.append("\"").append(data).append("\t,").toString());
-            bufferedWriter.newLine();
+    /**
+     * Write lines to a file according to the provided format.
+     *
+     * @param format the format of the specified file
+     * @throws IOException output exception
+     */
+    private static void writeFormat(String format) throws IOException {
+        switch (format) {
+            case "json":
+                for (Object data : dataList) {
+                    String jsonString = JSONObject.toJSONString(data, true);
+                    bufferedWriter.write(jsonString);
+                    bufferedWriter.newLine();
+                }
+                break;
+            case "csv":
+                for (Object data : dataList) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    bufferedWriter.write(stringBuilder.append("\"").append(data).append("\",").toString());
+                    bufferedWriter.newLine();
+                }
+                break;
+            case "tsv":
+                for (Object data : dataList) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    bufferedWriter.write(stringBuilder.append("\"").append(data).append("\t,").toString());
+                    bufferedWriter.newLine();
+                }
+                break;
         }
     }
 }

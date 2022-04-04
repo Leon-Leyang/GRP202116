@@ -123,7 +123,7 @@ public class ProjectController {
 
         for (ModelDO model : modelList) {
             String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
-                    "_" + model.getVersion();
+                    "_" + model.getVersion() + File.separator;
             FileUtils.deleteDirectory(modelDirectory);
         }
 
