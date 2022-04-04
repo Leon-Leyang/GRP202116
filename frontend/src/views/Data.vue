@@ -64,7 +64,7 @@ export default {
       LS:[],
       projectId:0,
       annoDataList:[],
-      annos:[{id:null,result:[]}],
+      annos:[],
       predictDataList:[],
       predicts:[],
       preState: 'accept',
@@ -78,6 +78,8 @@ export default {
 
   methods: {
     enterData(data){
+      this.predicts = []
+      this.annos = []
       console.log('dataId', data.dataId)
       this.$store.state.currentDataId = data.dataId
       this.$store.state.realDataId = data.realDataId
@@ -87,6 +89,8 @@ export default {
       console.log('enter', data)
     },
     prev(){
+      this.predicts = []
+      this.annos = []
       if(this.$store.state.currentDataId == 1){
         console.log('no prev')
       }else{
@@ -98,6 +102,8 @@ export default {
 
     },
     next(){
+      this.predicts = []
+      this.annos = []      
       if(this.$store.state.currentDataId == (this.$store.state.currentDataList.length)){
         console.log('no next')
       }else{
