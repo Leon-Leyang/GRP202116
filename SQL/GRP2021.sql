@@ -101,7 +101,7 @@ CREATE TABLE `prediction` (
   `model_version` varchar(100) DEFAULT NULL,
   `is_accepted` tinyint DEFAULT NULL,
   PRIMARY KEY (`prediction_id`),
-  UNIQUE KEY `unique` (`project_id`,`model_version`),
+  UNIQUE KEY `unique` (`project_id`,`model_version`,`data_id`),
   KEY `data_id` (`data_id`),
   CONSTRAINT `prediction_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
   CONSTRAINT `prediction_ibfk_2` FOREIGN KEY (`data_id`) REFERENCES `data` (`data_id`) ON DELETE CASCADE
