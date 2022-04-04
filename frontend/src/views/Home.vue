@@ -68,6 +68,20 @@
                     <!-- Import Data -->
                     <el-tab-pane name="3" v-if="importAllow">
                         <span slot="label">Import Data</span>
+                        <div>Choose Data Type:</div>
+                        <v-chip-group
+                          v-model="operateForm.type"
+                          active-class="deep-purple--text text--accent-4"
+                          mandatory
+                        >
+                        <v-chip
+                          v-for="type in oType"
+                          :key="type"
+                          :value="type"
+                        >
+                          {{ type }}
+                        </v-chip>
+                        </v-chip-group>
                         <div style="display:flex">
                           <div>
                             Please enter the path to the folder where you want to use the file:
@@ -333,6 +347,7 @@ import ML from './Create_ML.vue'
         fileList: [],
         i : 0,
         newestId: 0,
+        oType: ['image','text'],
 
       // Create Project
       file:'',
@@ -425,8 +440,6 @@ import ML from './Create_ML.vue'
               })
           } else 
           {
-              this.operateForm.type = 'image'
-              console.log('this.operateForm.type', this.operateForm.type)
               this.operateForm.configs = this.$store.state.currentConfig
               console.log('confifg', this.operateForm.configs,this.$store.state.currentConfig)
               
@@ -460,17 +473,13 @@ import ML from './Create_ML.vue'
                 console.log('this.$store.state.currentMLList1', this.$store.state.currentMLList)
                 if(this.$store.state.currentMLList != null){
                   for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
-                    console.log('mln', mln)
-                    console.log('params', this.$store.state.currentMLList[mln].params)
-
                     this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
                     console.log('params', this.$store.state.currentMLList[mln].params)
-                    this.$axios.post(`/model/create/`+ projectId, JSON.stringify(this.$store.state.currentMLList[mln]))
-                        .then(res => {
-                        console.log("ml", res)
-
-                    })
                   }
+                  this.$axios.post(`/model/create/`+ projectId, JSON.stringify(this.$store.state.currentMLList))
+                      .then(res => {
+                      console.log("ml", res)
+                  })            
                   this.$store.state.currentMLList = null
                   console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)                  
                 }
