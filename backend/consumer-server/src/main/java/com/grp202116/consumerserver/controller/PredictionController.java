@@ -12,8 +12,12 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
- * The Class PredictionController, control the Prediction in the project and data
- * Control the list and the deletion of the Predictions
+ * This is the controller of predictions,
+ * including methods of selection, insertion and deletion.
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ * @see PredictionMapper
  */
 @RestController
 public class PredictionController {
@@ -22,6 +26,7 @@ public class PredictionController {
 
     /**
      * List the Prediction of certain data
+     *
      * @param dataId the dataId fetched from the mapper
      * @return return the Prediction of corresponding dataId
      */
@@ -32,6 +37,7 @@ public class PredictionController {
 
     /**
      * List the Prediction of certain project
+     *
      * @param projectId the projectId fetched from the mapper
      * @return return the Prediction of corresponding projectId
      */
@@ -42,6 +48,7 @@ public class PredictionController {
 
     /**
      * Delete all the Prediction in the certain project
+     *
      * @param projectId the projectId fetched from the mapper
      */
     @DeleteMapping("prediction/project/{projectId}")
@@ -49,6 +56,12 @@ public class PredictionController {
         predictionMapper.deleteByProjectId(projectId);
     }
 
+    /**
+     * Set the accepting status of a certain prediction
+     *
+     * @param predictionId the id of prediction
+     * @param status the status of whether accepted
+     */
     @GetMapping("prediction/{predictionId}/{status}")
     public void setAcceptStatus(@PathVariable BigInteger predictionId, @PathVariable int status) {
         if (status == 0) predictionMapper.setNotAccepted(predictionId);

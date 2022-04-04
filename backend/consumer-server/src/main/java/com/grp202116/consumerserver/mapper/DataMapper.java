@@ -8,7 +8,12 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
- * The DataMapper define the actions or the operations of the Data
+ * This is the mapper class of the data table,
+ * controlling interactions with the database.
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ * @see DataDO
  */
 @Mapper
 public interface DataMapper extends BaseMapper {
@@ -27,8 +32,11 @@ public interface DataMapper extends BaseMapper {
      */
     DataDO getByDataId(BigInteger id);
 
-    List<DataDO> getAnnotatedIdList(List<BigInteger> dataIdList);
-
+    /**
+     * List all annotated data
+     *
+     * @return the list of data
+     */
     List<DataDO> getAnnotatedList();
 
     /**
@@ -54,15 +62,29 @@ public interface DataMapper extends BaseMapper {
      */
     void deleteDataById(BigInteger dataId);
 
-    Boolean getAnnotateStatus(BigInteger dataId);
-
-    int getProjectId(BigInteger dataId);
-
+    /**
+     * Alter annotation table to reset auto-increment from the largest number
+     */
     void alter();
 
+    /**
+     * Set a certain data to the status of annotated
+     *
+     * @param dataId the id of data
+     */
     void setAnnotated(BigInteger dataId);
 
+    /**
+     * Set a certain data to the status of not being annotated
+     *
+     * @param dataId the id of data
+     */
     void setNotAnnotated(BigInteger dataId);
 
+    /**
+     * Updated the {@link DataDO#isPredicted()}
+     *
+     * @param dataDO the data to be updated
+     */
     void updateDataPredict(DataDO dataDO);
 }

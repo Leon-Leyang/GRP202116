@@ -132,7 +132,7 @@ public class ModelController {
         String scriptPath = runObject.getString("script_url");
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDO model = modelMapper.getByVersion(version);
+        ModelDO model = modelMapper.getByVersionProject(version, projectId);
 
         if (model == null) return;
 
@@ -181,7 +181,7 @@ public class ModelController {
         JSONObject trainParams = trainObject.getJSONObject("params");
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDO model = modelMapper.getByVersion(version);
+        ModelDO model = modelMapper.getByVersionProject(version, projectId);
 
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
         if (annotationList.size() < 1) return "";

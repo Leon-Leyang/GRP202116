@@ -7,7 +7,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
- * This is the mapper class of annotations,
+ * This is the mapper class of the annotation table,
  * controlling interactions with the database.
  *
  * @author Yujie Chen

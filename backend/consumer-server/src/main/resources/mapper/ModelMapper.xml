@@ -33,6 +33,12 @@
                            create_time, model_root, type, params, labels_path)
         values (#{modelPath}, #{version}, #{description}, #{projectId},
                 #{createTime}, #{modelRoot}, #{type}, #{params}, #{labelsPath})
+        ON DUPLICATE KEY UPDATE model_path  = VALUES(model_path),
+                                description = VALUES(description),
+                                model_root  = VALUES(model_root),
+                                type        = VALUES(type),
+                                params      = VALUES(params),
+                                labels_path = VALUES(labels_path)
     </insert>
 
     <select id="getByProjectId" resultMap="modelMap">
@@ -41,10 +47,11 @@
         where project_id = #{projectId}
     </select>
 
-    <select id="getByVersion" resultMap="modelMap">
+    <select id="getByVersionProject" resultMap="modelMap">
         select *
         from model
-        where version = #{versioin}
+        where version = #{version}
+          AND project_id = #{projectId}
     </select>
 
     <delete id="deleteByProjectId">

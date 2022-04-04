@@ -5,8 +5,11 @@ import java.util.Date;
 /**
  * The class ProjectDO contain the basic information of the project data object
  * controls the type, updateTime, name and description value of the project object using setter and getter method
+ *
+ * @author Yujie Chen
+ * @version 1.2
  */
-public class ProjectDO extends ProjectDistinguishableDO{
+public class ProjectDO extends ProjectDistinguishableDO {
     private String type;
     private Date updateTime;
     private String name;
@@ -15,6 +18,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Get the type of the project object
+     *
      * @return the type of the project
      */
     public String getType() {
@@ -23,6 +27,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Set the type of the project
+     *
      * @param type the set type
      */
     public void setType(String type) {
@@ -31,6 +36,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Get the updateTime of the project data object
+     *
      * @return the updateTime of the project
      */
     public Date getUpdateTime() {
@@ -39,6 +45,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Set the updateTime of the project
+     *
      * @param updateTime the set updateTime of the project
      */
     public void setUpdateTime(Date updateTime) {
@@ -47,6 +54,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Get the name value of the project data object
+     *
      * @return the name value
      */
     public String getName() {
@@ -55,6 +63,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Set the name value of the project
+     *
      * @param name the set name
      */
     public void setName(String name) {
@@ -63,6 +72,7 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Get the description of the project data object
+     *
      * @return the description of the project
      */
     public String getDescription() {
@@ -71,16 +81,27 @@ public class ProjectDO extends ProjectDistinguishableDO{
 
     /**
      * Set the description of the project
+     *
      * @param description the set description
      */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Get the configs of a certain project
+     *
+     * @return the {@link #configs}
+     */
     public String getConfigs() {
         return configs;
     }
 
+    /**
+     * Set the configs of a certain project
+     *
+     * @param configs the configs to be updated
+     */
     public void setConfigs(String configs) {
         this.configs = configs;
     }
