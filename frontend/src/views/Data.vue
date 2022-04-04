@@ -78,8 +78,10 @@ export default {
 
   methods: {
     enterData(data){
-      this.predicts = []
-      this.annos = []
+      this.predicts.splice(0, this.predicts.length) 
+      this.annos.splice(0, this.annos.length)  
+      console.log('annopre', this.annos,this.predicts) 
+
       console.log('dataId', data.dataId)
       this.$store.state.currentDataId = data.dataId
       this.$store.state.realDataId = data.realDataId
@@ -89,8 +91,10 @@ export default {
       console.log('enter', data)
     },
     prev(){
-      this.predicts = []
-      this.annos = []
+      this.predicts.splice(0, this.predicts.length) 
+      this.annos.splice(0, this.annos.length)  
+      console.log('annopre', this.annos,this.predicts) 
+
       if(this.$store.state.currentDataId == 1){
         console.log('no prev')
       }else{
@@ -102,8 +106,9 @@ export default {
 
     },
     next(){
-      this.predicts = []
-      this.annos = []      
+      this.predicts.splice(0, this.predicts.length) 
+      this.annos.splice(0, this.annos.length)    
+      console.log('annopre', this.annos,this.predicts) 
       if(this.$store.state.currentDataId == (this.$store.state.currentDataList.length)){
         console.log('no next')
       }else{
@@ -127,18 +132,18 @@ export default {
               }
           })
           .then(res => {
-            console.log('Anno', res)
+            console.log('Anno', res,this.annos)
             this.annoDataList = res.data.map(item => {
                 return {...item}
             })
-            for(var i = 0; i < this.annoDataList.length; i++){
-              console.log('i', this.annoDataList[i])
-              this.annos[i].id = this.annoDataList[i].annotationId
-              this.annos[i].result = eval(this.annoDataList[i].result)
-              console.log('tag', this.annos[i].result)
+            console.log('Anno', this.annoDataList)
 
+            for(var i = 0; i < this.annoDataList.length; i++){
+              console.log('i', i)
+              this.annos.push({id: this.annoDataList[i].annotationId, result: eval(this.annoDataList[i].result)})
             }
-            console.log('annos:', (this.annos[0]))
+            // this.annos = JSON.parse(this.annos)
+            console.log('annos:', this.annos)
           })
           .catch((error) => {
   // here you will have access to error.response
@@ -170,6 +175,7 @@ export default {
     },
 
     newLS(data){
+      var temp = this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
         if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
           var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
@@ -183,18 +189,26 @@ export default {
             this.getAnno()
           },100)
         }
+        console.log('t/f', this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0)
         if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
           this.predicts = []
+          if(temp != 0){
+            this.getAnno()
+          }
+          console.log('pre', this.predicts )
         }
       }else{
         this.getAnno()
         this.getPredict()
       }
+      console.log('des', '')
       this.labelStudio.destroy()
-      console.log('this', this.annos[0].result.length)
-      if(this.annos[0].result.length == 0 & this.predicts != []){
+      console.log('this', this.annos)
+      if(this.annos == [] & this.predicts != []){
         this.annos = this.predicts
       }
+      console.log('anno,pre',this.annos,this.predicts)
+
       this.labelStudio = new LabelStudio("label-studio", {
         config: this.$store.state.currentConfig,
         interfaces: [
@@ -281,6 +295,7 @@ export default {
           })
         },
       });
+    
     },
   
   },
@@ -292,8 +307,10 @@ export default {
     console.log('curren', this.$store.state.currentDataList,this.$store.state.currentDataId)
     console.log('tisada', this.tableData)
     // console.log('confi', this.$store.state.currentConfig)
-    console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
+    console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 )
+    var temp = this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated
     if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
+      console.log('te', this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0)
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
         var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
         annotationlist[0].dataId = this.$store.state.realDataId
@@ -301,13 +318,16 @@ export default {
         .then((res)=>{
           console.log('annotalist up', res)
         })
-        clearTimeout(this.timer);
-        this.timer = setTimeout(()=>{
+        // clearTimeout(this.timer);
+        // this.timer = setTimeout(()=>{
           this.getAnno()
-        },500)
+        // },500)
       }
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
         this.predicts = []
+          if(temp != 0){
+            this.getAnno()
+          }
         console.log('empty pre', this.predicts)
       }
     }else{
@@ -318,10 +338,11 @@ export default {
     this.timer = setTimeout(()=>{
 
       //lack the multi people condition
-      console.log('this', this.annos[0].result.length)
-      if(this.annos[0].result.length == 0 & this.predicts != []){
+      console.log('this', this.annos)
+      if(this.annos == [] & this.predicts != []){
         this.annos = this.predicts
       }
+      console.log('anno,pre',this.annos,this.predicts)
       this.labelStudio = new LabelStudio("label-studio", {
         // config: this.config,
         config: this.$store.state.currentConfig,
@@ -408,9 +429,10 @@ export default {
           })
         },
       });
-    },700)
     console.log(this.labelStudio.options)
     this.$store.state.nowLS = this.labelStudio
+    },1000)
+
   },
 };
 </script>
