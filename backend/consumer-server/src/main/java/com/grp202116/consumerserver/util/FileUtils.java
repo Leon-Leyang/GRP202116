@@ -47,6 +47,7 @@ public class FileUtils {
         File project = new File(projectPath);
         try {
             Files.createDirectories(project.toPath());
+            logger.info("New directory created in: " + project.getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,7 +121,7 @@ public class FileUtils {
         try {
             if (targetFile.exists()) Files.delete(targetFile.toPath());
             Files.copy(file.toPath(), targetFile.toPath());
-            logger.info("New file created at: " + targetFile.getPath());
+            logger.info(file.getPath() + "is copied to" + targetFile.getPath());
         } catch (FileAlreadyExistsException e) {
             e.printStackTrace();
         }

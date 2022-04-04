@@ -78,7 +78,7 @@ public class ModelSaver {
         try {
             if (targetFile.exists()) Files.delete(targetFile.toPath());
             Files.copy(modelFile.toPath(), targetFile.toPath());
-            logger.info("New file created at: " + targetFile.getPath());
+            logger.info(modelFile.getPath() + "is copied to" + targetFile.getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,7 +103,7 @@ public class ModelSaver {
                 Files.delete(targetFile.toPath());
             }
             Files.copy(customFile.toPath(), targetFile.toPath());
-            logger.info("New file created at: " + targetFile.getPath());
+            logger.info(customFile.getPath() + "is copied to"  + targetFile.getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }

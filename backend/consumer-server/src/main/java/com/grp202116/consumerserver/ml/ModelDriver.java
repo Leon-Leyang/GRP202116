@@ -90,7 +90,7 @@ public class ModelDriver {
             PredictionDO prediction = new PredictionDO();
             prediction.setPredictionId(predictionJSONObject.getString("id"));
             prediction.setType(predictionJSONObject.getString("type"));
-            prediction.setResult(predictionJSONObject.toJSONString());
+            prediction.setResult("[" + predictionJSONObject.toJSONString() + "]");
 
             Date date = new Date();
             prediction.setCreateTime(date);
