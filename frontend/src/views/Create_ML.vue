@@ -273,10 +273,10 @@
     methods: {
       onSubmit() {
           console.log('submit!');
-          this.$store.state.currentMLList.push(this.form)
+          this.items.push(this.form)
           console.log('submit!');
-          this.items = this.$store.state.currentMLList
-          console.log('item', this.items)
+          this.$store.state.currentMLList = this.items
+          console.log('item', this.items, this.$store.state.currentMLList)
           this.form = {
             modelRoot:'',
             version: '',

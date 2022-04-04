@@ -443,9 +443,9 @@ import ML from './Create_ML.vue'
 
 
                 var folderURL = this.folderURL.split(",")
+                var projectId = this.newestId
                 //upload folder address
                 if(folderURL != ''){                
-                  var projectId = this.newestId
                   console.log('newestId', projectId)
                   console.log('address', folderURL)
                   this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
@@ -457,8 +457,8 @@ import ML from './Create_ML.vue'
 
 
                 //post ml
-                console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
-                if(this.$store.state.currentMLList != []){
+                console.log('this.$store.state.currentMLList1', this.$store.state.currentMLList)
+                if(this.$store.state.currentMLList != null){
                   for(var mln = 0; mln<this.$store.state.currentMLList.length; mln++){
                     console.log('mln', mln)
                     console.log('params', this.$store.state.currentMLList[mln].params)
@@ -500,7 +500,6 @@ import ML from './Create_ML.vue'
           this.active = '1'
           this.refresh = false
           this.$store.state.currentProjectId = null
-          this.$store.state.currentMLList = null
       },
       cancelChange(){
         this.isShow = false 
