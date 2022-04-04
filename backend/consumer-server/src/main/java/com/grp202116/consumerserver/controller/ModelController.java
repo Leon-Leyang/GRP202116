@@ -103,7 +103,7 @@ public class ModelController {
     /**
      * Delete the Model in certain project
      *
-     * @param projectId the projectId fetched from the mapper
+     * @param modelId the projectId fetched from the mapper
      */
     @DeleteMapping("/model/{modelId}")
     public void deleteModel(@PathVariable BigInteger modelId) {
@@ -115,27 +115,28 @@ public class ModelController {
      * Create a new model and save it to the database
      *
      * @param projectId project id
-     * @param model     a {@link ModelDO} object
+     * @param modelList     a list of {@link ModelDO} object
      */
     @PostMapping("/model/create/{projectId}")
     public void createModel(@PathVariable BigInteger projectId,
-                            @RequestBody ModelDO model) {
+                            @RequestBody List<ModelDO> modelList) {
+        for (ModelDO model: modelList) {
+            model.setCreateTime(new Date());
+            model.setProjectId(projectId);
 
-        model.setCreateTime(new Date());
-        model.setProjectId(projectId);
+            ModelSaver modelSaver = new ModelSaver(model);
+            String modelPath = modelSaver.saveModel(model.getModelPath());
+            if (modelPath == null) return;
+            else model.setModelPath(modelPath);
 
-        ModelSaver modelSaver = new ModelSaver(model);
-        String modelPath = modelSaver.saveModel(model.getModelPath());
-        if (modelPath == null) return;
-        else model.setModelPath(modelPath);
+            String labelPath = modelSaver.saveLabels(model.getLabelsPath());
+            if (labelPath == null) return;
+            else model.setLabelsPath(labelPath);
 
-        String labelPath = modelSaver.saveLabels(model.getLabelsPath());
-        if (labelPath == null) return;
-        else model.setLabelsPath(labelPath);
+            if (saveModelParams(model, modelSaver)) return;
 
-        if (saveModelParams(model, modelSaver)) return;
-
-        modelMapper.insert(model);
+            modelMapper.insert(model);
+        }
     }
 
     /**

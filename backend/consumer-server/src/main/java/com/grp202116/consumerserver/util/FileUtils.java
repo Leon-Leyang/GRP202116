@@ -154,7 +154,13 @@ public class FileUtils {
             dataList.add(data);
         }
         File targetFile = new File(projectPath + UUID.randomUUID() + "." + realType);
-        if (targetFile.createNewFile()) logger.info("New file created at: " + targetFile.getPath());
+        try {
+            if (targetFile.exists()) Files.delete(targetFile.toPath());
+            Files.copy(file.toPath(), targetFile.toPath());
+            logger.info(file.getPath() + "is copied to" + targetFile.getPath());
+        } catch (FileAlreadyExistsException e) {
+            e.printStackTrace();
+        }
 
         bf.close();
     }
