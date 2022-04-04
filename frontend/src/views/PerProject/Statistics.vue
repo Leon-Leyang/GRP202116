@@ -22,14 +22,14 @@
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Percentage completed</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="(statistic.labeledDataListNumber/statistic.dataListNumber)"></el-progress></div>
+            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.completionPercentage"></el-progress></div>
         </el-col>
         </el-row>
 
         <el-row>
-        <el-col :span="24" class="inblock" v-if="this.$store.state.currentProject.type == 'txt'">
+        <el-col :span="24" class="inblock" v-if="this.$store.state.currentProject.type == 'text'">
             <div class="grid-content bg-purple-light title">Average word counts per piece of data </div>
-            <div class="pagetext-a">{{averageTextWordsNumber}}</div>
+            <div class="pagetext-a">{{statistic.averageTextWordsNumber}}</div>
         </el-col>
         </el-row>      
 
@@ -58,7 +58,7 @@
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple-light title">Average annotations per data</div>
-            <div class="pagetext-a">12</div>
+            <div class="pagetext-a">{{statistic.annotationsNumber/statistic.dataListNumber}}</div>
         </el-col>
         </el-row>
           </v-card>
@@ -117,7 +117,7 @@ export default {
       })
       .catch((error) => {
           // here you will have access to error.response
-          console.log('error',error.response)
+          console.log('error',error.resposnse)
       });    
   }
 }
