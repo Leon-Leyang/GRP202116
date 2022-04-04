@@ -442,8 +442,8 @@
         type: '',
         resource: '',
         params:{
-            mean:null,
-            std:null,
+            mean:'[0.485, 0.456, 0.406]',
+            std:'[0.229, 0.224, 0.225]',
             imgSize:null,
             threshold:null,
             vocabPath:null,
@@ -548,10 +548,10 @@
       onSubmit() {
           console.log('submit1!');
           console.log('form', this.form)
-          this.$store.state.currentMLList.push(this.form)
+          this.items.push(this.form)
           console.log('submit2!');
-          this.items=this.$store.state.currentMLList
-          console.log('this.$store.state.currentMLList.', this.$store.state.currentMLList)
+          this.$store.state.currentMLList = this.items
+          console.log('currentMLList.', this.$store.state.currentMLList)
 
           console.log('item', this.items)
           this.form = {
@@ -563,8 +563,8 @@
             type: '',
             resource: '',
             params:{
-                mean:null,
-                std:null,
+                mean:'[0.485, 0.456, 0.406]',
+                std:'[0.229, 0.224, 0.225]',
                 imgSize:null,
                 threshold:null,
                 vocabPath:null,
@@ -575,8 +575,8 @@
           console.log('item', this.items)
           this.value = null
 
-          // console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
-          // if(this.$store.state.currentMLList != []){
+          // console.log('this.$store.state.currentMLList ml page', this.$store.state.currentMLList)
+          // if(this.$store.state.currentMLList != null){
           //   for(var mln = this.numOfML; mln<this.$store.state.currentMLList.length; mln++){
           //     console.log('mln', mln)
           //     console.log('params', this.$store.state.currentMLList[mln].params)
