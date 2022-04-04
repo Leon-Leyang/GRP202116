@@ -41,6 +41,11 @@ public class FileUtils {
      * @return the list of {@link DataDO} to be inserted into the database
      */
     public static List<DataDO> uploadProjectData(List<File> fileList, BigInteger projectId, String type) {
+        if (type == null) {
+            logger.warn("The type of this project " + projectId + " is not specified");
+            return null;
+        }
+
         dataList = new ArrayList<>();
         FileUtils.projectId = projectId;
         projectPath = ".." + File.separator + "files" + File.separator + projectId + File.separator;
@@ -50,17 +55,19 @@ public class FileUtils {
             logger.info("New directory created in: " + project.getPath());
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
 
         for (File file : fileList) {
             try {
                 if (!file.exists()) {
-                    logger.info(file.getPath() + "  is not a file nor a directory");
+                    logger.warn(file.getPath() + "  is not a file nor a directory");
                     continue;
                 }
                 moveToLocal(file, type);
             } catch (IOException e) {
                 e.printStackTrace();
+                return null;
             }
         }
 
@@ -101,10 +108,10 @@ public class FileUtils {
                     && !realType.equalsIgnoreCase("webp"))
                 return;
         } else {
-            if (!realType.equalsIgnoreCase("txt") && !realType.equalsIgnoreCase("csv")
-                    && !realType.equalsIgnoreCase("tsv") && !realType.equalsIgnoreCase("json"))
-                return;
-            else splitText(file, realType);
+            if (realType.equalsIgnoreCase("txt") || realType.equalsIgnoreCase("csv")
+                    || realType.equalsIgnoreCase("tsv") || realType.equalsIgnoreCase("json"))
+                splitText(file, realType);
+            return;
         }
 
         DataDO data = new DataDO();
