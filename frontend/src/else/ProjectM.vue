@@ -56,12 +56,7 @@ import Create from '../components/ProjectManage/Create.vue';
         getList(name = '') {
             this.config.loading = true
             name ? (this.config.page = 1) : ''
-            this.$axios.get('/projects', {
-                    params: {
-                        page: this.config.page,
-                        name
-                    }
-                })
+            this.$axios.get('/projects')
                 .then(res => {
                     console.log("list",res)
                     this.tableData = res.data.map(item => {

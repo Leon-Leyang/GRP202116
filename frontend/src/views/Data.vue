@@ -120,7 +120,7 @@ export default {
               console.log('tag', this.annos[i].result)
 
             }
-            console.log('annos:', this.annos)
+            console.log('annos:', (this.annos[0]))
           })
           .catch((error) => {
   // here you will have access to error.response
@@ -162,14 +162,15 @@ export default {
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0 ){
         if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0){
           var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
-          axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist)
+          annotationlist[0].dataId = this.$store.state.realDataId
+          axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
           .then((res)=>{
             console.log('annotalist up', res)
           })
           clearTimeout(this.timer);
           this.timer = setTimeout(()=>{
             this.getAnno()
-          },500)
+          },100)
         }
         if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0){
           this.predicts = []
@@ -284,7 +285,8 @@ export default {
     if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].isPredicted == 0 ){
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].isAnnotated == 0){
         var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
-        axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist)
+        annotationlist[0].dataId = this.$store.state.realDataId
+        axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
         .then((res)=>{
           console.log('annotalist up', res)
         })
