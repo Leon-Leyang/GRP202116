@@ -1,45 +1,5 @@
 <template>
   <v-container class="co">
- <!--<v-toolbar
- 
-    color="purple"
-    dark
-  >
-    <v-toolbar-title>Title</v-toolbar-title>
-
-    <v-divider
-      class="mx-4"
-      vertical
-    ></v-divider>
-
-    <span class="subheading">My Home</span>
-
-    <v-spacer></v-spacer>
-
-    <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn text>
-        News
-      </v-btn>
-
-      <v-divider vertical></v-divider>
-
-      <v-btn text>
-        Blog
-      </v-btn>
-
-      <v-divider vertical></v-divider>
-
-      <v-btn text>
-        Music
-      </v-btn>
-
-      <v-divider vertical></v-divider>
-    </v-toolbar-items>
-
-    <v-app-bar-nav-icon></v-app-bar-nav-icon>
-  </v-toolbar>
- -->
-
   <v-row
         no-gutters
         justify="center"
@@ -55,21 +15,21 @@
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Data completed</div>
-            <div class="pagetext-a">12/3</div>
+            <div class="pagetext-a">{{statistic.labeledDataListNumber}}/{{statistic.dataListNumber}}</div>
         </el-col>
         </el-row>
 
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Percentage completed</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="25"></el-progress></div>
+            <div class="pagetext-b"><el-progress type="circle" :percentage="(statistic.labeledDataListNumber/statistic.dataListNumber)"></el-progress></div>
         </el-col>
         </el-row>
 
         <el-row>
-        <el-col :span="24" class="inblock">
+        <el-col :span="24" class="inblock" v-if="this.$store.state.currentProject.type == 'txt'">
             <div class="grid-content bg-purple-light title">Average word counts per piece of data </div>
-            <div class="pagetext-a">1130</div>
+            <div class="pagetext-a">{{averageTextWordsNumber}}</div>
         </el-col>
         </el-row>      
 
@@ -86,13 +46,13 @@
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Total annotations:</div>
-            <div class="pagetext-a">123</div>
+            <div class="pagetext-a">{{statistic.annotationsNumber}}</div>
         </el-col>     
         </el-row>
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Annotations Percentage:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="25"></el-progress></div>
+            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averageAnnotations"></el-progress></div>
         </el-col>
         </el-row>   
         <el-row>
@@ -114,14 +74,14 @@
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Total predictions:</div>
-            <div class="pagetext-a">123</div>
+            <div class="pagetext-a">{{statistic.predictionsNumber}}</div>
         </el-col>
         </el-row>
 
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Predictions Percentage:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="35"></el-progress></div>
+            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averagePredictions"></el-progress></div>
         </el-col>
         </el-row> 
 
@@ -140,6 +100,28 @@
   </v-container>
   
 </template>
+<script>
+export default {
+  data() {
+    return {
+      statistic:null,
+    }
+  },
+  mounted(){
+    this.$axios.get('/statistics/'+ this.$store.state.currentProjectId)
+      .then(res => {
+          console.log("statistics",res)
+          this.statistic = res.data
+          console.log(" sta table",this.statistic)
+
+      })
+      .catch((error) => {
+          // here you will have access to error.response
+          console.log('error',error.response)
+      });    
+  }
+}
+</script>
 
 <style>
 

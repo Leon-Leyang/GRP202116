@@ -72,7 +72,7 @@
                 }) 
       }
     },
-    mounted() {
+    created() {
       clearTimeout(this.timer); 
  
       this.timer = setTimeout(()=>{  
@@ -88,40 +88,111 @@
 
           if(this.tableData[i].url.indexOf(".jpg")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".jpg", "")
-            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.jpg' )
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpg' )
+            console.log('puic', this.tableData[i].url)
+          }
+          else if(this.tableData[i].url.indexOf(".JPG")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".JPG", "")
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.JPG' )
             console.log('puic', this.tableData[i].url)
           }
           else if(this.tableData[i].url.indexOf(".JPEG")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".JPEG", "")
-            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.JPEG' )
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.JPEG' )
+            console.log('puic', this.tableData[i].url)
+          }          
+          else if(this.tableData[i].url.indexOf(".jpeg")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".jpeg", "")
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpeg' )
             console.log('puic', this.tableData[i].url)
           }
           else if(this.tableData[i].url.indexOf(".PNG")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".PNG", "")
-            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.PNG' )
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.PNG' )
             console.log('puic', this.tableData[i].url)
           }
+          else if(this.tableData[i].url.indexOf(".png")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".png", "")
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.png' )
+            console.log('puic', this.tableData[i].url)
+          }          
           else if(this.tableData[i].url.indexOf(".webp")!=-1){
             this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
-            this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.webp' )
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.webp' )
             console.log('puic', this.tableData[i].url)
           }
+          else if(this.tableData[i].url.indexOf(".WEBP")!=-1){
+            this.tableData[i].url = this.tableData[i].url.replace(".WEBP", "")
+            this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.WEBP' )
+            console.log('puic', this.tableData[i].url)
+          }          
           // else if(this.tableData[i].url.indexOf("txt")!=-1){
           //   this.tableData[i].url = this.tableData[i].url.replace(".txt", "")
-          //   this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.txt' )
+          //   this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.txt' )
           // }  
           // else if(this.tableData[i].url.indexOf(".doc")!=-1){
           //   this.tableData[i].url = this.tableData[i].url.replace(".doc", "")
-          //   this.tableData[i].url = require("..//..//..//..//../GRP202116/" + this.tableData[i].url + '.doc' )
+          //   this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.doc' )
           // }                  
           console.log('tabelda',this.tableData[i].url)
         }
         this.$store.state.currentDataList = this.tableData
 
         console.log('asd', this.$store.state.currentDataList)
-      },500);
+      },700);
 
-    },  
+    }, 
+
+    // mounted() {
+    //   clearTimeout(this.timer); 
+ 
+    //   this.timer = setTimeout(()=>{  
+    //     console.log('currentDataList', this.$store.state.currentDataList)
+    //     this.tableData = this.$store.state.currentDataList
+    //     console.log('curraList', this.tableData)
+
+    //     // for(var i=0; i<this.tableData.length; i++){
+    //     //   this.tableData[i].realDataId = this.tableData[i].dataId
+    //     //   this.tableData[i].dataId = i + 1
+    //     //   this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
+    //     //   this.tableData[i].url = this.tableData[i].url.replace("../", "")
+
+    //     //   if(this.tableData[i].url.indexOf(".jpg")!=-1){
+    //     //     this.tableData[i].url = this.tableData[i].url.replace(".jpg", "")
+    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpg' )
+    //     //     console.log('puic', this.tableData[i].url)
+    //     //   }
+    //     //   else if(this.tableData[i].url.indexOf(".JPEG")!=-1){
+    //     //     this.tableData[i].url = this.tableData[i].url.replace(".JPEG", "")
+    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.JPEG' )
+    //     //     console.log('puic', this.tableData[i].url)
+    //     //   }
+    //     //   else if(this.tableData[i].url.indexOf(".PNG")!=-1){
+    //     //     this.tableData[i].url = this.tableData[i].url.replace(".PNG", "")
+    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.PNG' )
+    //     //     console.log('puic', this.tableData[i].url)
+    //     //   }
+    //     //   else if(this.tableData[i].url.indexOf(".webp")!=-1){
+    //     //     this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
+    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.webp' )
+    //     //     console.log('puic', this.tableData[i].url)
+    //     //   }
+    //     //   // else if(this.tableData[i].url.indexOf("txt")!=-1){
+    //     //   //   this.tableData[i].url = this.tableData[i].url.replace(".txt", "")
+    //     //   //   this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.txt' )
+    //     //   // }  
+    //     //   // else if(this.tableData[i].url.indexOf(".doc")!=-1){
+    //     //   //   this.tableData[i].url = this.tableData[i].url.replace(".doc", "")
+    //     //   //   this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.doc' )
+    //     //   // }                  
+    //     //   console.log('tabelda',this.tableData[i].url)
+    //     // }
+    //     // this.$store.state.currentDataList = this.tableData
+
+    //     // console.log('asd', this.$store.state.currentDataList)
+    //   },500);
+
+    // },      
 
   }
 </script>

@@ -81,6 +81,7 @@ import Setting from '@/views/PerProject/Setting'
       }
     },
     mounted() {
+      this.$store.state.currentMLList = null
       console.log('label', this.$store.state.currentConfig)
       this.projectId = this.$store.state.currentProjectId
       console.log('projectId',this.projectId)

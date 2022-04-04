@@ -173,38 +173,14 @@
     
 
 <style>
-/*
-  .content{
-    width:90%;
-    margin: 0 auto;
-  }
-
-
-.v-input--selection-controls {
-   margin-top:0!important;
-}
-
-.v-card__subtitle, .v-card__text, .v-card__title{
-        padding: 0;
-}
-
-.v-text-field {
-    padding-top: 0px!important;
-    margin-top: 0px!important; 
-    margin-bottom: 20px;
-}
-
-.v-messages{
-    min-height: 0!important;
-}*/
 </style>
 
 <script>
 
 export default {
-    data: () => ({
-
-      items: [
+  data() {
+    return {
+            items: [
         {
           title: 'Polygons',
           img: '/images/1.JPG',
@@ -215,10 +191,15 @@ export default {
         },
       ],
       
-       name: 'Hey!',
-       description: "This is a project for the ..."
-    
-    })
+       name: this.$store.state.currentProject.name,
+       description: this.$store.state.currentProject.description,
+    }
+  },
+  mounted() {
+    console.log('this.$store.state.currentProject', this.$store.state.currentProject)
+  },
+
+
 }
 
 </script>
