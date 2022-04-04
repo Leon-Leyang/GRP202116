@@ -495,7 +495,7 @@
       testScript:'',
       runObject: {
         version:'',
-        scriptUrl:''
+        scriptUrl:null
       },
       trainObject:{
         version:null,
@@ -519,6 +519,8 @@
       numOfML:null,
 
       items: [ ],
+      prevMLList:[],
+      newMLList:null
       }
     },
     watch:{
@@ -548,6 +550,7 @@
       onSubmit() {
           console.log('submit1!');
           console.log('form', this.form)
+          this.newMLList.push(this.form)
           this.items.push(this.form)
           console.log('submit2!');
           this.$store.state.currentMLList = this.items
@@ -575,23 +578,19 @@
           console.log('item', this.items)
           this.value = null
 
-          // console.log('this.$store.state.currentMLList ml page', this.$store.state.currentMLList)
-          // if(this.$store.state.currentMLList != null){
-          //   for(var mln = this.numOfML; mln<this.$store.state.currentMLList.length; mln++){
-          //     console.log('mln', mln)
-          //     console.log('params', this.$store.state.currentMLList[mln].params)
-
-          //     this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
-          //     console.log('params', this.$store.state.currentMLList[mln].params)
-          //     this.$axios.post(`/model/create/`+ this.$store.state.currentProjectId, JSON.stringify(this.$store.state.currentMLList[mln]))
-          //         .then(res => {
-          //         console.log("ml", res)
-
-          //     })
-          //   }
-          //   this.numOfML = this.$store.state.currentMLList.length
-          //   console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)                  
-          // }
+          console.log('this.$store.state.currentMLList ml page, newMLList', this.$store.state.currentMLList, this.newMLList)
+          if(this.newMLList != null){
+            for(var mln = 0; mln<this.newMLList.length; mln++){
+              console.log('mln', mln)
+              this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
+              console.log('params', this.$store.state.currentMLList[mln].params)
+            }
+            this.$axios.post(`/model/create/`+ this.$store.state.currentProjectId, JSON.stringify(this.newMLList))
+                .then(res => {
+                console.log("ml", res)
+            })
+            console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)                  
+          }
 
           console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
       },
@@ -663,6 +662,7 @@
             this.items = res.data
             this.$store.state.currentMLList = this.items
             this.numOfML = this.items.length
+            this.prevMLList = this.items
           })
           .catch((error) => {
               // here you will have access to error.response

@@ -66,7 +66,7 @@ export default {
       annoDataList:[],
       annos:[{id:null,result:[]}],
       predictDataList:[],
-      predicts:[{id:null,result:[]}],
+      predicts:[],
       preState: 'accept',
       //test param
       id:0,
@@ -153,14 +153,7 @@ export default {
             })
             console.log('pre', this.predictDataList)
             for(var j = 0; j < this.predictDataList.length; j++){
-              console.log('j', j)
-              this.predicts[j].id = this.predictDataList[j].predictionId
-              console.log('jas', this.predictDataList[j].predictionId)
-              console.log(this.predictDataList[j].result)
-              this.predicts[j].result = eval(this.predictDataList[j].result)
-            console.log('preasd', this.predictDataList[j].result)
-
-
+              this.predicts.push({id: this.predictDataList[j].predictionId, result: eval(this.predictDataList[j].result)})
             }
             console.log('predicts:', this.predicts)            
           })
