@@ -102,9 +102,12 @@ public class FileUtils {
                 return;
         } else {
             if (!realType.equalsIgnoreCase("txt") && !realType.equalsIgnoreCase("csv")
-                    && !realType.equalsIgnoreCase("tsv") && !realType.equalsIgnoreCase("json"))
+                    && !realType.equalsIgnoreCase("tsv") && !realType.equalsIgnoreCase("json")){
                 return;
-            else splitText(file, realType);
+            }else{
+                splitText(file, realType);
+                return;
+            }
         }
 
         DataDO data = new DataDO();
