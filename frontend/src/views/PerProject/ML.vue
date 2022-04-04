@@ -322,7 +322,7 @@
                                         <v-col cols="12">
                                           <div style="margin-top:30px">
                                             Upload the Customized Train Script Here:
-                                            <el-input type="textarea" v-model="trainObject.scriptUrl"></el-input>                                            
+                                            <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
                                           </div>
                                         </v-col>
                                         
@@ -492,10 +492,10 @@
         {label:'Customization',value: '6'}]
         }],
       value: '',
-      testScript:'',
+      testScript:null,
       runObject: {
         version:'',
-        scriptUrl:null
+        script_url:null
       },
       trainObject:{
         version:null,
@@ -510,7 +510,7 @@
           lossFunction:null,
           localPath:null,
         },
-        scriptUrl:null,
+        script_url:null,
       },
 
       dialog:false,
@@ -599,13 +599,9 @@
         console.log('version', version)
         this.dialog = false
         this.runObject.version = version
-        this.runObject.scriptUrl = this.testScript
+        this.runObject.script_url = this.testScript
         console.log('runObject', this.runObject, JSON.stringify(this.runObject))
-        this.$axios.post('/model/run/'+ this.$store.state.currentProjectId,{
-          params:{
-            runObject : JSON.stringify(this.runObject)
-          }          
-        })
+        this.$axios.post('/model/run/'+ this.$store.state.currentProjectId, JSON.stringify(this.runObject))
         .then((res)=>{
           console.log('test model', res)
         })       
