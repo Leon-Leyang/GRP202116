@@ -101,7 +101,7 @@ public class DataController {
         ProjectDO project = projectMapper.getByProjectId(projectId);
         List<File> fileList = FileUtils.multipartToFile(multiFileList);
         List<DataDO> dataList = FileUtils.uploadProjectData(fileList, projectId, project.getType());
-        if (dataList.size() != 0) {
+        if (dataList != null && dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
         }
