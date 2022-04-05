@@ -82,7 +82,6 @@
               <v-col cols="12">
                 <v-text-field
                   label="Learning Rate:"
-                  type="password"
                   hint="number"
                   persistent-hint
                   required
@@ -134,22 +133,23 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <!--
+        
           <v-btn
             color="blue darken-1"
             text
             @click="dialog = false"
           >
-            Close
+            Start
           </v-btn>
-        -->
+
           <v-btn
             color="blue darken-1"
             text
             @click="dialog = false"
           >
-            Run
+            Cancel
           </v-btn>
+          
         </v-card-actions>
       </v-card>
     </v-dialog>

@@ -16,9 +16,9 @@
                                 <el-input v-model="form.version" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model Type:">
+                            <el-form-item label="Script Type:">
 
-                            <el-select v-model="value" placeholder="please select the ML model type" @change="c1">
+                            <el-select v-model="value" placeholder="please select the ML model script type" @change="c1">
                                 <el-option-group
                                 v-for="group in options"
                                 :key="group.label"
@@ -96,16 +96,27 @@
                                 <el-input v-model="form.params.sequenceLen" clearable maxlength="" size="mini" placeholder="(For named entity recognition)"></el-input>
                             </el-form-item>
 
+                           
                             <el-form-item style="margin-top:40px">
-                                <el-button type="primary" @click="onSubmit">Save</el-button>
-                                <el-button>Cancel</el-button>
-                            </el-form-item>
-                            <!--
-                            <div>
-                                    <el-button type="primary" @click="$router.push('/ML-Test')">Test</el-button>
-                                    <el-button type="primary" @click="$router.push('/ML-Train')">Train</el-button>
+                             <!--   <el-button type="primary" @click="onSubmit">Save</el-button>
+                                <el-button>Cancel</el-button>-->
+                                <div style="display:flex;flex-direction:row">
+                            <v-btn
+                            depressed
+                            color="pink lighten-1"
+                            >
+                            Save
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                            
+                             <v-btn
+                            depressed
+                            color="error"
+                            >
+                            Cancel
+                            </v-btn>
                             </div>
-                            -->
+                            </el-form-item>
                             </el-form>
 
                         </div>
@@ -179,7 +190,9 @@
     width:100%; 
   }
 
-    
+  .el-select .el-input {
+    width: 300px;
+  }  
 </style>
 
 <script>

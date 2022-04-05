@@ -1,8 +1,52 @@
 <template>
-<div>
+<div style="background:rgb(218, 253, 249);height:100%">
+  <v-container style="height:100%">
+   <div style="margin: 10px 10px 12px 14px">
+<v-row style="height:10%">
+  <v-btn
+      fab
+      small
+      icon
+    >
+    <v-icon dark>
+      mdi-delete
+    </v-icon>
+    </v-btn>
+  <v-spacer>
+  </v-spacer>
+  <v-btn
+      color="amber"
+      @click="xx()"
+      depressed
+      rounded
+      class="white--text"
+  >  
+      Import<v-icon
+        right
+        dark
+      > mdi-database-import
+      </v-icon>
+  </v-btn>
+  <v-btn
+      style="margin-left:20px; margin-right:10px"
+      color="blue-grey"
+      @click="xx()"
+      rounded
+      depressed
+      class="white--text"
+      
+  >
+      Export<v-icon
+        right
+        dark
+      > mdi-cloud-upload
+      </v-icon>
+  </v-btn>
+</v-row>
+    </div>
 <el-table
   :data="tableData"
-  style="width: 100%"
+  style="width: 100%; height:85%"
   :default-sort = "{prop: 'id', order: 'ascending'}" 
   v-cloak
   stripe
@@ -13,15 +57,15 @@
     <div @click="enterData(tableData.row)" id="div"> -->
       <el-table-column
         type="selection"
-        width="50">
+        >
       </el-table-column>
-      <el-table-column show-overflow-tooltip sortable label="ID" width="100" prop="dataId" align="center">
+      <el-table-column show-overflow-tooltip sortable label="ID" prop="dataId" align="center">
       </el-table-column> 
-      <el-table-column show-overflow-tooltip sortable label="Last Modification Time" width="200" prop="updateTime" align="center">
+      <el-table-column show-overflow-tooltip sortable label="Last Modification Time" prop="updateTime" align="center">
       </el-table-column> 
-      <el-table-column show-overflow-tooltip sortable label="Import Time" width="200" prop="createTime" align="center">
+      <el-table-column show-overflow-tooltip sortable label="Import Time" prop="createTime" align="center">
       </el-table-column>  
-      <el-table-column show-overflow-tooltip label="Preview" width="200" prop="url" align="center">
+      <el-table-column show-overflow-tooltip label="Preview" prop="url" align="center">
         <template slot-scope="scope">
                     <el-popover placement="right" v-if="dataType == 'image'">
                       <img :src="scope.row.url" />
@@ -50,7 +94,7 @@
   <!-- <el-table-column label="Prediction" width="100" prop="predi" align="center"></el-table-column>        -->
 </el-table>
 <el-pagination class="pager" layout="prev, pager, next"  :total="10" :current-page.sync="config.page" @current-change="changePage" :page-size="20"></el-pagination>
-
+</v-container>
 </div>
 </template>
 
@@ -100,7 +144,7 @@
           console.log('valk', val,this.multipleSelection)
       },      
     },
-    mounted() {
+    created() {
       console.log('restart', '')
       this.dataType = this.$store.state.currentProject.type
       if(this.$store.state.currentProject.type == 'image'){
@@ -157,62 +201,12 @@
         },500);
 
       }
-    }, 
-
-    // mounted() {
-    //   clearTimeout(this.timer); 
- 
-    //   this.timer = setTimeout(()=>{  
-    //     console.log('currentDataList', this.$store.state.currentDataList)
-    //     this.tableData = this.$store.state.currentDataList
-    //     console.log('curraList', this.tableData)
-
-    //     // for(var i=0; i<this.tableData.length; i++){
-    //     //   this.tableData[i].realDataId = this.tableData[i].dataId
-    //     //   this.tableData[i].dataId = i + 1
-    //     //   this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
-    //     //   this.tableData[i].url = this.tableData[i].url.replace("../", "")
-
-    //     //   if(this.tableData[i].url.indexOf(".jpg")!=-1){
-    //     //     this.tableData[i].url = this.tableData[i].url.replace(".jpg", "")
-    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpg' )
-    //     //     console.log('puic', this.tableData[i].url)
-    //     //   }
-    //     //   else if(this.tableData[i].url.indexOf(".JPEG")!=-1){
-    //     //     this.tableData[i].url = this.tableData[i].url.replace(".JPEG", "")
-    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.JPEG' )
-    //     //     console.log('puic', this.tableData[i].url)
-    //     //   }
-    //     //   else if(this.tableData[i].url.indexOf(".PNG")!=-1){
-    //     //     this.tableData[i].url = this.tableData[i].url.replace(".PNG", "")
-    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.PNG' )
-    //     //     console.log('puic', this.tableData[i].url)
-    //     //   }
-    //     //   else if(this.tableData[i].url.indexOf(".webp")!=-1){
-    //     //     this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
-    //     //     this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.webp' )
-    //     //     console.log('puic', this.tableData[i].url)
-    //     //   }
-    //     //   // else if(this.tableData[i].url.indexOf("txt")!=-1){
-    //     //   //   this.tableData[i].url = this.tableData[i].url.replace(".txt", "")
-    //     //   //   this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.txt' )
-    //     //   // }  
-    //     //   // else if(this.tableData[i].url.indexOf(".doc")!=-1){
-    //     //   //   this.tableData[i].url = this.tableData[i].url.replace(".doc", "")
-    //     //   //   this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.doc' )
-    //     //   // }                  
-    //     //   console.log('tabelda',this.tableData[i].url)
-    //     // }
-    //     // this.$store.state.currentDataList = this.tableData
-
-    //     // console.log('asd', this.$store.state.currentDataList)
-    //   },500);
-
-    // },      
-
+    },     
   }
 </script>
 
 <style>
-
+.el-table th.el-table__cell>.cell{
+  padding-left: 14px!important;
+}
 </style>

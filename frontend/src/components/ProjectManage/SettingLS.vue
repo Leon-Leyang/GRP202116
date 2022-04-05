@@ -3,21 +3,21 @@
     <v-row
     >
         <v-card
-        width="1250px"
+        style="margin-top:30px; margin-left:10px; height:450px"
+        ><!--width="1250px"
         height="500px"
         style="margin-top:30px; margin-left:10px;"
-        elevation=0
-        >
+        elevation=0-->
         <v-row justify="center">
             <v-tabs vertical style="width:100%">
-                <v-tab>
+                <v-tab style="text-align:left">
                 <v-icon left>
                     mdi-image-area
                 </v-icon>
                 For Image
                 </v-tab>
             
-                <v-tab>
+                <v-tab style="text-align:left">
                 <v-icon left>
                     mdi-card-text
                 </v-icon>
@@ -26,19 +26,21 @@
 
                 
             <!--1st-->
-                <v-tab-item class="tabitem"> <!--删掉tabitem,card-->
+                <v-tab-item class="tabitem" style="height:450px"> <!--删掉tabitem,card-->
                 <v-container class="con">
 
                 <v-row
                 class="fill-height"
                 align="center"
                 justify="center"
+                
             >
                 <template v-for="(item, i) in imageTool">
                 <v-col
                     :key="i"
                     cols="8"
                     md="4"
+                    style="height:60%"
                 >
                     <v-hover v-slot="{ hover }">
                     <v-card
@@ -48,7 +50,7 @@
                     >
                         <v-img
                         :src="item.img"
-                        height="225px"
+                        height="188px"
                         >
                         <v-card-title class="text-h6 white--text">
                             <v-row
@@ -102,7 +104,7 @@
 
 
             <!--2nd-->
-                <v-tab-item class="tabitem"> 
+                <v-tab-item class="tabitem" style="height:450px"> 
                 <!--删掉card-->
                     
                     <v-container class="con">
@@ -352,3 +354,11 @@ export default {
 
 }
 </script>
+
+<style>
+
+.con{
+    height: 400px;
+}
+
+</style>

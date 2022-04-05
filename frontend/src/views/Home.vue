@@ -18,8 +18,8 @@
           <v-dialog
           v-model="isShow"
           persistent
-          width="1400"
-          >
+          style="height:90%"
+          ><!-- -->
           <template v-slot:activator="{ on, attrs }">
               <v-btn
               color="primary"
@@ -32,9 +32,8 @@
               </v-btn>
           </template>
           <v-card
-          height="700px"
           v-if="refresh"
-          >
+          ><!--700px-->
               <v-card-title class="text-h5">
               {{operateType === 'add' ? 'New' : 'Update'}}
               </v-card-title>
@@ -42,18 +41,18 @@
 
               <!-- Create Project -->
               <div>
-                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="200px" class="demo-ruleForm"  style="padding: 30px 60px 0px 30px; height: 620px;">
+                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="200px" class="demo-ruleForm"  style="padding: 0px 60px 0px 30px; height:520px"><!--%-->
                 <el-tabs v-model="active">
                     <!-- Basic information -->
                     <el-tab-pane name="1" >
                         <span slot="label">Basic Info</span>
                                 <!-- Project Name -->
-                                <el-form-item label="Project Name" prop="name">
+                                <el-form-item label="Project Name" label-width="100px" prop="name">
                                     <el-input v-model="operateForm.name"></el-input>
                                 </el-form-item>
 
                                 <!-- Project Description -->
-                                <el-form-item label="Description" style="margin-top:50px">
+                                <el-form-item label="Description" label-width="100px" style="margin-top:50px">
                                     <el-input type="textarea" v-model="operateForm.description" placeholder="(Optional)" rows="10"></el-input>
                                 </el-form-item>   
                     </el-tab-pane>
@@ -82,7 +81,7 @@
                           {{ type }}
                         </v-chip>
                         </v-chip-group>
-                        <div style="display:flex">
+                        <!--<div style="display:flex">--><div style="margin-top:20px; font-size: 1.25rem; font-weight: 500"> 
                           <div>
                             Please enter the path to the folder where you want to use the file:
 
@@ -95,7 +94,7 @@
                             </el-input>
                             <div slot="tip" class="el-upload__tip">If there are multiple paths please separate them with commas(",").</div>
                           </div>
-                          <div>
+                          <div style="margin-top:20px">
                             Please upload the appropriate type of file
                             <input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />
                           </div>

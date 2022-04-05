@@ -1,12 +1,28 @@
 <!-- 项目进入后的具体页面 -->
 <template>
   <v-card id="problock">
-<button @click="back">Back</button>
-<v-btn @click="deleteSelectBtn()"></v-btn>
+    
+    <div style="background:rgb(113, 223, 207); height:7%">
+<v-btn
+      color="blue-grey"
+      @click="back"
+      text
+      large
+  >  
+      <v-icon
+        left 
+      > mdi-arrow-left
+      </v-icon>Back
+  </v-btn></div>
+ 
+
+<v-btn @click="deleteSelectBtn()">del</v-btn>
     <v-tabs
         v-model="tabs"
         centered
         grow
+        color="yellow"
+        background-color="rgb(113, 223, 207)"
     >
         <v-tab>
             Data
@@ -24,26 +40,27 @@
     <v-divider></v-divider>
     <v-tabs-items v-model="tabs">
       <v-tab-item>
-        <v-card flat v-if="tabs==0">
+        <v-card flat class="tabcard" v-if="tabs==0">
           <Table :dataList="dataList" :config="config" />
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat v-if="tabs==1">
+        <v-card flat v-if="tabs==1" class="tabcard">
             <Statistics></Statistics>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat v-if="tabs==2">
+        <v-card flat v-if="tabs==2" class="tabcard">
           <ML></ML>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat v-if="tabs==3">
+        <v-card flat v-if="tabs==3" class="tabcard">
           <Setting></Setting>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
+
   </v-card>
 </template>
 
@@ -87,6 +104,7 @@ import Setting from '@/views/PerProject/Setting'
             console.log('delete select data', res)
           })
         }
+
       }
     },
     watch:{
@@ -136,5 +154,18 @@ import Setting from '@/views/PerProject/Setting'
 #problock{
     margin: 0 auto;
     width: 90%;
+   /* height: 90%;*/
 }
+
+.tabcard{
+    height:480px/*100%*/;
+ 
+}
+
+.v-tabs-slider{
+  color:yellow;
+}
+
+
+
 </style>

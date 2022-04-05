@@ -22,6 +22,8 @@ import "./assets/icon/iconfont.css"
 
 Vue.use(Vuex)
 
+// Vue.forceUpdate()
+
 
 // Vue.prototype.$moment = moment;
 
