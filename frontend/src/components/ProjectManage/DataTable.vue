@@ -7,6 +7,7 @@
   v-cloak
   stripe
   @row-click="enterData"
+  @selection-change="handleSelectionChange"
   >
   <!-- <template slot-scope="tableData" id="template">
     <div @click="enterData(tableData.row)" id="div"> -->
@@ -59,12 +60,26 @@
     data(){
       return{ 
         tableData:[],
+        multipleSelection: [],
         dataType:null,
         url: '../../../../../GRP202116/files/5/c7a3ec64-b343-40e7-9944-fb0b20151308.jpg'
       }
     },
     props: {
       config: Object,
+    },
+    watch: {
+        multipleSelection: function (val) {
+          console.log('val', val)
+          let arr = [];
+          for (let i in this.multipleSelection) {
+            console.log('this.multipleSelection[i]',this.multipleSelection[i])
+            arr.push(this.multipleSelection[i].realDataId);
+          }
+          console.log('multipleSelection',arr);
+          this.$store.state.selectData = arr
+          console.log('selectData',this.$store.state.selectData)
+        }
     },
     methods: {
       enterData(data, event, column){
@@ -79,9 +94,14 @@
                     path: '/data',
                     name: 'Data',  
                 }) 
-      }
+      },
+      handleSelectionChange(val) {
+          this.multipleSelection = val;
+          console.log('valk', val,this.multipleSelection)
+      },      
     },
-    created() {
+    mounted() {
+      console.log('restart', '')
       this.dataType = this.$store.state.currentProject.type
       if(this.$store.state.currentProject.type == 'image'){
         clearTimeout(this.timer); 
@@ -121,7 +141,7 @@
             this.$store.state.currentDataList = this.tableData
 
             console.log('asd', this.$store.state.currentDataList)
-          },700);
+          },500);
 
       }else{
         clearTimeout(this.timer); 
@@ -134,7 +154,7 @@
           }        
           this.$store.state.currentDataList = this.tableData
           console.log('table text', this.tableData)
-        },700);
+        },500);
 
       }
     }, 

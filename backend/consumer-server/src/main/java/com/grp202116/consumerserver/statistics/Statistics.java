@@ -53,11 +53,11 @@ public class Statistics {
      * @param projectId the created project id
      */
     public Statistics(BigInteger projectId) throws IOException {
+        this.setDataList(getDataListFromDB());
         this.projectId = projectId;
         this.setDataListNumber(countDataList());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());
-        this.setDataList(getDataListFromDB());
         this.setAnnotations(getAnnotationsFromDB());
         this.setAnnotationsNumber(BigInteger.valueOf(getAnnotations().size()));
         this.setPredictions(getPredictionsFromDB());
