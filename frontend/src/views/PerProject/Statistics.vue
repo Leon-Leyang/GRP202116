@@ -88,7 +88,7 @@
         <el-row>  
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple-light title">Average predictions per data</div>
-            <div class="pagetext-a">14</div>
+            <div class="pagetext-a">{{statistic.predictionsNumber/statistic.dataListNumber}}</div>
         </el-col>
         </el-row>
    
@@ -113,7 +113,6 @@ export default {
           console.log("statistics",res)
           this.statistic = res.data
           console.log(" sta table",this.statistic)
-
       })
       .catch((error) => {
           // here you will have access to error.response
