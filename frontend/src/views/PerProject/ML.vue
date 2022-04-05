@@ -520,7 +520,7 @@
 
       items: [ ],
       prevMLList:[],
-      newMLList:null
+      newMLList:[],
       }
     },
     watch:{
@@ -550,7 +550,10 @@
       onSubmit() {
           console.log('submit1!');
           console.log('form', this.form)
+          console.log('tag', this.newMLList)
           this.newMLList.push(this.form)
+          console.log('tag', this.newMLList)
+          
           this.items.push(this.form)
           console.log('submit2!');
           this.$store.state.currentMLList = this.items
@@ -579,7 +582,7 @@
           this.value = null
 
           console.log('this.$store.state.currentMLList ml page, newMLList', this.$store.state.currentMLList, this.newMLList)
-          if(this.newMLList != null){
+          if(this.newMLList != []){
             for(var mln = 0; mln<this.newMLList.length; mln++){
               console.log('mln', mln)
               this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
