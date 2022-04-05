@@ -137,13 +137,16 @@
     </v-row> 
     <v-row>  
        <v-col offset-md="1">
-        <v-btn>
+        <v-btn
+         @click="deleteAllData()">
           Delete All Data
         </v-btn>    
-        <v-btn>
+        <v-btn
+        @click="deleteAllAnno()">
           Delete All Annotations
         </v-btn> 
-        <v-btn>
+        <v-btn
+        @click="deleteAllPredict()">
           Delete All Predictions
         </v-btn>         
        </v-col>  
@@ -306,7 +309,27 @@ export default {
           .then(res => {
           console.log('edit',res)
       })      
-}
+    },
+    deleteAllData(){
+      this.$axios.delete('/data/project/'+ this.$store.state.currentProjectId)
+      .then((res)=>{
+        console.log('deleteAllData', res)
+        console.log('this.$store.state.currentDataList', this.$store.state.currentDataList)
+        this.$store.state.currentDataList = []
+      })
+    },
+    deleteAllAnno(){
+      this.$axios.delete('/annotation/project/'+ this.$store.state.currentProjectId)
+      .then((res)=>{
+        console.log('deleteAllAnno', res)
+      })      
+    },
+    deleteAllPredict(){
+      this.$axios.delete('/prediction/project/'+ this.$store.state.currentProjectId)
+      .then((res)=>{
+        console.log('deleteAllPredict', res)
+      })      
+    },    
   },
   mounted() {
     console.log('this.$store.state.currentProject', this.$store.state.currentProject)

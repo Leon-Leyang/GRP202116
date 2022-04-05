@@ -360,8 +360,7 @@ import ML from './Create_ML.vue'
       onScroll () {
         this.scrollInvoked++
       },
-      getList() {
-          // this.tableData = null
+      getList() {          // this.tableData = null
           // this.config.loading = true
           // name ? (this.config.page = 1) : ''
           this.$axios.get('/project/list', {
@@ -397,21 +396,19 @@ import ML from './Create_ML.vue'
                       })
                     return {...item,process:this.tempProcess}
                 })
-
-                this.config.total = res.data.length
-                this.config.loading = false
-                console.log("table",this.tableData)
+                console.log("table1")
               // console.log("dew",row)                  
                 }
 
               })
               .catch((error) => {
               // here you will have access to error.response
-                console.log(error.response)
+                console.log('error',error.response)
                 });
                 
       },
       addProject() {
+          this.folderURL = null
           this.importAllow = true
           this.operateForm = {}
           this.operateType = 'add'
@@ -453,7 +450,8 @@ import ML from './Create_ML.vue'
                   this.getList()
               })
               setTimeout(()=>{
-
+                console.log('newr', this.newestId)
+                console.log('address', this.folderURL)
                 console.log('now!!!',this.$store.state.currentMLList)
 
 
@@ -461,7 +459,7 @@ import ML from './Create_ML.vue'
                 var projectId = this.newestId
                 //upload folder address
                 if(folderURL != ''){                
-                  console.log('newestId', projectId)
+                  console.log('newestId', this.newestId)
                   console.log('address', folderURL)
                   this.$axios.post('/project/'+ projectId +'/data_url', folderURL)
                   .then(res => {
@@ -516,6 +514,7 @@ import ML from './Create_ML.vue'
         this.isShow = false 
         this.active = '1'
         this.$store.state.currentMLList = null
+        this.folderURL = null
         this.refresh = false
         this.$store.state.currentProjectId = null
         this.$store.state.currentMLList = null

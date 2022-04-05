@@ -21,7 +21,8 @@ import java.util.Set;
 /**
  * The class Statistics contains the basic information of the statistics
  * controls the statistics of data, labels and project.
- * The calculation will be done in the backend then send to the frontend to list the Statistics
+ * The calculation will be done in the backend then send to the frontend to list
+ * the Statistics
  *
  * @author Henghui Zhang; Yujie Chen
  * @version 1.2
@@ -38,8 +39,8 @@ public class Statistics {
     public static Statistics Statistics;
 
     @PostConstruct
-    public void init(){
-        Statistics = this ;
+    public void init() {
+        Statistics = this;
         Statistics.dataMapper = this.dataMapper;
         Statistics.annotationMapper = this.annotationMapper;
         Statistics.predictionMapper = this.predictionMapper;
@@ -69,7 +70,6 @@ public class Statistics {
         this.setDataListNumber(countDataList());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());
-        this.setDataList(getDataListFromDB());
         this.setAnnotations(getAnnotationsFromDB());
         this.setAnnotationsNumber(BigInteger.valueOf(getAnnotations().size()));
         this.setPredictions(getPredictionsFromDB());
@@ -242,7 +242,8 @@ public class Statistics {
     }
 
     /**
-     * Get the size of the data in the project according to the project id and read value from the DB
+     * Get the size of the data in the project according to the project id and read
+     * value from the DB
      *
      * @return the size of the data
      */
@@ -251,7 +252,8 @@ public class Statistics {
     }
 
     /**
-     * Get the annotations object list from the DB and give the value to the Statistics list
+     * Get the annotations object list from the DB and give the value to the
+     * Statistics list
      *
      * @return the annotations object list from the DB
      */
@@ -260,7 +262,8 @@ public class Statistics {
     }
 
     /**
-     * Get the Prediction object list from the DB and give the value to the Statistics list
+     * Get the Prediction object list from the DB and give the value to the
+     * Statistics list
      *
      * @return the Prediction object list from the DB
      */
@@ -269,9 +272,11 @@ public class Statistics {
     }
 
     /**
-     * Get the percentage of the annotated data files in all data files for each project
+     * Get the percentage of the annotated data files in all data files for each
+     * project
      *
-     * @return the percentage of the annotated data files in all data files for each project
+     * @return the percentage of the annotated data files in all data files for each
+     *         project
      */
     public float calculateCompletionPercentage() {
 
@@ -392,4 +397,3 @@ public class Statistics {
         return (float) wordSum / (float) textDataType;
     }
 }
-
