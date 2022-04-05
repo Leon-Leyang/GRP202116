@@ -1,3 +1,12 @@
+'''
+Author: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Last Modified: Saturday, 26th March 2022 18:56
+Modified By: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Brief: Script class for named entity recognition which overrides the methods for predicting and preprocess class which overrides the base preprocess class
+'''
+
 from transformers import BertTokenizerFast
 from spacy.tokens import Doc
 from spacy.vocab import Vocab

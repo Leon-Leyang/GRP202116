@@ -1,8 +1,16 @@
+'''
+Author: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Last Modified: Saturday, 26th March 2022 18:56
+Modified By: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Brief: Class that controls the parsing of config and running and training of different models
+'''
+
 import json
 from xml.dom.minidom import parseString, Node
 from importlib import import_module
 
-from ml import *
 from ml.models.SemSegMaskModel import SemSegMaskModel
 from ml.models.ImgClsModel import ImgClsModel
 from ml.models.KpLabModel import KpLabModel

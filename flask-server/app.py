@@ -1,5 +1,11 @@
-import json
-import ast
+'''
+Author: Yujie Chen (scyyc7@nottingham.edu.cn)
+-----
+Last Modified: Saturday, 26th March 2022 18:56
+Modified By: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Brief: Flask app class
+'''
 
 from flask import Flask, Response, make_response, jsonify, request
 from ModelDriver import *

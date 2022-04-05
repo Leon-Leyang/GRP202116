@@ -1,3 +1,12 @@
+'''
+Author: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Last Modified: Saturday, 26th March 2022 18:56
+Modified By: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Brief: Script class for keypoint labeling which overrides the methods for predicting
+'''
+
 from PIL import Image
 
 import uuid

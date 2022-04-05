@@ -1,3 +1,12 @@
+'''
+Author: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Last Modified: Saturday, 26th March 2022 18:56
+Modified By: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Brief: Script class for image classification which overrides the methods for predicting and training and corresponding dataset class used for training
+'''
+
 from PIL import Image
 from torch.utils.data import DataLoader, random_split
 from torch.optim import *

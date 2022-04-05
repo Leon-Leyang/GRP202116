@@ -1,3 +1,12 @@
+'''
+Author: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Last Modified: Saturday, 26th March 2022 18:56
+Modified By: Leyang Hu (scylh6@nottingham.edu.cn)
+-----
+Brief: Script class for text classification which overrides the methods for predicting and preprocess class which overrides the base preprocess class
+'''
+
 import numpy as np
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing import sequence
