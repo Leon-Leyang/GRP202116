@@ -5,6 +5,7 @@ from torch.autograd import Variable
 from torch.utils.data import Dataset
 
 import uuid
+import ast
 import torch
 import torchvision.transforms as tf
 import torch.nn as nn
@@ -100,9 +101,9 @@ class ImgClsModel(Model):
         self.testLoader = DataLoader(testSet, batch_size=batchSize, shuffle=shuffle, num_workers=workerNum)
 
         # Initialize loss function
-        if(lossFunc == 'Cross Entropy'):
+        if(lossFunc == 'CrossEntropyLoss'):
             loss_fn = nn.CrossEntropyLoss()
-        elif(lossFunc == 'NLL'):
+        elif(lossFunc == 'NLLLoss'):
             loss_fn = nn.NLLLoss()
 
         # Initialize the optimizer
@@ -151,8 +152,8 @@ class ImgClsModel(Model):
             accuracy = testAccuracy()
             print('For epoch', epoch + 1, 'the test accuracy over the whole test set is %d %%' % (accuracy))
 
-        torch.save(self.model, savePath + '/test.pth')
-        return accuracy
+        torch.save(self.model, savePath)
+        return accuracy, trainNum
 
 class ImgClsDataset(Dataset):
     def __init__(self, datas, annotations, preprocess, labels):
@@ -169,7 +170,7 @@ class ImgClsDataset(Dataset):
     def __getitem__(self, index):
         imgPath = self.datas[index]['url']
         img = self.preprocess(Image.open(imgPath))
-        labelName = self.annotations[index]['result'][0]['value']['choices'][0]
+        labelName = ast.literal_eval(self.annotations[index]['result'])[0]['value']['choices'][0]
         label = self.labels.index(labelName)
         return img, label
 

@@ -104,6 +104,7 @@ import Setting from '@/views/PerProject/Setting'
             console.log('delete select data', res)
           })
         }
+
       }
     },
     watch:{

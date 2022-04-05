@@ -217,13 +217,13 @@ public class ModelController {
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
         if (annotationList.size() < 1) return;
 
-        List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
+        List<DataDO> annotatedDataList = dataMapper.getAnnotatedList(projectId);
         if (annotatedDataList.size() < 1) return;
 
         ModelTrainer modelTrainer = new ModelTrainer(project, model);
 
         String scriptName;
-        if (model.getType().equals("Custom")) {
+        if (model.getType().equals("Customization")) {
             if (scriptPath == null) return;
             else {
                 scriptName = ModelSaver.saveCustom(scriptPath);
@@ -236,11 +236,12 @@ public class ModelController {
         object.put("annotation_list", annotationList);
         object.put("data_list", annotatedDataList);
 
-        String accuracy = restTemplate.postForObject("http://sidecar-server/model/train",
-                HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class);
+        JSONObject result = JSONObject.parseObject(
+                restTemplate.postForObject("http://sidecar-server/model/train",
+                        HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
 
-        model.setAccuracy(accuracy);
-        model.setDataLength(annotatedDataList.size());
+        model.setAccuracy(result.getString("accuracy"));
+        model.setDataLength(result.getInteger("trainNum"));
         modelMapper.updateAccuracy(model);
     }
 }

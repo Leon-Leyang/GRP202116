@@ -57,7 +57,7 @@
     <select id="getAnnotatedList" resultMap="dataMap">
         select *
         from data
-        where is_annotated = 1
+        where is_annotated = 1 and project_id = #{projectId}
     </select>
 
     <select id="getByDataId" resultMap="dataMap">

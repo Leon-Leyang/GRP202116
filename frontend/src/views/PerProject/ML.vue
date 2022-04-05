@@ -174,7 +174,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
-                                    @click="chooseVersion(item.version)"
+                                    @click="chooseVersion(item.version, item.type)"
                                   >
                                     TEST
                                   </v-btn>
@@ -189,7 +189,7 @@
                                   <v-card-text>
                                     <v-container>
                                       <v-row>   
-                                        <v-col cols="12">
+                                        <v-col cols="12" v-if="nowType == 'Customization'">
                                         Upload the Customized Train Script Here:
                                         <el-input type="textarea" v-model="testScript"></el-input>
                                         </v-col>
@@ -222,7 +222,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
-                                    @click="chooseVersion(item.version)"
+                                    @click="chooseVersion(item.version,item.type)"
                                   >
                                     Train
                                   </v-btn>
@@ -238,9 +238,10 @@
                                           cols="12"
                                           sm="6"
                                           md="4"
+                                          v-if="nowType != 'Customization'"
                                         >
                                           <v-text-field
-                                            v-model="trainObject.params.trainProportion"
+                                            v-model="trainObject.params.trainFrac"
                                             label="Train Proportion:"
                                             hint="range from 0 to 1"
                                             persistent-hint
@@ -249,6 +250,7 @@
                                         </v-col>
                                         
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                           md="4"
@@ -262,12 +264,13 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                           md="4"
                                         >
                                           <v-text-field
-                                          v-model="trainObject.params.workerNumber"
+                                          v-model="trainObject.params.workerNum"
                                             label="Worker Number:"
                                             hint="number"
                                             persistent-hint
@@ -275,7 +278,8 @@
                                           ></v-text-field>
                                         </v-col>
 
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType != 'Customization'">
                                           
                                             <v-switch
                                               v-model="trainObject.params.shuffle"
@@ -283,9 +287,10 @@
                                             ></v-switch>
                                         </v-col>
                                       
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType != 'Customization'">
                                           <v-text-field
-                                          v-model="trainObject.params.epochNumber"
+                                          v-model="trainObject.params.epochNum"
                                             label="Epoch Number:"
                                             hint="number"
                                             persistent-hint
@@ -293,7 +298,8 @@
                                           ></v-text-field>
                                         </v-col>
                                         
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType != 'Customization'">
                                           <v-text-field
                                           v-model="trainObject.params.learningRate"
                                             label="Learning Rate:"
@@ -305,6 +311,7 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                         >
@@ -316,11 +323,12 @@
                                           ></v-select>
                                         </v-col>
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                         >
                                           <v-autocomplete
-                                          v-model="trainObject.params.lossFunction"
+                                          v-model="trainObject.params.lossFunc"
                                             :items="['CrossEntropyLoss', 'NLLLoss']"
                                             label="Loss Function"
                                             required
@@ -337,7 +345,8 @@
                                           ></v-text-field>
                                         </v-col>
 
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType == 'Customization'">
                                           <div style="margin-top:30px">
                                             Upload the Customized Train Script Here:
                                             <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
@@ -454,6 +463,7 @@
     data() {
     return {
       nowVersion:'',
+      nowType:'',
       form: {
         modelRoot:'',
         version: '',
@@ -523,14 +533,14 @@
       trainObject:{
         version:null,
         params:{
-          trainProportion: null,
+          trainFrac: null,
           batchSize:null,
-          workerNumber:null,
+          workerNum:null,
           shuffle:false,
-          epochNumber:null,
+          epochNum:null,
           learningRate:null,
           optimizer:null,
-          lossFunction:null,
+          lossFunc:null,
           savePath:null,
         },
         script_url:null,
@@ -570,9 +580,12 @@
       }
     },
     methods:{
-      chooseVersion(version){
+      chooseVersion(version,type){
         console.log('nowversion', version)
         this.nowVersion = version
+        this.nowType = type
+        console.log('testTYpe', this.nowType)
+
       },
       onSubmit() {
           console.log('submit1!');
@@ -612,8 +625,8 @@
           if(this.newMLList != []){
             for(var mln = 0; mln<this.newMLList.length; mln++){
               console.log('mln', mln)
-              this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
-              console.log('params', this.$store.state.currentMLList[mln].params)
+              this.newMLList[mln].params = JSON.stringify(this.newMLList[mln].params)
+              console.log('params', this.newMLList[mln].params)
             }
             this.$axios.post(`/model/create/`+ this.$store.state.currentProjectId, JSON.stringify(this.newMLList))
                 .then(res => {
@@ -627,6 +640,7 @@
       MLTest(version){
         console.log('nee', this.testScript)
         console.log('version', version)
+
         this.dialog = false
         this.runObject.version = version
         this.runObject.script_url = this.testScript
@@ -634,16 +648,55 @@
         this.$axios.post('/model/run/'+ this.$store.state.currentProjectId, JSON.stringify(this.runObject))
         .then((res)=>{
           console.log('test model', res)
-        })       
+        })   
+        this.form = {
+          modelRoot:'',
+          version: '',
+          description:'',
+          modelPath:'',
+          labelsPath:'',
+          type: '',
+          resource: '',
+          params:{
+              mean:'[0.485, 0.456, 0.406]',
+              std:'[0.229, 0.224, 0.225]',
+              imgSize:null,
+              threshold:null,
+              vocabPath:null,
+              tokenNum:null,
+              sequenceLen:null,
+          }
+        }    
       },
       MLTrain(version){
         this.dialogTrain = false
         console.log('train', version, this.trainObject)
         this.trainObject.version = version
+        var bool = this.trainObject.params.shuffle
+        if(bool == false){
+          this.trainObject.params.shuffle = 'False'
+        }else{
+          this.trainObject.params.shuffle = 'True'
+        }
         this.$axios.post('/model/train/'+ this.$store.state.currentProjectId,JSON.stringify(this.trainObject))
         .then((res)=>{
           console.log('train model', res)
         }) 
+        this.trainObject={
+          version:null,
+          params:{
+            trainFrac: null,
+            batchSize:null,
+            workerNum:null,
+            shuffle:false,
+            epochNum:null,
+            learningRate:null,
+            optimizer:null,
+            lossFunc:null,
+            savePath:null,
+          },
+          script_url:null,
+        }        
       },
 
     

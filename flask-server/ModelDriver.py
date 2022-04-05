@@ -93,7 +93,6 @@ class ModelDriver():
             print("model undefined")
 
         prediction_item = model.predict(data)
-        # TODO: Merge predictionItems with the same model version together
 
         print(prediction_item)
         return prediction_item
@@ -108,19 +107,20 @@ class ModelDriver():
     @staticmethod
     def train_model_on_data_set(script_type, datas, annotations, model_path, model_root, labelsPath, params):
         if script_type == 'Image Classification':
+
             model = ImgClsModel(model_path, model_root, labelsPath, mean=json.loads(params['mean']), std=json.loads(params['std']),
                                 imgSize=json.loads(params['imgSize']))
-            accuracy = model.train(datas, annotations, params['savePath'], json.loads(params['epochNum']), json.loads(params['trainFrac']), json.loads(params['batchSize']), json.loads(params['shuffle']), json.loads(params['workerNum']), json.loads(params['learningRate']), params['lossFunc'], params['optimizer'])
+            accuracy, trainNum = model.train(datas, annotations, params['savePath'], json.loads(params['epochNum']), json.loads(params['trainFrac']), json.loads(params['batchSize']), params['shuffle']=='True', json.loads(params['workerNum']), json.loads(params['learningRate']), params['lossFunc'], params['optimizer'])
         elif script_type == 'Customization':
             moduleName = 'ml.models.' + params['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath)
-            accuracy = model.train(datas, annotations, params['savePath'])
+            accuracy, trainNum = model.train(datas, annotations, params['savePath'])
         else:
             print("model undefined")
             return
 
-        return accuracy
+        return accuracy, trainNum
 
 
 if __name__ == '__main__':
