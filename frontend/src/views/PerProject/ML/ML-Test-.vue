@@ -15,7 +15,7 @@
           v-on="on"
           width="72px"
         >
-          TEST
+          Run
         </v-btn>
         
       </template>
@@ -38,7 +38,7 @@
              -->   
               <v-col cols="12">
                 <v-file-input
-                label="Upload the Customized Train Script Here"
+                label="Upload the Customized Run Script Here"
                 outlined
                 dense
                 ></v-file-input>
@@ -51,22 +51,23 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <!--
+          
           <v-btn
             color="blue darken-1"
             text
             @click="dialog = false"
           >
-            Close
+            Start
           </v-btn>
-          -->
+
           <v-btn
             color="blue darken-1"
             text
             @click="dialog = false"
           >
-            Run
+            Cancel
           </v-btn>
+          
         </v-card-actions>
       </v-card>
     </v-dialog>

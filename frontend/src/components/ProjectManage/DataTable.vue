@@ -1,25 +1,69 @@
 <template>
-<div>
+<div style="background:rgb(218, 253, 249);height:100%">
+  <v-container style="height:100%">
+   <div style="margin: 10px 10px 12px 14px">
+<v-row style="height:10%">
+  <v-btn
+      fab
+      small
+      icon
+    >
+    <v-icon dark>
+      mdi-delete
+    </v-icon>
+    </v-btn>
+  <v-spacer>
+  </v-spacer>
+  <v-btn
+      color="amber"
+      @click="xx()"
+      depressed
+      rounded
+      class="white--text"
+  >  
+      Import<v-icon
+        right
+        dark
+      > mdi-database-import
+      </v-icon>
+  </v-btn>
+  <v-btn
+      style="margin-left:20px; margin-right:10px"
+      color="blue-grey"
+      @click="xx()"
+      rounded
+      depressed
+      class="white--text"
+      
+  >
+      Export<v-icon
+        right
+        dark
+      > mdi-cloud-upload
+      </v-icon>
+  </v-btn>
+</v-row>
+    </div>
 <el-table
   :data="tableData"
-  style="width: 100%"
+  style="width: 100%; height:85%"
   :default-sort = "{prop: 'id', order: 'ascending'}" 
   v-cloak
   stripe
-  >
+  ><!--class="blue lighten-5"-->
   <el-table-column
     type="selection"
-    width="50">
+    >
   </el-table-column>
 
 
-  <el-table-column show-overflow-tooltip sortable label="ID" width="100" prop="dataId" align="center">
+  <el-table-column show-overflow-tooltip sortable label="ID" prop="dataId" align="center">
   </el-table-column> 
-  <el-table-column show-overflow-tooltip sortable label="Last Modification Time" width="200" prop="updateTime" align="center">
+  <el-table-column show-overflow-tooltip sortable label="Last Modification Time" prop="updateTime" align="center">
   </el-table-column> 
-  <el-table-column show-overflow-tooltip sortable label="Import Time" width="200" prop="createTime" align="center">
+  <el-table-column show-overflow-tooltip sortable label="Import Time" prop="createTime" align="center">
   </el-table-column>  
-  <el-table-column show-overflow-tooltip label="Preview" width="200" prop="url" align="center">
+  <el-table-column show-overflow-tooltip label="Preview" prop="url" align="center">
     <template slot-scope="scope">
                 <el-popover placement="right">
                   <img :src="scope.row.url" />
@@ -32,7 +76,7 @@
                 </el-popover>
       </template>
   </el-table-column> 
-  <el-table-column show-overflow-tooltip label="Anno" width="100" prop="sta" align="center">
+  <el-table-column show-overflow-tooltip label="Anno" prop="sta" align="center">
     <template slot-scope="tableData">
       <button @click="enterData(tableData.row)">Enter</button>
     </template>
@@ -41,7 +85,7 @@
   <!-- <el-table-column label="Prediction" width="100" prop="predi" align="center"></el-table-column>        -->
 </el-table>
 <el-pagination class="pager" layout="prev, pager, next"  :total="10" :current-page.sync="config.page" @current-change="changePage" :page-size="20"></el-pagination>
-
+</v-container>
 </div>
 </template>
 
@@ -122,5 +166,7 @@
 </script>
 
 <style>
-
+.el-table th.el-table__cell>.cell{
+  padding-left: 14px!important;
+}
 </style>

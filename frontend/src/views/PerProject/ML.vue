@@ -1,12 +1,12 @@
 <template>
-<div style="font-size: 1.25rem; font-weight: 500"> 
+<div style="font-size: 1.25rem; font-weight: 500; height:100%"> 
     <v-container class="ML-container">
         <v-row>
             <v-col>
                 <v-card
                   v-scroll.self="onScroll"
                   class="overflow-y-auto"
-                  max-height="400">
+                  max-height="450px">
                     <v-card-text>
                         <div class="mb-4">
 
@@ -16,9 +16,9 @@
                                 <el-input v-model="form.version" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model Type:">
+                            <el-form-item label="Script Type:">
 
-                            <el-select v-model="value" placeholder="please select the ML model type" @change="selectType">
+                            <el-select v-model="value" placeholder="Please Select the ML Model Script Type" @change="selectType">
                                 <el-option-group
                                 v-for="group in options"
                                 :key="group.label"
@@ -47,7 +47,7 @@
                             </el-form-item>
 
                             <el-form-item label="Model Description:" style="margin-bottom:20px!important">
-                                <el-input type="textarea" v-model="form.description"></el-input>
+                                <el-input type="textarea" placeholder="(Optional)" v-model="form.description"></el-input>
                             </el-form-item>
                             <!--end-->  
 
@@ -97,15 +97,27 @@
                             </el-form-item>
 
                             <el-form-item style="margin-top:40px">
+                                <!--
                                 <el-button type="primary" @click="onSubmit">Save</el-button>
-                                <el-button>Cancel</el-button>
-                            </el-form-item>
-                            <!--
-                            <div>
-                                    <el-button type="primary" @click="$router.push('/ML-Test')">Test</el-button>
-                                    <el-button type="primary" @click="$router.push('/ML-Train')">Train</el-button>
+                                <el-button>Cancel</el-button>-->
+                        
+                            <div style="display:flex;flex-direction:row">
+                            <v-btn
+                            depressed
+                            color="pink lighten-1"
+                            >
+                            Save
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                            
+                             <v-btn
+                            depressed
+                            color="error"
+                            >
+                            Cancel
+                            </v-btn>
                             </div>
-                            -->
+                            </el-form-item>
                             </el-form>
 
                         </div>
@@ -115,7 +127,11 @@
 
             <v-col>
                 <v-container class="ml-container">
-                <v-card class="r-card">
+                <v-card
+                  v-scroll.self="onScroll"
+                  class="overflow-y-auto"
+                  max-height="450px"
+                  color="yellow">
                 <v-container>
                 <v-data-iterator
                     :items="items"
@@ -168,6 +184,8 @@
 <style>
   .ML-container{
     max-width: 1262px;
+    background:rgb(218, 253, 249);
+    height: 100%;
   }
   
 
@@ -181,7 +199,7 @@
   }
 
   .el-select .el-input {
-    width: 280px;
+    width: 300px;
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
@@ -266,7 +284,7 @@
         ],
 
         options: [{
-            label: 'Basic Types',
+            label: 'Supportive Types',
             options: [{
                 value: '0',
                 label: 'Image Classification'

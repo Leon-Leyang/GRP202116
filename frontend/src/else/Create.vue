@@ -410,7 +410,7 @@
 
 
 <style scoped>
-
+/*
 .v-card {
   transition: opacity .2s ease-in-out;
 }
@@ -430,16 +430,16 @@
 
 .con{
     height: 100%;/*500px也一样*/
-    overflow-y:scroll;
+    /*overflow-y:scroll;
 }
 
 .v-tab{
     justify-content:left;
     padding: 6px;/* */
-}
+/*}
 
 .el-form{
   padding: 20px 50px 0px 50px!important;
-}
+}*/
 
 </style>

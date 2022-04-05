@@ -1,9 +1,10 @@
 
 <template>
-<v-card>
-  <v-container>
+<v-card style="height:100%;background:rgb(218, 253, 249)">
+  <v-container style="height:80%">
     <v-row
       justify="space-between"
+      style="height:60%"
     >
       <v-col
         cols="12"
@@ -13,133 +14,115 @@
       <div style="font-size: 1.25rem; font-weight: 500">
         Project Name:</div>
         
-        <v-form ref="form">
-          <v-text-field
-            v-model="name"
-            :counter="max"
-            :rules="rules"
-            outlined
-          ></v-text-field> <!-- filled
-              color="blue-grey lighten-2" -->
-        </v-form>
+        <el-input clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
   
 
        <div style="font-size: 1.25rem; font-weight: 500">
         Project Description:</div>
 
-        <v-textarea
-              v-model="description"
-              :disabled="isUpdating"
-              outlined
-            > <!--filled
-              color="blue-grey lighten-2" -->
-        </v-textarea>
+        <el-input
+          type="textarea"
+          :rows="3"
+          placeholder="(Optional)"
+          v-model="textarea"
+          >
+        </el-input>
         
       </v-col>
 
       <v-col
         cols="12"
         md="6"
+        style="height:100%"
       ><!--7-->
-      <div style="font-size: 1.25rem; font-weight: 500">
-        Used Template:</div>
-        <p></p>
+          <div style="font-size: 1.25rem; font-weight: 500">
+            Used Template:</div>
+            <p></p>
 
-    <v-card>
-     <v-row
-      class="fill-height"
-      align="center"
-      justify="center"
-     >
-     <template v-for="(item, i) in items">
-        <v-col
-          :key="i"
-          cols="12"
-          md="4"
-        >
-        <!--
-        <v-img src="/images/1.JPG" width="250px"/>-->
-        <v-img :src="item.img"
-                width="225px"/>
-        <v-card-title style="font-size:0.25rem; padding=0">
-            {{ item.title }}
-        </v-card-title> 
-        </v-col>   
-     </template>
-    </v-row>
-    </v-card>
+          <v-card height="88%" class="LIcardA">
+          <v-container>
+          <v-row
+          class="fill-height"
+            align="center"
+            justify="center"
+            style="width:100%;"
+            
+          >
+          <template v-for="(item, i) in items">
+              <v-col
+                :key="i"
+                cols="12"
+                md="4"
+              >
+              <v-img :src="item.img"
+                      width="225px"/>
+              <v-card-title style="font-size:0.25rem" class="LIcard">
+                  {{ item.title }}
+              </v-card-title> 
+              </v-col>   
+          </template>
+          </v-row>
+          </v-container>
+          </v-card>
     
-    <v-btn
-      class="mx-2"
-      fab
-      dark
-      small
-      color="pink"
-    >
-      <v-icon dark>
-        mdi-eye
-      </v-icon>
-    </v-btn>
+          <div style="height:20%">
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            small
+            color="pink"
+          >
+            <v-icon dark>
+              mdi-eye
+            </v-icon>
+          </v-btn>
 
-    <v-btn
-      class="mx-2"
-      fab
-      dark
-      small
-      color="cyan"
-    >
-      <v-icon dark>
-        mdi-pencil
-      </v-icon>
-    </v-btn>
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            small
+            color="cyan"
+          >
+            <v-icon dark>
+              mdi-pencil
+            </v-icon>
+          </v-btn>
+          </div>
 
-    </v-col>
+       </v-col>
+
+
     </v-row>
 
-    <v-row style="padding:12px">
+    <v-row>
+        <v-col>
         <!--<v-col offset-md="6">5-->
         <div style="font-size: 1.25rem; font-weight: 500">
         Manipulation:</div>
+        </v-col>
     </v-row> 
-    <v-row>  
-       <v-col offset-md="1">
-       <v-card rounded="0" outlined>      
-        <v-checkbox label="Delete All Data"       
-        ></v-checkbox>
+    <v-row style="margin:0" justify="center">  
+       <v-col>
+       <v-card rounded="0" outlined style="height:34px">      
+        <v-checkbox label="Delete All Data"  
+        style="margin:0"></v-checkbox>
        </v-card>
        
-       <v-card rounded="0" outlined>
+       <v-card rounded="0" outlined style="height:34px">
          <v-checkbox
           label="Delete All Annotations"
-        ></v-checkbox>
+         style="margin:0"></v-checkbox>
         </v-card>
-        <v-card rounded="0" outlined>
+        <v-card rounded="0" outlined style="height:34px">
          <v-checkbox
           v-model="allowSpaces"
           label="Delete All Predictions"
-        ></v-checkbox>
+         style="margin:0"></v-checkbox>
          </v-card>
          </v-col>  
     </v-row>
-
-        <!--
-        <p></p>
-        <v-card>      
-        <v-checkbox
-          label="De"       
-        ></v-checkbox>
-         <v-checkbox 
-          label="Dele"
-        ></v-checkbox>
-         <div style="margin: 0">
-         <v-checkbox
-          v-model="allowSpaces"
-          label="Delete"
-        ></v-checkbox>  </div>
-        </v-card> 
-         -->
-
-      <!--</v-col>-->
     
   </v-container>
 
@@ -173,6 +156,16 @@
     
 
 <style>
+
+.LIcardA{
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.LIcard{
+  padding:0!important;
+}
+
 /*
   .content{
     width:90%;
@@ -213,10 +206,20 @@ export default {
           title: 'Masks',     
           img: '/images/2.JPG',
         },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
       ],
-      
-       name: 'Hey!',
-       description: "This is a project for the ..."
+    
     
     })
 }
