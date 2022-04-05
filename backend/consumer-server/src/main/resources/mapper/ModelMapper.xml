@@ -5,7 +5,8 @@
 <mapper namespace="com.grp202116.consumerserver.mapper.ModelMapper">
 
     <resultMap id="modelMap" type="com.grp202116.consumerserver.pojo.ModelDO">
-        <id column="version" property="version"/>
+        <id column="model_id" property="modelId"/>
+        <result column="version" property="version"/>
         <result column="model_path" property="modelPath"/>
         <result column="description" property="description"/>
         <result column="project_id" property="projectId"/>
@@ -14,6 +15,8 @@
         <result column="type" property="type"/>
         <result column="params" property="params"/>
         <result column="labels_path" property="labelsPath"/>
+        <result column="accuracy" property="accuracy"/>
+        <result column="data_length" property="dataLength"/>
     </resultMap>
 
     <update id="alter">
@@ -21,17 +24,58 @@
             AUTO_INCREMENT = 1;
     </update>
 
-    <update id="updateParams">
+    <update id="updateAccuracy">
         update model
-        set params = #{params}
-        where version = #{version}
+        <set>
+            <if test="accuracy != '' and accuracy != null">
+                accuracy = #{accuracy},
+            </if>
+            <if test="dataLength != '' and dataLength != null">
+                data_length = #{dataLength},
+            </if>
+        </set>
+        where model_id = #{modelId}
     </update>
 
-    <insert id="insert" parameterType="ModelDO">
+    <update id="updateModel">
+        update model
+            <set>
+                <if test="version != '' and version != null">
+                    version = #{version},
+                </if>
+                <if test="modelPath != '' and modelPath != null">
+                    model_path = #{modelPath},
+                </if>
+                <if test="description != '' and description != null">
+                    description = #{description},
+                </if>
+                <if test="modelRoot != '' and modelRoot != null">
+                    model_root = #{model_root},
+                </if>
+                <if test="type != '' and type != null">
+                    type = #{type},
+                </if>
+                <if test="params != '' and params != null">
+                    params = #{params},
+                </if>
+                <if test="labelsPath != '' and labelsPath != null">
+                    labels_path = #{labels_path},
+                </if>
+            </set>
+        where model_id = #{modelId}
+    </update>
+
+    <insert id="insert" parameterType="ModelDO" useGeneratedKeys="true" keyColumn="model_id" keyProperty="modelId">
         insert into model (model_path, version, description, project_id,
                            create_time, model_root, type, params, labels_path)
         values (#{modelPath}, #{version}, #{description}, #{projectId},
                 #{createTime}, #{modelRoot}, #{type}, #{params}, #{labelsPath})
+        ON DUPLICATE KEY UPDATE model_path  = VALUES(model_path),
+                                description = VALUES(description),
+                                model_root  = VALUES(model_root),
+                                type        = VALUES(type),
+                                params      = VALUES(params),
+                                labels_path = VALUES(labels_path)
     </insert>
 
     <select id="getByProjectId" resultMap="modelMap">
@@ -40,11 +84,18 @@
         where project_id = #{projectId}
     </select>
 
-    <select id="getByVersion" resultMap="modelMap">
+    <select id="getByVersionProject" resultMap="modelMap">
         select *
         from model
-        where version = #{versioin}
+        where version = #{version}
+          AND project_id = #{projectId}
     </select>
+
+    <delete id="deleteById">
+        delete
+        from model
+        where model_id = #{modelId}
+    </delete>
 
     <delete id="deleteByProjectId">
         delete

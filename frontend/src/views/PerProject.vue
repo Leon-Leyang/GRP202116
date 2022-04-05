@@ -15,6 +15,8 @@
       </v-icon>Back
   </v-btn></div>
  
+
+<v-btn @click="deleteSelectBtn()">del</v-btn>
     <v-tabs
         v-model="tabs"
         centered
@@ -38,22 +40,22 @@
     <v-divider></v-divider>
     <v-tabs-items v-model="tabs">
       <v-tab-item>
-        <v-card flat class="tabcard">
+        <v-card flat class="tabcard" v-if="tabs==0">
           <Table :dataList="dataList" :config="config" />
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat class="tabcard">
+        <v-card flat v-if="tabs==1" class="tabcard">
             <Statistics></Statistics>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat class="tabcard">
+        <v-card flat v-if="tabs==2" class="tabcard">
           <ML></ML>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat class="tabcard">
+        <v-card flat v-if="tabs==3" class="tabcard">
           <Setting></Setting>
         </v-card>
       </v-tab-item>
@@ -94,9 +96,39 @@ import Setting from '@/views/PerProject/Setting'
             path: '/',
             name: 'Home', 
         }) 
+      },
+      deleteSelectBtn(){
+        for(var i = 0;i<this.$store.state.selectData.length;i++){
+          this.$axios.delete('/data/'+this.$store.state.selectData[i])
+          .then((res)=>{
+            console.log('delete select data', res)
+          })
+        }
+      }
+    },
+    watch:{
+      tabs:function(val){
+        console.log('val', val)
+        this.$store.state.currentMLList = null
+        console.log('label', this.$store.state.currentConfig)
+        this.projectId = this.$store.state.currentProjectId
+        console.log('projectId',this.projectId)
+              this.$axios.get('/data/project/'+ this.projectId)
+                  .then(res => {
+                      console.log('res', res)
+                      this.$store.state.currentDataList = res.data
+                      // this.$store.state.currentDataList.
+                      console.log('store datalist', this.$store.state.currentDataList)
+                  })
+                  .catch((error) => {
+                  // here you will have access to error.response
+                  console.log(error.response)
+                  });
+        console.log('liugo', this.$store.state.currentDataList)
       }
     },
     mounted() {
+      this.$store.state.currentMLList = null
       console.log('label', this.$store.state.currentConfig)
       this.projectId = this.$store.state.currentProjectId
       console.log('projectId',this.projectId)

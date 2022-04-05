@@ -56,10 +56,10 @@
                                 <el-input v-model="form.params.imgSize" clearable maxlength="" size="mini" placeholder="(For image classification)"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Mean:">
-                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
+                                <el-input v-model="form.params.mean" clearable maxlength="" size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Standard Deviation:">
-                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
                             </el-form-item>
                             
 
@@ -209,8 +209,8 @@
             type: '',
             resource: '',
             params:{
-                mean:null,
-                std:null,
+                mean:'[0.485, 0.456, 0.406]',
+                std:'[0.229, 0.224, 0.225]',
                 imgSize:null,
                 threshold:null,
                 vocabPath:null,
@@ -286,10 +286,10 @@
     methods: {
       onSubmit() {
           console.log('submit!');
-          this.$store.state.currentMLList.push(this.form)
+          this.items.push(this.form)
           console.log('submit!');
-          this.items = this.$store.state.currentMLList
-          console.log('item', this.items)
+          this.$store.state.currentMLList = this.items
+          console.log('item', this.items, this.$store.state.currentMLList)
           this.form = {
             modelRoot:'',
             version: '',
@@ -299,8 +299,8 @@
             type: '',
             resource: '',
             params:{
-                mean:null,
-                std:null,
+                mean:'[0.485, 0.456, 0.406]',
+                std:'[0.229, 0.224, 0.225]',
                 imgSize:null,
                 threshold:null,
                 vocabPath:null,

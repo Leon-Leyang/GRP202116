@@ -16,6 +16,10 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
+logging:
+  level:
+    com.grp202116.consumerserver.mapper : debug
+
 eureka:
   client:
     healthcheck:

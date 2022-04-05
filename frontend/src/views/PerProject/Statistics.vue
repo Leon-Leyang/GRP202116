@@ -18,28 +18,28 @@
         <el-row style="height:27%">
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple-light title">Total Data:</div>
-            <div class="pagetext-a">1130</div>
+            <div class="pagetext-a">{{statistic.dataListNumber}}</div>
         </el-col>
         </el-row> 
 
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Percentage completed:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="25"></el-progress></div>
+            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.completionPercentage"></el-progress></div>
         </el-col>
         </el-row>
        <!--
         <el-row>
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple-light title">Average word counts per piece of data:</div>
-            <div class="pagetext-a">1130</div>
+        <el-col :span="24" class="inblock" v-if="this.$store.state.currentProject.type == 'text'">
+            <div class="grid-content bg-purple-light title">Average word counts per piece of data </div>
+            <div class="pagetext-a">{{statistic.averageTextWordsNumber}}</div>
         </el-col>
         </el-row>      
        --> 
        <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Data completed:</div>
-            <div class="pagetext-a">257</div>
+            <div class="pagetext-a">{{statistic.labeledDataListNumber}}</div>
         </el-col>
         </el-row>
       </v-card>
@@ -56,19 +56,19 @@
         <el-row style="height:27%">
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Total annotations:</div>
-            <div class="pagetext-a">123</div>
+            <div class="pagetext-a">{{statistic.annotationsNumber}}</div>
         </el-col>     
         </el-row>
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Annotations Percentage:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="25" color="green"></el-progress></div>
+            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averageAnnotations" color="green"></el-progress></div>
         </el-col>
         </el-row>   
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple-light title">Average annotations per piece of data:</div>
-            <div class="pagetext-a">12</div>
+            <div class="pagetext-a">{{statistic.annotationsNumber/statistic.dataListNumber}}</div>
         </el-col>
         </el-row>
           </v-card>
@@ -84,21 +84,21 @@
         <el-row style="height:27%">
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Total predictions:</div>
-            <div class="pagetext-a">123</div>
+            <div class="pagetext-a">{{statistic.predictionsNumber}}</div>
         </el-col>
         </el-row>
 
         <el-row>
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Predictions Percentage:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="35" color="red"></el-progress></div>
+            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averagePredictions" color="red"></el-progress></div>
         </el-col>
         </el-row> 
 
         <el-row>  
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple-light title">Average predictions per piece of data:</div>
-            <div class="pagetext-a">14</div>
+            <div class="pagetext-a">{{statistic.predictionsNumber/statistic.dataListNumber}}</div>
         </el-col>
         </el-row>
    
@@ -136,6 +136,27 @@
   </v-container>
   
 </template>
+<script>
+export default {
+  data() {
+    return {
+      statistic:null,
+    }
+  },
+  mounted(){
+    this.$axios.get('/statistics/'+ this.$store.state.currentProjectId)
+      .then(res => {
+          console.log("statistics",res)
+          this.statistic = res.data
+          console.log(" sta table",this.statistic)
+      })
+      .catch((error) => {
+          // here you will have access to error.response
+          console.log('error',error.resposnse)
+      });    
+  }
+}
+</script>
 
 <style>
 

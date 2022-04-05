@@ -1,12 +1,10 @@
 package com.grp202116.consumerserver.controller;
 
-import com.grp202116.consumerserver.mapper.AnnotationMapper;
 import com.grp202116.consumerserver.mapper.DataMapper;
 import com.grp202116.consumerserver.mapper.ProjectMapper;
-import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
-import com.grp202116.consumerserver.util.FileUtils;
+import com.grp202116.consumerserver.service.util.FileUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,22 +12,21 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
- * The Class DataController, contains the operations for Data
- * including list the Data, add the Data and delete the Data by mapper
+ * This is the controller of data,
+ * includes selection, insertion and deletion methods.
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ * @see DataMapper
+ * @see ProjectMapper
  */
-
 @RestController
 public class DataController {
     @Resource
     private DataMapper dataMapper;
-
-    @Resource
-    private AnnotationMapper annotationMapper;
-
     @Resource
     private ProjectMapper projectMapper;
 
@@ -59,6 +56,7 @@ public class DataController {
      * Add the Data to the database
      *
      * @param dataList the uploaded data
+     * @deprecated
      */
     @Deprecated
     @PutMapping("/data/add")
@@ -67,9 +65,13 @@ public class DataController {
     }
 
     /**
-     * Upload data to project path
+     * Upload data to the project according to the url,
+     * use the {@link FileUtils#uploadProjectData(List, BigInteger, String)}
+     * to move files to another local position,
+     * then insert the new address by {@link DataMapper#insertAll(List)}
      *
-     * @param urlList a list of data urls
+     * @param urlList   the list of data url
+     * @param projectId the id of the corresponding project
      */
     @PostMapping("/project/{projectId}/data_url")
     public void uploadDataURL(@RequestBody List<String> urlList, @PathVariable BigInteger projectId) {
@@ -85,16 +87,18 @@ public class DataController {
     }
 
     /**
-     * Upload data by sending files directly
-     * @param multiFileList the list of file
-     * @param projectId project id
+     * Upload data to the project by directly transfer the files.
+     * The files have to be convert from {@link MultipartFile} to {@link File}.
+     *
+     * @param multiFileList the list of files
+     * @param projectId     the id of the corresponding project
      */
     @PostMapping("/project/{projectId}/data_file")
     public void uploadDataFile(@RequestParam("fileList") MultipartFile[] multiFileList, @PathVariable BigInteger projectId) {
         ProjectDO project = projectMapper.getByProjectId(projectId);
         List<File> fileList = FileUtils.multipartToFile(multiFileList);
         List<DataDO> dataList = FileUtils.uploadProjectData(fileList, projectId, project.getType());
-        if (dataList.size() != 0) {
+        if (dataList != null && dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
         }
@@ -118,26 +122,5 @@ public class DataController {
     @DeleteMapping("/data/{dataId}")
     public void deleteDataById(@PathVariable BigInteger dataId) {
         dataMapper.deleteDataById(dataId);
-    }
-
-    /**
-     * requires the annotations to be inserted at the beginning
-     * @param dataList the list of data that inserted
-     */
-    private void createAnnotations(List<DataDO> dataList) {
-        if (dataList.size() < 1) return;
-        List<AnnotationDO> annotationList = new ArrayList<>();
-
-        for (DataDO data: dataList) {
-            AnnotationDO annotation = new AnnotationDO();
-            annotation.setDataId(data.getDataId());
-            annotation.setProjectId(data.getProjectId());
-            Date date = new Date();
-            annotation.setCreateTime(date);
-            annotation.setUpdateTime(date);
-            annotationList.add(annotation);
-        }
-        annotationMapper.alter();
-        annotationMapper.insertAll(annotationList);
     }
 }

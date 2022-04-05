@@ -56,10 +56,10 @@
                                 <el-input v-model="form.params.imgSize" clearable maxlength="" size="mini" placeholder="(For image classification)"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Mean:">
-                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
+                                <el-input v-model="form.params.mean" clearable maxlength="" size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Standard Deviation:">
-                                <el-input v-model="form.name" clearable maxlength="" size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
                             </el-form-item>
                             
 
@@ -160,9 +160,217 @@
                                 ></v-progress-linear>  -->
 
                             <v-card-actions>
-                                <MLTest></MLTest>
-                                <MLTrain></MLTrain>
-                                </v-card-actions>
+
+                              <!-- ML Test -->
+                              <v-dialog
+                                v-model="dialog"
+                                persistent
+                                max-width="600px"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  
+                                  <v-btn
+                                    color="yellow"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    width="72px"
+                                    @click="chooseVersion(item.version)"
+                                  >
+                                    TEST
+                                  </v-btn>
+                                  
+                                </template>
+
+
+                                <v-card>
+                                  <v-card-title>
+                                    <span class="text-h5">Test</span>
+                                  </v-card-title>
+                                  <v-card-text>
+                                    <v-container>
+                                      <v-row>   
+                                        <v-col cols="12">
+                                        Upload the Customized Train Script Here:
+                                        <el-input type="textarea" v-model="testScript"></el-input>
+                                        </v-col>
+                                      </v-row>
+                                    </v-container>
+                                  </v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                      color="blue darken-1"
+                                      text
+                                      @click="MLTest(nowVersion)"
+                                    >
+                                      Run
+                                    </v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+
+                              <!-- ML Train -->
+                              <v-dialog
+                                v-model="dialogTrain"
+                                persistent
+                                max-width="600px"
+                              >
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-btn
+                                    color="green"
+                                    dark
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    width="72px"
+                                    @click="chooseVersion(item.version)"
+                                  >
+                                    Train
+                                  </v-btn>
+                                </template>
+                                <v-card>
+                                  <v-card-title>
+                                    <span class="text-h5">Train</span>
+                                  </v-card-title>
+                                  <v-card-text>
+                                    <v-container>
+                                      <v-row>
+                                        <v-col
+                                          cols="12"
+                                          sm="6"
+                                          md="4"
+                                        >
+                                          <v-text-field
+                                            v-model="trainObject.params.trainProportion"
+                                            label="Train Proportion:"
+                                            hint="range from 0 to 1"
+                                            persistent-hint
+                                            required
+                                          ></v-text-field>
+                                        </v-col>
+                                        
+                                        <v-col
+                                          cols="12"
+                                          sm="6"
+                                          md="4"
+                                        >
+                                          <v-text-field
+                                            v-model="trainObject.params.batchSize"
+                                            label="Batch Size:"
+                                            hint="number"
+                                            persistent-hint
+                                            required
+                                          ></v-text-field>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          sm="6"
+                                          md="4"
+                                        >
+                                          <v-text-field
+                                          v-model="trainObject.params.workerNumber"
+                                            label="Worker Number:"
+                                            hint="number"
+                                            persistent-hint
+                                            required
+                                          ></v-text-field>
+                                        </v-col>
+
+                                        <v-col cols="12">
+                                          
+                                            <v-switch
+                                              v-model="trainObject.params.shuffle"
+                                              :label="`Shuffle`"
+                                            ></v-switch>
+                                        </v-col>
+                                      
+                                        <v-col cols="12">
+                                          <v-text-field
+                                          v-model="trainObject.params.epochNumber"
+                                            label="Epoch Number:"
+                                            hint="number"
+                                            persistent-hint
+                                            required
+                                          ></v-text-field>
+                                        </v-col>
+                                        
+                                        <v-col cols="12">
+                                          <v-text-field
+                                          v-model="trainObject.params.learningRate"
+                                            label="Learning Rate:"
+                                            type="password"
+                                            hint="number"
+                                            persistent-hint
+                                            required
+                                          
+                                          ></v-text-field>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          sm="6"
+                                        >
+                                          <v-select
+                                          v-model="trainObject.params.optimizer"
+                                            :items="['SGD', 'ASGD', 'Rprop', 'Adagrad','Adadelta','RMSprop','Adam','Adamax','SparseAdam','LBFGS']"
+                                            label="Optimizer"
+                                            required
+                                          ></v-select>
+                                        </v-col>
+                                        <v-col
+                                          cols="12"
+                                          sm="6"
+                                        >
+                                          <v-autocomplete
+                                          v-model="trainObject.params.lossFunction"
+                                            :items="['CrossEntropyLoss', 'NLLLoss']"
+                                            label="Loss Function"
+                                            required
+                                          ></v-autocomplete><!--multiple-->
+                                        </v-col>
+
+                                        <v-col cols="12">
+                                          <v-text-field
+                                          v-model="trainObject.params.savePath"
+                                            label="Where to save the model:"
+                                            hint="local path"
+                                            persistent-hint
+                                            required
+                                          ></v-text-field>
+                                        </v-col>
+
+                                        <v-col cols="12">
+                                          <div style="margin-top:30px">
+                                            Upload the Customized Train Script Here:
+                                            <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
+                                          </div>
+                                        </v-col>
+                                        
+                                      </v-row>
+                                    </v-container>
+                                    <!--<small>*indicates required field</small>-->
+                                  </v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <!--
+                                    <v-btn
+                                      color="blue darken-1"
+                                      text
+                                      @click="dialog = false"
+                                    >
+                                      Close
+                                    </v-btn>
+                                  -->
+                                    <v-btn
+                                      color="blue darken-1"
+                                      text
+                                      @click="MLTrain(nowVersion)"
+                                    >
+                                      Run
+                                    </v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+
+                            </v-card-actions>
 
                             </v-card>
                         </v-col>
@@ -242,47 +450,42 @@
 </style>
 
 <script>
-  /*import MLTest from '@/views/PerProject/ML/ML-Test-';*/
-  import MLTest from './ML/ML-Test-.vue';
-  import MLTrain from './ML/ML-Train-.vue';
   export default {
-    components: {
-        MLTest,
-        MLTrain
-    },
     data() {
     return {
-        form: {
-            modelRoot:'',
-            version: '',
-            description:'',
-            modelPath:'',
-            labelsPath:'',
-            type: '',
-            resource: '',
-            params:{
-                mean:null,
-                std:null,
-                imgSize:null,
-                threshold:null,
-                vocabPath:null,
-                tokenNum:null,
-                sequenceLen:null,
-            }
-        },
+      nowVersion:'',
+      form: {
+        modelRoot:'',
+        version: '',
+        description:'',
+        modelPath:'',
+        labelsPath:'',
+        type: '',
+        resource: '',
+        params:{
+            mean:'[0.485, 0.456, 0.406]',
+            std:'[0.229, 0.224, 0.225]',
+            imgSize:null,
+            threshold:null,
+            vocabPath:null,
+            tokenNum:null,
+            sequenceLen:null,
+        }
+      },
 
-        type:null,
+      type:null,
 
-        typeOptions:[
-        {label:'Image Classification',value:0},
-        {label:'Object Detection',value:1},
-        {label:'Keypoint Labeling',value:2},
-        {label:'Semantic Segmentation with Masks',value:3},
-        {label:'Text Classification',value:4},
-        {label:'Name Entity Recognition',value:5},
-        {label:'Customization',value:6},
-        ],
+      typeOptions:[
+      {label:'Image Classification',value:0},
+      {label:'Object Detection',value:1},
+      {label:'Keypoint Labeling',value:2},
+      {label:'Semantic Segmentation with Masks',value:3},
+      {label:'Text Classification',value:4},
+      {label:'Name Entity Recognition',value:5},
+      {label:'Customization',value:6},
+      ],
 
+      
         options: [{
             label: 'Supportive Types',
             options: [{
@@ -311,8 +514,36 @@
             {label:'Customization',value: '6'}]
             }],
         value: '',
+            
+      testScript:null,
+      runObject: {
+        version:'',
+        script_url:null
+      },
+      trainObject:{
+        version:null,
+        params:{
+          trainProportion: null,
+          batchSize:null,
+          workerNumber:null,
+          shuffle:false,
+          epochNumber:null,
+          learningRate:null,
+          optimizer:null,
+          lossFunction:null,
+          savePath:null,
+        },
+        script_url:null,
+      },
 
-        items: [ ],
+      dialog:false,
+      dialogTrain: false,
+
+      numOfML:null,
+
+      items: [ ],
+      prevMLList:[],
+      newMLList:[],
       }
     },
     watch:{
@@ -333,14 +564,28 @@
               this.$store.state.currentMLType = 'Customization'
           }
           this.form.type = this.$store.state.currentMLType
+      },
+      testScript: function(val){
+        this.testScript = val
       }
     },
     methods:{
+      chooseVersion(version){
+        console.log('nowversion', version)
+        this.nowVersion = version
+      },
       onSubmit() {
-          console.log('submit!');
-          this.$store.state.currentMLList.push(this.form)
-          console.log('submit!');
-          this.items = this.$store.state.currentMLList
+          console.log('submit1!');
+          console.log('form', this.form)
+          console.log('tag', this.newMLList)
+          this.newMLList.push(this.form)
+          console.log('tag', this.newMLList)
+          
+          this.items.push(this.form)
+          console.log('submit2!');
+          this.$store.state.currentMLList = this.items
+          console.log('currentMLList.', this.$store.state.currentMLList)
+
           console.log('item', this.items)
           this.form = {
             modelRoot:'',
@@ -351,18 +596,56 @@
             type: '',
             resource: '',
             params:{
-                mean:null,
-                std:null,
+                mean:'[0.485, 0.456, 0.406]',
+                std:'[0.229, 0.224, 0.225]',
                 imgSize:null,
                 threshold:null,
                 vocabPath:null,
                 tokenNum:null,
                 sequenceLen:null,
             }
-        }
-        console.log('item', this.items)
+          }
+          console.log('item', this.items)
           this.value = null
+
+          console.log('this.$store.state.currentMLList ml page, newMLList', this.$store.state.currentMLList, this.newMLList)
+          if(this.newMLList != []){
+            for(var mln = 0; mln<this.newMLList.length; mln++){
+              console.log('mln', mln)
+              this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
+              console.log('params', this.$store.state.currentMLList[mln].params)
+            }
+            this.$axios.post(`/model/create/`+ this.$store.state.currentProjectId, JSON.stringify(this.newMLList))
+                .then(res => {
+                console.log("ml", res)
+            })
+            console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)                  
+          }
+
+          console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
       },
+      MLTest(version){
+        console.log('nee', this.testScript)
+        console.log('version', version)
+        this.dialog = false
+        this.runObject.version = version
+        this.runObject.script_url = this.testScript
+        console.log('runObject', this.runObject, JSON.stringify(this.runObject))
+        this.$axios.post('/model/run/'+ this.$store.state.currentProjectId, JSON.stringify(this.runObject))
+        .then((res)=>{
+          console.log('test model', res)
+        })       
+      },
+      MLTrain(version){
+        this.dialogTrain = false
+        console.log('train', version, this.trainObject)
+        this.trainObject.version = version
+        this.$axios.post('/model/train/'+ this.$store.state.currentProjectId,JSON.stringify(this.trainObject))
+        .then((res)=>{
+          console.log('train model', res)
+        }) 
+      },
+
     
       selectType(selectValue) {
           this.isObjDetect = false;
@@ -390,22 +673,23 @@
         this.isNER = true;
       }
     },
+
     
     },
     mounted() {
-      // this.$axios.get('/model/'+ this.$store.state.currentProjectId, {
-      //         params: {
-      //             page: this.config.page,
-      //             name
-      //         }
-      //     })
-      //     .then(res => {
-            
-      //     })
-      //     .catch((error) => {
-      //         // here you will have access to error.response
-      //         console.log(error.response)
-      //     });
+      console.log('ml.currentProjectId', this.$store.state.currentProjectId)
+      this.$axios.get('/model/'+ this.$store.state.currentProjectId)
+          .then(res => {
+            console.log('have get ML', res)
+            this.items = res.data
+            this.$store.state.currentMLList = this.items
+            this.numOfML = this.items.length
+            this.prevMLList = this.items
+          })
+          .catch((error) => {
+              // here you will have access to error.response
+              console.log(error.response)
+          });
     },
   }
 </script>

@@ -1,12 +1,11 @@
 package com.grp202116.consumerserver.controller;
 
-import com.grp202116.consumerserver.mapper.AnnotationMapper;
-import com.grp202116.consumerserver.mapper.DataMapper;
-import com.grp202116.consumerserver.mapper.PredictionMapper;
-import com.grp202116.consumerserver.mapper.ProjectMapper;
+import com.grp202116.consumerserver.mapper.*;
 import com.grp202116.consumerserver.pojo.DataDO;
+import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
-import com.grp202116.consumerserver.util.ExportUtils;
+import com.grp202116.consumerserver.service.util.ExportUtils;
+import com.grp202116.consumerserver.service.util.FileUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Collections;
@@ -23,18 +23,22 @@ import java.util.List;
 /**
  * The Class ProjectController, contain the operation for the Project
  * including list the Project, edit the Project, add and delete of the Project
+ * as well as methods for exporting data
+ *
+ * @author Yujie Chen
+ * @version 1.2
+ * @see ProjectMapper
  */
 @RestController
 public class ProjectController {
     @Resource
     private ProjectMapper projectMapper;
-
+    @Resource
+    private ModelMapper modelMapper;
     @Resource
     private DataMapper dataMapper;
-
     @Resource
     private AnnotationMapper annotationMapper;
-
     @Resource
     private PredictionMapper predictionMapper;
 
@@ -62,6 +66,7 @@ public class ProjectController {
     /**
      * Get the process of a certain project
      *
+     * @param projectId the id of a project
      * @return the process, retains four decimal
      */
     @GetMapping("/project/{projectId}/process")
@@ -111,6 +116,16 @@ public class ProjectController {
      */
     @DeleteMapping("/project/{projectId}")
     public void deleteProject(@PathVariable BigInteger projectId) {
+        String projectDirectory = ".." + File.separator + "files" + File.separator + projectId;
+        FileUtils.deleteDirectory(projectDirectory);
+        List<ModelDO> modelList = modelMapper.getByProjectId(projectId);
+
+        for (ModelDO model : modelList) {
+            String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
+                    "_" + model.getVersion() + File.separator;
+            FileUtils.deleteDirectory(modelDirectory);
+        }
+
         projectMapper.deleteByProjectId(projectId);
     }
 
@@ -147,6 +162,7 @@ public class ProjectController {
 
     /**
      * Helper method for the response entity creation
+     *
      * @param resource byte source of a certain file
      * @return response of success or failure
      */

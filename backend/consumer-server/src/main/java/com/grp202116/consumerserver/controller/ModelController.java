@@ -4,14 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.*;
-import com.grp202116.consumerserver.ml.ModelDriver;
-import com.grp202116.consumerserver.ml.ModelSaver;
-import com.grp202116.consumerserver.ml.ModelTrainer;
+import com.grp202116.consumerserver.service.ml.ModelDriver;
+import com.grp202116.consumerserver.service.ml.ModelSaver;
+import com.grp202116.consumerserver.service.ml.ModelTrainer;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
-import com.grp202116.consumerserver.util.HttpUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.grp202116.consumerserver.service.util.HttpUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,28 +22,33 @@ import java.math.BigInteger;
 import java.util.*;
 
 /**
- * The Class ModelController, control the ml Model of the project
- * Control the Addition, deletion, update and the running of the Model
+ * This is the controller which deals with the model,
+ * including select, insert and delete models.
+ *
+ * @author Yujie Chen
+ * @version 1.2
  */
 @RestController
 public class ModelController {
     @Resource
     PredictionMapper predictionMapper;
-
     @Resource
     AnnotationMapper annotationMapper;
-
     @Resource
     ModelMapper modelMapper;
-
     @Resource
     ProjectMapper projectMapper;
-
     @Resource
     DataMapper dataMapper;
 
     private final RestTemplate restTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(ModelController.class);
 
+    /**
+     * A constructor to insert a {@link RestTemplate} to interact with the flask server.
+     *
+     * @param restTemplate insertion of restTemplate
+     */
     public ModelController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -53,95 +60,117 @@ public class ModelController {
      * @return return the Model of corresponding projectId
      */
     @GetMapping("/model/{projectId}")
-    public ModelDO getProjectModel(@PathVariable BigInteger projectId) {
+    public List<ModelDO> getProjectModel(@PathVariable BigInteger projectId) {
         return modelMapper.getByProjectId(projectId);
     }
 
     /**
-     * Update the Model in certain project by first delete the origin Model,
-     * then insert the newly imported Model
+     * Update the Model in certain project.
      *
-     * @param projectId the projectId fetched from the mapper
-     * @param model     the newly imported Model
+     * @param model the newly imported Model
      */
-    @PostMapping("/model/{projectId}")
-    public void updateModel(@PathVariable BigInteger projectId, @RequestBody ModelDO model) {
-        modelMapper.deleteByProjectId(projectId);
-        modelMapper.insert(model);
-    }
-
-    /**
-     * Delete the Model in certain project
-     *
-     * @param projectId the projectId fetched from the mapper
-     */
-    @DeleteMapping("/model/{projectId}")
-    public void deleteModel(@PathVariable BigInteger projectId) {
-        modelMapper.deleteByProjectId(projectId);
-    }
-
-
-    /**
-     * Save model and params
-     *
-     * @param projectId project id
-     * @param model     model
-     */
-    @PostMapping("/model/create/{projectId}")
-    public void createModel(@PathVariable BigInteger projectId,
-                            @RequestBody ModelDO model) {
-
-        model.setCreateTime(new Date());
-        model.setProjectId(projectId);
-
+    @PostMapping("/model/update")
+    public void updateModel(@RequestBody ModelDO model) {
         ModelSaver modelSaver = new ModelSaver(model);
         String modelPath = modelSaver.saveModel(model.getModelPath());
-        if (modelPath == null) return;
-        else model.setModelPath(modelPath);
+        if (modelPath != null) model.setModelPath(modelPath);
 
         String labelPath = modelSaver.saveLabels(model.getLabelsPath());
-        if (labelPath == null) return;
-        else model.setLabelsPath(labelPath);
+        if (labelPath != null) model.setLabelsPath(labelPath);
 
+        if (saveModelParams(model, modelSaver)) return;
+        modelMapper.updateModel(model);
+    }
+
+    /**
+     * Save params of model
+     *
+     * @param model      a {@link ModelDO} object
+     * @param modelSaver the {@link ModelSaver} object
+     * @return true if no valid target path
+     */
+    private static boolean saveModelParams(@RequestBody ModelDO model, ModelSaver modelSaver) {
         JSONObject params = JSON.parseObject(model.getParams());
         String vocPath = params.getString("vocabPath");
         if (vocPath != null) {
             String targetPath = modelSaver.saveLabels(vocPath);
-            if (targetPath == null) return;
+            if (targetPath == null) return true;
             else {
                 params.put("vocabPath", targetPath);
                 model.setParams(JSONObject.toJSONString(params));
             }
         }
-
-        modelMapper.insert(model);
+        return false;
     }
 
     /**
-     * Run the ml Model in the certain project
-     * requires the version of model and corresponding params
-     * if it is a custom model, requires a .py script file .
+     * Delete the Model in certain project
      *
-     * @param projectId the projectId fetched from the mapper
+     * @param modelId the projectId fetched from the mapper
+     */
+    @DeleteMapping("/model/{modelId}")
+    public void deleteModel(@PathVariable BigInteger modelId) {
+        modelMapper.deleteById(modelId);
+    }
+
+
+    /**
+     * Create a new model and save it to the database
+     *
+     * @param projectId project id
+     * @param modelList     a list of {@link ModelDO} object
+     */
+    @PostMapping("/model/create/{projectId}")
+    public void createModel(@PathVariable BigInteger projectId,
+                            @RequestBody List<ModelDO> modelList) {
+        for (ModelDO model: modelList) {
+            model.setCreateTime(new Date());
+            model.setProjectId(projectId);
+
+            ModelSaver modelSaver = new ModelSaver(model);
+            String modelPath = modelSaver.saveModel(model.getModelPath());
+            if (modelPath == null) return;
+            else model.setModelPath(modelPath);
+
+            String labelPath = modelSaver.saveLabels(model.getLabelsPath());
+            if (labelPath == null) return;
+            else model.setLabelsPath(labelPath);
+
+            if (saveModelParams(model, modelSaver)) return;
+
+            modelMapper.insert(model);
+        }
+    }
+
+    /**
+     * Run a model based on the inputs
+     *
+     * @param projectId the id of a project
+     * @param runObject the {@link JSONObject} of the params, containing all required information
      */
     @PostMapping("/model/run/{projectId}")
     public void runModel(@PathVariable BigInteger projectId, @RequestBody JSONObject runObject) {
-
         if (!runObject.containsKey("version") || !runObject.containsKey("script_url")) return;
         String version = runObject.getString("version");
         String scriptPath = runObject.getString("script_url");
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDO model = modelMapper.getByVersion(version);
+        ModelDO model = modelMapper.getByVersionProject(version, projectId);
 
-        if (model == null) return;
+        if (model == null) {
+            logger.warn("Model cannot be located according to the project and version");
+            return;
+        };
 
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(project, model);
 
         String scriptName;
         if (model.getType().equals("Custom")) {
-            if (scriptPath == null) return;
+            if (scriptPath == null) {
+                logger.warn("Script Path not specified for custom model");
+                return;
+            }
             else {
                 scriptName = ModelSaver.saveCustom(scriptPath);
                 if (scriptName == null) return;
@@ -151,11 +180,12 @@ public class ModelController {
 
         for (DataDO data : dataList) {
             JSONObject object = modelDriver.runModelConfig(data);
+            if (object == null) return;
 
             JSONObject result = JSONObject.parseObject(
                     restTemplate.postForObject("http://sidecar-server/model/run",
                             HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
-            JSONArray predictions = JSONObject.parseArray(result.getString("result"));
+            JSONArray predictions = result.getJSONArray("result");
 
             data.setPredicted(true);
             dataMapper.updateDataPredict(data);
@@ -165,57 +195,52 @@ public class ModelController {
     }
 
     /**
-     * Train custom model
+     * Train a model
      *
-     * @param projectId id of the specified project
+     * @param projectId   the id of a project
+     * @param trainObject the {@link JSONObject} of params
+     * @return the accuracy of this model
      */
     @PostMapping("/model/train/{projectId}")
-    public String trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject trainObject) {
+    public void trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject trainObject) {
 
         if (!trainObject.containsKey("version") && !trainObject.containsKey("params") &&
-        !trainObject.containsKey("script_url")) return null;
+                !trainObject.containsKey("script_url")) return;
 
         String version = trainObject.getString("version");
         String scriptPath = trainObject.getString("script_url");
         JSONObject trainParams = trainObject.getJSONObject("params");
 
         ProjectDO project = projectMapper.getByProjectId(projectId);
-        ModelDO model = modelMapper.getByVersion(version);
+        ModelDO model = modelMapper.getByVersionProject(version, projectId);
 
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
-        if (annotationList.size() < 1) return "";
+        if (annotationList.size() < 1) return;
 
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
-        if (annotatedDataList.size() < 1) return "";
+        if (annotatedDataList.size() < 1) return;
 
         ModelTrainer modelTrainer = new ModelTrainer(project, model);
 
         String scriptName;
         if (model.getType().equals("Custom")) {
-            if (scriptPath == null) return null;
+            if (scriptPath == null) return;
             else {
                 scriptName = ModelSaver.saveCustom(scriptPath);
-                if (scriptName == null) return null;
+                if (scriptName == null) return;
                 else modelTrainer.setScriptName(scriptName);
             }
         }
         JSONObject object = new JSONObject();
-        object.putAll(trainParams);
-        object.putAll(modelTrainer.trainModelConfig());
+        object.putAll(modelTrainer.trainModelConfig(trainParams));
         object.put("annotation_list", annotationList);
         object.put("data_list", annotatedDataList);
 
-        return restTemplate.postForObject("http://sidecar-server/model/train",
+        String accuracy = restTemplate.postForObject("http://sidecar-server/model/train",
                 HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class);
 
-    }
-
-    @Deprecated
-    @PostMapping("/model/save/{projectId}")
-    public void saveModel(@PathVariable BigInteger projectId, @RequestBody ModelDO model) {
-
-        model.setProjectId(projectId);
-        model.setCreateTime(new Date());
-        modelMapper.insert(model);
+        model.setAccuracy(accuracy);
+        model.setDataLength(annotatedDataList.size());
+        modelMapper.updateAccuracy(model);
     }
 }

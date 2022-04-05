@@ -65,6 +65,9 @@ class ModelDriver():
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
         if script_type == 'Image Classification':
+            print(from_name)
+            print(to_name)
+            print(tool_type)
             model = ImgClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                 json.loads(params['mean']), json.loads(params['std']), json.loads(params['imgSize']))
         elif script_type == 'Object Detection':
@@ -82,7 +85,7 @@ class ModelDriver():
         elif script_type == 'Named Entity Recognition':
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                              json.loads(params['sequenceLen']))
-        elif script_type == 'Custom':
+        elif script_type == 'Customization':
             moduleName = 'ml.models.' + params['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type)
@@ -108,7 +111,7 @@ class ModelDriver():
             model = ImgClsModel(model_path, model_root, labelsPath, mean=json.loads(params['mean']), std=json.loads(params['std']),
                                 imgSize=json.loads(params['imgSize']))
             accuracy = model.train(datas, annotations, params['savePath'], json.loads(params['epochNum']), json.loads(params['trainFrac']), json.loads(params['batchSize']), json.loads(params['shuffle']), json.loads(params['workerNum']), json.loads(params['learningRate']), params['lossFunc'], params['optimizer'])
-        elif script_type == 'Custom':
+        elif script_type == 'Customization':
             moduleName = 'ml.models.' + params['scriptName']
             module = import_module(moduleName)
             model = module.CustomModel(model_path, model_root, labelsPath)

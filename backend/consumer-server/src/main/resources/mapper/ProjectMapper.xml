@@ -25,8 +25,8 @@
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="projectId" keyColumn="projectId" parameterType="ProjectDO">
-        insert into project (create_time, update_time, type, name, description)
-        values (#{createTime}, #{updateTime}, #{type}, #{name}, #{description})
+        insert into project (create_time, update_time, type, name, description, configs)
+        values (#{createTime}, #{updateTime}, #{type}, #{name}, #{description}, #{configs})
     </insert>
 
     <select id="listAll" resultMap="projectMap">

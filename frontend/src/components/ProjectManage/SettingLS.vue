@@ -3,9 +3,11 @@
     <v-row
     >
         <v-card
-        
         style="margin-top:30px; margin-left:10px; height:450px"
-        >
+        ><!--width="1250px"
+        height="500px"
+        style="margin-top:30px; margin-left:10px;"
+        elevation=0-->
         <v-row justify="center">
             <v-tabs vertical style="width:100%">
                 <v-tab style="text-align:left">
@@ -44,7 +46,7 @@
                     <v-card
                         :elevation="hover ? 12 : 2"
                         :class="{ 'on-hover': hover }"
-                        @click="enterConfig(item.config)"
+                        @click="enterConfig(item.config,'image',item.title)"
                     >
                         <v-img
                         :src="item.img"
@@ -107,61 +109,62 @@
                     
                     <v-container class="con">
 
-            <v-row
-                class="fill-height"
-                align="center"
-                justify="center"
-            >
-                <template v-for="(item, i) in textTool">
-                <v-col
-                    :key="i"
-                    cols="12"
-                    md="5"
-                >
-                    <v-hover v-slot="{ hover }">
-                    <v-card
-                        :elevation="hover ? 12 : 2"
-                        :class="{ 'on-hover': hover }"
+                    <v-row
+                        class="fill-height"
+                        align="center"
+                        justify="center"
                     >
-                        <v-img
-                        :src="item.img"
-                        height="188px"
+                        <template v-for="(item, i) in textTool">
+                        <v-col
+                            :key="i"
+                            cols="12"
+                            md="5"
                         >
-                        <v-card-title class="text-h6 black--text">
-                            <v-row
-                            class="fill-height flex-column"
-                            justify="space-between"
+                            <v-hover v-slot="{ hover }">
+                            <v-card
+                                :elevation="hover ? 12 : 2"
+                                :class="{ 'on-hover': hover }"
+                                @click="enterConfig(item.config,'text')"
                             >
-                            <p class="mt-4 subheading text-left">
-                                {{ item.title }}
-                            </p>
-            <div> <!--class="align-self-center"-->
-                                <v-btn
-                                v-for="(icon, index) in icons"
-                                :key="index"
-                                :class="{ 'show-btns-2': hover }"
-                                :color="transparent"
-                                icon
-                                x-large
+                                <v-img
+                                :src="item.img"
+                                height="225px"
                                 >
-                                
-                                <v-icon
-                                    :class="{ 'show-btns-2': hover }"
-                                    :color="transparent" 
-                                >{{ icon }}
-                                </v-icon>
-                                
-                                
-                                </v-btn>
-                            </div>
-                            </v-row>
-                        </v-card-title>
-                        </v-img>
-                    </v-card>
-                    </v-hover>
-                </v-col>
-                </template>
-            </v-row>
+                                <v-card-title class="text-h6 black--text">
+                                    <v-row
+                                    class="fill-height flex-column"
+                                    justify="space-between"
+                                    >
+                                    <p class="mt-4 subheading text-left">
+                                        {{ item.title }}
+                                    </p>
+                    <div> <!--class="align-self-center"-->
+                                        <v-btn
+                                        v-for="(icon, index) in icons"
+                                        :key="index"
+                                        :class="{ 'show-btns-2': hover }"
+                                        :color="transparent"
+                                        icon
+                                        x-large
+                                        >
+                                        
+                                        <v-icon
+                                            :class="{ 'show-btns-2': hover }"
+                                            :color="transparent" 
+                                        >{{ icon }}
+                                        </v-icon>
+                                        
+                                        
+                                        </v-btn>
+                                    </div>
+                                    </v-row>
+                                </v-card-title>
+                                </v-img>
+                            </v-card>
+                            </v-hover>
+                        </v-col>
+                        </template>
+                    </v-row>
 
             </v-container>
                 
@@ -175,6 +178,7 @@
             :value="overlay"
             color="grey"
             style="height:610px"
+            dark=false
             >
             <v-btn
                 @click="overlay = false"
@@ -339,10 +343,12 @@ export default {
         }
     },
     methods: {
-        enterConfig(config){
+        enterConfig(config,type,title){
             this.$store.state.currentConfig = config
+            this.$store.state.currentConfigTitle = title
             console.log('config', this.$store.state.currentConfig)
             this.overlay = !this.overlay
+            this.$store.state.dataType = type
         }
     },
 

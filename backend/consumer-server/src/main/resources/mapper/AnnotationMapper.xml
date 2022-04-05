@@ -35,6 +35,21 @@
             (#{item.projectId}, #{item.dataId},#{item.type},
             #{item.createTime},#{item.updateTime}, #{item.result})
         </foreach>
+        ON DUPLICATE KEY UPDATE
+        project_id = VALUES(project_id), type = VALUES(data_id), update_time = VALUES(update_time),
+        result = VALUES(result)
+    </insert>
+
+    <insert id="insert" parameterType="AnnotationDO" useGeneratedKeys="true" keyColumn="annotation_id"
+            keyProperty="annotationId">
+        insert into annotation
+            (project_id, data_id, type, create_time, update_time, result)
+        values (#{projectId}, #{dataId}, #{type},
+                #{createTime}, #{updateTime}, #{result})
+        ON DUPLICATE KEY UPDATE project_id  = VALUES(project_id),
+                                type        = VALUES(data_id),
+                                update_time = VALUES(update_time),
+                                result      = VALUES(result)
     </insert>
 
     <select id="listByDataId" resultMap="annotationMap">
