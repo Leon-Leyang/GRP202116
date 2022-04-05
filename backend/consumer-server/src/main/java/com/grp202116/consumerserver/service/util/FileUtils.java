@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.util;
+package com.grp202116.consumerserver.service.util;
 
 import com.grp202116.consumerserver.pojo.DataDO;
 import org.apache.commons.io.FilenameUtils;

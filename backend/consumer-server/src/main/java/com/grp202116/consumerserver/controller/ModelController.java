@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.*;
-import com.grp202116.consumerserver.ml.ModelDriver;
-import com.grp202116.consumerserver.ml.ModelSaver;
-import com.grp202116.consumerserver.ml.ModelTrainer;
+import com.grp202116.consumerserver.service.ml.ModelDriver;
+import com.grp202116.consumerserver.service.ml.ModelSaver;
+import com.grp202116.consumerserver.service.ml.ModelTrainer;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
-import com.grp202116.consumerserver.util.HttpUtils;
+import com.grp202116.consumerserver.service.util.HttpUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -161,7 +161,7 @@ public class ModelController {
         ModelDriver modelDriver = new ModelDriver(project, model);
 
         String scriptName;
-        if (model.getType().equals("Custom")) {
+        if (model.getType().equals("Customization")) {
             if (scriptPath == null) return;
             else {
                 scriptName = ModelSaver.saveCustom(scriptPath);

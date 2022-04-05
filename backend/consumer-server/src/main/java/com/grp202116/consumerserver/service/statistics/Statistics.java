@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.statistics;
+package com.grp202116.consumerserver.service.statistics;
 
 import com.grp202116.consumerserver.mapper.AnnotationMapper;
 import com.grp202116.consumerserver.mapper.DataMapper;
