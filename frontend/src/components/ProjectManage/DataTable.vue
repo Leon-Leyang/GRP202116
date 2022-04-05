@@ -6,42 +6,45 @@
   :default-sort = "{prop: 'id', order: 'ascending'}" 
   v-cloak
   stripe
+  @row-click="enterData"
   >
-  <el-table-column
-    type="selection"
-    width="50">
-  </el-table-column>
-
-
-  <el-table-column show-overflow-tooltip sortable label="ID" width="100" prop="dataId" align="center">
-  </el-table-column> 
-  <el-table-column show-overflow-tooltip sortable label="Last Modification Time" width="200" prop="updateTime" align="center">
-  </el-table-column> 
-  <el-table-column show-overflow-tooltip sortable label="Import Time" width="200" prop="createTime" align="center">
-  </el-table-column>  
-  <el-table-column show-overflow-tooltip label="Preview" width="200" prop="url" align="center">
-    <template slot-scope="scope">
-                <el-popover placement="right" v-if="dataType == 'image'">
-                  <img :src="scope.row.url" />
-                  <img
-                    slot="reference"
-                    :src="scope.row.url"
-                    :alt="scope.row.url"
-                    style="max-height: 50px; max-width: 130px"
-                  />
-                </el-popover>
-                <div v-if="dataType == 'text'" style="width:50px;white-space:nowrap;overflow:hidden;">
-                  <span>
-                    {{scope.row.url}}
-                  </span>
-                </div>
-      </template>
-  </el-table-column> 
-  <el-table-column show-overflow-tooltip label="Anno" width="100" prop="sta" align="center">
+  <!-- <template slot-scope="tableData" id="template">
+    <div @click="enterData(tableData.row)" id="div"> -->
+      <el-table-column
+        type="selection"
+        width="50">
+      </el-table-column>
+      <el-table-column show-overflow-tooltip sortable label="ID" width="100" prop="dataId" align="center">
+      </el-table-column> 
+      <el-table-column show-overflow-tooltip sortable label="Last Modification Time" width="200" prop="updateTime" align="center">
+      </el-table-column> 
+      <el-table-column show-overflow-tooltip sortable label="Import Time" width="200" prop="createTime" align="center">
+      </el-table-column>  
+      <el-table-column show-overflow-tooltip label="Preview" width="200" prop="url" align="center">
+        <template slot-scope="scope">
+                    <el-popover placement="right" v-if="dataType == 'image'">
+                      <img :src="scope.row.url" />
+                      <img
+                        slot="reference"
+                        :src="scope.row.url"
+                        :alt="scope.row.url"
+                        style="max-height: 50px; max-width: 130px"
+                      />
+                    </el-popover>
+                    <div v-if="dataType == 'text'" style="width:50px;white-space:nowrap;overflow:hidden;">
+                      <span>
+                        {{scope.row.url}}
+                      </span>
+                    </div>
+          </template>
+      </el-table-column>   
+    <!-- </div>
+  </template> -->
+  <!-- <el-table-column show-overflow-tooltip label="Anno" width="100" prop="sta" align="center">
     <template slot-scope="tableData">
       <button @click="enterData(tableData.row)">Enter</button>
     </template>
-  </el-table-column> 
+  </el-table-column>  -->
   <!-- <el-table-column label="Annotation" width="100" prop="anno" align="center"></el-table-column>  -->
   <!-- <el-table-column label="Prediction" width="100" prop="predi" align="center"></el-table-column>        -->
 </el-table>
@@ -64,8 +67,8 @@
       config: Object,
     },
     methods: {
-      enterData(data){
-        console.log('data', data)
+      enterData(data, event, column){
+        console.log('data', data,event,column)
         this.$store.state.currentDataId = data.dataId
         this.$store.state.realDataId = data.realDataId
         console.log('cur', this.$store.state.currentDataId)
