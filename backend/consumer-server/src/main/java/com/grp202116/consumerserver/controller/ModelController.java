@@ -232,8 +232,7 @@ public class ModelController {
             }
         }
         JSONObject object = new JSONObject();
-        object.putAll(trainParams);
-        object.putAll(modelTrainer.trainModelConfig());
+        object.putAll(modelTrainer.trainModelConfig(trainParams));
         object.put("annotation_list", annotationList);
         object.put("data_list", annotatedDataList);
 

@@ -42,7 +42,7 @@ public class ModelTrainer {
      *
      * @return the jsonObject {@link JSONObject}
      */
-    public JSONObject trainModelConfig() {
+    public JSONObject trainModelConfig(JSONObject trainParams) {
         JSONObject object = new JSONObject();
         object.put("script_type", model.getType());
         object.put("model_path", model.getModelPath());
@@ -51,6 +51,7 @@ public class ModelTrainer {
 
         JSONObject params = JSON.parseObject(model.getParams());
         if (scriptName != null) params.put("scriptName", scriptName);
+        params.putAll(trainParams);
         object.put("params", params);
 
         return object;
