@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.statistics;
+package com.grp202116.consumerserver.service.statistics;
 
 import com.grp202116.consumerserver.mapper.AnnotationMapper;
 import com.grp202116.consumerserver.mapper.DataMapper;
@@ -6,7 +6,9 @@ import com.grp202116.consumerserver.mapper.PredictionMapper;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.PredictionDO;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,11 +21,13 @@ import java.util.Set;
 /**
  * The class Statistics contains the basic information of the statistics
  * controls the statistics of data, labels and project.
- * The calculation will be done in the backend then send to the frontend to list the Statistics
+ * The calculation will be done in the backend then send to the frontend to list
+ * the Statistics
  *
- * @author Henghui Zhang
+ * @author Henghui Zhang; Yujie Chen
  * @version 1.2
  */
+@Component
 public class Statistics {
     @Resource
     private DataMapper dataMapper;
@@ -32,6 +36,15 @@ public class Statistics {
     @Resource
     private PredictionMapper predictionMapper;
 
+    public static Statistics Statistics;
+
+    @PostConstruct
+    public void init() {
+        Statistics = this;
+        Statistics.dataMapper = this.dataMapper;
+        Statistics.annotationMapper = this.annotationMapper;
+        Statistics.predictionMapper = this.predictionMapper;
+    }
 
     BigInteger projectId;
     BigInteger dataListNumber;
@@ -52,8 +65,7 @@ public class Statistics {
      *
      * @param projectId the created project id
      */
-    public Statistics(BigInteger projectId) throws IOException {
-        this.setDataList(getDataListFromDB());
+    public Statistics setProjectId(BigInteger projectId) throws IOException {
         this.projectId = projectId;
         this.setDataListNumber(countDataList());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
@@ -65,6 +77,7 @@ public class Statistics {
         this.setAverageAnnotations(countAverageAnnotations());
         this.setAveragePredictions(countAveragePredictions());
         this.setAverageTextWordsNumber(countAverageTextWordsNumber());
+        return this;
     }
 
     /**
@@ -229,7 +242,8 @@ public class Statistics {
     }
 
     /**
-     * Get the size of the data in the project according to the project id and read value from the DB
+     * Get the size of the data in the project according to the project id and read
+     * value from the DB
      *
      * @return the size of the data
      */
@@ -238,7 +252,8 @@ public class Statistics {
     }
 
     /**
-     * Get the annotations object list from the DB and give the value to the Statistics list
+     * Get the annotations object list from the DB and give the value to the
+     * Statistics list
      *
      * @return the annotations object list from the DB
      */
@@ -247,7 +262,8 @@ public class Statistics {
     }
 
     /**
-     * Get the Prediction object list from the DB and give the value to the Statistics list
+     * Get the Prediction object list from the DB and give the value to the
+     * Statistics list
      *
      * @return the Prediction object list from the DB
      */
@@ -256,9 +272,11 @@ public class Statistics {
     }
 
     /**
-     * Get the percentage of the annotated data files in all data files for each project
+     * Get the percentage of the annotated data files in all data files for each
+     * project
      *
-     * @return the percentage of the annotated data files in all data files for each project
+     * @return the percentage of the annotated data files in all data files for each
+     *         project
      */
     public float calculateCompletionPercentage() {
 
@@ -379,4 +397,3 @@ public class Statistics {
         return (float) wordSum / (float) textDataType;
     }
 }
-

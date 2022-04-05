@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.util;
+package com.grp202116.consumerserver.service.util;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.HttpEntity;

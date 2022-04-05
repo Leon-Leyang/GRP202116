@@ -15,6 +15,8 @@
         <result column="type" property="type"/>
         <result column="params" property="params"/>
         <result column="labels_path" property="labelsPath"/>
+        <result column="accuracy" property="accuracy"/>
+        <result column="data_length" property="dataLength"/>
     </resultMap>
 
     <update id="alter">
@@ -22,10 +24,17 @@
             AUTO_INCREMENT = 1;
     </update>
 
-    <update id="updateParams">
+    <update id="updateAccuracy">
         update model
-        set params = #{params}
-        where version = #{version}
+        <set>
+            <if test="accuracy != '' and accuracy != null">
+                accuracy = #{accuracy},
+            </if>
+            <if test="dataLength != '' and dataLength != null">
+                data_length = #{dataLength},
+            </if>
+        </set>
+        where model_id = #{modelId}
     </update>
 
     <update id="updateModel">

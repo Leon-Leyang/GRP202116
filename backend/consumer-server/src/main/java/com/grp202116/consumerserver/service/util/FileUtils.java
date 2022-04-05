@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.util;
+package com.grp202116.consumerserver.service.util;
 
 import com.grp202116.consumerserver.pojo.DataDO;
 import org.apache.commons.io.FilenameUtils;
@@ -108,6 +108,7 @@ public class FileUtils {
                     && !realType.equalsIgnoreCase("webp"))
                 return;
         } else {
+
             if (realType.equalsIgnoreCase("txt") || realType.equalsIgnoreCase("csv")
                     || realType.equalsIgnoreCase("tsv") || realType.equalsIgnoreCase("json"))
                 splitText(file, realType);

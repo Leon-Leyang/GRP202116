@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.ml;
+package com.grp202116.consumerserver.service.ml;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

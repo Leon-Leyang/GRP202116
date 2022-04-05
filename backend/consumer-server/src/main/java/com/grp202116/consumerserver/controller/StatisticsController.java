@@ -1,6 +1,6 @@
 package com.grp202116.consumerserver.controller;
 
-import com.grp202116.consumerserver.statistics.Statistics;
+import com.grp202116.consumerserver.service.statistics.Statistics;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +26,6 @@ public class StatisticsController {
      */
     @GetMapping("/statistics/{projectId}")
     public Statistics getStatistics(@PathVariable BigInteger projectId) throws IOException {
-        return new Statistics(projectId);
+        return new Statistics().setProjectId(projectId);
     }
 }

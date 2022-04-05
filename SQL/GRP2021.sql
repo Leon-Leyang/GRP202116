@@ -80,6 +80,8 @@ CREATE TABLE `model` (
   `type` varchar(100) DEFAULT NULL,
   `params` mediumtext,
   `labels_path` varchar(100) DEFAULT NULL,
+  `accuracy` varchar(100) DEFAULT NULL,
+  `data_length` int DEFAULT NULL,
   PRIMARY KEY (`model_id`),
   UNIQUE KEY `version` (`version`,`project_id`),
   KEY `project_id` (`project_id`),
