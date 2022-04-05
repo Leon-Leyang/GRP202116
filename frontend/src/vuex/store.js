@@ -17,7 +17,8 @@ const store = new Vuex.Store({
         prevLS:[],
         currentMLList:[],
         currentMLType:'',
-        dataType:''
+        dataType:'',
+        beforeConfig:``,
     },
     getters: {
         getProjectId(state){

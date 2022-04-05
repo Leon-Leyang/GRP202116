@@ -6,6 +6,7 @@
         width="1250px"
         height="500px"
         style="margin-top:30px; margin-left:10px;"
+        elevation=0
         >
         <v-row justify="center">
             <v-tabs vertical style="width:100%">

@@ -158,6 +158,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
+                                    @click="chooseVersion(item.version)"
                                   >
                                     TEST
                                   </v-btn>
@@ -184,7 +185,7 @@
                                     <v-btn
                                       color="blue darken-1"
                                       text
-                                      @click="MLTest(item.version)"
+                                      @click="MLTest(nowVersion)"
                                     >
                                       Run
                                     </v-btn>
@@ -205,6 +206,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
+                                    @click="chooseVersion(item.version)"
                                   >
                                     Train
                                   </v-btn>
@@ -344,7 +346,7 @@
                                     <v-btn
                                       color="blue darken-1"
                                       text
-                                      @click="MLTrain(item.version)"
+                                      @click="MLTrain(nowVersion)"
                                     >
                                       Run
                                     </v-btn>
@@ -433,6 +435,7 @@
   export default {
     data() {
     return {
+      nowVersion:'',
       form: {
         modelRoot:'',
         version: '',
@@ -547,6 +550,10 @@
       }
     },
     methods:{
+      chooseVersion(version){
+        console.log('nowversion', version)
+        this.nowVersion = version
+      },
       onSubmit() {
           console.log('submit1!');
           console.log('form', this.form)

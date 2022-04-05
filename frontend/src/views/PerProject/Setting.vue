@@ -66,23 +66,10 @@
             </v-col>   
         </v-row>
         </v-card>
-    
-    <v-btn
-      class="mx-2"
-      fab
-      dark
-      small
-      color="pink"
-    >
-      <v-icon dark>
-        mdi-eye
-      </v-icon>
-    </v-btn>
-
 
     <v-dialog
       v-model="dialog"
-      width="500"
+      width="1600"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -101,14 +88,8 @@
         </v-btn>
       </template>
 
-      <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
-          Privacy Policy
-        </v-card-title>
-
-        <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </v-card-text>
+      <v-card height="700">
+        <SettingLS style="height:650px"></SettingLS>
 
         <v-divider></v-divider>
 
@@ -117,76 +98,56 @@
           <v-btn
             color="primary"
             text
-            @click="dialog = false"
+            @click="cancel()"
           >
             Cancel
           </v-btn>          
           <v-btn
             color="primary"
             text
-            @click="dialog = false"
+            @click="confirm()"
           >
             Confirm
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     </v-col>
     </v-row>
-
-    <v-row style="padding:12px">
-        <!--<v-col offset-md="6">5-->
-        <div style="font-size: 1.25rem; font-weight: 500">
-        Manipulation:</div>
-    </v-row> 
-    <v-row>  
-       <v-col offset-md="1">
-       <v-card rounded="0" outlined>      
-        <v-checkbox label="Delete All Data"       
-        ></v-checkbox>
-       </v-card>
-       
-       <v-card rounded="0" outlined>
-         <v-checkbox
-          label="Delete All Annotations"
-        ></v-checkbox>
-        </v-card>
-        <v-card rounded="0" outlined>
-         <v-checkbox
-          v-model="allowSpaces"
-          label="Delete All Predictions"
-        ></v-checkbox>
-         </v-card>
-         </v-col>  
-    </v-row>
-    
   </v-container>
 
    <v-card-actions>
-      <v-switch
-        v-model="autoUpdate"
-        :disabled="isUpdating"
-        class="mt-0"
-        color="green lighten-2"
-        hide-details
-        label="Auto Update"
-      ></v-switch>
       <v-spacer></v-spacer>
       <v-btn
-        :disabled="autoUpdate"
-        :loading="isUpdating"
         color="blue-grey darken-3"
         depressed
-        @click="isUpdating = true"
+        @click="save()"
       >
         <v-icon left>
           mdi-update
         </v-icon>
-        Update Now
+        SAVE
       </v-btn>
-    </v-card-actions>
-
+   </v-card-actions>
+    <v-row style="padding:12px">
+        <!--<v-col offset-md="6">5-->
+        <div style="font-size: 1.25rem; font-weight: 500">
+        Manipulation:
+        </div>
+    </v-row> 
+    <v-row>  
+       <v-col offset-md="1">
+        <v-btn>
+          Delete All Data
+        </v-btn>    
+        <v-btn>
+          Delete All Annotations
+        </v-btn> 
+        <v-btn>
+          Delete All Predictions
+        </v-btn>         
+       </v-col>  
+    </v-row>
 </v-card>
 </template> 
  
@@ -196,8 +157,11 @@
 </style>
 
 <script>
-
+import SettingLS from '../../components/ProjectManage/SettingLS.vue'
 export default {
+  components:{
+    SettingLS
+  },
   data() {
     return {
       dialog: false,
@@ -315,13 +279,40 @@ export default {
       ],
       nowTemplateTitle:'',
       nowTemplateImage:'',
-       name: this.$store.state.currentProject.name,
-       description: this.$store.state.currentProject.description,
+      name: this.$store.state.currentProject.name,
+      description: this.$store.state.currentProject.description,
+      beforeConfig:``,
     }
+  },
+  methods: {
+    confirm(){
+      this.dialog = false
+    },
+    cancel(){
+      this.$store.state.currentConfig = this.beforeConfig
+      this.dialog = false
+    },
+    save(){
+      console.log('confifg', this.$store.state.currentProject)
+      this.$store.state.currentProject.name = this.name
+      this.$store.state.currentProject.description = this.description
+      this.$store.state.currentProject.configs = this.$store.state.currentConfig
+      console.log('confifg', this.$store.state.currentProject.configs,this.$store.state.currentConfig)
+      var operateForm = this.$store.state.currentProject
+      console.log("test",operateForm)
+      operateForm.createTime = "2022-04-03T16:00:00.000+00:00"
+      operateForm.updateTime = "2022-04-03T16:00:00.000+00:00"
+      this.$axios.post(`/project/edit`, JSON.stringify(operateForm))
+          .then(res => {
+          console.log('edit',res)
+      })      
+}
   },
   mounted() {
     console.log('this.$store.state.currentProject', this.$store.state.currentProject)
     this.nowTemplateTitle = this.$store.state.currentConfigTitle
+    // this.$store.state.beforeConfig = this.$store.state.currentConfig
+    this.beforeConfig = this.$store.state.currentConfig
     for(var i=0; i<this.items.length; i++){
       if(this.nowTemplateTitle == this.items[i].title){
         this.nowTemplateImage = this.items[i].img
