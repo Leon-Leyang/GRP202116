@@ -12,6 +12,8 @@ import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.util.HttpUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,6 +42,7 @@ public class ModelController {
     DataMapper dataMapper;
 
     private final RestTemplate restTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(ModelController.class);
 
     /**
      * A constructor to insert a {@link RestTemplate} to interact with the flask server.
@@ -147,7 +150,6 @@ public class ModelController {
      */
     @PostMapping("/model/run/{projectId}")
     public void runModel(@PathVariable BigInteger projectId, @RequestBody JSONObject runObject) {
-
         if (!runObject.containsKey("version") || !runObject.containsKey("script_url")) return;
         String version = runObject.getString("version");
         String scriptPath = runObject.getString("script_url");
@@ -155,14 +157,20 @@ public class ModelController {
         ProjectDO project = projectMapper.getByProjectId(projectId);
         ModelDO model = modelMapper.getByVersionProject(version, projectId);
 
-        if (model == null) return;
+        if (model == null) {
+            logger.warn("Model cannot be located according to the project and version");
+            return;
+        };
 
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(project, model);
 
         String scriptName;
         if (model.getType().equals("Custom")) {
-            if (scriptPath == null) return;
+            if (scriptPath == null) {
+                logger.warn("Script Path not specified for custom model");
+                return;
+            }
             else {
                 scriptName = ModelSaver.saveCustom(scriptPath);
                 if (scriptName == null) return;
@@ -194,10 +202,10 @@ public class ModelController {
      * @return the accuracy of this model
      */
     @PostMapping("/model/train/{projectId}")
-    public String trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject trainObject) {
+    public void trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject trainObject) {
 
         if (!trainObject.containsKey("version") && !trainObject.containsKey("params") &&
-                !trainObject.containsKey("script_url")) return null;
+                !trainObject.containsKey("script_url")) return;
 
         String version = trainObject.getString("version");
         String scriptPath = trainObject.getString("script_url");
@@ -207,19 +215,19 @@ public class ModelController {
         ModelDO model = modelMapper.getByVersionProject(version, projectId);
 
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
-        if (annotationList.size() < 1) return "";
+        if (annotationList.size() < 1) return;
 
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
-        if (annotatedDataList.size() < 1) return "";
+        if (annotatedDataList.size() < 1) return;
 
         ModelTrainer modelTrainer = new ModelTrainer(project, model);
 
         String scriptName;
         if (model.getType().equals("Custom")) {
-            if (scriptPath == null) return null;
+            if (scriptPath == null) return;
             else {
                 scriptName = ModelSaver.saveCustom(scriptPath);
-                if (scriptName == null) return null;
+                if (scriptName == null) return;
                 else modelTrainer.setScriptName(scriptName);
             }
         }
@@ -229,8 +237,11 @@ public class ModelController {
         object.put("annotation_list", annotationList);
         object.put("data_list", annotatedDataList);
 
-        return restTemplate.postForObject("http://sidecar-server/model/train",
+        String accuracy = restTemplate.postForObject("http://sidecar-server/model/train",
                 HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class);
 
+        model.setAccuracy(accuracy);
+        model.setDataLength(annotatedDataList.size());
+        modelMapper.updateAccuracy(model);
     }
 }

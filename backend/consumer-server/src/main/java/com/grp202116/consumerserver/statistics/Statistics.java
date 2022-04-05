@@ -6,7 +6,9 @@ import com.grp202116.consumerserver.mapper.PredictionMapper;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.PredictionDO;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,9 +23,10 @@ import java.util.Set;
  * controls the statistics of data, labels and project.
  * The calculation will be done in the backend then send to the frontend to list the Statistics
  *
- * @author Henghui Zhang
+ * @author Henghui Zhang; Yujie Chen
  * @version 1.2
  */
+@Component
 public class Statistics {
     @Resource
     private DataMapper dataMapper;
@@ -32,6 +35,15 @@ public class Statistics {
     @Resource
     private PredictionMapper predictionMapper;
 
+    public static Statistics Statistics;
+
+    @PostConstruct
+    public void init(){
+        Statistics = this ;
+        Statistics.dataMapper = this.dataMapper;
+        Statistics.annotationMapper = this.annotationMapper;
+        Statistics.predictionMapper = this.predictionMapper;
+    }
 
     BigInteger projectId;
     BigInteger dataListNumber;
@@ -52,7 +64,7 @@ public class Statistics {
      *
      * @param projectId the created project id
      */
-    public Statistics(BigInteger projectId) throws IOException {
+    public Statistics setProjectId(BigInteger projectId) throws IOException {
         this.projectId = projectId;
         this.setDataListNumber(countDataList());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
@@ -65,6 +77,7 @@ public class Statistics {
         this.setAverageAnnotations(countAverageAnnotations());
         this.setAveragePredictions(countAveragePredictions());
         this.setAverageTextWordsNumber(countAverageTextWordsNumber());
+        return this;
     }
 
     /**

@@ -68,4 +68,11 @@ public interface ModelMapper extends BaseMapper {
      * @param model the model to be updated
      */
     void updateModel(ModelDO model);
+
+    /**
+     * Update model training
+     *
+     * @param model the model to be updated
+     */
+    void updateAccuracy(ModelDO model);
 }

@@ -18,6 +18,8 @@ public class ModelDO extends ProjectDistinguishableDO {
     private String type;
     private String params;
     private String labelsPath;
+    private String accuracy;
+    private int dataLength;
 
     /**
      * Get the id of a model
@@ -161,5 +163,41 @@ public class ModelDO extends ProjectDistinguishableDO {
      */
     public void setLabelsPath(String labelsPath) {
         this.labelsPath = labelsPath;
+    }
+
+    /**
+     * Get the accuracy of a ml model
+     *
+     * @return the accuracy
+     */
+    public String getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Get the accuracy of a ml model
+     *
+     * @param accuracy the accuracy
+     */
+    public void setAccuracy(String accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    /**
+     * Get the data length of a ml model
+     *
+     * @return the data length
+     */
+    public int getDataLength() {
+        return dataLength;
+    }
+
+    /**
+     * Set the data length of a ml model
+     *
+     * @param dataLength data length
+     */
+    public void setDataLength(int dataLength) {
+        this.dataLength = dataLength;
     }
 }
