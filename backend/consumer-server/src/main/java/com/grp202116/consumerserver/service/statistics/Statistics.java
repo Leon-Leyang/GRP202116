@@ -36,14 +36,14 @@ public class Statistics {
     @Resource
     private PredictionMapper predictionMapper;
 
-    public static Statistics Statistics;
+    public static Statistics statistics;
 
     @PostConstruct
     public void init() {
-        Statistics = this;
-        Statistics.dataMapper = this.dataMapper;
-        Statistics.annotationMapper = this.annotationMapper;
-        Statistics.predictionMapper = this.predictionMapper;
+        statistics = this;
+        statistics.dataMapper = this.dataMapper;
+        statistics.annotationMapper = this.annotationMapper;
+        statistics.predictionMapper = this.predictionMapper;
     }
 
     BigInteger projectId;
@@ -67,7 +67,13 @@ public class Statistics {
      */
     public Statistics setProjectId(BigInteger projectId) throws IOException {
         this.projectId = projectId;
+        this.setDataList(getDataListFromDB());
         this.setDataListNumber(countDataList());
+        this.setAnnotations(getAnnotationsFromDB());
+        this.setCompletionPercentage(getCompletionPercentage());
+        this.setAverageAnnotations(getAverageAnnotations());
+        this.setAveragePredictions(getAveragePredictions());
+        this.setAverageTextWordsNumber(getAverageTextWordsNumber());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());
         this.setAnnotations(getAnnotationsFromDB());
@@ -95,7 +101,7 @@ public class Statistics {
      * @return the Data objects list
      */
     public List<DataDO> getDataListFromDB() {
-        return dataMapper.listByProjectId(this.projectId);
+        return statistics.dataMapper.listByProjectId(this.projectId);
     }
 
     /**
@@ -258,7 +264,7 @@ public class Statistics {
      * @return the annotations object list from the DB
      */
     public List<AnnotationDO> getAnnotationsFromDB() {
-        return annotationMapper.listByProjectId(this.projectId);
+        return statistics.annotationMapper.listByProjectId(this.projectId);
     }
 
     /**
@@ -268,7 +274,7 @@ public class Statistics {
      * @return the Prediction object list from the DB
      */
     public List<PredictionDO> getPredictionsFromDB() {
-        return predictionMapper.listByProjectId(this.projectId);
+        return statistics.predictionMapper.listByProjectId(this.projectId);
     }
 
     /**

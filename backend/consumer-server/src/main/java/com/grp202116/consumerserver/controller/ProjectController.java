@@ -135,8 +135,8 @@ public class ProjectController {
      * @param format    csv, tsv or json
      * @param projectId project id
      */
-    @PostMapping("/project/{projectId}/data_export/annotations")
-    public ResponseEntity<ByteArrayResource> exportAnnotation(@RequestParam("format") String format,
+    @GetMapping("/project/{projectId}/data_export/annotations/{format}")
+    public ResponseEntity<ByteArrayResource> exportAnnotation(@PathVariable String format,
                                                               @PathVariable BigInteger projectId) {
         ByteArrayResource resource = ExportUtils.exportFile(true, format,
                 Collections.singletonList(annotationMapper.listByProjectId(projectId)));
@@ -150,8 +150,8 @@ public class ProjectController {
      * @param format    csv, tsv or json
      * @param projectId project id
      */
-    @PostMapping("/project/{projectId}/data_export/predictions")
-    public ResponseEntity<ByteArrayResource> exportPrediction(@RequestParam("format") String format,
+    @GetMapping("/project/{projectId}/data_export/predictions/{format}")
+    public ResponseEntity<ByteArrayResource> exportPrediction(@PathVariable String format,
                                                               @PathVariable BigInteger projectId) {
 
         ByteArrayResource resource = ExportUtils.exportFile(false, format,
