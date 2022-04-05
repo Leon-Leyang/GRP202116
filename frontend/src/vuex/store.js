@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         realDataId: 0,
         currentProject: [],
         currentConfig: ``,
+        currentConfigTitle:'',
         nowLS:[],
         prevLS:[],
         currentMLList:[],

@@ -101,24 +101,9 @@
                 this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpg' )
                 console.log('puic', this.tableData[i].url)
               }
-              else if(this.tableData[i].url.indexOf(".JPG")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".JPG", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.JPG' )
-                console.log('puic', this.tableData[i].url)
-              }
-              else if(this.tableData[i].url.indexOf(".JPEG")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".JPEG", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.JPEG' )
-                console.log('puic', this.tableData[i].url)
-              }          
               else if(this.tableData[i].url.indexOf(".jpeg")!=-1){
                 this.tableData[i].url = this.tableData[i].url.replace(".jpeg", "")
                 this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpeg' )
-                console.log('puic', this.tableData[i].url)
-              }
-              else if(this.tableData[i].url.indexOf(".PNG")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".PNG", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.PNG' )
                 console.log('puic', this.tableData[i].url)
               }
               else if(this.tableData[i].url.indexOf(".png")!=-1){
@@ -131,11 +116,6 @@
                 this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.webp' )
                 console.log('puic', this.tableData[i].url)
               }
-              else if(this.tableData[i].url.indexOf(".WEBP")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".WEBP", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.WEBP' )
-                console.log('puic', this.tableData[i].url)
-              }                            
               console.log('tabelda',this.tableData[i].url)
             }
             this.$store.state.currentDataList = this.tableData

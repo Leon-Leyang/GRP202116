@@ -43,7 +43,7 @@
                     <v-card
                         :elevation="hover ? 12 : 2"
                         :class="{ 'on-hover': hover }"
-                        @click="enterConfig(item.config,'image')"
+                        @click="enterConfig(item.config,'image',item.title)"
                     >
                         <v-img
                         :src="item.img"
@@ -340,8 +340,9 @@ export default {
         }
     },
     methods: {
-        enterConfig(config,type){
+        enterConfig(config,type,title){
             this.$store.state.currentConfig = config
+            this.$store.state.currentConfigTitle = title
             console.log('config', this.$store.state.currentConfig)
             this.overlay = !this.overlay
             this.$store.state.dataType = type
