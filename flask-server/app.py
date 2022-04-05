@@ -1,4 +1,5 @@
 import json
+import ast
 
 from flask import Flask, Response, make_response, jsonify, request
 from ModelDriver import *
@@ -22,7 +23,7 @@ def get_user():
 def run_model():
     print("Running started.")
 
-    print(request.json.get("params"))
+    # print(request.json.get("params"))
 
     predictions = ModelDriver.run_model_on_data(request.json.get("script_type"),
                                                 request.json.get("data").replace('\\','/'),
@@ -41,12 +42,12 @@ def run_model():
 @app.route('/model/train', methods=["post"])
 def train_model():
     print("Training started.")
-    print(request.json)
-    data_list = request.json.get("data_list")
-    annotation_list = request.json.get("annotation_list")
-    print(data_list)
-    print(annotation_list)
-
+    # print(request.json)
+    # data_list = request.json.get("data_list")
+    # annotation_list = request.json.get("annotation_list")
+    # print(data_list)
+    # print(annotation_list)
+    # print(request.json.get("params"))
     accuracy = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
                                                    request.json.get("data_list"),
                                                    request.json.get("annotation_list"),
@@ -56,7 +57,7 @@ def train_model():
                                                    request.json.get("params"))
     print("Training finished.")
     print("Accuracy: " + str(accuracy))
-    return make_response(accuracy)
+    return make_response(str(accuracy))
 
 
 @app.errorhandler(404)
