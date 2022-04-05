@@ -217,7 +217,7 @@ public class ModelController {
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
         if (annotationList.size() < 1) return;
 
-        List<DataDO> annotatedDataList = dataMapper.getAnnotatedList();
+        List<DataDO> annotatedDataList = dataMapper.getAnnotatedList(projectId);
         if (annotatedDataList.size() < 1) return;
 
         ModelTrainer modelTrainer = new ModelTrainer(project, model);
