@@ -84,6 +84,7 @@ public class AnnotationController {
      */
     @DeleteMapping("/annotation/data/{dataId}")
     public void deleteDataAnnotations(@PathVariable BigInteger dataId) {
+        dataMapper.setNotAnnotated(dataId);
         annotationMapper.deleteByDataId(dataId);
     }
 
@@ -94,6 +95,8 @@ public class AnnotationController {
      */
     @DeleteMapping("/annotation/project/{projectId}")
     public void deleteProjectAnnotations(@PathVariable BigInteger projectId) {
+        List<DataDO> dataList = dataMapper.listByProjectId(projectId);
+        for (DataDO data: dataList) dataMapper.setNotAnnotated(data.getDataId());
         annotationMapper.deleteByProjectId(projectId);
     }
 
