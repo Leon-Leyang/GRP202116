@@ -223,7 +223,7 @@ public class ModelController {
         ModelTrainer modelTrainer = new ModelTrainer(project, model);
 
         String scriptName;
-        if (model.getType().equals("Custom")) {
+        if (model.getType().equals("Customization")) {
             if (scriptPath == null) return;
             else {
                 scriptName = ModelSaver.saveCustom(scriptPath);
