@@ -36,14 +36,14 @@ public class Statistics {
     @Resource
     private PredictionMapper predictionMapper;
 
-    public static Statistics Statistics;
+    public static Statistics statistics;
 
     @PostConstruct
     public void init() {
-        Statistics = this;
-        Statistics.dataMapper = this.dataMapper;
-        Statistics.annotationMapper = this.annotationMapper;
-        Statistics.predictionMapper = this.predictionMapper;
+        statistics = this;
+        statistics.dataMapper = this.dataMapper;
+        statistics.annotationMapper = this.annotationMapper;
+        statistics.predictionMapper = this.predictionMapper;
     }
 
     BigInteger projectId;
@@ -95,7 +95,7 @@ public class Statistics {
      * @return the Data objects list
      */
     public List<DataDO> getDataListFromDB() {
-        return dataMapper.listByProjectId(this.projectId);
+        return statistics.dataMapper.listByProjectId(this.projectId);
     }
 
     /**
@@ -258,7 +258,7 @@ public class Statistics {
      * @return the annotations object list from the DB
      */
     public List<AnnotationDO> getAnnotationsFromDB() {
-        return annotationMapper.listByProjectId(this.projectId);
+        return statistics.annotationMapper.listByProjectId(this.projectId);
     }
 
     /**
@@ -268,7 +268,7 @@ public class Statistics {
      * @return the Prediction object list from the DB
      */
     public List<PredictionDO> getPredictionsFromDB() {
-        return predictionMapper.listByProjectId(this.projectId);
+        return statistics.predictionMapper.listByProjectId(this.projectId);
     }
 
     /**
