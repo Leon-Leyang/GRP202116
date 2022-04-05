@@ -313,7 +313,7 @@
 
                                         <v-col cols="12">
                                           <v-text-field
-                                          v-model="trainObject.params.localPath"
+                                          v-model="trainObject.params.savePath"
                                             label="Where to save the model:"
                                             hint="local path"
                                             persistent-hint
@@ -511,7 +511,7 @@
           learningRate:null,
           optimizer:null,
           lossFunction:null,
-          localPath:null,
+          savePath:null,
         },
         script_url:null,
       },
@@ -620,11 +620,7 @@
         this.dialogTrain = false
         console.log('train', version, this.trainObject)
         this.trainObject.version = version
-        this.$axios.post('/model/train/'+ this.$store.state.currentProjectId,{
-          params:{
-            trainObject : JSON.stringify(this.trainObject)
-          }          
-        })
+        this.$axios.post('/model/train/'+ this.$store.state.currentProjectId,JSON.stringify(this.trainObject))
         .then((res)=>{
           console.log('train model', res)
         }) 
