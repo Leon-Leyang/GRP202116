@@ -48,7 +48,7 @@ def train_model():
     # print(data_list)
     # print(annotation_list)
     # print(request.json.get("params"))
-    accuracy = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
+    accuracy,trainNum = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
                                                    request.json.get("data_list"),
                                                    request.json.get("annotation_list"),
                                                    request.json.get("model_path").replace('\\', '/'),
@@ -57,8 +57,8 @@ def train_model():
                                                    request.json.get("params"))
     print("Training finished.")
     print("Accuracy: " + str(accuracy))
-    return make_response(str(accuracy))
-
+    return Response(json.dumps({'accuracy': accuracy, 'trainNum': trainNum}),
+                    mimetype='application/json')
 
 @app.errorhandler(404)
 def not_found(error):

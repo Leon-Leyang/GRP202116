@@ -153,7 +153,7 @@ class ImgClsModel(Model):
             print('For epoch', epoch + 1, 'the test accuracy over the whole test set is %d %%' % (accuracy))
 
         torch.save(self.model, savePath)
-        return accuracy
+        return accuracy, trainNum
 
 class ImgClsDataset(Dataset):
     def __init__(self, datas, annotations, preprocess, labels):
