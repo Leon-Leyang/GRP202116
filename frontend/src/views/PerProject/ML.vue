@@ -224,7 +224,7 @@
                                           md="4"
                                         >
                                           <v-text-field
-                                            v-model="trainObject.params.trainProportion"
+                                            v-model="trainObject.params.trainFrac"
                                             label="Train Proportion:"
                                             hint="range from 0 to 1"
                                             persistent-hint
@@ -251,7 +251,7 @@
                                           md="4"
                                         >
                                           <v-text-field
-                                          v-model="trainObject.params.workerNumber"
+                                          v-model="trainObject.params.workerNum"
                                             label="Worker Number:"
                                             hint="number"
                                             persistent-hint
@@ -269,7 +269,7 @@
                                       
                                         <v-col cols="12">
                                           <v-text-field
-                                          v-model="trainObject.params.epochNumber"
+                                          v-model="trainObject.params.epochNum"
                                             label="Epoch Number:"
                                             hint="number"
                                             persistent-hint
@@ -304,7 +304,7 @@
                                           sm="6"
                                         >
                                           <v-autocomplete
-                                          v-model="trainObject.params.lossFunction"
+                                          v-model="trainObject.params.lossFunc"
                                             :items="['CrossEntropyLoss', 'NLLLoss']"
                                             label="Loss Function"
                                             required
@@ -503,14 +503,14 @@
       trainObject:{
         version:null,
         params:{
-          trainProportion: null,
+          trainFrac: null,
           batchSize:null,
-          workerNumber:null,
+          workerNum:null,
           shuffle:false,
-          epochNumber:null,
+          epochNum:null,
           learningRate:null,
           optimizer:null,
-          lossFunction:null,
+          lossFunc:null,
           savePath:null,
         },
         script_url:null,
@@ -592,8 +592,8 @@
           if(this.newMLList != []){
             for(var mln = 0; mln<this.newMLList.length; mln++){
               console.log('mln', mln)
-              this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
-              console.log('params', this.$store.state.currentMLList[mln].params)
+              this.newMLList[mln].params = JSON.stringify(this.newMLList[mln].params)
+              console.log('params', this.newMLList[mln].params)
             }
             this.$axios.post(`/model/create/`+ this.$store.state.currentProjectId, JSON.stringify(this.newMLList))
                 .then(res => {
@@ -614,16 +614,55 @@
         this.$axios.post('/model/run/'+ this.$store.state.currentProjectId, JSON.stringify(this.runObject))
         .then((res)=>{
           console.log('test model', res)
-        })       
+        })   
+        this.form = {
+          modelRoot:'',
+          version: '',
+          description:'',
+          modelPath:'',
+          labelsPath:'',
+          type: '',
+          resource: '',
+          params:{
+              mean:'[0.485, 0.456, 0.406]',
+              std:'[0.229, 0.224, 0.225]',
+              imgSize:null,
+              threshold:null,
+              vocabPath:null,
+              tokenNum:null,
+              sequenceLen:null,
+          }
+        }    
       },
       MLTrain(version){
         this.dialogTrain = false
         console.log('train', version, this.trainObject)
         this.trainObject.version = version
+        var bool = this.trainObject.params.shuffle
+        if(bool == false){
+          this.trainObject.params.shuffle = 'False'
+        }else{
+          this.trainObject.params.shuffle = 'True'
+        }
         this.$axios.post('/model/train/'+ this.$store.state.currentProjectId,JSON.stringify(this.trainObject))
         .then((res)=>{
           console.log('train model', res)
         }) 
+        this.trainObject={
+          version:null,
+          params:{
+            trainFrac: null,
+            batchSize:null,
+            workerNum:null,
+            shuffle:false,
+            epochNum:null,
+            learningRate:null,
+            optimizer:null,
+            lossFunc:null,
+            savePath:null,
+          },
+          script_url:null,
+        }        
       },
 
     
