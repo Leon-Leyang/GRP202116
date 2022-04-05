@@ -1,6 +1,5 @@
-package com.grp202116.consumerserver.util;
+package com.grp202116.consumerserver.service.util;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

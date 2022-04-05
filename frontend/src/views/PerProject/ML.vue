@@ -158,6 +158,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
+                                    @click="chooseVersion(item.version)"
                                   >
                                     TEST
                                   </v-btn>
@@ -184,7 +185,7 @@
                                     <v-btn
                                       color="blue darken-1"
                                       text
-                                      @click="MLTest(item.version)"
+                                      @click="MLTest(nowVersion)"
                                     >
                                       Run
                                     </v-btn>
@@ -205,6 +206,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
+                                    @click="chooseVersion(item.version)"
                                   >
                                     Train
                                   </v-btn>
@@ -322,7 +324,7 @@
                                         <v-col cols="12">
                                           <div style="margin-top:30px">
                                             Upload the Customized Train Script Here:
-                                            <el-input type="textarea" v-model="trainObject.scriptUrl"></el-input>                                            
+                                            <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
                                           </div>
                                         </v-col>
                                         
@@ -344,7 +346,7 @@
                                     <v-btn
                                       color="blue darken-1"
                                       text
-                                      @click="MLTrain(item.version)"
+                                      @click="MLTrain(nowVersion)"
                                     >
                                       Run
                                     </v-btn>
@@ -433,6 +435,7 @@
   export default {
     data() {
     return {
+      nowVersion:'',
       form: {
         modelRoot:'',
         version: '',
@@ -492,10 +495,10 @@
         {label:'Customization',value: '6'}]
         }],
       value: '',
-      testScript:'',
+      testScript:null,
       runObject: {
         version:'',
-        scriptUrl:null
+        script_url:null
       },
       trainObject:{
         version:null,
@@ -510,7 +513,7 @@
           lossFunction:null,
           localPath:null,
         },
-        scriptUrl:null,
+        script_url:null,
       },
 
       dialog:false,
@@ -520,7 +523,7 @@
 
       items: [ ],
       prevMLList:[],
-      newMLList:null
+      newMLList:[],
       }
     },
     watch:{
@@ -547,10 +550,17 @@
       }
     },
     methods:{
+      chooseVersion(version){
+        console.log('nowversion', version)
+        this.nowVersion = version
+      },
       onSubmit() {
           console.log('submit1!');
           console.log('form', this.form)
+          console.log('tag', this.newMLList)
           this.newMLList.push(this.form)
+          console.log('tag', this.newMLList)
+          
           this.items.push(this.form)
           console.log('submit2!');
           this.$store.state.currentMLList = this.items
@@ -579,7 +589,7 @@
           this.value = null
 
           console.log('this.$store.state.currentMLList ml page, newMLList', this.$store.state.currentMLList, this.newMLList)
-          if(this.newMLList != null){
+          if(this.newMLList != []){
             for(var mln = 0; mln<this.newMLList.length; mln++){
               console.log('mln', mln)
               this.$store.state.currentMLList[mln].params = JSON.stringify(this.$store.state.currentMLList[mln].params)
@@ -599,13 +609,9 @@
         console.log('version', version)
         this.dialog = false
         this.runObject.version = version
-        this.runObject.scriptUrl = this.testScript
+        this.runObject.script_url = this.testScript
         console.log('runObject', this.runObject, JSON.stringify(this.runObject))
-        this.$axios.post('/model/run/'+ this.$store.state.currentProjectId,{
-          params:{
-            runObject : JSON.stringify(this.runObject)
-          }          
-        })
+        this.$axios.post('/model/run/'+ this.$store.state.currentProjectId, JSON.stringify(this.runObject))
         .then((res)=>{
           console.log('test model', res)
         })       

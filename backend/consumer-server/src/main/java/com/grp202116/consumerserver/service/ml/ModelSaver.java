@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.ml;
+package com.grp202116.consumerserver.service.ml;
 
 import com.grp202116.consumerserver.pojo.ModelDO;
 import org.apache.commons.io.FilenameUtils;
@@ -107,6 +107,6 @@ public class ModelSaver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return FilenameUtils.getName(customFile.getName());
+        return FilenameUtils.getName(customFile.getName()).substring(0, customFile.getName().length() - 3);
     }
 }

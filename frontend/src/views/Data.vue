@@ -26,7 +26,10 @@
           <template v-slot:default="{ item }">
             <v-list-item :key="item">
               <v-list-item-action>
-              <img :src="item.url" @click="enterData(item)" style="width:100%"/>
+              <img :src="item.url" @click="enterData(item)" style="width:100%" v-if="dataType == 'image'" />
+              <div  style="width:120px;white-space:nowrap;overflow:hidden;">
+                <span v-if="dataType == 'text'" @click="enterData(item)">{{item.url}}</span>
+              </div>
               </v-list-item-action>
             </v-list-item>
 
@@ -71,6 +74,7 @@ export default {
       //test param
       id:0,
       config: ``,
+      dataType:'',
       //logic param
       // config: this.configInterface,
     }
@@ -78,8 +82,10 @@ export default {
 
   methods: {
     enterData(data){
-      this.predicts = []
-      this.annos = []
+      this.predicts.splice(0, this.predicts.length) 
+      this.annos.splice(0, this.annos.length)  
+      console.log('annopre', this.annos,this.predicts) 
+
       console.log('dataId', data.dataId)
       this.$store.state.currentDataId = data.dataId
       this.$store.state.realDataId = data.realDataId
@@ -89,8 +95,10 @@ export default {
       console.log('enter', data)
     },
     prev(){
-      this.predicts = []
-      this.annos = []
+      this.predicts.splice(0, this.predicts.length) 
+      this.annos.splice(0, this.annos.length)  
+      console.log('annopre', this.annos,this.predicts) 
+
       if(this.$store.state.currentDataId == 1){
         console.log('no prev')
       }else{
@@ -102,8 +110,9 @@ export default {
 
     },
     next(){
-      this.predicts = []
-      this.annos = []      
+      this.predicts.splice(0, this.predicts.length) 
+      this.annos.splice(0, this.annos.length)    
+      console.log('annopre', this.annos,this.predicts) 
       if(this.$store.state.currentDataId == (this.$store.state.currentDataList.length)){
         console.log('no next')
       }else{
@@ -127,18 +136,18 @@ export default {
               }
           })
           .then(res => {
-            console.log('Anno', res)
+            console.log('Anno', res,this.annos)
             this.annoDataList = res.data.map(item => {
                 return {...item}
             })
-            for(var i = 0; i < this.annoDataList.length; i++){
-              console.log('i', this.annoDataList[i])
-              this.annos[i].id = this.annoDataList[i].annotationId
-              this.annos[i].result = eval(this.annoDataList[i].result)
-              console.log('tag', this.annos[i].result)
+            console.log('Anno', this.annoDataList)
 
+            for(var i = 0; i < this.annoDataList.length; i++){
+              console.log('i', i)
+              this.annos.push({id: this.annoDataList[i].annotationId, result: eval(this.annoDataList[i].result)})
             }
-            console.log('annos:', (this.annos[0]))
+            // this.annos = JSON.parse(this.annos)
+            console.log('annos:', this.annos)
           })
           .catch((error) => {
   // here you will have access to error.response
@@ -170,6 +179,7 @@ export default {
     },
 
     newLS(data){
+      var temp = this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
         if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
           var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
@@ -183,117 +193,218 @@ export default {
             this.getAnno()
           },100)
         }
+        console.log('t/f', this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0)
         if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
           this.predicts = []
+          if(temp != 0){
+            this.getAnno()
+          }
+          console.log('pre', this.predicts )
         }
       }else{
         this.getAnno()
         this.getPredict()
       }
+      console.log('des', '')
       this.labelStudio.destroy()
-      console.log('this', this.annos[0].result.length)
-      if(this.annos[0].result.length == 0 & this.predicts != []){
+      console.log('this', this.annos)
+      if(this.annos == [] & this.predicts != []){
         this.annos = this.predicts
       }
-      this.labelStudio = new LabelStudio("label-studio", {
-        config: this.$store.state.currentConfig,
-        interfaces: [
-          "panel",
-          "update",
-          "submit",
-          // "skip",
-          "controls",
-          // "review",
-          "infobar",
-          "topbar",
-          "instruction",
-          "side-column",
-          "ground-truth",
-          "annotations:history",
-          "annotations:tabs",
-          "annotations:menu",
-          "annotations:current",
-          "annotations:add-new",
-          "annotations:delete",
-          'annotations:view-all',
-          "predictions:tabs",
-          "predictions:menu",
-          "auto-annotation",
-          "edit-history",
-          //"topbar:prevnext",
-        ],
+      console.log('anno,pre',this.annos,this.predicts)
+      if(this.dataType == 'image'){
+        this.labelStudio = new LabelStudio("label-studio", {
+          config: this.$store.state.currentConfig,
+          interfaces: [
+            "panel",
+            "update",
+            "submit",
+            // "skip",
+            "controls",
+            // "review",
+            "infobar",
+            "topbar",
+            "instruction",
+            "side-column",
+            "ground-truth",
+            "annotations:history",
+            "annotations:tabs",
+            "annotations:menu",
+            "annotations:current",
+            "annotations:add-new",
+            "annotations:delete",
+            'annotations:view-all',
+            "predictions:tabs",
+            "predictions:menu",
+            "auto-annotation",
+            "edit-history",
+            //"topbar:prevnext",
+          ],
 
-        user: {
-          pk: 1,
-          firstName: "James",
-          lastName: "Dean",
-        },
-
-        task: {
-          annotations: this.annos,
-          predictions: this.predicts,
-          id: this.$store.state.realDataId,
-          data: {
-            image: this.$store.state.currentDataList[data.dataId - 1].url
+          user: {
+            pk: 1,
+            firstName: "James",
+            lastName: "Dean",
           },
-        },
 
-  //steam vr  lagecy vr
+          task: {
+            annotations: this.annos,
+            predictions: this.predicts,
+            id: this.$store.state.realDataId,
+            data: {
+              image: this.$store.state.currentDataList[data.dataId - 1].url
+            },
+          },
 
-        onSubmitAnnotation: function(ls, annotation) {
-          var result = annotation.serializeAnnotation()
-          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
-          // annotationlist[0].annotationId = annotation.pk
-          annotationlist[0].dataId = ls.task.id
-          annotationlist[0].result = JSON.stringify(result)
-          console.log('re', annotationlist)
+    //steam vr  lagecy vr
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
-          .then((res)=>{
-            console.log('annotalist sub', res)
-          })
-        },
+          onSubmitAnnotation: function(ls, annotation) {
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = ls.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist)
 
-        onLabelStudioLoad: function (LS) {
-          var c = LS.annotationStore.addAnnotation({
-            userGenerate: true,
-          });
-          LS.annotationStore.selectAnnotation(c.id);
-        },
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist sub', res)
+            })
+          },
 
-        onUpdateAnnotation: function (LS, annotation) {
-          // retrive an annotation 
-          console.log('xiaw', annotation.serializeAnnotation())
-          console.log('LS', LS)
-          console.log('annotation',annotation)
+          onLabelStudioLoad: function (LS) {
+            var c = LS.annotationStore.addAnnotation({
+              userGenerate: true,
+            });
+            LS.annotationStore.selectAnnotation(c.id);
+          },
 
-          
-          var result = annotation.serializeAnnotation()
-          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
-          // annotationlist[0].annotationId = annotation.pk
-          annotationlist[0].dataId = LS.task.id
-          annotationlist[0].result = JSON.stringify(result)
-          console.log('re', annotationlist)
+          onUpdateAnnotation: function (LS, annotation) {
+            // retrive an annotation 
+            console.log('xiaw', annotation.serializeAnnotation())
+            console.log('LS', LS)
+            console.log('annotation',annotation)
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
-          .then((res)=>{
-            console.log('annotalist up', res)
-          })
-        },
-      });
+            
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = LS.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist)
+
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist up', res)
+            })
+          },
+        });
+      }else{
+        this.labelStudio = new LabelStudio("label-studio", {
+          config: this.$store.state.currentConfig,
+          interfaces: [
+            "panel",
+            "update",
+            "submit",
+            // "skip",
+            "controls",
+            // "review",
+            "infobar",
+            "topbar",
+            "instruction",
+            "side-column",
+            "ground-truth",
+            "annotations:history",
+            "annotations:tabs",
+            "annotations:menu",
+            "annotations:current",
+            "annotations:add-new",
+            "annotations:delete",
+            'annotations:view-all',
+            "predictions:tabs",
+            "predictions:menu",
+            "auto-annotation",
+            "edit-history",
+            //"topbar:prevnext",
+          ],
+
+          user: {
+            pk: 1,
+            firstName: "James",
+            lastName: "Dean",
+          },
+
+          task: {
+            annotations: this.annos,
+            predictions: this.predicts,
+            id: this.$store.state.realDataId,
+            data: {
+              text: this.$store.state.currentDataList[data.dataId - 1].url
+            },
+          },
+
+    //steam vr  lagecy vr
+
+          onSubmitAnnotation: function(ls, annotation) {
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = ls.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist)
+
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist sub', res)
+            })
+          },
+
+          onLabelStudioLoad: function (LS) {
+            var c = LS.annotationStore.addAnnotation({
+              userGenerate: true,
+            });
+            LS.annotationStore.selectAnnotation(c.id);
+          },
+
+          onUpdateAnnotation: function (LS, annotation) {
+            // retrive an annotation 
+            console.log('xiaw', annotation.serializeAnnotation())
+            console.log('LS', LS)
+            console.log('annotation',annotation)
+
+            
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":1}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = LS.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist)
+
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist up', res)
+            })
+          },
+        });
+      }
+
+    
     },
   
   },
 
 
   mounted() {
+    this.dataType = this.$store.state.currentProject.type
     this.currentDataId = this.$store.state.currentDataId
     this.tableData = this.$store.state.currentDataList
     console.log('curren', this.$store.state.currentDataList,this.$store.state.currentDataId)
     console.log('tisada', this.tableData)
     // console.log('confi', this.$store.state.currentConfig)
-    console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
+    console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 )
+    var temp = this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated
     if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
+      console.log('te', this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0)
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
         var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
         annotationlist[0].dataId = this.$store.state.realDataId
@@ -301,13 +412,16 @@ export default {
         .then((res)=>{
           console.log('annotalist up', res)
         })
-        clearTimeout(this.timer);
-        this.timer = setTimeout(()=>{
+        // clearTimeout(this.timer);
+        // this.timer = setTimeout(()=>{
           this.getAnno()
-        },500)
+        // },500)
       }
       if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
         this.predicts = []
+          if(temp != 0){
+            this.getAnno()
+          }
         console.log('empty pre', this.predicts)
       }
     }else{
@@ -318,99 +432,190 @@ export default {
     this.timer = setTimeout(()=>{
 
       //lack the multi people condition
-      console.log('this', this.annos[0].result.length)
-      if(this.annos[0].result.length == 0 & this.predicts != []){
+      console.log('this', this.annos)
+      if(this.annos == [] & this.predicts != []){
         this.annos = this.predicts
       }
-      this.labelStudio = new LabelStudio("label-studio", {
-        // config: this.config,
-        config: this.$store.state.currentConfig,
-        interfaces: [
-          "panel",
-          "update",
-          "submit",
-          // "skip",
-          "controls",
-          // "review", //==> the problem to show update!!!
-          "infobar",
-          "topbar",
-          "instruction",
-          "side-column",
-          "ground-truth",
-          "annotations:history",
-          "annotations:tabs",
-          "annotations:menu",
-          // "annotations:current", //==>show the name in the rightbar
-          "annotations:add-new",
-          "annotations:delete",
-          'annotations:view-all',
-          "predictions:tabs", //==> Reject | Fix+Accept
-          "predictions:menu", //==> Reject | Accept
-          // "auto-annotation",
-          // "edit-history",
-          "topbar:prevnext",
-        ],
+      console.log('anno,pre',this.annos,this.predicts)
+      if(this.dataType == 'image'){
+        this.labelStudio = new LabelStudio("label-studio", {
+          // config: this.config,
+          config: this.$store.state.currentConfig,
+          interfaces: [
+            "panel",
+            "update",
+            "submit",
+            // "skip",
+            "controls",
+            // "review", //==> the problem to show update!!!
+            "infobar",
+            "topbar",
+            "instruction",
+            "side-column",
+            "ground-truth",
+            "annotations:history",
+            "annotations:tabs",
+            "annotations:menu",
+            // "annotations:current", //==>show the name in the rightbar
+            "annotations:add-new",
+            "annotations:delete",
+            'annotations:view-all',
+            "predictions:tabs", //==> Reject | Fix+Accept
+            "predictions:menu", //==> Reject | Accept
+            // "auto-annotation",
+            // "edit-history",
+            "topbar:prevnext",
+          ],
 
-        user: {
-          pk: 1,
-          firstName: "James",
-          lastName: "Dean",
-        },
-
-        task: {
-          annotations: this.annos,
-          predictions: this.predicts,
-          id: this.$store.state.realDataId,
-          data: {
-            // image:"https://www.helpguide.org/wp-content/uploads/king-charles-spaniel-resting-head-768.jpg" 
-            image: this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url
+          user: {
+            pk: 1,
+            firstName: "James",
+            lastName: "Dean",
           },
-        },
+
+          task: {
+            annotations: this.annos,
+            predictions: this.predicts,
+            id: this.$store.state.realDataId,
+            data: {
+              // image:"https://www.helpguide.org/wp-content/uploads/king-charles-spaniel-resting-head-768.jpg" 
+              image: this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url
+            },
+          },
 
 
-        // onLabelStudioLoad: function (LS) {
-        //   var c = LS.annotationStore.addAnnotation({
-        //     userGenerate: true,
-        //   });
-        //   LS.annotationStore.selectAnnotation(c.id);
-        // },
-        onSubmitAnnotation: function(ls, annotation) {
-          var result = annotation.serializeAnnotation()
-          var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
-          // annotationlist[0].annotationId = annotation.pk
-          annotationlist[0].dataId = ls.task.id
-          annotationlist[0].result = JSON.stringify(result)
-          console.log('re', annotationlist)
+          // onLabelStudioLoad: function (LS) {
+          //   var c = LS.annotationStore.addAnnotation({
+          //     userGenerate: true,
+          //   });
+          //   LS.annotationStore.selectAnnotation(c.id);
+          // },
+          onSubmitAnnotation: function(ls, annotation) {
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = ls.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist)
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
-          .then((res)=>{
-            console.log('annotalist sub', res)
-          })
-        },
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist sub', res)
+            })
+          },
 
-        onUpdateAnnotation: function (LS, annotation) {
-          // retrive an annotation 
-          console.log('xiaw', annotation.serializeAnnotation())
-          console.log('LS', LS)
-          console.log('annotation',annotation)
+          onUpdateAnnotation: function (LS, annotation) {
+            // retrive an annotation 
+            console.log('xiaw', annotation.serializeAnnotation())
+            console.log('LS', LS)
+            console.log('annotation',annotation)
 
-          
-          var result = annotation.serializeAnnotation()
-          var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":null}]
-          // annotationlist[0].annotationId = annotation.pk
-          annotationlist[0].dataId = LS.task.id
-          annotationlist[0].result = JSON.stringify(result)
-          console.log('re', annotationlist, annotationlist[0].dataId, JSON.stringify(annotationlist))
+            
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = LS.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist, annotationlist[0].dataId, JSON.stringify(annotationlist))
 
-          axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
-          .then((res)=>{
-            console.log('annotalist up', res)
-          })
-        },
-      });
-    },700)
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist up', res)
+            })
+          },
+        });
+      }else{
+        this.labelStudio = new LabelStudio("label-studio", {
+          // config: this.config,
+          config: this.$store.state.currentConfig,
+          interfaces: [
+            "panel",
+            "update",
+            "submit",
+            // "skip",
+            "controls",
+            // "review", //==> the problem to show update!!!
+            "infobar",
+            "topbar",
+            "instruction",
+            "side-column",
+            "ground-truth",
+            "annotations:history",
+            "annotations:tabs",
+            "annotations:menu",
+            // "annotations:current", //==>show the name in the rightbar
+            "annotations:add-new",
+            "annotations:delete",
+            'annotations:view-all',
+            "predictions:tabs", //==> Reject | Fix+Accept
+            "predictions:menu", //==> Reject | Accept
+            // "auto-annotation",
+            // "edit-history",
+            "topbar:prevnext",
+          ],
+
+          user: {
+            pk: 1,
+            firstName: "James",
+            lastName: "Dean",
+          },
+
+          task: {
+            annotations: this.annos,
+            predictions: this.predicts,
+            id: this.$store.state.realDataId,
+            data: {
+              // image:"https://www.helpguide.org/wp-content/uploads/king-charles-spaniel-resting-head-768.jpg" 
+              text: this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url
+            },
+          },
+
+
+          // onLabelStudioLoad: function (LS) {
+          //   var c = LS.annotationStore.addAnnotation({
+          //     userGenerate: true,
+          //   });
+          //   LS.annotationStore.selectAnnotation(c.id);
+          // },
+          onSubmitAnnotation: function(ls, annotation) {
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = ls.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist)
+
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist sub', res)
+            })
+          },
+
+          onUpdateAnnotation: function (LS, annotation) {
+            // retrive an annotation 
+            console.log('xiaw', annotation.serializeAnnotation())
+            console.log('LS', LS)
+            console.log('annotation',annotation)
+
+            
+            var result = annotation.serializeAnnotation()
+            var annotationlist = [{"createTime":null,"projectId":0,"dataId":0,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+            // annotationlist[0].annotationId = annotation.pk
+            annotationlist[0].dataId = LS.task.id
+            annotationlist[0].result = JSON.stringify(result)
+            console.log('re', annotationlist, annotationlist[0].dataId, JSON.stringify(annotationlist))
+
+            axios.put('/annotation/data/' + annotationlist[0].dataId, annotationlist[0])
+            .then((res)=>{
+              console.log('annotalist up', res)
+            })
+          },
+        });
+      }
     console.log(this.labelStudio.options)
     this.$store.state.nowLS = this.labelStudio
+    },1000)
+
   },
 };
 </script>

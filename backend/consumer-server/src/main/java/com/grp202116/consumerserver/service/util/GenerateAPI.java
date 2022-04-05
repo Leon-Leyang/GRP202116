@@ -1,4 +1,4 @@
-package com.grp202116.consumerserver.util;
+package com.grp202116.consumerserver.service.util;
 
 import io.github.yedaxia.apidocs.Docs;
 import io.github.yedaxia.apidocs.DocsConfig;
