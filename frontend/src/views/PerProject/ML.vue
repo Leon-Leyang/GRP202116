@@ -158,7 +158,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
-                                    @click="chooseVersion(item.version)"
+                                    @click="chooseVersion(item.version, item.type)"
                                   >
                                     TEST
                                   </v-btn>
@@ -173,7 +173,7 @@
                                   <v-card-text>
                                     <v-container>
                                       <v-row>   
-                                        <v-col cols="12">
+                                        <v-col cols="12" v-if="nowType == 'Customization'">
                                         Upload the Customized Train Script Here:
                                         <el-input type="textarea" v-model="testScript"></el-input>
                                         </v-col>
@@ -206,7 +206,7 @@
                                     v-bind="attrs"
                                     v-on="on"
                                     width="72px"
-                                    @click="chooseVersion(item.version)"
+                                    @click="chooseVersion(item.version,item.type)"
                                   >
                                     Train
                                   </v-btn>
@@ -222,6 +222,7 @@
                                           cols="12"
                                           sm="6"
                                           md="4"
+                                          v-if="nowType != 'Customization'"
                                         >
                                           <v-text-field
                                             v-model="trainObject.params.trainFrac"
@@ -233,6 +234,7 @@
                                         </v-col>
                                         
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                           md="4"
@@ -246,6 +248,7 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                           md="4"
@@ -259,7 +262,8 @@
                                           ></v-text-field>
                                         </v-col>
 
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType != 'Customization'">
                                           
                                             <v-switch
                                               v-model="trainObject.params.shuffle"
@@ -267,7 +271,8 @@
                                             ></v-switch>
                                         </v-col>
                                       
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType != 'Customization'">
                                           <v-text-field
                                           v-model="trainObject.params.epochNum"
                                             label="Epoch Number:"
@@ -277,7 +282,8 @@
                                           ></v-text-field>
                                         </v-col>
                                         
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType != 'Customization'">
                                           <v-text-field
                                           v-model="trainObject.params.learningRate"
                                             label="Learning Rate:"
@@ -289,6 +295,7 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                         >
@@ -300,6 +307,7 @@
                                           ></v-select>
                                         </v-col>
                                         <v-col
+                                        v-if="nowType != 'Customization'"
                                           cols="12"
                                           sm="6"
                                         >
@@ -321,7 +329,8 @@
                                           ></v-text-field>
                                         </v-col>
 
-                                        <v-col cols="12">
+                                        <v-col cols="12"
+                                        v-if="nowType == 'Customization'">
                                           <div style="margin-top:30px">
                                             Upload the Customized Train Script Here:
                                             <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
@@ -436,6 +445,7 @@
     data() {
     return {
       nowVersion:'',
+      nowType:'',
       form: {
         modelRoot:'',
         version: '',
@@ -550,9 +560,12 @@
       }
     },
     methods:{
-      chooseVersion(version){
+      chooseVersion(version,type){
         console.log('nowversion', version)
         this.nowVersion = version
+        this.nowType = type
+        console.log('testTYpe', this.nowType)
+
       },
       onSubmit() {
           console.log('submit1!');
@@ -607,6 +620,7 @@
       MLTest(version){
         console.log('nee', this.testScript)
         console.log('version', version)
+
         this.dialog = false
         this.runObject.version = version
         this.runObject.script_url = this.testScript
