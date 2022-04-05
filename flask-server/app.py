@@ -48,7 +48,7 @@ def train_model():
     # print(data_list)
     # print(annotation_list)
     # print(request.json.get("params"))
-    accuracy,trainNum = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
+    accuracy, trainNum = ModelDriver.train_model_on_data_set(request.json.get("script_type"),
                                                    request.json.get("data_list"),
                                                    request.json.get("annotation_list"),
                                                    request.json.get("model_path").replace('\\', '/'),
