@@ -398,8 +398,8 @@ import ML from './Create_ML.vue'
                     return {...item,process:this.tempProcess}
                 })
 
-                // this.config.total = res.data.length
-                // this.config.loading = false
+                this.config.total = res.data.length
+                this.config.loading = false
                 console.log("table",this.tableData)
               // console.log("dew",row)                  
                 }
@@ -430,11 +430,13 @@ import ML from './Create_ML.vue'
         console.log('this.operateType', this.operateType)
           if (this.operateType === 'edit') {
               this.operateForm.configs = this.$store.state.currentConfig
-              console.log('confifg', this.operateForm.configs,this.$store.state.currentConfig)
-              console.log("test",this.operateForm)
-              this.$axios.post(`/project/edit`, JSON.stringify(this.operateForm))
+              console.log('confifg', this.operateForm.configs)
+              this.operateForm.createTime = "2022-04-03T16:00:00.000+00:00"
+              this.operateForm.updateTime = "2022-04-03T16:00:00.000+00:00"
+              console.log("test",this.operateForm, JSON.stringify(this.operateForm))
+              this.$axios.post('/project/edit', JSON.stringify(this.operateForm))
                   .then(res => {
-                  console.log(res.data)
+                  console.log("edit", res.data)
                   this.isShow = false
                   this.getList()
               })
