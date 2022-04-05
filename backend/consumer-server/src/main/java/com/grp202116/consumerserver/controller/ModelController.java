@@ -236,11 +236,12 @@ public class ModelController {
         object.put("annotation_list", annotationList);
         object.put("data_list", annotatedDataList);
 
-        String accuracy = restTemplate.postForObject("http://sidecar-server/model/train",
-                HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class);
+        JSONObject result = JSONObject.parseObject(
+                restTemplate.postForObject("http://sidecar-server/model/train",
+                        HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
 
-        model.setAccuracy(accuracy);
-        model.setDataLength(annotatedDataList.size());
+        model.setAccuracy(result.getString("accuracy"));
+        model.setDataLength(result.getInteger("trainNum"));
         modelMapper.updateAccuracy(model);
     }
 }
