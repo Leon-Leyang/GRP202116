@@ -65,7 +65,7 @@ public class Statistics {
      *
      * @param projectId the created project id
      */
-    public Statistics setProjectId(BigInteger projectId) throws IOException {
+    public Statistics setupStatistics(BigInteger projectId) throws IOException {
         this.projectId = projectId;
         this.setDataList(getDataListFromDB());
         this.setDataListNumber(countDataList());

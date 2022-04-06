@@ -49,7 +49,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- 添加mybatis支持 -->
+        <!-- mybatis support -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>

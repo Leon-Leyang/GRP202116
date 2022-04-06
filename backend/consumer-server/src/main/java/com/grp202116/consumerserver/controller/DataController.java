@@ -116,7 +116,8 @@ public class DataController {
      * @param projectId     the id of the corresponding project
      */
     @PostMapping("/project/{projectId}/data_file")
-    public void uploadDataFile(@RequestParam("fileList") MultipartFile[] multiFileList, @PathVariable BigInteger projectId) {
+    public void uploadDataFile(@RequestParam("fileList") MultipartFile[] multiFileList,
+                               @PathVariable BigInteger projectId) {
         ProjectDO project = projectMapper.getByProjectId(projectId);
         List<File> fileList = FileUtils.multipartToFile(multiFileList);
         List<DataDO> dataList = FileUtils.uploadProjectData(fileList, projectId, project.getType());
