@@ -82,25 +82,26 @@ public class ModelDriver {
      * @param predictions the {@link JSONArray} of predictions
      * @return a list of {@link ProjectDO}
      */
-    public PredictionDO savePredictions(JSONArray predictions) {
+    public List<PredictionDO> savePredictions(JSONArray predictions) {
 
-        if (predictions.size() < 1) return null;
+        List<PredictionDO> predictionList = new ArrayList<>();
+        for (int i = 0; i < predictions.size(); i++) {
+            JSONObject predictionJSONObject = predictions.getJSONObject(i);
+            PredictionDO prediction = new PredictionDO();
+            prediction.setPredictionId(predictionJSONObject.getString("id"));
+            prediction.setType(predictionJSONObject.getString("type"));
+            prediction.setResult("[" + predictionJSONObject.toJSONString() + "]");
 
-        JSONObject predictionJSONObject = predictions.getJSONObject(0);
-        PredictionDO prediction = new PredictionDO();
-        prediction.setPredictionId(predictionJSONObject.getString("id"));
-        prediction.setType(predictionJSONObject.getString("type"));
-//            prediction.setResult("[" + predictionJSONObject.toJSONString() + "]");
-        prediction.setResult(predictions.toJSONString());
+            Date date = new Date();
+            prediction.setCreateTime(date);
+            prediction.setUpdateTime(date);
+            prediction.setDataId(data.getDataId());
+            prediction.setModel(model.getVersion());
+            prediction.setProjectId(project.getProjectId());
 
-        Date date = new Date();
-        prediction.setCreateTime(date);
-        prediction.setUpdateTime(date);
-        prediction.setDataId(data.getDataId());
-        prediction.setModel(model.getVersion());
-        prediction.setProjectId(project.getProjectId());
+            predictionList.add(prediction);
+        }
 
-
-        return prediction;
+        return predictionList;
     }
 }
