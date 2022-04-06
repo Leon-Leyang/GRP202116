@@ -88,6 +88,26 @@ public class ModelDriver {
     }
 
     /**
+     * Create a {@link JSONObject} which contains all needed params for training
+     *
+     * @return the jsonObject {@link JSONObject}
+     */
+    public JSONObject trainModelConfig(JSONObject trainParams) {
+        JSONObject object = new JSONObject();
+        object.put("script_type", model.getType());
+        object.put("model_path", model.getModelPath());
+        object.put("model_root", model.getModelRoot());
+        object.put("labels_path", model.getLabelsPath());
+
+        JSONObject params = JSON.parseObject(model.getParams());
+        if (scriptName != null) params.put("scriptName", scriptName);
+        params.putAll(trainParams);
+        object.put("params", params);
+
+        return object;
+    }
+
+    /**
      * Convert resulting predictions to a json array
      *
      * @param predictions the {@link JSONArray} of predictions
@@ -109,25 +129,5 @@ public class ModelDriver {
         prediction.setProjectId(project.getProjectId());
 
         return prediction;
-    }
-
-    /**
-     * Create a {@link JSONObject} which contains all needed params for training
-     *
-     * @return the jsonObject {@link JSONObject}
-     */
-    public JSONObject trainModelConfig(JSONObject trainParams) {
-        JSONObject object = new JSONObject();
-        object.put("script_type", model.getType());
-        object.put("model_path", model.getModelPath());
-        object.put("model_root", model.getModelRoot());
-        object.put("labels_path", model.getLabelsPath());
-
-        JSONObject params = JSON.parseObject(model.getParams());
-        if (scriptName != null) params.put("scriptName", scriptName);
-        params.putAll(trainParams);
-        object.put("params", params);
-
-        return object;
     }
 }

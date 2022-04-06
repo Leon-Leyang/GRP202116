@@ -69,35 +69,8 @@ public class ModelController {
     @PostMapping("/model/update")
     public void updateModel(@RequestBody ModelDO model) {
         ModelSaver modelSaver = new ModelSaver(model);
-        String modelPath = modelSaver.saveModel(model.getModelPath());
-        if (modelPath != null) model.setModelPath(modelPath);
-
-        String labelPath = modelSaver.saveLabels(model.getLabelsPath());
-        if (labelPath != null) model.setLabelsPath(labelPath);
-
-        if (saveModelParams(model, modelSaver)) return;
-        modelMapper.updateModel(model);
-    }
-
-    /**
-     * Save params of model
-     *
-     * @param model      a {@link ModelDO} object
-     * @param modelSaver the {@link ModelSaver} object
-     * @return true if no valid target path
-     */
-    private static boolean saveModelParams(@RequestBody ModelDO model, ModelSaver modelSaver) {
-        JSONObject params = JSON.parseObject(model.getParams());
-        String vocPath = params.getString("vocabPath");
-        if (vocPath != null) {
-            String targetPath = modelSaver.saveLabels(vocPath);
-            if (targetPath == null) return true;
-            else {
-                params.put("vocabPath", targetPath);
-                model.setParams(JSONObject.toJSONString(params));
-            }
-        }
-        return false;
+        if (modelSaver.saveModel()) return;
+        modelMapper.updateModel(modelSaver.getModel());
     }
 
     /**
@@ -125,26 +98,9 @@ public class ModelController {
             model.setProjectId(projectId);
 
             ModelSaver modelSaver = new ModelSaver(model);
-            String modelPath = modelSaver.saveModel(model.getModelPath());
-            if (modelPath == null) {
-                FileUtils.deleteDirectory(modelSaver.getModelPath());
-                return;
-            }
-            else model.setModelPath(modelPath);
+            if (modelSaver.saveModel()) return;
 
-            String labelPath = modelSaver.saveLabels(model.getLabelsPath());
-            if (labelPath == null) {
-                FileUtils.deleteDirectory(modelSaver.getModelPath());
-                return;
-            }
-            else model.setLabelsPath(labelPath);
-
-            if (saveModelParams(model, modelSaver)) {
-                FileUtils.deleteDirectory(modelSaver.getModelPath());
-                return;
-            }
-
-            modelMapper.insert(model);
+            modelMapper.insert(modelSaver.getModel());
         }
     }
 
