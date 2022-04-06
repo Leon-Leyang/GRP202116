@@ -7,14 +7,16 @@
       fab
       small
       icon
+      large
     >
-    <v-icon dark>
+    <v-icon dark large>
       mdi-delete
     </v-icon>
     </v-btn>
   <v-spacer>
   </v-spacer>
   <v-btn
+      large
       color="amber"
       @click="xx()"
       depressed
@@ -24,6 +26,7 @@
       Import<v-icon
         right
         dark
+        large
       > mdi-database-import
       </v-icon>
   </v-btn>
@@ -34,11 +37,13 @@
       rounded
       depressed
       class="white--text"
+      large
       
   >
       Export<v-icon
         right
         dark
+        large
       > mdi-cloud-upload
       </v-icon>
   </v-btn>

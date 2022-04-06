@@ -4,27 +4,34 @@
   <v-container style="height:80%">
     <v-row
       justify="space-between"
-      style="height:60%"
+      style="height:60%; margin-top:100px"
     >
       <v-col
         cols="12"
         md="4"
       >
 
-      <div style="font-size: 1.25rem; font-weight: 500">
+      <div style="font-size: 2.5rem; font-weight: 500">
         Project Name:</div>
         
-        <el-input clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
+        <el-input v-model="name"
+            :counter="max"
+            :rules="rules"
+            outlined
+            suffix-icon="el-icon-edit el-input__icon" style="font-size:2rem"></el-input>
   
 
-       <div style="font-size: 1.25rem; font-weight: 500">
+       <div style="font-size: 2.5rem; font-weight: 500; margin-top: 50px">
         Project Description:</div>
 
         <el-input
           type="textarea"
-          :rows="3"
+          :rows="3" 
           placeholder="(Optional)"
-          v-model="textarea"
+          v-model="description"
+          :disabled="isUpdating"
+          outlined
+          style="font-size:2rem"
           >
         </el-input>
         
@@ -34,8 +41,8 @@
         cols="12"
         md="6"
         style="height:100%"
-      ><!--7-->
-          <div style="font-size: 1.25rem; font-weight: 500">
+      >
+          <div style="font-size: 2.5rem; font-weight: 500">
             Used Template:</div>
             
 
@@ -56,7 +63,7 @@
               >
                <img :src= nowTemplateImage
                     width="225px">
-              <v-card-title style="font-size:0.25rem" class="LIcard">
+              <v-card-title style="font-size:0.5rem" class="LIcard">
                   {{ nowTemplateTitle }}
               </v-card-title> 
               </v-col>   
@@ -71,10 +78,10 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="mx-2"
+          style="margin-top:-30px"
           fab
           dark
-          small
+          large
           v-bind="attrs"
           v-on="on"
           color="cyan"
@@ -118,7 +125,7 @@
 
     <v-row>
         <v-col>
-        <div style="font-size: 1.25rem; font-weight: 500">
+        <div style="font-size: 2.5rem; font-weight: 500">
         Manipulation:</div>
         </v-col>
     </v-row> 
@@ -130,18 +137,20 @@
 
     
     <v-dialog
-      v-model="dialog"
+      v-model="dialoga"
       persistent
-      max-width="500"
+      max-width="1000"
     >
       <template v-slot:activator="{ on, attrs }">
         
         <v-btn
         rounded
-          color="error"
+          color="#B71C1C"
           dark
           v-bind="attrs"
           v-on="on"
+          style="font-size: 2.5rem; font-weight: 500"
+          height="60px"
         >
           Delete All Data
         </v-btn>
@@ -157,14 +166,14 @@
           <v-btn
             color="green darken-1"
             text
-            @click="dialog = false"
+            @click="deleteAllData(),dialoga = false"
           >
             Confirm
           </v-btn>
           <v-btn
             color="green darken-1"
             text
-            @click="deleteAllData(),dialog = false"
+            @click="dialoga = false"
           >
             Cancel
           </v-btn>
@@ -175,17 +184,19 @@
 
    
     <v-dialog
-      v-model="dialog"
+      v-model="dialogb"
       persistent
-      max-width="500"
+      max-width="1000"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
         rounded
-          color="error"
+          color="#B71C1C"
           dark
           v-bind="attrs"
           v-on="on"
+          style="font-size: 2.5rem; font-weight: 500"
+          height="60px"
         >
           Delete All Annotations
         </v-btn>
@@ -200,14 +211,14 @@
           <v-btn
             color="green darken-1"
             text
-            @click="dialog = false"
+            @click="deleteAllAnno(),dialogb = false"
           >
             Confirm
           </v-btn>
           <v-btn
             color="green darken-1"
             text
-            @click="deleteAllAnno(),dialog = false"
+            @click="dialogb = false"
           >
             Cancel
           </v-btn>
@@ -218,17 +229,20 @@
 
     
     <v-dialog
-      v-model="dialog"
+      v-model="dialogc"
       persistent
-      max-width="500"
-    >
+      max-width="1000"
+      
+    ><!-- max-height="1000!impotant"-->
       <template v-slot:activator="{ on, attrs }">
         <v-btn
         rounded
-          color="error"
+          color="#B71C1C"
           dark
           v-bind="attrs"
           v-on="on"
+          style="font-size: 2.5rem; font-weight: 500"
+          height="60px"
         >
           Delete All Predictions
         </v-btn>
@@ -243,14 +257,14 @@
           <v-btn
             color="green darken-1"
             text
-            @click="dialog = false"
+            @click="deleteAllPredict(),dialogc = false"
           >
             Confirm
           </v-btn>
           <v-btn
             color="green darken-1"
             text
-            @click="deleteAllPredict(),dialog = false"
+            @click="dialogc = false"
           >
             Cancel
           </v-btn>
@@ -268,11 +282,12 @@
    <v-card-actions>
      <v-spacer></v-spacer>
       <v-btn
-        color="blue-grey darken-3"
+        color="#7986CB"
         depressed
         @click="save()"
+        style="font-size: 2.5rem; font-weight: 500; margin-right:226.641px"
       >
-        <v-icon left>
+        <v-icon left large>
           mdi-update
         </v-icon>
         SAVE
@@ -310,6 +325,9 @@ export default {
   data() {
     return {
       dialog: false,
+      dialoga: false,
+      dialogb: false,
+      dialogc: false,
       items: [
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Polygons',

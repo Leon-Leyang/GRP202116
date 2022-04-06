@@ -42,7 +42,7 @@ export default {
 <style>
 .topbar{
     width: 100%;
-    height: 70px;
+    height: 150px;
     background: linear-gradient(#D0D0D0,#F5F5F5);
 }
 .mark{
@@ -67,11 +67,4 @@ export default {
 }
 
 
-/**
-.link3{ text-decoration-line: none;
-} 
-.a{
-  text-decoration-line: none; 
-}
-**/
 </style>

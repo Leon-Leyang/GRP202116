@@ -18,7 +18,7 @@
           <v-dialog
           v-model="isShow"
           persistent
-          style="height:90%"
+          style="height:900px!important"
           ><!-- -->
           <template v-slot:activator="{ on, attrs }">
               <v-btn

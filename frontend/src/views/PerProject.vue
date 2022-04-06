@@ -2,15 +2,17 @@
 <template>
   <v-card id="problock">
     
-    <div style="background:rgb(113, 223, 207); height:7%">
+    <div style="background:rgb(113, 223, 207); height:auto">
 <v-btn
       color="blue-grey"
       @click="back"
       text
       large
+      height="100px"
+      style="font-size:2.7rem"
   >  
       <v-icon
-        left 
+        left large
       > mdi-arrow-left
       </v-icon>Back
   </v-btn></div>
@@ -23,17 +25,18 @@
         grow
         color="yellow"
         background-color="rgb(113, 223, 207)"
+        
     >
-        <v-tab>
+        <v-tab style="font-size:3rem">
             Data
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:3rem">
             Statistics
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:3rem">
             Machine Learning Model
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:3rem">
             Settings
         </v-tab>
     </v-tabs>
@@ -158,7 +161,7 @@ import Setting from '@/views/PerProject/Setting'
 }
 
 .tabcard{
-    height:480px/*100%*/;
+    height:1100px/*100%*/;
  
 }
 

@@ -1,119 +1,127 @@
 <template>
-<div style="font-size: 1.25rem; font-weight: 500; height:100%"> 
+<div style="font-size: 2.5rem; font-weight: 500; height:100%"> 
     <v-container class="ML-container">
         <v-row>
             <v-col>
                 <v-card
                   v-scroll.self="onScroll"
                   class="overflow-y-auto"
-                  max-height="450px">
+                  max-height="920px" style="margin-top:50px">
+                  
                     <v-card-text>
                         <div class="mb-4">
 
-                            <el-form ref="form" :model="form" :label-position="right"><!--why-->
+                            <el-form ref="form" :model="form" :label-position="right">
 
-                            <el-form-item label="Model Version:">
-                                <el-input v-model="form.version" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                            <el-form-item label="Model Version:" class="formitem" style="margin-top:20px">
+                                <el-input v-model="form.version" clearable  size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Script Type:">
+                            <el-form-item label="Script Type:" class="formitem">
 
-                            <el-select v-model="value" placeholder="Please Select the ML Model Script Type" @change="selectType">
+                            <el-select v-model="value" placeholder="Please Select the ML Model Script Type" @change="selectType" style="font-size:2rem">
                                 <el-option-group
                                 v-for="group in options"
                                 :key="group.label"
-                                :label="group.label">
+                                :label="group.label"
+                                
+                                >
                                 <el-option
                                     v-for="item in group.options"
                                     :key="item.value"
                                     :label="item.label"
-                                    :value="item.value">
+                                    :value="item.value"
+                                    style="font-size:2rem">
                                 </el-option>
                                 </el-option-group>
                             </el-select>
                             </el-form-item>
 
 
-                            <el-form-item label="Model Project Root Path:">
-                                <el-input v-model="form.modelRoot" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                            <el-form-item label="Model Project Root Path:" class="formitem">
+                                <el-input v-model="form.modelRoot" clearable size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model File:" style="margin-top:20px">
-                                <el-input v-model="form.modelPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                            <el-form-item label="Model Path:" class="formitem">
+                                <el-input v-model="form.modelPath" clearable size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
                             
-                            <el-form-item label="Class File:" style="margin-top:20px">
-                                <el-input v-model="form.labelsPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                            <el-form-item label="Class File Path:" class="formitem">
+                                <el-input v-model="form.labelsPath" clearable  size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model Description:" style="margin-bottom:20px!important">
-                                <el-input type="textarea" placeholder="(Optional)" v-model="form.description"></el-input>
+                            <el-form-item label="Model Description:" class="formitem">
+                                <el-input type="textarea" placeholder="(Optional)" v-model="form.description" class="forminput"></el-input>
                             </el-form-item>
                             <!--end-->  
 
                             <!--If choosing others, then it will not display the following-->
-                            <el-form-item v-if="isImgCla" label="Image Size:" > <!--style="margin-bottom:0"-->
-                                <el-input v-model="form.params.imgSize" clearable maxlength="" size="mini" placeholder="(For image classification)"></el-input>
+                            <el-form-item v-if="isImgCla" label="Image Size:" class="formitem"> <!--style="margin-bottom:0"-->
+                                <el-input v-model="form.params.imgSize" clearable  size="big" placeholder="(For image classification)" class="forminput"></el-input>
                             </el-form-item>
-                            <el-form-item v-if="isImgCla" label="Mean:">
-                                <el-input v-model="form.params.mean" clearable maxlength="" size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
+                            <el-form-item v-if="isImgCla" label="Mean:" class="formitem">
+                                <el-input v-model="form.params.mean" clearable  size="big" placeholder="(For image classification) [0.485, 0.456, 0.406] by default" class="forminput"></el-input>
                             </el-form-item>
-                            <el-form-item v-if="isImgCla" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
-                            </el-form-item>
-                            
-
-                            <el-form-item v-if="isObjDetect" label="Threashold:">
-                                <el-input v-model="form.params.threshold" clearable maxlength="" size="mini" placeholder="(For object detection)"></el-input>
+                            <el-form-item v-if="isImgCla" label="Standard Deviation:" class="formitem">
+                                <el-input v-model="form.params.std" clearable  size="big" placeholder="(For image classification) [0.229, 0.224, 0.225] by default" class="forminput"></el-input>
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isSemSeg" label="Mean:">
-                                <el-input v-model="form.params.mean" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default"></el-input>
-                            </el-form-item>
-                            <el-form-item v-if="isSemSeg" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable maxlength="" size="mini" placeholder="(For semantic segmentation) [0.229, 0.224, 0.225] by default"></el-input>
+                            <el-form-item v-if="isObjDetect" label="Threshold:" class="formitem">
+                                <el-input v-model="form.params.threshold" clearable  size="big" placeholder="(For object detection)" class="forminput"></el-input>
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isKpLb" label="Threashold:">
-                                <el-input v-model="form.params.threshold" clearable maxlength="" size="mini" placeholder="(For keypoint labeling)"></el-input>
+                            <el-form-item v-if="isSemSeg" label="Mean:" class="formitem">
+                                <el-input v-model="form.params.mean" clearable  size="big" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default" class="forminput"></el-input>
+                            </el-form-item>
+                            <el-form-item v-if="isSemSeg" label="Standard Deviation:" class="formitem">
+                                <el-input v-model="form.params.std" clearable size="big" placeholder="(For semantic segmentation) [0.229, 0.224, 0.225] by default" class="forminput"></el-input>
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isTC" label="Vocabulary File:" style="margin-top:20px">
-                                <el-input v-model="form.params.vocabPath" clearable maxlength="" size="mini" placeholder="(For keypoint labeling)"></el-input>
-                            </el-form-item>
-                            <el-form-item v-if="isTC" label="Token Number:">
-                                <el-input v-model="form.params.tokenNum" clearable maxlength="" size="mini" placeholder="(For text classification)"></el-input>
-                            </el-form-item>
-                            <el-form-item v-if="isTC" label="Sequence Length:">
-                                <el-input v-model="form.params.sequenceLen" clearable maxlength="" size="mini" placeholder="(For text classification)"></el-input>
+                            <el-form-item v-if="isKpLb" label="Threashold:" class="formitem">
+                                <el-input v-model="form.params.threshold" clearable  size="big" placeholder="(For keypoint labeling)" class="forminput"></el-input>
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isNER" label="Sequence Length:">
-                                <el-input v-model="form.params.sequenceLen" clearable maxlength="" size="mini" placeholder="(For named entity recognition)"></el-input>
+                            <el-form-item v-if="isTC" label="Vocabulary File Path:" class="formitem">
+                                <el-input v-model="form.params.vocabPath" clearable  size="big" placeholder="(For text classification)" class="forminput"></el-input>
+                            </el-form-item>
+                            <el-form-item v-if="isTC" label="Token Number:" class="formitem">
+                                <el-input v-model="form.params.tokenNum" clearable  size="big" placeholder="(For text classification)" class="forminput"></el-input>
+                            </el-form-item>
+                            <el-form-item v-if="isTC" label="Sequence Length:" class="formitem">
+                                <el-input v-model="form.params.sequenceLen" clearable  size="big" placeholder="(For text classification)" class="forminput"></el-input>
+                            </el-form-item>
+                            
+
+                            <el-form-item v-if="isNER" label="Sequence Length:" class="formitem">
+                                <el-input v-model="form.params.sequenceLen" clearable  size="big" placeholder="(For named entity recognition)" class="forminput"></el-input>
                             </el-form-item>
 
-                            <el-form-item style="margin-top:40px">
+                            <el-form-item style="margin-top:40px" class="formitem">
                                 <!--
                                 <el-button type="primary" @click="onSubmit">Save</el-button>
                                 <el-button>Cancel</el-button>-->
                         
                             <div style="display:flex;flex-direction:row">
                             <v-btn
+                            large
                             depressed
                             color="pink lighten-1"
                             @click="onSubmit()"
+                            style="font-size: 2rem"
                             >
                             Save
                             </v-btn>
                             <v-spacer></v-spacer>
                             
                              <v-btn
+                            large
                             depressed
                             color="error"
+                            style="font-size: 2rem"
                             >
                             Cancel
                             </v-btn>
@@ -131,8 +139,9 @@
                 <v-card
                   v-scroll.self="onScroll"
                   class="overflow-y-auto"
-                  max-height="450px"
-                  color="yellow">
+                  max-height="920px"
+                  color="yellow"
+                  style="margin-top:50px">
                 <v-container>
                 <v-data-iterator
                     :items="items"
@@ -164,7 +173,7 @@
 
                               <!-- ML Test -->
                               <v-dialog
-                                v-model="dialog"
+                                v-model="dialogTest"
                                 persistent
                                 max-width="600px"
                               >
@@ -191,8 +200,8 @@
                                     <v-container>
                                       <v-row>   
                                         <v-col cols="12" v-if="nowType == 'Customization'">
-                                        Upload the Customized Run Script Here:
-                                        <el-input type="textarea" v-model="testScript"></el-input>
+                                        Fill in the Customized Run Script Path Here:
+                                        <el-input type="textarea" v-model="testScript" placeholder="(Optional for choosing the supportive types)" class="forminput"></el-input>
                                         </v-col>
                                       </v-row>
                                     </v-container>
@@ -202,7 +211,7 @@
                                     <v-btn
                                         color="blue darken-1"
                                         text
-                                        @click="dialog = false, MLTest(nowVersion)"
+                                        @click="dialogTest = false, MLTest(nowVersion)"
                                     >
                                         Start
                                     </v-btn>
@@ -210,7 +219,7 @@
                                     <v-btn
                                         color="blue darken-1"
                                         text
-                                        @click="dialog = false"
+                                        @click="dialogTest = false"
                                     >
                                         Cancel
                                     </v-btn>
@@ -312,7 +321,6 @@
                                           <v-text-field
                                           v-model="trainObject.params.learningRate"
                                             label="Learning Rate:"
-                                            type="password"
                                             hint="number"
                                             persistent-hint
                                             required
@@ -357,7 +365,7 @@
                                         <v-col cols="12"
                                         v-if="nowType == 'Customization'">
                                           <div style="margin-top:30px">
-                                            Upload the Customized Train Script Here:
+                                            Fill in the Customized Train Script Path Here:
                                             <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
                                           </div>
                                         </v-col>
@@ -371,7 +379,7 @@
                                      <v-btn
                                         color="blue darken-1"
                                         text
-                                        @click="dialog = false, MLTrain(nowVersion)"
+                                        @click="dialogTrain = false, MLTrain(nowVersion)"
                                     >
                                         Start
                                     </v-btn>
@@ -379,7 +387,7 @@
                                     <v-btn
                                         color="blue darken-1"
                                         text
-                                        @click="dialog = false"
+                                        @click="dialogTrain = false"
                                     >
                                         Cancel
                                     </v-btn>
@@ -408,7 +416,7 @@
 
 <style>
   .ML-container{
-    max-width: 1262px;
+    max-width: 100%;
     background:rgb(218, 253, 249);
     height: 100%;
   }
@@ -424,10 +432,12 @@
   }
 
   .el-select .el-input {
-    width: 300px;
+    width: 700px;
+    font-size:2rem;
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
+    
   }
   .content{
       margin-left:20px;
@@ -435,34 +445,24 @@
       margin-top:6px;
   }
 
-.v-text-field--outlined fieldset {
-    border-collapse: collapse;
-    border-style: solid;
-    border-color: #DCDFE6!important;
-    border-width: 1px;
-    bottom: 0;/* */
-    top: -5px;/* */
-    /*height: 32px;*/
-    left: 0;
-    right: 0;
-    pointer-events: none;
-    position: absolute;
-    transition-duration: 0.15s;
-    transition-property: color;
-    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-}
 
-  .v-input {
-    height: 40px;
-}
-  
-  .el-form-item {
-    margin-bottom: 0px!important;
+  .el-form-item__label{
+      font-size: 2.5rem!important; 
+      font-weight: 500; 
+  }
+
+
+  .formitem{
+    margin-bottom:40px!important;
     margin-left: 20px;
     margin-right: 20px;
-}
+  }
 
- 
+  .forminput{
+      font-size:2rem!important;
+      
+  }
+
     
 </style>
 
@@ -554,7 +554,7 @@
         script_url:null,
       },
 
-      dialog:false,
+      dialogTest:false,
       dialogTrain: false,
 
       numOfML:null,
@@ -649,7 +649,7 @@
         console.log('nee', this.testScript)
         console.log('version', version)
 
-        this.dialog = false
+        this.dialogTest = false
         this.runObject.version = version
         this.runObject.script_url = this.testScript
         console.log('runObject', this.runObject, JSON.stringify(this.runObject))

@@ -163,7 +163,7 @@ export default {
 .co{
     padding: 0;
     margin: 0;
-    max-width: 1262.9px;
+    max-width:100%!important;
     height: 100%;
 }
 .c-1{
@@ -184,14 +184,14 @@ export default {
 
 .title{
     font-style:italic;
-    font-size:0.8em;
+    font-size:1.6em;
     font-family:Georgia, serif!important;
     /*text-decoration :underline;*/
     color: rgb(124,124,124);
 }
 .pagetext-a{
-   /* height: 50px; */
-    font-size:2.5em;
+   
+    font-size:5em;
     font-weight: 600;
     text-align: center;
     height: 33%;
@@ -200,7 +200,7 @@ export default {
 }
 
 .pagetext-b{
-    /*height: 50px;*/
+    
     height: 33%;
     font-size:2.5em;
     font-weight: 600;
