@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@heartexlabs/label-studio": "^1.4.0",
+    "antd": "^4.19.5",
     "axios": "^0.24.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "codemirror": "^5.65.2",

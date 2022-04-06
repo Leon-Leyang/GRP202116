@@ -35,7 +35,7 @@
     <v-tabs-items v-model="tabs">
       <v-tab-item>
         <v-card flat class="tabcard" v-if="tabs==0">
-          <Table :dataList="dataList" :config="config" />
+          <Table/>
         </v-card>
       </v-tab-item>
       <v-tab-item>
@@ -64,6 +64,7 @@ import Table from '../components/ProjectManage/DataTable';
 import Statistics from '@/views/PerProject/Statistics'
 import ML from '@/views/PerProject/ML'
 import Setting from '@/views/PerProject/Setting'
+import { Modal } from "antd";
 
   export default {
     components: {
@@ -81,11 +82,6 @@ import Setting from '@/views/PerProject/Setting'
         projectId:0,
         tabs: null,
         dataList:[],
-        config: {          //Important
-              page: 1,
-              total: 30,
-              loading: false
-          },
       }
     },
     methods: {
@@ -107,24 +103,31 @@ import Setting from '@/views/PerProject/Setting'
       download(id, name) {
         console.log('format', this.format)
         console.log('id$name', id, name)
-        this.$axios.get('/project/'+ id +'/data_export/annotations/csv', {
+        this.$axios.get('/project/'+ id +'/data_export/annotations/'+ this.format, {
           responseType: 'blob'
         }).then((res)=> {
-          console.log('res', res)
-          const content = res.data;
+          console.log('resas', res.headers['content-disposition'])
+          const content = res.data
+          const filename = window.decodeURI(res.headers['content-disposition'].split('=')[1], "UTF-8");
           const blob = new Blob([content])
           console.log('content blob', content, blob)
           if ('download' in document.createElement('a')) {
             const elink = document.createElement('a');
-            elink.download = name;
+            elink.download = filename ;
             elink.style.display = 'none';
             elink.href = URL.createObjectURL(blob);
             document.body.appendChild(elink);
             elink.click();
             URL.revokeObjectURL(elink.href);
             document.body.removeChild(elink);
+            Modal.success({
+              title: "Success",
+              okText:"Confirm",
+              content: "Start download...",
+              onOk: () => {}
+            })
           } else {
-            navigator.msSaveBlob(blob, name)
+            navigator.msSaveBlob(blob, filename)
           }
         }, function(err) {
           console.log('err', err)
@@ -138,18 +141,18 @@ import Setting from '@/views/PerProject/Setting'
         this.$store.state.currentMLList = null
         console.log('label', this.$store.state.currentConfig)
         this.projectId = this.$store.state.currentProjectId
-        console.log('projectId',this.projectId)
-              this.$axios.get('/data/project/'+ this.projectId)
-                  .then(res => {
-                      console.log('res', res)
-                      this.$store.state.currentDataList = res.data
-                      // this.$store.state.currentDataList.
-                      console.log('store datalist', this.$store.state.currentDataList)
-                  })
-                  .catch((error) => {
-                  // here you will have access to error.response
-                  console.log(error.response)
-                  });
+        // console.log('projectId',this.projectId)
+        //       this.$axios.get('/data/project/'+ this.projectId)
+        //           .then(res => {
+        //               console.log('res', res)
+        //               this.$store.state.currentDataList = res.data
+        //               // this.$store.state.currentDataList.
+        //               console.log('store datalist', this.$store.state.currentDataList)
+        //           })
+        //           .catch((error) => {
+        //           // here you will have access to error.response
+        //           console.log(error.response)
+        //           });
         console.log('liugo', this.$store.state.currentDataList)
       }
     },
@@ -160,19 +163,19 @@ import Setting from '@/views/PerProject/Setting'
       this.$store.state.currentMLList = null
       console.log('label', this.$store.state.currentConfig)
       this.projectId = this.$store.state.currentProjectId
-      console.log('projectId',this.projectId)
-            this.$axios.get('/data/project/'+ this.projectId)
-                .then(res => {
-                    console.log('res', res)
-                    this.$store.state.currentDataList = res.data
-                    // this.$store.state.currentDataList.
-                    console.log('store datalist', this.$store.state.currentDataList)
-                })
-                .catch((error) => {
-                // here you will have access to error.response
-                console.log(error.response)
-                });
-      console.log('liugo', this.$store.state.currentDataList)
+      // console.log('projectId',this.projectId)
+      //       this.$axios.get('/data/project/'+ this.projectId)
+      //           .then(res => {
+      //               console.log('res', res)
+      //               this.$store.state.currentDataList = res.data
+      //               // this.$store.state.currentDataList.
+      //               console.log('store datalist', this.$store.state.currentDataList)
+      //           })
+      //           .catch((error) => {
+      //           // here you will have access to error.response
+      //           console.log(error.response)
+      //           });
+      // console.log('liugo', this.$store.state.currentDataList)
       
     },
   }
