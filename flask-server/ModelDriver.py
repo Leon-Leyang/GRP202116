@@ -84,7 +84,7 @@ class ModelDriver():
         elif script_type == 'Keypoint Labeling':
             model = KpLabModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                json.loads(params['threshold']))
-        elif script_type == 'Semantic Segmentation Mask':
+        elif script_type == 'Semantic Segmentation with Masks':
             model = SemSegMaskModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                     json.loads(params['mean']), json.loads(params['std']))
         elif script_type == 'Text Classification':
@@ -196,7 +196,7 @@ if __name__ == '__main__':
     # }
 
     params = {
-        'scriptName' : 'CustomModel',
+        'scriptName': 'CustomModel',
         'savePath': savePath
     }
 
