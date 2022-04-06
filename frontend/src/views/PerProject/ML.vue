@@ -330,7 +330,7 @@
                                         </v-col>
 
                                         <v-col cols="12"
-                                        v-if="nowType == 'Customization'">
+                                        v-if="nowType != 'Image Classification'">
                                           <div style="margin-top:30px">
                                             Upload the Customized Train Script Here:
                                             <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
