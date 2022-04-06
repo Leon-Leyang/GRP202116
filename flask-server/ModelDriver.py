@@ -90,7 +90,7 @@ class ModelDriver():
         elif script_type == 'Text Classification':
             model = TextClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                  params['vocabPath'], json.loads(params['tokenNum']), json.loads(params['sequenceLen']))
-        elif script_type == 'Named Entity Recognition':
+        elif script_type == 'Name Entity Recognition':
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                              json.loads(params['sequenceLen']))
         elif script_type == 'Customization':

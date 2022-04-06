@@ -277,8 +277,9 @@ export default {
       }
       console.log('anno,pre',this.annos,this.predicts)
       if(this.dataType == 'image'){
-        clearTimeout(this.timer);
-        this.timer = setTimeout(()=>{
+        // clearTimeout(this.timer);
+        // this.timer = 
+        setTimeout(()=>{
           this.labelStudio = new LabelStudio("label-studio", {
             config: this.$store.state.currentConfig,
             interfaces: [

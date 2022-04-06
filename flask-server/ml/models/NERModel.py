@@ -49,11 +49,8 @@ class NERModel(Model):
         self.preprocess = Preprocess(sequenceLen)
 
 
-    def predict(self, textPath):
-        super().predict(textPath)
-
-        with open(textPath, 'r') as f:
-            text = f.read()
+    def predict(self, text):
+        super().predict(text)
 
         # Preprocess the text and get needed input for the model
         sequence = self.preprocess(text)
@@ -115,6 +112,6 @@ if __name__ == '__main__':
 
     nERModel = NERModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, sequenceLen)
 
-    textPath = '../../../ml/resources/ner.txt'
-    predictionItem = nERModel.predict(textPath)
+    text = '@HuggingFace is a company based in New York, but is also has employees working in Paris'
+    predictionItem = nERModel.predict(text)
     print(predictionItem)
