@@ -73,9 +73,9 @@ class ModelDriver():
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
         if script_type == 'Image Classification':
-            print(from_name)
-            print(to_name)
-            print(tool_type)
+            # print(from_name)
+            # print(to_name)
+            # print(tool_type)
             model = ImgClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                 json.loads(params['mean']), json.loads(params['std']), json.loads(params['imgSize']))
         elif script_type == 'Object Detection':
@@ -101,7 +101,7 @@ class ModelDriver():
             print("model undefined")
 
         prediction_item = model.predict(data)
-
+        # print(data)
         print(prediction_item)
         return prediction_item
 

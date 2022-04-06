@@ -41,7 +41,7 @@ def run_model():
                                                 request.json.get("params"))
 
     print("Running finished.")
-    print(predictions)
+    # print(predictions)
     return Response(json.dumps(predictions), mimetype='application/json')
 
 
