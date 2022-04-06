@@ -1,8 +1,7 @@
-<!-- 项目进入后的具体页面 -->
 <template>
   <v-card id="problock">
-  <button @click="back">Back</button>
-  <button @click="download(id,name)" type="button"> Down Load </button>
+  <v-btn @click="back">Back</v-btn>
+  <v-btn @click="download(id,name)"> Down Load </v-btn>
 <!-- <v-btn @click="deleteSelectBtn()"></v-btn> -->
     <v-radio-group v-model="format" row>
       <v-radio

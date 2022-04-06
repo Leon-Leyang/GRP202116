@@ -1,5 +1,6 @@
 <template>
 <div>
+<v-btn>Delete</v-btn>
 <el-table
   :data="tableData"
   style="width: 100%"
@@ -9,8 +10,7 @@
   @row-click="enterData"
   @selection-change="handleSelectionChange"
   >
-  <!-- <template slot-scope="tableData" id="template">
-    <div @click="enterData(tableData.row)" id="div"> -->
+
       <el-table-column
         type="selection"
         width="50">
@@ -39,15 +39,7 @@
                     </div>
           </template>
       </el-table-column>   
-    <!-- </div>
-  </template> -->
-  <!-- <el-table-column show-overflow-tooltip label="Anno" width="100" prop="sta" align="center">
-    <template slot-scope="tableData">
-      <button @click="enterData(tableData.row)">Enter</button>
-    </template>
-  </el-table-column>  -->
-  <!-- <el-table-column label="Annotation" width="100" prop="anno" align="center"></el-table-column>  -->
-  <!-- <el-table-column label="Prediction" width="100" prop="predi" align="center"></el-table-column>        -->
+
 </el-table>
 <el-pagination class="pager" layout="prev, pager, next"  :total="10" :current-page.sync="config.page" @current-change="changePage" :page-size="20"></el-pagination>
 
@@ -60,9 +52,10 @@
     data(){
       return{ 
         tableData:[],
+        base_url:'./',
         multipleSelection: [],
         dataType:null,
-        url: '../../../../../GRP202116/files/5/c7a3ec64-b343-40e7-9944-fb0b20151308.jpg'
+        url: '../../../../../GRP202116/files/5/c7a3ec64-b343-40e7-9944-fb0b20151308.jpg',
       }
     },
     props: {
@@ -98,65 +91,47 @@
       handleSelectionChange(val) {
           this.multipleSelection = val;
           console.log('valk', val,this.multipleSelection)
-      },      
+      },   
+      convertData(){
+        if(this.$store.state.currentProject.type == 'image'){
+          clearTimeout(this.timer); 
+          this.timer = setTimeout(()=>{  
+              console.log('currentDataList', this.$store.state.currentDataList)
+              this.tableData = this.$store.state.currentDataList
+              console.log('curraList', this.tableData)
+
+              for(var i=0; i<this.tableData.length; i++){
+                this.tableData[i].realDataId = this.tableData[i].dataId
+                this.tableData[i].dataId = i + 1
+                this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
+                this.tableData[i].url = this.tableData[i].url.replace("../", "")
+                console.log('tabelda',this.tableData[i].url)
+              }
+              this.$store.state.currentDataList = this.tableData
+
+              console.log('asd', this.$store.state.currentDataList)
+            },200);
+
+        }else{
+          clearTimeout(this.timer); 
+          this.timer = setTimeout(()=>{  
+            this.tableData = this.$store.state.currentDataList
+            for(var i=0; i<this.tableData.length; i++){
+              this.tableData[i].realDataId = this.tableData[i].dataId
+              this.tableData[i].dataId = i + 1
+              console.log('tabelda',this.tableData[i].url)
+            }        
+            this.$store.state.currentDataList = this.tableData
+            console.log('table text', this.tableData)
+          },200);
+
+        }        
+      }   
     },
     created() {
       console.log('restart', '')
       this.dataType = this.$store.state.currentProject.type
-      if(this.$store.state.currentProject.type == 'image'){
-        clearTimeout(this.timer); 
-        this.timer = setTimeout(()=>{  
-            console.log('currentDataList', this.$store.state.currentDataList)
-            this.tableData = this.$store.state.currentDataList
-            console.log('curraList', this.tableData)
-
-            for(var i=0; i<this.tableData.length; i++){
-              this.tableData[i].realDataId = this.tableData[i].dataId
-              this.tableData[i].dataId = i + 1
-              this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
-              this.tableData[i].url = this.tableData[i].url.replace("../", "")
-
-              if(this.tableData[i].url.indexOf(".jpg")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".jpg", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpg' )
-                console.log('puic', this.tableData[i].url)
-              }
-              else if(this.tableData[i].url.indexOf(".jpeg")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".jpeg", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.jpeg' )
-                console.log('puic', this.tableData[i].url)
-              }
-              else if(this.tableData[i].url.indexOf(".png")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".png", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.png' )
-                console.log('puic', this.tableData[i].url)
-              }          
-              else if(this.tableData[i].url.indexOf(".webp")!=-1){
-                this.tableData[i].url = this.tableData[i].url.replace(".webp", "")
-                this.tableData[i].url = require('..//..//..//..//../GRP202116/' + this.tableData[i].url + '.webp' )
-                console.log('puic', this.tableData[i].url)
-              }
-              console.log('tabelda',this.tableData[i].url)
-            }
-            this.$store.state.currentDataList = this.tableData
-
-            console.log('asd', this.$store.state.currentDataList)
-          },500);
-
-      }else{
-        clearTimeout(this.timer); 
-        this.timer = setTimeout(()=>{  
-          this.tableData = this.$store.state.currentDataList
-          for(var i=0; i<this.tableData.length; i++){
-            this.tableData[i].realDataId = this.tableData[i].dataId
-            this.tableData[i].dataId = i + 1
-            console.log('tabelda',this.tableData[i].url)
-          }        
-          this.$store.state.currentDataList = this.tableData
-          console.log('table text', this.tableData)
-        },500);
-
-      }
+      this.convertData()
     },     
   }
 </script>
