@@ -7,7 +7,6 @@ import com.grp202116.consumerserver.mapper.*;
 import com.grp202116.consumerserver.pojo.*;
 import com.grp202116.consumerserver.service.ml.ModelDriver;
 import com.grp202116.consumerserver.service.ml.ModelSaver;
-import com.grp202116.consumerserver.service.ml.ModelTrainer;
 import com.grp202116.consumerserver.service.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -172,17 +171,7 @@ public class ModelController {
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(project, model);
 
-        String scriptName;
-        if (model.getType().equals("Customization")) {
-            if (scriptPath == null) {
-                logger.warn("Script Path not specified for custom model");
-                return;
-            } else {
-                scriptName = ModelSaver.saveCustom(scriptPath);
-                if (scriptName == null) return;
-                else modelDriver.setScriptName(scriptName);
-            }
-        }
+        if (modelDriver.setScript(scriptPath)) return;
 
         for (DataDO data : dataList) {
             JSONObject object = modelDriver.runModelConfig(data);
@@ -192,14 +181,14 @@ public class ModelController {
                     restTemplate.postForObject("http://sidecar-server/model/run",
                             HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
             JSONArray predictions = result.getJSONArray("result");
-            if (predictions == null) return;
+            if (predictions == null) continue;
 
             data.setPredicted(true);
             dataMapper.updateDataPredict(data);
-            List<PredictionDO> predictionList = modelDriver.savePredictions(predictions);
-            if (predictionList.size() < 1) return;
+            PredictionDO prediction = modelDriver.savePredictions(predictions);
+            if (prediction == null) continue;
             predictionMapper.alter();
-            predictionMapper.insertAll(predictionList);
+            predictionMapper.insert(prediction);
         }
     }
 
@@ -228,19 +217,12 @@ public class ModelController {
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList(projectId);
         if (annotatedDataList.size() < 1) return;
 
-        ModelTrainer modelTrainer = new ModelTrainer(project, model);
+        ModelDriver modelDriver = new ModelDriver(project, model);
 
-        String scriptName;
-        if (model.getType().equals("Customization")) {
-            if (scriptPath == null) return;
-            else {
-                scriptName = ModelSaver.saveCustom(scriptPath);
-                if (scriptName == null) return;
-                else modelTrainer.setScriptName(scriptName);
-            }
-        }
+        if (modelDriver.setScript(scriptPath)) return;
+
         JSONObject object = new JSONObject();
-        object.putAll(modelTrainer.trainModelConfig(trainParams));
+        object.putAll(modelDriver.trainModelConfig(trainParams));
         object.put("annotation_list", annotationList);
         object.put("data_list", annotatedDataList);
 

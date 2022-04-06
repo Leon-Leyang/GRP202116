@@ -24,6 +24,13 @@ public interface PredictionMapper extends BaseMapper {
     void insertAll(List<PredictionDO> predictions);
 
     /**
+     * Insert a {@link PredictionDO}
+     *
+     * @param prediction the obtained Prediction
+     */
+    void insert(PredictionDO prediction);
+
+    /**
      * List the Prediction of certain data
      *
      * @param dataId the dataId
