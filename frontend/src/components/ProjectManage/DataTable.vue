@@ -65,6 +65,7 @@
   stripe
   @row-click="enterData"
   @selection-change="handleSelectionChange"
+  :key="Math.random()"
   >
 
       <el-table-column
@@ -134,19 +135,6 @@
 
       }
     },
-    watch: {
-        multipleSelection: function (val) {
-          console.log('val', val)
-          let arr = [];
-          for (let i in this.multipleSelection) {
-            console.log('this.multipleSelection[i]',this.multipleSelection[i])
-            arr.push(this.multipleSelection[i].realDataId);
-          }
-          console.log('multipleSelection',arr);
-          this.$store.state.selectData = arr
-          console.log('selectData',this.$store.state.selectData)
-        }
-    },
     methods: {
       loadData(projectId, pageNum, pageSize){
         this.$axios.get('/data/page/'+ projectId +"/"+ pageNum +"/"+ pageSize)
@@ -157,15 +145,17 @@
                 this.total = res.data.total
                 this.convertData()
         })
+        // this.$set(this.tableData,1,this.tableData)
       },  
           
       enterData(data, event, column){
-        console.log('data', data,event,column)
+        console.log('dataenter', data,event,column)
         this.$store.state.currentDataId = data.listNumber
         this.$store.state.realDataId = data.dataId
         console.log('cur', this.$store.state.currentDataId)
         console.log('real', this.$store.state.realDataId)
         console.log('lisy', this.$store.state.currentPageList[this.$store.state.currentDataId - 1])
+        this.$store.state.totalNum = this.total
         this.$router.push({  
                     path: '/data',
                     name: 'Data',  
@@ -181,6 +171,8 @@
       // },
       handleCurrentChange(val) {
           this.currentPage = val;
+          console.log('currentPage', this.currentPage)
+          this.$store.state.currentPage = val
           this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);
       },
       multiDelete(){
@@ -188,14 +180,16 @@
         return;
         var array = [];
         this.multipleSelection.forEach((item) => {
-          array.push(item.realDataId)
+          array.push(item.dataId)
         })
+        console.log('arr', array)
         for(var i = 0;i<array.length;i++){
-          this.$axios.delete('/data/'+ array[i])
+          this.$axios.delete('/data/'+ this.$store.state.currentProjectId + "/" + array[i])
           .then((res)=>{
             console.log('res delete daata', res)
           })
         }
+        this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize)
       },
       convertData(){
         if(this.$store.state.currentProject.type == 'image'){
@@ -264,7 +258,10 @@
             console.log('fileList', res)
           })
           }
+          this.folderURL = null
+          this.fileList = []          
           this.dialog = false
+          this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize)
       }, 
       CancelImport(){
         this.folderURL = null
@@ -277,6 +274,7 @@
 
       this.dataType = this.$store.state.currentProject.type
       this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize)
+      console.log('currentPage', this.currentPage)
     },     
   }
 </script>
