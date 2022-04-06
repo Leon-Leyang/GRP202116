@@ -17,7 +17,7 @@ is of concern to modern deep learning based techniques.
 
 ### 1. Import SQL Database
 
-+ Please make sure that you have **MySQL** installed. You could use the [MySQL Intallation Guide](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) as reference.
++ Please make sure that you have **MySQL** installed. You could use the [MySQL Intallation Guide](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) for reference.
 
 + To import the database, open the terminal in the same directory with the  [GRP2021.sql](./sql/GRP2021.sql) file and execute following commands:
 
