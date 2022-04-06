@@ -87,4 +87,11 @@ public interface DataMapper extends BaseMapper {
      * @param dataDO the data to be updated
      */
     void updateDataPredict(DataDO dataDO);
+
+    /**
+     * Update the list number of data
+     *
+     * @param dataList the list of data
+     */
+    void updateListNumberAll(List<DataDO> dataList);
 }

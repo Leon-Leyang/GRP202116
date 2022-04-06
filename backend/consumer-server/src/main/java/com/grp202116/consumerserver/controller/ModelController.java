@@ -11,6 +11,7 @@ import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
 import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.ProjectDO;
+import com.grp202116.consumerserver.service.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.grp202116.consumerserver.service.util.HttpUtils;
@@ -118,25 +119,34 @@ public class ModelController {
      * Create a new model and save it to the database
      *
      * @param projectId project id
-     * @param modelList     a list of {@link ModelDO} object
+     * @param modelList a list of {@link ModelDO} object
      */
     @PostMapping("/model/create/{projectId}")
     public void createModel(@PathVariable BigInteger projectId,
                             @RequestBody List<ModelDO> modelList) {
-        for (ModelDO model: modelList) {
+        for (ModelDO model : modelList) {
             model.setCreateTime(new Date());
             model.setProjectId(projectId);
 
             ModelSaver modelSaver = new ModelSaver(model);
             String modelPath = modelSaver.saveModel(model.getModelPath());
-            if (modelPath == null) return;
+            if (modelPath == null) {
+                FileUtils.deleteDirectory(modelSaver.getModelPath());
+                return;
+            }
             else model.setModelPath(modelPath);
 
             String labelPath = modelSaver.saveLabels(model.getLabelsPath());
-            if (labelPath == null) return;
+            if (labelPath == null) {
+                FileUtils.deleteDirectory(modelSaver.getModelPath());
+                return;
+            }
             else model.setLabelsPath(labelPath);
 
-            if (saveModelParams(model, modelSaver)) return;
+            if (saveModelParams(model, modelSaver)) {
+                FileUtils.deleteDirectory(modelSaver.getModelPath());
+                return;
+            }
 
             modelMapper.insert(model);
         }
@@ -160,7 +170,7 @@ public class ModelController {
         if (model == null) {
             logger.warn("Model cannot be located according to the project and version");
             return;
-        };
+        }
 
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(project, model);
@@ -170,8 +180,7 @@ public class ModelController {
             if (scriptPath == null) {
                 logger.warn("Script Path not specified for custom model");
                 return;
-            }
-            else {
+            } else {
                 scriptName = ModelSaver.saveCustom(scriptPath);
                 if (scriptName == null) return;
                 else modelDriver.setScriptName(scriptName);
@@ -199,7 +208,6 @@ public class ModelController {
      *
      * @param projectId   the id of a project
      * @param trainObject the {@link JSONObject} of params
-     * @return the accuracy of this model
      */
     @PostMapping("/model/train/{projectId}")
     public void trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject trainObject) {

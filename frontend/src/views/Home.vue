@@ -646,7 +646,7 @@ import ML from './Create_ML.vue'
       }
     },
     mounted() {
-        // console.lozg('tag', '')
+        // console.log('tag', '')
         this.getList()
     },
     activated: function() {

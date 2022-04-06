@@ -12,11 +12,20 @@
         <result column="project_id" property="projectId"/>
         <result column="is_annotated" property="isAnnotated"/>
         <result column="is_predicted" property="isPredicted"/>
+        <result column="list_number" property="listNumber"/>
     </resultMap>
 
     <update id="alter">
         alter table data
             AUTO_INCREMENT = 1;
+    </update>
+
+    <update id="updateListNumberAll" parameterType="List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update data
+            set list_number = #{item.listNumber}
+            where data_id = #{item.dataId}
+        </foreach>
     </update>
 
     <update id="updateDataPredict" parameterType="DataDO">
@@ -38,10 +47,10 @@
     </update>
 
     <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="dataId" keyColumn="data_id">
-        insert into data (url,update_time,type,project_id)
+        insert into data (url,update_time,type,project_id, list_number)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.url},#{item.updateTime},#{item.type},#{item.projectId})
+            (#{item.url},#{item.updateTime},#{item.type},#{item.projectId}, #{item.listNumber})
         </foreach>
     </insert>
 

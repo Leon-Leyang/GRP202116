@@ -35,6 +35,13 @@
 
             <v-divider></v-divider>
           </template>
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="pagesize"
+            layout="prev, next"
+            :total="total"
+            class="pager"></el-pagination>
         </v-virtual-scroll>
       </v-card>
     </div>
@@ -75,8 +82,17 @@ export default {
       id:0,
       config: ``,
       dataType:'',
-      //logic param
-      // config: this.configInterface,
+      listQuery: {
+        page: 1,
+        limit: 20
+        },
+      total:null,
+      list:null,   
+      currentPage:null,     
+      start: 1,
+      pagesize: 7,  
+      pageNum:null,    
+      newId:0,  
     }
   },
 
@@ -87,10 +103,10 @@ export default {
       console.log('annopre', this.annos,this.predicts) 
 
       console.log('dataId', data.dataId)
-      this.$store.state.currentDataId = data.dataId
-      this.$store.state.realDataId = data.realDataId
+      this.$store.state.currentDataId = data.listNumber
+      this.$store.state.realDataId = data.dataId
       console.log('cur', this.$store.state.currentDataId,this.$store.state.realDataId)
-      console.log('culist', this.$store.state.currentDataList)
+      console.log('culist', this.$store.state.currentPageList)
       this.newLS(data)
       console.log('enter', data)
     },
@@ -100,12 +116,34 @@ export default {
       console.log('annopre', this.annos,this.predicts) 
 
       if(this.$store.state.currentDataId == 1){
-        console.log('no prev')
+        if(this.currentPage > 0 ){
+          console.log('type1', this.$store.state.currentProjectId, this.currentPage, this.pagesize)
+          this.currentPage --
+          this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);
+          // clearTimeout(this.timer);
+        // this.timer = setTimeout(()=>{   
+          console.log('tag1', this.currentPage,this.$store.state.currentPageList)
+          this.$store.state.currentDataId = 1
+
+        // clearTimeout(this.timer);
+        setTimeout(()=>{   
+          console.log('tag', this.$store.state.currentPageList[this.$store.state.currentDataId-1].dataId)
+          this.$store.state.realDataId = this.$store.state.currentPageList[this.$store.state.currentDataId-1].listNumber
+          console.log('import', this.$store.state.currentDataId,this.$store.state.realDataId)        
+          this.currentDataId = this.$store.state.currentDataId         
+          console.log('cyr', this.$store.state.currentPageList,this.$store.state.realDataId, this.currentDataId)
+          // console.log('this.$store.state.currentPageList[this.$store.state.currentDataId - 1]', this.$store.state.currentDataId)
+          this.newLS(this.$store.state.currentPageList[0])},800)
+        }else{
+          console.log('no prev')
+
+        }        
       }else{
         this.$store.state.currentDataId--
-        this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1].realDataId
-        console.log('prev', this.$store.state.realDataId, this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
-        this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])        
+        console.log('listnum', this.$store.state.currentPageList)
+        this.$store.state.realDataId = this.$store.state.currentPageList[this.$store.state.currentDataId-1].listNumber
+        console.log('prev', this.$store.state.realDataId, this.$store.state.currentPageList[this.$store.state.currentDataId - 1])
+        this.newLS(this.$store.state.currentPageList[this.$store.state.currentDataId - 1])        
       }
 
     },
@@ -113,13 +151,37 @@ export default {
       this.predicts = [] 
       this.annos = []   
       console.log('annopre', this.annos,this.predicts) 
-      if(this.$store.state.currentDataId == (this.$store.state.currentDataList.length)){
-        console.log('no next')
+      console.log('import', this.$store.state.currentDataId)
+      if(this.$store.state.currentDataId >= (this.$store.state.currentPageList.length)){
+        if(this.currentPage < this.pageNum){
+          // this.$store.state.currentDataId++
+          console.log('type1', this.$store.state.currentProjectId, this.currentPage, this.pagesize)
+          this.currentPage ++
+          this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);
+          // clearTimeout(this.timer);
+        // this.timer = setTimeout(()=>{   
+          console.log('tag1', this.currentPage,this.$store.state.currentPageList)
+          this.$store.state.currentDataId = 1
+
+        // clearTimeout(this.timer);
+        setTimeout(()=>{   
+          console.log('tag', this.$store.state.currentPageList[this.$store.state.currentDataId-1].dataId)
+          this.$store.state.realDataId = this.$store.state.currentPageList[this.$store.state.currentDataId-1].listNumber
+          console.log('import', this.$store.state.currentDataId,this.$store.state.realDataId)        
+          this.currentDataId = this.$store.state.currentDataId         
+          console.log('cyr', this.$store.state.currentPageList,this.$store.state.realDataId, this.currentDataId)
+          // console.log('this.$store.state.currentPageList[this.$store.state.currentDataId - 1]', this.$store.state.currentDataId)
+          this.newLS(this.$store.state.currentPageList[0])},800)
+        }else{
+          console.log('no next')
+        }
       }else{
         this.$store.state.currentDataId++
-        this.$store.state.realDataId = this.$store.state.currentDataList[this.$store.state.currentDataId-1].realDataId
-        console.log('next', this.$store.state.realDataId, this.$store.state.currentDataList[this.$store.state.currentDataId - 1])
-        this.newLS(this.$store.state.currentDataList[this.$store.state.currentDataId - 1])        
+        console.log('listnum', this.$store.state.currentPageList)
+        console.log('this.$store.state.currentDataId', this.$store.state.currentDataId)
+        this.$store.state.realDataId = this.$store.state.currentPageList[this.$store.state.currentDataId-1].listNumber
+        console.log('next', this.$store.state.realDataId, this.$store.state.currentPageList[this.$store.state.currentDataId - 1])
+        this.newLS(this.$store.state.currentPageList[this.$store.state.currentDataId - 1])        
       }
     },
     back(){
@@ -179,25 +241,25 @@ export default {
     },
 
     newLS(data){
-      console.log('test', this.$store.state.currentDataList, this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated,this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted )
+      console.log('test', this.$store.state.currentPageList, this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated,this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted )
       this.labelStudio.destroy()
-      var temp = this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated
-      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
-        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
+      var temp = this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated
+      if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0 ){
+        if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0){
           var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
           annotationlist[0].dataId = this.$store.state.realDataId
           axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
           .then((res)=>{
             console.log('annotalist up', res)
-            this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated = 1
+            this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated = 1
           })
           clearTimeout(this.timer);
           this.timer = setTimeout(()=>{
             this.getAnno()
           },100)
         }
-        console.log('t/f', this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0)
-        if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
+        console.log('t/f', this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0)
+        if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0){
           this.predicts = []
           if(temp != 0){
             this.getAnno()
@@ -256,7 +318,7 @@ export default {
               predictions: this.predicts,
               id: this.$store.state.realDataId,
               data: {
-                image: this.$store.state.currentDataList[data.dataId - 1].url
+                image: this.$store.state.currentPageList[data.listNumber - 1].url
               },
             },
 
@@ -347,7 +409,7 @@ export default {
               predictions: this.predicts,
               id: this.$store.state.realDataId,
               data: {
-                text: this.$store.state.currentDataList[data.dataId - 1].url
+                text: this.$store.state.currentPageList[data.listNumber - 1].url
               },
             },
 
@@ -395,50 +457,178 @@ export default {
             },
           });
         },500)
-
       }
-
-    
     },
-  
+    loadData(projectId, pageNum, pageSize){
+      this.$axios.get('/data/page/'+ projectId +"/"+ pageNum +"/"+ pageSize)
+      .then((res) => {
+              console.log("currentPageList", res)
+              this.$store.state.currentPageList = res.data.list
+              console.log('this.$store.state.currentPageList', this.$store.state.currentPageList)
+              this.total = res.data.total
+              this.convertData()
+      })
+      // this.$set(this.tableData,1,this.tableData)
+    },  
+    handleSelectionChange(val) {
+        this.multipleSelection = val;
+        console.log('valk', val,this.multipleSelection)
+    },   
+    // handleSizeChange(val){
+    //   this.pagesize = val;
+    //   this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);        
+    // },
+    handleCurrentChange(val) {
+        this.currentPage = val;
+        this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);
+    },
+    convertData(){
+      if(this.$store.state.currentProject.type == 'image'){
+        clearTimeout(this.timer); 
+        this.timer = setTimeout(()=>{  
+            console.log('currentDataList', this.$store.state.currentPageList)
+            this.tableData = this.$store.state.currentPageList
+            console.log('curraList', this.tableData)
+
+            for(var i=0; i<this.tableData.length; i++){
+              this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
+              this.tableData[i].url = this.tableData[i].url.replace("../frontend/public/", "")
+              console.log('tabelda',this.tableData[i].url)
+            }
+            this.$store.state.currentPageList = this.tableData
+
+            console.log('asd', this.$store.state.currentPageList)
+          },200);
+
+      }else{
+        clearTimeout(this.timer); 
+        this.timer = setTimeout(()=>{  
+          this.tableData = this.$store.state.currentPageList
+          for(var i=0; i<this.tableData.length; i++){
+            console.log('tabelda',this.tableData[i].url)
+          }        
+          this.$store.state.currentPageList = this.tableData
+          console.log('table text', this.tableData)
+        },200);
+
+      }        
+    },
   },
 
 
   mounted() {
+    this.currentPage = this.$store.state.currentPage
+    this.total = this.$store.state.totalNum
+    var more = 0;
+    if((this.total % 7) != 0){
+      more= 1;
+    }else{
+      more = 0;
+    }
+    this.pageNum = this.total/7 + more
     this.dataType = this.$store.state.currentProject.type
     this.currentDataId = this.$store.state.currentDataId
-    this.tableData = this.$store.state.currentDataList
-    console.log('curren', this.$store.state.currentDataList,this.$store.state.currentDataId)
+    this.tableData = this.$store.state.currentPageList
+    console.log('curren', this.$store.state.currentPageList,this.$store.state.currentDataId)
     console.log('tisada', this.tableData)
     // console.log('confi', this.$store.state.currentConfig)
-    console.log('imag', this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 )
-    var temp = this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated
-    if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0 ){
-      console.log('te', this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0)
-      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated == 0){
-        var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
-        annotationlist[0].dataId = this.$store.state.realDataId
-        axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
-        .then((res)=>{
-          console.log('annotalist up', res)
-          this.$store.state.currentDataList[this.$store.state.currentDataId -1].annotated = 1
-        })
-        // clearTimeout(this.timer);
-        // this.timer = setTimeout(()=>{
-          this.getAnno()
-        // },500)
+    this.newId = this.$store.state.currentDataId % 7
+    if(this.$store.state.currentDataId <= 7){
+      if(this.newId == 0){
+        this.newId = 7
       }
-      if(this.$store.state.currentDataList[this.$store.state.currentDataId -1].predicted == 0){
-        this.predicts = []
-          if(temp != 0){
+      console.log('imag', this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0 )
+      var temp = this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated
+      if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0 ){
+        console.log('te', this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0)
+        if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0){
+          var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+          annotationlist[0].dataId = this.$store.state.realDataId
+          axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
+          .then((res)=>{
+            console.log('annotalist up', res)
+            this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated = 1
+          })
+          // clearTimeout(this.timer);
+          // this.timer = setTimeout(()=>{
             this.getAnno()
+          // },500)
+        }
+        if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0){
+          this.predicts = []
+            if(temp != 0){
+              this.getAnno()
+            }
+          console.log('empty pre', this.predicts)
+        }
+      }else{
+        this.getAnno()
+        this.getPredict()
+      }}
+    else{
+      if(this.newId != 0 ){
+        console.log('imag', this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 )
+        var templ = this.$store.state.currentPageList[this.newId -1].annotated
+        if(this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 ){
+          console.log('te', this.$store.state.currentPageList[this.newId -1].annotated == 0)
+          if(this.$store.state.currentPageList[this.newId -1].annotated == 0){
+            var annotationlistt = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+            annotationlistt[0].dataId = this.$store.state.realDataId
+            axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlistt[0])
+            .then((res)=>{
+              console.log('annotalist up', res)
+              this.$store.state.currentPageList[this.newId -1].annotated = 1
+            })
+            // clearTimeout(this.timer);
+            // this.timer = setTimeout(()=>{
+              this.getAnno()
+            // },500)
           }
-        console.log('empty pre', this.predicts)
+          if(this.$store.state.currentPageList[this.newId -1].predicted == 0){
+            this.predicts = []
+              if(templ != 0){
+                this.getAnno()
+              }
+            console.log('empty pre', this.predicts)
+          }
+        }else{
+          this.getAnno()
+          this.getPredict()
+        }   
+      }else{
+        this.newId = 7
+        console.log('imag', this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 )
+        var templa = this.$store.state.currentPageList[this.newId -1].annotated
+        if(this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 ){
+          console.log('te', this.$store.state.currentPageList[this.newId -1].annotated == 0)
+          if(this.$store.state.currentPageList[this.newId -1].annotated == 0){
+            var annotationlisttt = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
+            annotationlisttt[0].dataId = this.$store.state.realDataId
+            axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlisttt[0])
+            .then((res)=>{
+              console.log('annotalist up', res)
+              this.$store.state.currentPageList[this.newId -1].annotated = 1
+            })
+            // clearTimeout(this.timer);
+            // this.timer = setTimeout(()=>{
+              this.getAnno()
+            // },500)
+          }
+          if(this.$store.state.currentPageList[this.newId -1].predicted == 0){
+            this.predicts = []
+              if(templa != 0){
+                this.getAnno()
+              }
+            console.log('empty pre', this.predicts)
+          }
+        }else{
+          this.getAnno()
+          this.getPredict()
+        }   
       }
-    }else{
-      this.getAnno()
-      this.getPredict()
+   
     }
+
     clearTimeout(this.timer);
     this.timer = setTimeout(()=>{
 
@@ -490,7 +680,7 @@ export default {
             id: this.$store.state.realDataId,
             data: {
               // image:"https://www.helpguide.org/wp-content/uploads/king-charles-spaniel-resting-head-768.jpg" 
-              image: this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url
+              image: this.$store.state.currentPageList[this.newId - 1].url
             },
           },
 
@@ -577,7 +767,7 @@ export default {
             id: this.$store.state.realDataId,
             data: {
               // image:"https://www.helpguide.org/wp-content/uploads/king-charles-spaniel-resting-head-768.jpg" 
-              text: this.$store.state.currentDataList[this.$store.state.currentDataId - 1].url
+              text: this.$store.state.currentPageList[this.newId - 1].url
             },
           },
 

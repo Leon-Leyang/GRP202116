@@ -33,7 +33,7 @@ CREATE TABLE `annotation` (
   KEY `project_id` (`project_id`),
   CONSTRAINT `annotation_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE,
   CONSTRAINT `annotation_ibfk_2` FOREIGN KEY (`data_id`) REFERENCES `data` (`data_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `data` */
 
@@ -47,10 +47,11 @@ CREATE TABLE `data` (
   `project_id` int DEFAULT NULL,
   `is_annotated` tinyint(1) DEFAULT '0',
   `is_predicted` tinyint(1) DEFAULT '0',
+  `list_number` int DEFAULT NULL,
   PRIMARY KEY (`data_id`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `data_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Table structure for table `labelinterface` */
 
@@ -122,7 +123,7 @@ CREATE TABLE `project` (
   `description` varchar(100) DEFAULT NULL,
   `configs` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`project_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
