@@ -48,8 +48,7 @@
             keyColumn="prediction_id">
         insert into prediction
         (project_id, data_id, type, model_version, create_time, update_time, result)
-        values (#{item.projectId}, #{item.dataId}, #{item.type},
-                #{item.model}, #{item.createTime}, #{item.updateTime}, #{item.result})
+        values (#{projectId}, #{dataId}, #{type}, #{model}, #{createTime}, #{updateTime}, #{result})
         ON DUPLICATE KEY UPDATE type        = VALUES(type),
                                 update_time = VALUES(update_time),
                                 result      = VALUES(result);
