@@ -7,7 +7,7 @@
       fab
       small
       icon
-      large
+      x-large
     >
     <v-icon dark large>
       mdi-delete
@@ -22,11 +22,12 @@
       depressed
       rounded
       class="white--text"
+      x-large
   >  
       Import<v-icon
         right
         dark
-        large
+        x-large
       > mdi-database-import
       </v-icon>
   </v-btn>
@@ -38,7 +39,7 @@
       depressed
       class="white--text"
       large
-      
+      x-large
   >
       Export<v-icon
         right
