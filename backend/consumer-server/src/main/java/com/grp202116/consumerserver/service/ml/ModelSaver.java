@@ -25,8 +25,8 @@ public class ModelSaver {
      * @param model a specified model
      */
     public ModelSaver(ModelDO model) {
-        String modelDirectory = ".." + File.separator + ".." + File.separator + "ml" + File.separator + "models" +
-                File.separator + model.getProjectId() + "_" + model.getVersion() + File.separator;
+        String modelDirectory = ".." + File.separator + "ml" + File.separator + "models" + File.separator +
+                model.getProjectId() + "_" + model.getVersion() + File.separator;
         File directory = new File(modelDirectory);
         ModelSaver.modelPath = modelDirectory;
         if (!directory.exists()) {
@@ -114,6 +114,6 @@ public class ModelSaver {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return FilenameUtils.getName(customFile.getName()).substring(0, customFile.getName().length() - 3);
+        return FilenameUtils.getBaseName(customFile.getName());
     }
 }
