@@ -285,7 +285,7 @@
         color="#7986CB"
         depressed
         @click="save()"
-        style="font-size: 2.5rem; font-weight: 500; margin-right:226.641px"
+        style="font-size: 2.5rem; font-weight: 500; margin-right:226.641px; height:4rem"
       >
         <v-icon left large>
           mdi-update

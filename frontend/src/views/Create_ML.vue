@@ -13,7 +13,7 @@
                             <el-form ref="form" :model="form" :label-position="right"><!--why-->
 
                             <el-form-item label="Model Version:">
-                                <el-input v-model="form.version" clearable maxlength="" size="big" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                                <el-input v-model="form.version" clearable maxlength="" size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
 
                             <el-form-item label="Script Type:">
@@ -27,7 +27,8 @@
                                     v-for="item in group.options"
                                     :key="item.value"
                                     :label="item.label"
-                                    :value="item.value">
+                                    :value="item.value"
+                                    style="font-size:2rem;height:3.5rem">
                                 </el-option>
                                 </el-option-group>
                             </el-select>
@@ -35,65 +36,65 @@
 
 
                             <el-form-item label="Model Project Root Path:">
-                                <el-input v-model="form.modelRoot" clearable size="big" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                                <el-input v-model="form.modelRoot" clearable size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
 
                             <el-form-item label="Model Path:" style="margin-top:20px">
-                                <el-input v-model="form.modelPath" clearable size="big" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                                <el-input v-model="form.modelPath" clearable size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
                             
                             <el-form-item label="Class File Path:" style="margin-top:20px">
-                                <el-input v-model="form.labelsPath" clearable size="big" suffix-icon="el-icon-edit el-input__icon"></el-input>
+                                <el-input v-model="form.labelsPath" clearable size="big" suffix-icon="el-icon-edit el-input__icon" class="forminput"></el-input>
                             </el-form-item>
 
                             <el-form-item label="Model Description:" style="margin-bottom:20px!important">
-                                <el-input type="textarea" placeholder="(Optional)" v-model="form.description"></el-input>
+                                <el-input type="textarea" placeholder="(Optional)" v-model="form.description" class="forminput"></el-input>
                             </el-form-item>
                             <!--end-->  
 
                             <!--If choosing others, then it will not display the following-->
                             <el-form-item v-if="isImgCla" label="Image Size:" > <!--style="margin-bottom:0"-->
-                                <el-input v-model="form.params.imgSize" clearable size="big" placeholder="(For image classification)"></el-input>
+                                <el-input v-model="form.params.imgSize" clearable size="big" placeholder="(For image classification)" class="forminput"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Mean:">
-                                <el-input v-model="form.params.mean" clearable size="big" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
+                                <el-input v-model="form.params.mean" clearable size="big" placeholder="(For image classification) [0.485, 0.456, 0.406] by default" class="forminput"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable size="big" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable size="big" placeholder="(For image classification) [0.229, 0.224, 0.225] by default" class="forminput"></el-input>
                             </el-form-item>
                             
 
                             <el-form-item v-if="isObjDetect" label="Threshold:">
-                                <el-input v-model="form.params.threshold" clearable size="big" placeholder="(For object detection)"></el-input>
+                                <el-input v-model="form.params.threshold" clearable size="big" placeholder="(For object detection)" class="forminput"></el-input>
                             </el-form-item>
                             
 
                             <el-form-item v-if="isSemSeg" label="Mean:">
-                                <el-input v-model="form.params.mean" clearable size="big" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default"></el-input>
+                                <el-input v-model="form.params.mean" clearable size="big" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default" class="forminput"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isSemSeg" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable size="big" placeholder="(For semantic segmentation) [0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable size="big" placeholder="(For semantic segmentation) [0.229, 0.224, 0.225] by default" class="forminput"></el-input>
                             </el-form-item>
                             
 
                             <el-form-item v-if="isKpLb" label="Threashold:">
-                                <el-input v-model="form.params.threshold" clearable size="big" placeholder="(For keypoint labeling)"></el-input>
+                                <el-input v-model="form.params.threshold" clearable size="big" placeholder="(For keypoint labeling)" class="forminput"></el-input>
                             </el-form-item>
                             
 
                             <el-form-item v-if="isTC" label="Vocabulary File Path:" style="margin-top:20px">
-                                <el-input v-model="form.params.vocabPath" clearable size="big" placeholder="(For text classification)"></el-input>
+                                <el-input v-model="form.params.vocabPath" clearable size="big" placeholder="(For text classification)" class="forminput"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isTC" label="Token Number:">
-                                <el-input v-model="form.params.tokenNum" clearable size="big" placeholder="(For text classification)"></el-input>
+                                <el-input v-model="form.params.tokenNum" clearable size="big" placeholder="(For text classification)" class="forminput"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isTC" label="Sequence Length:">
-                                <el-input v-model="form.params.sequenceLen" clearable size="big" placeholder="(For text classification)"></el-input>
+                                <el-input v-model="form.params.sequenceLen" clearable size="big" placeholder="(For text classification)" class="forminput"></el-input>
                             </el-form-item>
                             
 
                             <el-form-item v-if="isNER" label="Sequence Length:">
-                                <el-input v-model="form.params.sequenceLen" clearable size="big" placeholder="(For named entity recognition)"></el-input>
+                                <el-input v-model="form.params.sequenceLen" clearable size="big" placeholder="(For named entity recognition)" class="forminput"></el-input>
                             </el-form-item>
 
                            
@@ -102,17 +103,21 @@
                                 <el-button>Cancel</el-button>-->
                                 <div style="display:flex;flex-direction:row">
                             <v-btn
+                            large
                             depressed
                             color="pink lighten-1"
                             @click="onSubmit"
+                            style="font-size: 2rem"
                             >
                             Save
                             </v-btn>
                             <v-spacer></v-spacer>
                             
                              <v-btn
+                            large
                             depressed
                             color="error"
+                            style="font-size: 2rem"
                             >
                             Cancel
                             </v-btn>
@@ -131,6 +136,7 @@
                 <v-container>
                 <v-data-iterator
                     :items="items"
+                    hide-default-footer
                     >
 
                     <template v-slot:default="props">

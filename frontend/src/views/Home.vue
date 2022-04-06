@@ -18,7 +18,7 @@
           <v-dialog
           v-model="isShow"
           persistent
-          style="height:900px!important"
+          style="height:100%!important"
           ><!-- -->
           <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -33,7 +33,7 @@
           </template>
           <v-card
           v-if="refresh"
-          ><!--700px-->
+          style="height:800px;"><!--700px-->
               <v-card-title class="text-h5">
               {{operateType === 'add' ? 'New' : 'Update'}}
               </v-card-title>
@@ -41,18 +41,18 @@
 
               <!-- Create Project -->
               <div>
-                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="200px" class="demo-ruleForm"  style="padding: 0px 60px 0px 30px; height:520px"><!--%-->
+                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules"  class="demo-ruleForm"  style="padding: 0px 60px 0px 30px; height:520px"><!--%-->
                 <el-tabs v-model="active">
                     <!-- Basic information -->
                     <el-tab-pane name="1" >
                         <span slot="label">Basic Info</span>
                                 <!-- Project Name -->
-                                <el-form-item label="Project Name" label-width="100px" prop="name">
+                                <el-form-item label="Project Name" label-width="20rem" prop="name">
                                     <el-input v-model="operateForm.name"></el-input>
                                 </el-form-item>
 
                                 <!-- Project Description -->
-                                <el-form-item label="Description" label-width="100px" style="margin-top:50px">
+                                <el-form-item label="Description" label-width="20rem" style="margin-top:50px">
                                     <el-input type="textarea" v-model="operateForm.description" placeholder="(Optional)" rows="10"></el-input>
                                 </el-form-item>   
                     </el-tab-pane>

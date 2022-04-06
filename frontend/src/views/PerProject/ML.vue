@@ -31,7 +31,7 @@
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value"
-                                    style="font-size:2rem">
+                                    style="font-size:2rem;height:3rem">
                                 </el-option>
                                 </el-option-group>
                             </el-select>
