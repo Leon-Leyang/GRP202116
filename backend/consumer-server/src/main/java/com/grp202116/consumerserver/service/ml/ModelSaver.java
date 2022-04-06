@@ -40,6 +40,15 @@ public class ModelSaver {
     }
 
     /**
+     * Get the directory path of a model saver
+     *
+     * @return the directory path {@link #modelPath}
+     */
+    public String getModelPath() {
+        return modelPath;
+    }
+
+    /**
      * Save a model by copying it to a local address
      *
      * @param url the url of the specified mode
