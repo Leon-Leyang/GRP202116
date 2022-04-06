@@ -57,17 +57,17 @@ public class DataController {
     /**
      * List the Data of a project by corresponding page number and page size
      *
-     * @param pageNum the number of a page
-     * @param pageSize the size of a page
+     * @param pageNum   the number of a page
+     * @param pageSize  the size of a page
      * @param projectId the id of required project
      * @return a list of {@link DataDO} in the format of {@link PageInfo}
      */
     @GetMapping("/data/page/{projectId}/{pageNum}/{pageSize}")
     @ResponseBody
     public PageInfo<DataDO> listProjectDataPage(@PathVariable int pageNum, @PathVariable int pageSize,
-                                                @PathVariable BigInteger projectId){
+                                                @PathVariable BigInteger projectId) {
 
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
 
         return new PageInfo<>(dataList);
@@ -101,10 +101,11 @@ public class DataController {
         for (String url : urlList) fileList.add(new File(url));
 
         List<DataDO> dataList = FileUtils.uploadProjectData(fileList, projectId, project.getType());
-        if (dataList.size() != 0) {
+        if (dataList != null && dataList.size() != 0) {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
         }
+        updateDataNumber(projectId);
     }
 
     /**
@@ -123,6 +124,7 @@ public class DataController {
             dataMapper.alter();
             dataMapper.insertAll(dataList);
         }
+        updateDataNumber(projectId);
     }
 
     /**
@@ -138,10 +140,24 @@ public class DataController {
     /**
      * Delete the Data by the corresponding id
      *
-     * @param dataId the dataId fetched from the mapper
+     * @param dataId    the dataId fetched from the mapper
+     * @param projectId the id of a project
      */
-    @DeleteMapping("/data/{dataId}")
-    public void deleteDataById(@PathVariable BigInteger dataId) {
+    @DeleteMapping("/data/{projectId}/{dataId}")
+    public void deleteDataById(@PathVariable BigInteger projectId, @PathVariable BigInteger dataId) {
         dataMapper.deleteDataById(dataId);
+        updateDataNumber(projectId);
+    }
+
+    /**
+     * A helper method for updating the list number of data inside a project
+     *
+     * @param projectId the id of a project
+     */
+    private void updateDataNumber(BigInteger projectId) {
+        List<DataDO> currentList = dataMapper.listByProjectId(projectId);
+        int number = 1;
+        for (DataDO data : currentList) data.setListNumber(number++);
+        dataMapper.updateListNumberAll(currentList);
     }
 }

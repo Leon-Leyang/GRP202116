@@ -11,6 +11,7 @@ public class DataDO extends DataDistinguishableDO {
     private String url;
     private boolean isAnnotated;
     private boolean isPredicted;
+    private int listNumber;
 
     /**
      * Get the Url value of the data
@@ -64,5 +65,23 @@ public class DataDO extends DataDistinguishableDO {
      */
     public void setPredicted(boolean predicted) {
         isPredicted = predicted;
+    }
+
+    /**
+     * Get the list number of a data
+     *
+     * @return the list number
+     */
+    public int getListNumber() {
+        return listNumber;
+    }
+
+    /**
+     * Set the list number of a data
+     *
+     * @param listNumber the list number
+     */
+    public void setListNumber(int listNumber) {
+        this.listNumber = listNumber;
     }
 }
