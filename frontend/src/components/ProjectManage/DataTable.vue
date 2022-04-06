@@ -1,6 +1,62 @@
 <template>
 <div>
-<v-btn>Delete</v-btn>
+<v-btn @click="multiDelete()">Delete</v-btn>
+<v-dialog
+  v-model="dialog"
+  width="500"
+>
+  <template v-slot:activator="{ on, attrs }">
+    <v-btn
+      color="red lighten-2"
+      dark
+      v-bind="attrs"
+      v-on="on"
+    >
+      Import
+    </v-btn>
+  </template>
+
+  <v-card>
+    <div style="display:flex">
+      <div>
+        Please enter the path to the folder where you want to use the file:
+
+        <el-input
+          type="textarea"
+          :rows="2"
+          placeholder="Address"
+          v-model="folderURL"
+          >
+        </el-input>
+        <div slot="tip" class="el-upload__tip">If there are multiple paths please separate them with commas(",").</div>
+      </div>
+      <div>
+        Please upload the appropriate type of file
+        <input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />
+      </div>
+    </div>
+
+    <v-divider></v-divider>
+
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="primary"
+        text
+        @click="CancelImport()"
+      >
+        Cancel
+      </v-btn>      
+      <v-btn
+        color="primary"
+        text
+        @click="ImportData()"
+      >
+        Accept
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
 <el-table
   :data="tableData"
   style="width: 100%"
@@ -15,7 +71,7 @@
         type="selection"
         width="50">
       </el-table-column>
-      <el-table-column show-overflow-tooltip sortable label="ID" width="100" prop="dataId" align="center">
+      <el-table-column show-overflow-tooltip sortable label="ID" width="100" prop="listNumber" align="center">
       </el-table-column> 
       <el-table-column show-overflow-tooltip sortable label="Last Modification Time" width="200" prop="updateTime" align="center">
       </el-table-column> 
@@ -42,13 +98,11 @@
 
 </el-table>
 <el-pagination
-  @size-change="handleSizeChange"
   @current-change="handleCurrentChange"
   :current-page="currentPage"
-  :page-sizes="[10, 20, 30, 40]"
   :page-size="pagesize"
-  layout="total, sizes, prev, pager, next, jumper"
-  :total="totalCount"
+  layout="total, prev, pager, next, jumper"
+  :total="total"
   class="pager"></el-pagination>
 
 </div>
@@ -63,8 +117,7 @@
         highlightId: -1,
         currentPage: 1,
         start: 1,
-        totalCount: 1000,
-        pagesize: 10,
+        pagesize: 7,
         base_url:'./',
         multipleSelection: [],
         dataType:null,
@@ -75,6 +128,10 @@
           },
         total:null,
         list:null,  
+        folderURL:'',
+        fileList: [],
+        dialog: false,
+
       }
     },
     watch: {
@@ -95,22 +152,20 @@
         this.$axios.get('/data/page/'+ projectId +"/"+ pageNum +"/"+ pageSize)
         .then((res) => {
                 console.log("currentPageList", res)
-                this.$store.state.currentPageList = res.data
+                this.$store.state.currentPageList = res.data.list
+                console.log('this.$store.state.currentPageList', this.$store.state.currentPageList)
                 this.total = res.data.total
-                // this.total = res.data.total
-                // this.$store.state.currentDataList = res.data
-                // console.log('total, list', this.total, this.list)
+                this.convertData()
         })
       },  
           
       enterData(data, event, column){
         console.log('data', data,event,column)
-        this.$store.state.currentDataId = data.dataId
-        this.$store.state.realDataId = data.realDataId
+        this.$store.state.currentDataId = data.listNumber
+        this.$store.state.realDataId = data.dataId
         console.log('cur', this.$store.state.currentDataId)
         console.log('real', this.$store.state.realDataId)
-        console.log('culist', this.$store.state.currentDataList)
-        console.log('lisy', this.$store.state.currentDataList[this.$store.state.currentDataId - 1].dataId)
+        console.log('lisy', this.$store.state.currentPageList[this.$store.state.currentDataId - 1])
         this.$router.push({  
                     path: '/data',
                     name: 'Data',  
@@ -120,10 +175,10 @@
           this.multipleSelection = val;
           console.log('valk', val,this.multipleSelection)
       },   
-      handleSizeChange(val){
-        this.pagesize = val;
-        this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);        
-      },
+      // handleSizeChange(val){
+      //   this.pagesize = val;
+      //   this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);        
+      // },
       handleCurrentChange(val) {
           this.currentPage = val;
           this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);
@@ -146,37 +201,76 @@
         if(this.$store.state.currentProject.type == 'image'){
           clearTimeout(this.timer); 
           this.timer = setTimeout(()=>{  
-              console.log('currentDataList', this.$store.state.currentDataList)
-              this.tableData = this.$store.state.currentDataList
+              console.log('currentDataList', this.$store.state.currentPageList)
+              this.tableData = this.$store.state.currentPageList
               console.log('curraList', this.tableData)
 
               for(var i=0; i<this.tableData.length; i++){
-                this.tableData[i].realDataId = this.tableData[i].dataId
-                this.tableData[i].dataId = i + 1
                 this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
                 this.tableData[i].url = this.tableData[i].url.replace("../frontend/public/", "")
                 console.log('tabelda',this.tableData[i].url)
               }
-              this.$store.state.currentDataList = this.tableData
+              this.$store.state.currentPageList = this.tableData
 
-              console.log('asd', this.$store.state.currentDataList)
+              console.log('asd', this.$store.state.currentPageList)
             },200);
 
         }else{
           clearTimeout(this.timer); 
           this.timer = setTimeout(()=>{  
-            this.tableData = this.$store.state.currentDataList
+            this.tableData = this.$store.state.currentPageList
             for(var i=0; i<this.tableData.length; i++){
-              this.tableData[i].realDataId = this.tableData[i].dataId
-              this.tableData[i].dataId = i + 1
               console.log('tabelda',this.tableData[i].url)
             }        
-            this.$store.state.currentDataList = this.tableData
+            this.$store.state.currentPageList = this.tableData
             console.log('table text', this.tableData)
           },200);
 
         }        
-      }   
+      },
+      getFiles: function(event) {
+        this.fileList = [];
+        let files = event.target.files;
+        for (let i = 0; i < files.length; i++) {
+          this.fileList.push(files[i]);
+        }
+      },   
+      ImportData(){
+        //upload folder address
+        var folderURL = this.folderURL.split(",")
+          console.log('this.$store.state.currentProjectId',this.$store.state.currentProjectId)
+
+        if(folderURL != ''){                
+          console.log('address', folderURL)
+          this.$axios.post('/project/'+ this.$store.state.currentProjectId +'/data_url', folderURL)
+          .then(res => {
+            console.log('folderURL', res)
+          })
+        }        
+        //upload file
+        let fileList = this.fileList
+        console.log('fileList', fileList)
+        if(fileList != ''){
+          let formData = new FormData()
+          for (let i = 0; i < fileList.length; i++) {
+            formData.append('fileList', fileList[i])
+          }
+          this.$axios.post('/project/'+ this.$store.state.currentProjectId +'/data_file', formData,{
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(res => {
+            console.log('fileList', res)
+          })
+          }
+          this.dialog = false
+      }, 
+      CancelImport(){
+        this.folderURL = null
+        this.fileList = []
+        this.dialog = false
+      }         
     },
     created() {
       console.log('restart', '')

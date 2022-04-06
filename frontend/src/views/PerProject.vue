@@ -2,7 +2,6 @@
   <v-card id="problock">
   <v-btn @click="back">Back</v-btn>
   <v-btn @click="download(id,name)"> Down Load </v-btn>
-<!-- <v-btn @click="deleteSelectBtn()"></v-btn> -->
     <v-radio-group v-model="format" row>
       <v-radio
         v-for="n in fileFormat"
@@ -91,15 +90,7 @@ import { Modal } from "antd";
             name: 'Home', 
         }) 
       },
-      deleteSelectBtn(){
-        for(var i = 0;i<this.$store.state.selectData.length;i++){
-          this.$axios.delete('/data/'+this.$store.state.selectData[i])
-          .then((res)=>{
-            console.log('delete select data', res)
-          })
-        }
 
-      },
       download(id, name) {
         console.log('format', this.format)
         console.log('id$name', id, name)
@@ -141,18 +132,6 @@ import { Modal } from "antd";
         this.$store.state.currentMLList = null
         console.log('label', this.$store.state.currentConfig)
         this.projectId = this.$store.state.currentProjectId
-        // console.log('projectId',this.projectId)
-        //       this.$axios.get('/data/project/'+ this.projectId)
-        //           .then(res => {
-        //               console.log('res', res)
-        //               this.$store.state.currentDataList = res.data
-        //               // this.$store.state.currentDataList.
-        //               console.log('store datalist', this.$store.state.currentDataList)
-        //           })
-        //           .catch((error) => {
-        //           // here you will have access to error.response
-        //           console.log(error.response)
-        //           });
         console.log('liugo', this.$store.state.currentDataList)
       }
     },
@@ -189,7 +168,7 @@ import { Modal } from "antd";
 }
 
 .tabcard{
-    height:480px/*100%*/;
+    height:100%;
  
 }
 

@@ -75,8 +75,6 @@ export default {
       id:0,
       config: ``,
       dataType:'',
-      //logic param
-      // config: this.configInterface,
     }
   },
 

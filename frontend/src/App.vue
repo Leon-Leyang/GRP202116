@@ -3,12 +3,10 @@
     <v-app>
       <div  style="display:flex;height:100%">
         <SideBar />
-        <div style="width:100%">
+          <div id="page" style="background-color:#F5F5F5;width:100%;height:100%">
           <TopBar />
-          <div id="page" style="background-color:#F5F5F5;height:100%">
             <router-view />
           </div>
-        </div>
       </div>
     </v-app>    
   </div>
