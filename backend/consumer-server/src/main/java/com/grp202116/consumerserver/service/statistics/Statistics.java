@@ -151,9 +151,11 @@ public class Statistics {
 
         Set<Object> labeledData = new HashSet<>();
         for (AnnotationDO annotationDO : annotations) {
-            labeledData.add(annotationDO.getDataId());
-        }
+            if(annotationDO.getResult()!=null){
+                labeledData.add(annotationDO.getDataId());
+            }
 
+        }
         return BigInteger.valueOf(labeledData.size());
 
     }
