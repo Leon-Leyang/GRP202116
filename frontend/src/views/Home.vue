@@ -48,12 +48,12 @@
                         <span slot="label">Basic Info</span>
                                 <!-- Project Name -->
                                 <el-form-item label="Project Name" label-width="20rem" prop="name">
-                                    <el-input v-model="operateForm.name"></el-input>
+                                    <el-input v-model="operateForm.name" class="forminput"></el-input>
                                 </el-form-item>
 
                                 <!-- Project Description -->
                                 <el-form-item label="Description" label-width="20rem" style="margin-top:50px">
-                                    <el-input type="textarea" v-model="operateForm.description" placeholder="(Optional)" rows="10"></el-input>
+                                    <el-input type="textarea" v-model="operateForm.description" placeholder="(Optional)" rows="10" class="forminput"></el-input>
                                 </el-form-item>   
                     </el-tab-pane>
 
@@ -83,13 +83,15 @@
                         </v-chip-group>
                         <!--<div style="display:flex">--><div style="margin-top:20px; font-size: 1.25rem; font-weight: 500"> 
                           <div>
+                            <div style="font-size:1rem!important">
                             Please enter the path to the folder where you want to use the file:
-
+                            </div>
                             <el-input
                               type="textarea"
                               :rows="2"
                               placeholder="Address"
                               v-model="folderURL"
+                              class="forminput"
                               >
                             </el-input>
                             <div slot="tip" class="el-upload__tip">If there are multiple paths please separate them with commas(",").</div>

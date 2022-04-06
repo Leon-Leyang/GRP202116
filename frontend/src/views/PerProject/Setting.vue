@@ -87,7 +87,7 @@
           color="cyan"
           @click="editTemplate"
         >
-          <v-icon dark>
+          <v-icon dark x-large>
             mdi-pencil
           </v-icon>
         </v-btn>
@@ -277,7 +277,7 @@
     </v-card> 
   </div>
 
-  </v-container>
+  
 
    <v-card-actions>
      <v-spacer></v-spacer>
@@ -285,14 +285,16 @@
         color="#7986CB"
         depressed
         @click="save()"
-        style="font-size: 2.5rem; font-weight: 500; margin-right:226.641px; height:4rem"
+        style="font-size: 2.5rem; font-weight: 500; margin-top:5rem; height:4rem"
       >
-        <v-icon left large>
+        <v-icon left x-large>
           mdi-update
         </v-icon>
         SAVE
       </v-btn>
     </v-card-actions>
+
+</v-container>
 
 </v-card>
 </template> 
