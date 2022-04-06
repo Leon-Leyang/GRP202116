@@ -105,6 +105,7 @@
                             <v-btn
                             depressed
                             color="pink lighten-1"
+                            @click="onSubmit()"
                             >
                             Save
                             </v-btn>
@@ -176,7 +177,7 @@
                                     width="72px"
                                     @click="chooseVersion(item.version, item.type)"
                                   >
-                                    TEST
+                                    Run
                                   </v-btn>
                                   
                                 </template>
@@ -184,13 +185,13 @@
 
                                 <v-card>
                                   <v-card-title>
-                                    <span class="text-h5">Test</span>
+                                    <span class="text-h5">Run</span>
                                   </v-card-title>
                                   <v-card-text>
                                     <v-container>
                                       <v-row>   
                                         <v-col cols="12" v-if="nowType == 'Customization'">
-                                        Upload the Customized Train Script Here:
+                                        Upload the Customized Run Script Here:
                                         <el-input type="textarea" v-model="testScript"></el-input>
                                         </v-col>
                                       </v-row>
@@ -199,11 +200,19 @@
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn
-                                      color="blue darken-1"
-                                      text
-                                      @click="MLTest(nowVersion)"
+                                        color="blue darken-1"
+                                        text
+                                        @click="dialog = false, MLTest(nowVersion)"
                                     >
-                                      Run
+                                        Start
+                                    </v-btn>
+
+                                    <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="dialog = false"
+                                    >
+                                        Cancel
                                     </v-btn>
                                   </v-card-actions>
                                 </v-card>
@@ -359,21 +368,20 @@
                                   </v-card-text>
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <!--
-                                    <v-btn
-                                      color="blue darken-1"
-                                      text
-                                      @click="dialog = false"
+                                     <v-btn
+                                        color="blue darken-1"
+                                        text
+                                        @click="dialog = false, MLTrain(nowVersion)"
                                     >
-                                      Close
+                                        Start
                                     </v-btn>
-                                  -->
+
                                     <v-btn
-                                      color="blue darken-1"
-                                      text
-                                      @click="MLTrain(nowVersion)"
+                                        color="blue darken-1"
+                                        text
+                                        @click="dialog = false"
                                     >
-                                      Run
+                                        Cancel
                                     </v-btn>
                                   </v-card-actions>
                                 </v-card>

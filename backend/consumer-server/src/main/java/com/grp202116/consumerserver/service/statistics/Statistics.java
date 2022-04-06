@@ -67,6 +67,7 @@ public class Statistics {
      */
     public Statistics setProjectId(BigInteger projectId) throws IOException {
         this.projectId = projectId;
+        this.setDataList(getDataListFromDB());
         this.setDataListNumber(countDataList());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());

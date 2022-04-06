@@ -1,12 +1,15 @@
 <template>
   <div id="app">
     <v-app>
-      <TopBar />
+      
       <div style="display:flex; height:100%; width:100%">
         <SideBar />
-        <div id="page" style="width:100%">
+        <div style="width:100%">
+         <TopBar />
+         <div id="page" style="background-color:#F5F5F5;height:100%">
           <router-view />
-        </div>
+         </div>
+         </div>
       </div>
     </v-app>    
   </div>

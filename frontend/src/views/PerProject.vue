@@ -15,8 +15,8 @@
       </v-icon>Back
   </v-btn></div>
  
-
-<v-btn @click="deleteSelectBtn()">del</v-btn>
+<!--
+<v-btn @click="deleteSelectBtn()">del</v-btn>-->
     <v-tabs
         v-model="tabs"
         centered

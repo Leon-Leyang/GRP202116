@@ -37,7 +37,7 @@
       ><!--7-->
           <div style="font-size: 1.25rem; font-weight: 500">
             Used Template:</div>
-            <p></p>
+            
 
           <v-card height="88%" class="LIcardA">
           <v-container>
@@ -48,52 +48,24 @@
             style="width:100%;"
             
           >
-          <!--
-          <template v-for="(item, i) in items">-->
+          
               <v-col
                 :key="i"
                 cols="12"
                 md="4"
               >
-              <v-img :src="nowTemplateImage"
-                      width="225px"/>
+               <img :src= nowTemplateImage
+                    width="225px">
               <v-card-title style="font-size:0.25rem" class="LIcard">
                   {{ nowTemplateTitle }}
               </v-card-title> 
               </v-col>   
-          <!--</template>-->
+          
           </v-row>
           </v-container>
           </v-card>
     
-         <!--
-          <div style="height:20%">
-          <v-btn
-            class="mx-2"
-            fab
-            dark
-            small
-            color="pink"
-          >
-            <v-icon dark>
-              mdi-eye
-            </v-icon>
-          </v-btn>
-
-          <v-btn
-            class="mx-2"
-            fab
-            dark
-            small
-            color="cyan"
-          >
-            <v-icon dark>
-              mdi-pencil
-            </v-icon>
-          </v-btn>
-          </div>
-        -->
-       <v-dialog
+          <v-dialog
       v-model="dialog"
       width="1600"
     >
@@ -140,40 +112,161 @@
     </v-dialog>
 
        </v-col>
+
+
     </v-row>
-<!--
+
     <v-row>
         <v-col>
-        
         <div style="font-size: 1.25rem; font-weight: 500">
         Manipulation:</div>
         </v-col>
     </v-row> 
-    <v-row style="margin:0" justify="center">  
-       <v-col>
-       <v-card rounded="0" outlined style="height:34px">      
-        <v-checkbox label="Delete All Data"  
-        style="margin:0"></v-checkbox>
-       </v-card>
-       
-       <v-card rounded="0" outlined style="height:34px">
-         <v-checkbox
-          label="Delete All Annotations"
-         style="margin:0"></v-checkbox>
-        </v-card>
-        <v-card rounded="0" outlined style="height:34px">
-         <v-checkbox
-          v-model="allowSpaces"
-          label="Delete All Predictions"
-         style="margin:0"></v-checkbox>
-         </v-card>
-         </v-col>  
+
+  <div style="margin-top:45px">
+   <v-card outlined>
+    <v-row align="center"
+    justify="space-around" style="padding:20px 20px 20px 20px">
+
+    
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="500"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        
+        <v-btn
+        rounded
+          color="error"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Delete All Data
+        </v-btn>
+         
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Data?
+        </v-card-title>
+        <v-card-text>This will empty all the data files in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllData(),dialog = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+
+   
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="500"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        rounded
+          color="error"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Delete All Annotations
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Annotations?
+        </v-card-title>
+        <v-card-text>This will empty all the annotations you have made in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllAnno(),dialog = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+   
+
+    
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="500"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        rounded
+          color="error"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Delete All Predictions
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Predictions?
+        </v-card-title>
+        <v-card-text>This will empty all the existing predictions in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialog = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllPredict(),dialog = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+   
+
     </v-row>
-  -->  
+    </v-card> 
+  </div>
+
   </v-container>
 
    <v-card-actions>
-      <v-spacer></v-spacer>
+     <v-spacer></v-spacer>
       <v-btn
         color="blue-grey darken-3"
         depressed
@@ -184,29 +277,8 @@
         </v-icon>
         SAVE
       </v-btn>
-   </v-card-actions>
-    <v-row style="padding:12px">
-        <!--<v-col offset-md="6">5-->
-        <div style="font-size: 1.25rem; font-weight: 500">
-        Manipulation:
-        </div>
-    </v-row> 
-    <v-row>  
-       <v-col offset-md="1">
-        <v-btn
-         @click="deleteAllData()">
-          Delete All Data
-        </v-btn>    
-        <v-btn
-        @click="deleteAllAnno()">
-          Delete All Annotations
-        </v-btn> 
-        <v-btn
-        @click="deleteAllPredict()">
-          Delete All Predictions
-        </v-btn>         
-       </v-col>  
-    </v-row>
+    </v-card-actions>
+
 </v-card>
 </template> 
  
@@ -223,33 +295,13 @@
   padding:0!important;
 }
 
-/*
-  .content{
-    width:90%;
-    margin: 0 auto;
-  }
 
-
-.v-input--selection-controls {
-   margin-top:0!important;
-}
-
-.v-card__subtitle, .v-card__text, .v-card__title{
-        padding: 0;
-}
-
-.v-text-field {
-    padding-top: 0px!important;
-    margin-top: 0px!important; 
-    margin-bottom: 20px;
-}
-
-.v-messages{
-    min-height: 0!important;
-}*/
 </style>
 
 <script>
+
+
+
 import SettingLS from '../../components/ProjectManage/SettingLS.vue'
 export default {
   components:{
@@ -370,6 +422,30 @@ export default {
 </View>`
                 },                
       ],
+/*
+   items: [
+        {
+          title: 'Polygons',
+          img: '/images/1.JPG',
+        },
+        {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+      ],*/
+
       nowTemplateTitle:'',
       nowTemplateImage:'',
       name: this.$store.state.currentProject.name,
@@ -436,5 +512,7 @@ export default {
 
 
 }
+
+
 
 </script>
