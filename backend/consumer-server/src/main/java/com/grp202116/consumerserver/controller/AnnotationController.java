@@ -57,7 +57,7 @@ public class AnnotationController {
      *
      * @param dataId     the id of data
      * @param annotation the annotation to be updated
-     * @see DataMapper#setAnnotated(BigInteger)
+     * @see DataMapper#setAnnotated(BigInteger,Date)
      * @see AnnotationMapper#insert(AnnotationDO)
      */
     @PutMapping("/annotation/data/{dataId}")
@@ -65,9 +65,9 @@ public class AnnotationController {
         if (annotation == null) return;
 
         if (annotation.getResult() == null || annotation.getResult().equals("")) {
-            dataMapper.setNotAnnotated(dataId);
+            dataMapper.setNotAnnotated(dataId, new Date());
         } else {
-            dataMapper.setAnnotated(dataId);
+            dataMapper.setAnnotated(dataId, new Date());
         }
         DataDO data = dataMapper.getByDataId(dataId);
         Date date = new Date();
@@ -84,7 +84,7 @@ public class AnnotationController {
      */
     @DeleteMapping("/annotation/data/{dataId}")
     public void deleteDataAnnotations(@PathVariable BigInteger dataId) {
-        dataMapper.setNotAnnotated(dataId);
+        dataMapper.setNotAnnotated(dataId, new Date());
         annotationMapper.deleteByDataId(dataId);
     }
 
@@ -96,7 +96,7 @@ public class AnnotationController {
     @DeleteMapping("/annotation/project/{projectId}")
     public void deleteProjectAnnotations(@PathVariable BigInteger projectId) {
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
-        for (DataDO data: dataList) dataMapper.setNotAnnotated(data.getDataId());
+        for (DataDO data: dataList) dataMapper.setNotAnnotated(data.getDataId(), new Date());
         annotationMapper.deleteByProjectId(projectId);
     }
 

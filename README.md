@@ -52,7 +52,7 @@ TODO
   $ java -jar consumer-server-1.0-SNAPSHOT-exec.jar
   ```
 
-+ Or you could also use an preferred IDE to import the source code under the [backend](./backend/) directory.
++ Or you could also use a preferred IDE to import the source code under the [backend](./backend/) directory.
 
 + **Please check** that you are running the backend **in this order**:
 

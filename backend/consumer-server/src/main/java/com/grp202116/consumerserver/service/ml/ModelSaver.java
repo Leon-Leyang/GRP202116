@@ -98,6 +98,7 @@ public class ModelSaver {
             FileUtils.deleteDirectory(modelPath);
             return true;
         } else model.setLabelsPath(labelPath);
+
         if (saveModelParams()) {
             FileUtils.deleteDirectory(modelPath);
             return true;
