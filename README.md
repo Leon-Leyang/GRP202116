@@ -19,7 +19,7 @@ is of concern to modern deep learning based techniques.
 
 + Please make sure that you have **MySQL** installed. You could use the [MySQL Intallation Guide](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) for reference.
 
-+ To import the database, open the terminal in the same directory with the  [GRP2021.sql](./sql/GRP2021.sql) file and execute following commands:
++ To import the database, open the terminal in the same directory with the  [GRP2021.sql](./SQL/GRP2021.sql) file and execute following commands:
 
   ```
   // Template:
