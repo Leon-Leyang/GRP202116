@@ -37,7 +37,7 @@ public class ExportUtils {
 
         if (isAnnotation) {
             targetFile = new File(System.getProperty("java.io.tmpdir") + File.separator
-                    + "annotation" + simpleDateFormat.format(date) + "." + format);
+                    + "annotation_" + simpleDateFormat.format(date) + "." + format);
         } else {
             targetFile = new File(System.getProperty("java.io.tmpdir") + File.separator
                     + "prediction_" + simpleDateFormat.format(date) + "." + format);

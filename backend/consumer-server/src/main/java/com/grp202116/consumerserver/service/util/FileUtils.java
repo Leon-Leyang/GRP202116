@@ -48,7 +48,8 @@ public class FileUtils {
 
         dataList = new ArrayList<>();
         FileUtils.projectId = projectId;
-        projectPath = ".." + File.separator + "files" + File.separator + projectId + File.separator;
+        projectPath = ".." + File.separator + ".." + File.separator + "frontend" + File.separator +
+                "public" + File.separator + "files" + File.separator + projectId + File.separator;
         File project = new File(projectPath);
         try {
             Files.createDirectories(project.toPath());

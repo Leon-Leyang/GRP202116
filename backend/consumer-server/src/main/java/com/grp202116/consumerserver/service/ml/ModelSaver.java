@@ -25,12 +25,18 @@ public class ModelSaver {
      * @param model a specified model
      */
     public ModelSaver(ModelDO model) {
-        String modelDirectory = "../ml/models" + File.separator + model.getProjectId() +
-                "_" + model.getVersion() + File.separator;
+        String modelDirectory = ".." + File.separator + ".." + File.separator + "ml" + File.separator + "models" +
+                File.separator + model.getProjectId() + "_" + model.getVersion() + File.separator;
         File directory = new File(modelDirectory);
         ModelSaver.modelPath = modelDirectory;
-        if (!directory.exists()) if (directory.mkdirs())
-            logger.info("New directory created at: " + modelDirectory);
+        if (!directory.exists()) {
+            try {
+                Files.createDirectories(directory.toPath());
+                logger.info("New directory created at: " + modelDirectory);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -97,13 +103,14 @@ public class ModelSaver {
             logger.warn("This custom script is not a python file.");
             return null;
         }
-        File targetFile = new File("../flask-server/ml/models" + File.separator + customFile.getName());
+        File targetFile = new File(".." + File.separator + "flask-server" + File.separator +
+                "ml" + File.separator + "models" + File.separator + customFile.getName());
         try {
             if (targetFile.exists()) {
                 Files.delete(targetFile.toPath());
             }
             Files.copy(customFile.toPath(), targetFile.toPath());
-            logger.info(customFile.getPath() + "is copied to"  + targetFile.getPath());
+            logger.info(customFile.getPath() + "is copied to" + targetFile.getPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
