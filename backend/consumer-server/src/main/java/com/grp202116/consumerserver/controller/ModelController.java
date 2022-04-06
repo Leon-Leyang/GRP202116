@@ -173,7 +173,7 @@ public class ModelController {
         ModelDriver modelDriver = new ModelDriver(project, model);
 
         String scriptName;
-        if (model.getType().equals("Custom")) {
+        if (model.getType().equals("Customization")) {
             if (scriptPath == null) {
                 logger.warn("Script Path not specified for custom model");
                 return;
@@ -192,13 +192,14 @@ public class ModelController {
                     restTemplate.postForObject("http://sidecar-server/model/run",
                             HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
             JSONArray predictions = result.getJSONArray("result");
-            if (predictions == null || predictions.size() < 1) continue;
-            PredictionDO prediction = modelDriver.savePredictions(predictions);
-            if (prediction == null) continue;
+            if (predictions == null) return;
+
             data.setPredicted(true);
             dataMapper.updateDataPredict(data);
+            List<PredictionDO> predictionList = modelDriver.savePredictions(predictions);
+            if (predictionList.size() < 1) return;
             predictionMapper.alter();
-            predictionMapper.insert();
+            predictionMapper.insertAll(predictionList);
         }
     }
 
