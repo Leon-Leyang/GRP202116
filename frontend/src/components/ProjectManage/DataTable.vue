@@ -41,7 +41,15 @@
       </el-table-column>   
 
 </el-table>
-<el-pagination class="pager" layout="prev, pager, next"  :total="10" :current-page.sync="config.page" @current-change="changePage" :page-size="20"></el-pagination>
+<el-pagination
+  @size-change="handleSizeChange"
+  @current-change="handleCurrentChange"
+  :current-page="currentPage"
+  :page-sizes="[10, 20, 30, 40]"
+  :page-size="pagesize"
+  layout="total, sizes, prev, pager, next, jumper"
+  :total="totalCount"
+  class="pager"></el-pagination>
 
 </div>
 </template>
@@ -52,14 +60,22 @@
     data(){
       return{ 
         tableData:[],
+        highlightId: -1,
+        currentPage: 1,
+        start: 1,
+        totalCount: 1000,
+        pagesize: 10,
         base_url:'./',
         multipleSelection: [],
         dataType:null,
         url: '../../../../../GRP202116/files/5/c7a3ec64-b343-40e7-9944-fb0b20151308.jpg',
+        listQuery: {
+          page: 1,
+          limit: 20
+          },
+        total:null,
+        list:null,  
       }
-    },
-    props: {
-      config: Object,
     },
     watch: {
         multipleSelection: function (val) {
@@ -75,6 +91,18 @@
         }
     },
     methods: {
+      loadData(projectId, pageNum, pageSize){
+        this.$axios.get('/data/page/'+ projectId +"/"+ pageNum +"/"+ pageSize)
+        .then((res) => {
+                console.log("currentPageList", res)
+                this.$store.state.currentPageList = res.data
+                this.total = res.data.total
+                // this.total = res.data.total
+                // this.$store.state.currentDataList = res.data
+                // console.log('total, list', this.total, this.list)
+        })
+      },  
+          
       enterData(data, event, column){
         console.log('data', data,event,column)
         this.$store.state.currentDataId = data.dataId
@@ -92,6 +120,28 @@
           this.multipleSelection = val;
           console.log('valk', val,this.multipleSelection)
       },   
+      handleSizeChange(val){
+        this.pagesize = val;
+        this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);        
+      },
+      handleCurrentChange(val) {
+          this.currentPage = val;
+          this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);
+      },
+      multiDelete(){
+        if(this.multipleSelection.length == 0)
+        return;
+        var array = [];
+        this.multipleSelection.forEach((item) => {
+          array.push(item.realDataId)
+        })
+        for(var i = 0;i<array.length;i++){
+          this.$axios.delete('/data/'+ array[i])
+          .then((res)=>{
+            console.log('res delete daata', res)
+          })
+        }
+      },
       convertData(){
         if(this.$store.state.currentProject.type == 'image'){
           clearTimeout(this.timer); 
@@ -104,7 +154,7 @@
                 this.tableData[i].realDataId = this.tableData[i].dataId
                 this.tableData[i].dataId = i + 1
                 this.tableData[i].url = this.tableData[i].url.replaceAll("\\", "/")
-                this.tableData[i].url = this.tableData[i].url.replace("../", "")
+                this.tableData[i].url = this.tableData[i].url.replace("../frontend/public/", "")
                 console.log('tabelda',this.tableData[i].url)
               }
               this.$store.state.currentDataList = this.tableData
@@ -130,8 +180,9 @@
     },
     created() {
       console.log('restart', '')
+
       this.dataType = this.$store.state.currentProject.type
-      this.convertData()
+      this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize)
     },     
   }
 </script>

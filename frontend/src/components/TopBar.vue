@@ -69,7 +69,7 @@ export default {
 .topbar{
     width: 100%;
     height: 70px;
-    background: linear-gradient(#D0D0D0,#ffffff);
+    background: #F5F5F5;
 }
 .mark{
     height: 50px;

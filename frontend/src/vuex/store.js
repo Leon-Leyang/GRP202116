@@ -8,6 +8,7 @@ const store = new Vuex.Store({
     state: {
         currentProjectId: 0,
         currentDataList: [],
+        currentPageList:[],
         currentDataId: 0,
         realDataId: 0,
         currentProject: [],
