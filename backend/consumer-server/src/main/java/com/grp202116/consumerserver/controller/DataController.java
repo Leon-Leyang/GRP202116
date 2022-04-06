@@ -1,5 +1,7 @@
 package com.grp202116.consumerserver.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.grp202116.consumerserver.mapper.DataMapper;
 import com.grp202116.consumerserver.mapper.ProjectMapper;
 import com.grp202116.consumerserver.pojo.DataDO;
@@ -50,6 +52,25 @@ public class DataController {
     @GetMapping("/data/project/{projectId}")
     public List<DataDO> listProjectDataList(@PathVariable BigInteger projectId) {
         return dataMapper.listByProjectId(projectId);
+    }
+
+    /**
+     * List the Data of a project by corresponding page number and page size
+     *
+     * @param pageNum the number of a page
+     * @param pageSize the size of a page
+     * @param projectId the id of required project
+     * @return a list of {@link DataDO} in the format of {@link PageInfo}
+     */
+    @GetMapping("/data/page/{projectId}/{pageNum}/{pageSize}")
+    @ResponseBody
+    public PageInfo<DataDO> listProjectDataPage(@PathVariable int pageNum, @PathVariable int pageSize,
+                                                @PathVariable BigInteger projectId){
+
+        PageHelper.startPage(pageNum,pageSize);
+        List<DataDO> dataList = dataMapper.listByProjectId(projectId);
+
+        return new PageInfo<>(dataList);
     }
 
     /**
