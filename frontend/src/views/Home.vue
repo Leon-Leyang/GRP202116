@@ -502,7 +502,7 @@ import ML from './Create_ML.vue'
                   .then(res => {
                     console.log('fileList', res)
                   })
-                  }
+                }
               },1000)
           }
           this.isShow = false
@@ -646,7 +646,7 @@ import ML from './Create_ML.vue'
       }
     },
     mounted() {
-        // console.lozg('tag', '')
+        // console.log('tag', '')
         this.getList()
     },
     activated: function() {

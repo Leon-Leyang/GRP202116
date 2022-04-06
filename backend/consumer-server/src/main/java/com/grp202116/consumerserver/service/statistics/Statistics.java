@@ -70,20 +70,31 @@ public class Statistics {
         this.setDataList(getDataListFromDB());
         this.setDataListNumber(countDataList());
         this.setAnnotations(getAnnotationsFromDB());
+        this.setAnnotationsNumber(countAnnotationNumber());
+
         this.setCompletionPercentage(getCompletionPercentage());
         this.setAverageAnnotations(getAverageAnnotations());
         this.setAveragePredictions(getAveragePredictions());
         this.setAverageTextWordsNumber(getAverageTextWordsNumber());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());
-        this.setAnnotations(getAnnotationsFromDB());
-        this.setAnnotationsNumber(BigInteger.valueOf(getAnnotations().size()));
+
         this.setPredictions(getPredictionsFromDB());
         this.setPredictionsNumber(BigInteger.valueOf(getPredictions().size()));
         this.setAverageAnnotations(countAverageAnnotations());
         this.setAveragePredictions(countAveragePredictions());
         this.setAverageTextWordsNumber(countAverageTextWordsNumber());
         return this;
+    }
+
+    private BigInteger countAnnotationNumber() {
+        BigInteger number = BigInteger.valueOf(0);
+        for(AnnotationDO annotationDO: annotations){
+            if(annotationDO.getResult()!=null) {
+                number = number.add(BigInteger.valueOf(1));
+            }
+        }
+        return number;
     }
 
     /**
