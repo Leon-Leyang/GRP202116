@@ -45,13 +45,13 @@ TODO
 
   ```
   // Open the first terminal and execute:
-  $ java -jar eureka-server-1.0-SNAPSHOT-exec.jar
+  $ java -jar eureka-server-1.2-exec.jar
   
-  // After the above jar file has successfully started (when it displays "Completed initialization in * ms"), open a second terminal and execute:
-  $ java -jar sidecar-server-1.0-SNAPSHOT-exec.jar
+  // After the above jar file has successfully started (when it displays "Completed initialization in * "), open a second terminal and execute:
+  $ java -jar sidecar-server-1.2-exec.jar
   
-  // After the above jar file has successfully started (when it displays "Completed initialization in * ms"), open a third terminal and execute:
-  $ java -jar consumer-server-1.0-SNAPSHOT-exec.jar
+  // After the above jar file has successfully started (when it displays "Completed initialization in * "), open a third terminal and execute:
+  $ java -jar consumer-server-1.2-exec.jar
   ```
 
 + Or you could also use a preferred IDE to import the source code under the [backend](./backend/) directory.
