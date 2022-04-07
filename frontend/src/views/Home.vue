@@ -189,31 +189,33 @@
             :key="item.projectId"
             cols="12"
             md="4"
+            style="padding:20px"
           >
             <v-card
-            height="140px">
-                <v-card-title class="text-h5" @click="enterProject(item.projectId)">
+            height="250px"
+            style="border-radius:25px;padding-left:10px">
+                <v-card-title style="font-size:47px;color:#1A237E;padding-top:25px" @click="enterProject(item.projectId)">
                     {{ item.name }}
                 </v-card-title>
 
-                <v-card-subtitle style="height:30px">{{item.description}}</v-card-subtitle>
+                <v-card-subtitle style="height:100px;font-size:24px">{{item.description}}</v-card-subtitle>
               
                 <v-progress-linear
                 :color="customColorMethod(item.process)"
-                height="7"
+                height="12"
                 rounded
                 :value="item.process"
-                style="width:270px; margin-left: 10px"
+                style="width:400px; margin-left: 10px"
                 ></v-progress-linear>             
                 <v-card-actions>
-                <div style="margin-left:16px">
-                  <v-row>
-                    <v-card-subtitle style="padding:0px; font-size:10px; height: 15px; color: orange">
+                <div style="margin-left:20px">
+                  <v-row style="margin-top:10px">
+                    <v-card-subtitle style="padding:0px; font-size:16px; height: 30px; color:#7986CB">
                       Created Time: {{item.createTime}}
                     </v-card-subtitle>
                   </v-row>
                   <v-row>
-                    <v-card-subtitle style="padding:0px; font-size:10px; height: 15px; color: orange">
+                    <v-card-subtitle style="padding:0px; font-size:16px; height: 30px; color:#7986CB">
                       Last Update Time: {{item.updateTime}}
                     </v-card-subtitle>
                   </v-row>
@@ -569,7 +571,7 @@ import ML from './Create_ML.vue'
       },
       customColorMethod(percentage) {
         if (percentage < 100) {
-          return '#FFE7AD';
+          return '#90CAF9';
         } else {
           return '#7EDF96';
         }

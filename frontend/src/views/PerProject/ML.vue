@@ -1,5 +1,5 @@
 <template>
-<div style="font-size: 1.25rem; font-weight: 500"> 
+<div style="font-size: 1.25rem; font-weight: 500;background:#EDE7F6;height:100%"> 
     <v-container class="ML-container">
         <v-row>
             <v-col>
@@ -16,9 +16,9 @@
                                 <el-input v-model="form.version" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model Type:">
+                            <el-form-item label="Script Type:">
 
-                            <el-select v-model="value" placeholder="please select the ML model type" @change="selectType">
+                            <el-select v-model="value" placeholder="Please Select the ML Model Script Type" @change="selectType">
                                 <el-option-group
                                 v-for="group in options"
                                 :key="group.label"
@@ -38,16 +38,16 @@
                                 <el-input v-model="form.modelRoot" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model File:" style="margin-top:20px">
+                            <el-form-item label="Model Path:" style="margin-top:20px">
                                 <el-input v-model="form.modelPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
                             
-                            <el-form-item label="Class File:" style="margin-top:20px">
+                            <el-form-item label="Class File Path:" style="margin-top:20px">
                                 <el-input v-model="form.labelsPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
                             <el-form-item label="Model Description:" style="margin-bottom:20px!important">
-                                <el-input type="textarea" v-model="form.description"></el-input>
+                                <el-input placeholder="(Option)" type="textarea" v-model="form.description"></el-input>
                             </el-form-item>
                             <!--end-->  
 
@@ -63,7 +63,7 @@
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isObjDetect" label="Threashold:">
+                            <el-form-item v-if="isObjDetect" label="Threshold:">
                                 <el-input v-model="form.params.threshold" clearable maxlength="" size="mini" placeholder="(For object detection)"></el-input>
                             </el-form-item>
                             
@@ -160,7 +160,7 @@
                                     width="72px"
                                     @click="chooseVersion(item.version, item.type)"
                                   >
-                                    TEST
+                                    Run
                                   </v-btn>
                                   
                                 </template>
@@ -175,19 +175,22 @@
                                       <v-row>   
                                         <v-col cols="12" v-if="nowType == 'Customization'">
                                         Upload the Customized Train Script Here:
-                                        <el-input type="textarea" v-model="testScript"></el-input>
+                                        <el-input placeholder="(Optional)" type="textarea" v-model="testScript"></el-input>
                                         </v-col>
                                       </v-row>
                                     </v-container>
                                   </v-card-text>
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
+                                    <v-btn @click="cancelTest()">
+                                      Cancel
+                                    </v-btn>
                                     <v-btn
                                       color="blue darken-1"
                                       text
                                       @click="MLTest(nowVersion)"
                                     >
-                                      Run
+                                      Start
                                     </v-btn>
                                   </v-card-actions>
                                 </v-card>
@@ -287,7 +290,6 @@
                                           <v-text-field
                                           v-model="trainObject.params.learningRate"
                                             label="Learning Rate:"
-                                            type="password"
                                             hint="number"
                                             persistent-hint
                                             required
@@ -332,7 +334,7 @@
                                         <v-col cols="12"
                                         v-if="nowType != 'Image Classification'">
                                           <div style="margin-top:30px">
-                                            Upload the Customized Train Script Here:
+                                            Fill in the Customized Train Script Here:
                                             <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
                                           </div>
                                         </v-col>
@@ -343,21 +345,21 @@
                                   </v-card-text>
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <!--
+                                    
                                     <v-btn
                                       color="blue darken-1"
                                       text
-                                      @click="dialog = false"
+                                      @click="cancelTrain()"
                                     >
-                                      Close
+                                      Cancel
                                     </v-btn>
-                                  -->
+                                 
                                     <v-btn
                                       color="blue darken-1"
                                       text
                                       @click="MLTrain(nowVersion)"
                                     >
-                                      Run
+                                      Start
                                     </v-btn>
                                   </v-card-actions>
                                 </v-card>
@@ -478,7 +480,7 @@
       ],
 
       options: [{
-        label: 'Basic Types',
+        label: 'Supportive Types',
         options: [{
             value: '0',
             label: 'Image Classification'
@@ -617,6 +619,10 @@
 
           console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
       },
+      cancelTest(){
+        this.testScript = null
+        this.dialog = false
+      },      
       MLTest(version){
         console.log('nee', this.testScript)
         console.log('version', version)
@@ -629,6 +635,7 @@
         .then((res)=>{
           console.log('test model', res)
         })   
+        this.testScript = null
         this.form = {
           modelRoot:'',
           version: '',
@@ -648,6 +655,24 @@
           }
         }    
       },
+      cancelTrain(){
+        this.trainObject={
+          version:null,
+          params:{
+            trainFrac: null,
+            batchSize:null,
+            workerNum:null,
+            shuffle:false,
+            epochNum:null,
+            learningRate:null,
+            optimizer:null,
+            lossFunc:null,
+            savePath:null,
+          },
+          script_url:null,
+        }   
+        this.dialogTrain = false
+      },       
       MLTrain(version){
         this.dialogTrain = false
         console.log('train', version, this.trainObject)

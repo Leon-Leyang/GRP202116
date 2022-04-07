@@ -1,7 +1,7 @@
 
 <template>
-<v-card>
-  <v-container>
+<v-card style="height:100%;background:#EDE7F6">
+  <v-container style="height:80%">
     <v-row
       justify="space-between"
     >
@@ -10,79 +10,83 @@
         md="4"
       >
 
-      <div style="font-size: 1.25rem; font-weight: 500">
+      <div style="font-size:30px; font-weight: 500;margin-bottom:20px">
         Project Name:</div>
         
-        <v-form ref="form">
-          <v-text-field
-            v-model="name"
+        <el-input v-model="name"
             :counter="max"
             :rules="rules"
             outlined
-          ></v-text-field> <!-- filled
-              color="blue-grey lighten-2" -->
-        </v-form>
+            style="font-size:2rem"></el-input>
   
 
-       <div style="font-size: 1.25rem; font-weight: 500">
+       <div style="font-size:30px; font-weight: 500; margin-top: 25px">
         Project Description:</div>
 
-        <v-textarea
-              v-model="description"
-              :disabled="isUpdating"
-              outlined
-            > <!--filled
-              color="blue-grey lighten-2" -->
-        </v-textarea>
+        <el-input
+          type="textarea"
+          :rows="3" 
+          placeholder="(Optional)"
+          v-model="description"
+          :disabled="isUpdating"
+          outlined
+          style="font-size:1.7rem"
+          >
+        </el-input>
         
       </v-col>
 
       <v-col
         cols="12"
         md="6"
-      ><!--7-->
-      <div style="font-size: 1.25rem; font-weight: 500">
-        Used Template:</div>
-        <p></p>
+        style="height:100%"
+      >
+          <div style="font-size:30px; font-weight: 500">
+            Used Template:</div>
+            
 
-        <v-card>
-        <v-row
+          <v-card height="88%" class="LIcardA">
+          <v-container>
+          <v-row
           class="fill-height"
-          align="center"
-          justify="center"
-        >
-            <v-col
-              :key="i"
-              cols="12"
-              md="4"
-            >
-            <!--
-            <v-img src="/images/1.JPG" width="250px"/>-->
-            <v-img :src= "nowTemplateImage"
-                    width="225px"/>
-            <v-card-title style="font-size:0.25rem; padding=0">
-                {{ nowTemplateTitle }}
-            </v-card-title> 
-            </v-col>   
-        </v-row>
-        </v-card>
-
-    <v-dialog
+            align="center"
+            justify="center"
+            style="width:100%;"
+            
+          >
+          
+              <v-col
+                :key="i"
+                cols="12"
+                md="4"
+              >
+               <img :src= nowTemplateImage
+                    width="225px">
+              <v-card-title style="font-size:0.5rem" class="LIcard">
+                  {{ nowTemplateTitle }}
+              </v-card-title> 
+              </v-col>   
+          
+          </v-row>
+          </v-container>
+          </v-card>
+    
+          <v-dialog
       v-model="dialog"
       width="1600"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="mx-2"
+          style="margin-top:30px"
           fab
           dark
-          small
+          large
           v-bind="attrs"
           v-on="on"
           color="cyan"
           @click="editTemplate"
         >
-          <v-icon dark>
+          <v-icon dark x-large>
             mdi-pencil
           </v-icon>
         </v-btn>
@@ -112,54 +116,208 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    </v-col>
+
+       </v-col>
+
+
     </v-row>
-  </v-container>
+
+    <v-row>
+        <v-col>
+        <div style="font-size:30px; font-weight: 500">
+        Manipulation:</div>
+        </v-col>
+    </v-row> 
+
+  <div style="margin-top:45px">
+   <v-card outlined>
+    <v-row align="center"
+    justify="space-around" style="padding:20px 20px 20px 20px">
+
+    
+    <v-dialog
+      v-model="dialoga"
+      persistent
+      max-width="1000"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        
+        <v-btn
+        rounded
+          color="#B71C1C"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="font-size:30px; font-weight: 500"
+          height="60px"
+        >
+          Delete All Data
+        </v-btn>
+         
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Data?
+        </v-card-title>
+        <v-card-text>This will empty all the data files in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllData(),dialoga = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialoga = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+
+   
+    <v-dialog
+      v-model="dialogb"
+      persistent
+      max-width="1000"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        rounded
+          color="#B71C1C"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="font-size:30px; font-weight: 500"
+          height="60px"
+        >
+          Delete All Annotations
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Annotations?
+        </v-card-title>
+        <v-card-text>This will empty all the annotations you have made in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllAnno(),dialogb = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialogb = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+   
+
+    
+    <v-dialog
+      v-model="dialogc"
+      persistent
+      max-width="1000"
+      
+    ><!-- max-height="1000!impotant"-->
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        rounded
+          color="#B71C1C"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="font-size:30px; font-weight: 500"
+          height="60px"
+        >
+          Delete All Predictions
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Predictions?
+        </v-card-title>
+        <v-card-text>This will empty all the existing predictions in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllPredict(),dialogc = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialogc = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+   
+
+    </v-row>
+    </v-card> 
+  </div>
+
+  
 
    <v-card-actions>
-      <v-spacer></v-spacer>
+     <v-spacer></v-spacer>
       <v-btn
-        color="blue-grey darken-3"
+        color="#7986CB"
         depressed
         @click="save()"
+        style="font-size: 2.5rem; font-weight: 500; margin-top:5rem; height:4rem"
       >
-        <v-icon left>
+        <v-icon left x-large>
           mdi-update
         </v-icon>
         SAVE
       </v-btn>
-   </v-card-actions>
-    <v-row style="padding:12px">
-        <!--<v-col offset-md="6">5-->
-        <div style="font-size: 1.25rem; font-weight: 500">
-        Manipulation:
-        </div>
-    </v-row> 
-    <v-row>  
-       <v-col offset-md="1">
-        <v-btn
-         @click="deleteAllData()">
-          Delete All Data
-        </v-btn>    
-        <v-btn
-        @click="deleteAllAnno()">
-          Delete All Annotations
-        </v-btn> 
-        <v-btn
-        @click="deleteAllPredict()">
-          Delete All Predictions
-        </v-btn>         
-       </v-col>  
-    </v-row>
+    </v-card-actions>
+
+</v-container>
+
 </v-card>
 </template> 
  
     
 
 <style>
+
+.LIcardA{
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.LIcard{
+  padding:0!important;
+}
+
+
 </style>
 
 <script>
+
+
+
 import SettingLS from '../../components/ProjectManage/SettingLS.vue'
 export default {
   components:{
@@ -168,6 +326,9 @@ export default {
   data() {
     return {
       dialog: false,
+      dialoga: false,
+      dialogb: false,
+      dialogc: false,
       items: [
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Polygons',
@@ -280,6 +441,30 @@ export default {
 </View>`
                 },                
       ],
+/*
+   items: [
+        {
+          title: 'Polygons',
+          img: '/images/1.JPG',
+        },
+        {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+      ],*/
+
       nowTemplateTitle:'',
       nowTemplateImage:'',
       name: this.$store.state.currentProject.name,
@@ -347,4 +532,10 @@ export default {
 
 }
 
+
 </script>
+<style>
+    .el-input__inner{
+          height: 70px;
+        }
+</style>

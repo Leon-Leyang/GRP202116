@@ -16,9 +16,9 @@
                                 <el-input v-model="form.version" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model Type:">
+                            <el-form-item label="Script Type:">
 
-                            <el-select v-model="value" placeholder="please select the ML model type" @change="c1">
+                            <el-select v-model="value" placeholder="Please Select the ML Model Script Type" @change="c1">
                                 <el-option-group
                                 v-for="group in options"
                                 :key="group.label"
@@ -38,11 +38,11 @@
                                 <el-input v-model="form.modelRoot" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model File:" style="margin-top:20px">
+                            <el-form-item label="Model Path:" style="margin-top:20px">
                                 <el-input v-model="form.modelPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
                             
-                            <el-form-item label="Class File:" style="margin-top:20px">
+                            <el-form-item label="Class File Path:" style="margin-top:20px">
                                 <el-input v-model="form.labelsPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
@@ -63,7 +63,7 @@
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isObjDetect" label="Threashold:">
+                            <el-form-item v-if="isObjDetect" label="Threshold:">
                                 <el-input v-model="form.params.threshold" clearable maxlength="" size="mini" placeholder="(For object detection)"></el-input>
                             </el-form-item>
                             
@@ -219,7 +219,7 @@
         ],
 
         options: [{
-            label: 'Basic Types',
+            label: 'Supportive Types',
             options: [{
                 value: '0',
                 label: 'Image Classification'

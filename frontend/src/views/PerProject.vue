@@ -1,6 +1,6 @@
 <template>
-  <v-card id="problock">
-  <v-btn @click="back">Back</v-btn>
+  <v-card id="problock" style="background-color:#D1C4E9">
+  <!-- <v-btn @click="back">Back</v-btn>
   <v-btn @click="download(id,name)"> Down Load </v-btn>
     <v-radio-group v-model="format" row>
       <v-radio
@@ -9,24 +9,37 @@
         :label="n"
         :value="n"
       ></v-radio>
-    </v-radio-group>
+    </v-radio-group> -->
+    <v-btn
+      color="blue-grey"
+      @click="back"
+      text
+      large
+      style="font-size:23px;margin-top:10px"
+    >  
+      <v-icon
+        left x-large
+      > mdi-chevron-left
+      </v-icon>
+    </v-btn>
     <v-tabs
         v-model="tabs"
         centered
         grow
-        color="yellow"
-        background-color="rgb(113, 223, 207)"
+        color="#5E35B1"
+        background-color="deep-purple lighten-4"
+        
     >
-        <v-tab>
+        <v-tab style="font-size:25px">
             Data
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:25px">
             Statistics
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:25px">
             Machine Learning Model
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:25px">
             Settings
         </v-tab>
     </v-tabs>
@@ -141,21 +154,7 @@ import { Modal } from "antd";
       console.log('id name', this.id, this.name)
       this.$store.state.currentMLList = null
       console.log('label', this.$store.state.currentConfig)
-      this.projectId = this.$store.state.currentProjectId
-      // console.log('projectId',this.projectId)
-      //       this.$axios.get('/data/project/'+ this.projectId)
-      //           .then(res => {
-      //               console.log('res', res)
-      //               this.$store.state.currentDataList = res.data
-      //               // this.$store.state.currentDataList.
-      //               console.log('store datalist', this.$store.state.currentDataList)
-      //           })
-      //           .catch((error) => {
-      //           // here you will have access to error.response
-      //           console.log(error.response)
-      //           });
-      // console.log('liugo', this.$store.state.currentDataList)
-      
+      this.projectId = this.$store.state.currentProjectId      
     },
   }
 </script>
@@ -168,12 +167,12 @@ import { Modal } from "antd";
 }
 
 .tabcard{
-    height:100%;
+    height:700px;
  
 }
 
 .v-tabs-slider{
-  color:yellow;
+  color:#5E35B1;
 }
 
 
