@@ -147,7 +147,7 @@
       @current-change="handleCurrentChange"
       :current-page="currentPage"
       :page-size="pagesize"
-      layout="total, prev, pager, next, jumper"
+      layout="total, prev, pager, next"
       :total="total"
       class="pager">
     </el-pagination>
@@ -335,5 +335,7 @@
 </script>
 
 <style>
-
+  .el-input__inner{
+    height: 30px;
+  }
 </style>

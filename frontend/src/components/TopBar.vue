@@ -1,7 +1,7 @@
 <template>
     <div class="topbar">
-        <div class="mark">
-            <img class="logo" src="../assets/logo.png">
+        <div class="mark" style="height:60px">
+            <img class="logo" src="../assets/logo.png" style="width:100%">
         </div>
         <div class="priority">
             <v-breadcrumbs :items="items" divider=">>" style="padding: 7px 0px 0px 70px ">
@@ -10,7 +10,7 @@
                     :href="item.href"
                     :disabled="item.disabled"
                 >
-                    <p class="path" style="font-size:35px;font-weight:500;font-style:italic;color:#4527A0">
+                    <p class="path" style="font-size:35px;font-weight:500;font-style:italic;color:#303F9F">
                         {{ item.text.toUpperCase() }}
                     </p>
                 </v-breadcrumbs-item>
