@@ -1,5 +1,5 @@
 <template>
-<div style="background:#EDE7F6;height:100%">
+<div style="background:#f1f2fa;height:100%">
   <v-container style="height:100%">
     <div style="margin: 10px 10px 12px 14px">
       <v-row style="height:10%">
@@ -101,7 +101,7 @@
 
     <el-table
       :data="tableData"
-      style="width: 100%"
+      style="width: 100%;border-radius:10px;opacity:0.9"
       :header-cell-style="{color: '#848484', fontSize: '20px', backgroundColor: '#qua'}"
       :cell-style="{color: '#848484', fontSize: '17px', backgroundColor: '#qua'}"
       :default-sort = "{prop: 'id', order: 'ascending'}" 
