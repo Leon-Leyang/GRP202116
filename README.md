@@ -39,7 +39,9 @@ TODO
 
 + (*Recommended*) You could directly use the jar files under the releases to start the Spring Boot backend:
 
-  Inside the directory which contains the jar files, open separate terminals and execute following commands sequentially:
+  Before this, please make sure you have **Java** installed. You could refer to the [Official Guide](https://www.java.com/en/download/help/download_options.html).
+  
+  Inside the directory which contains the jar files, open separate terminals and execute following commands **sequentially**:
 
   ```
   // Open the first terminal and execute:
