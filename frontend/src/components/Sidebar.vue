@@ -11,6 +11,7 @@
         <v-btn
           icon
           @click.stop="mini = !mini"
+          style="padding-top:20px;margin-bottom:20px"
           dark
         >
           <v-icon v-if="mini==false" large dark>mdi-arrow-left</v-icon>
@@ -26,13 +27,14 @@
           v-for="item in items"
           :key="item.title"
           link
+          style="height:70px"
         >
           <v-list-item-icon style="margin-right:25px">
-            <v-icon large style="min-height:5rem">{{ item.icon }}</v-icon>
+            <v-icon large style="min-height:3rem">{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title style="font-size:1.5rem; line-height:5rem">{{ item.title }}</v-list-item-title>
+            <v-list-item-title style="font-size:1.5rem; line-height:5rem;line-height:22px">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

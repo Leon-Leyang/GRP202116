@@ -1,5 +1,5 @@
 <template>
-  <v-card id="problock" style="background-color:#D1C4E9">
+  <v-card id="problock" style="background-color:#9FA8DA">
   <!-- <v-btn @click="back">Back</v-btn>
   <v-btn @click="download(id,name)"> Down Load </v-btn>
     <v-radio-group v-model="format" row>
@@ -27,7 +27,7 @@
         centered
         grow
         color="#5E35B1"
-        background-color="deep-purple lighten-4"
+        background-color="#9FA8DA"
         
     >
         <v-tab style="font-size:25px">

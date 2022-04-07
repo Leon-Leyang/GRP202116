@@ -1,6 +1,6 @@
 
 <template>
-<v-card style="height:100%;background:#EDE7F6">
+<v-card style="height:100%;background:#f1f2fa;padding:10px">
   <v-container style="height:80%">
     <v-row
       justify="space-between"
@@ -116,7 +116,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+   <v-card-actions>
+     <v-spacer></v-spacer>
+      <v-btn
+        color="#7986CB"
+        depressed
+        @click="save()"
+        style="font-size: 2.5rem; font-weight: 500; margin-top:6rem; height:4rem"
+      >
+        <v-icon left x-large>
+          mdi-update
+        </v-icon>
+        SAVE
+      </v-btn>
+    </v-card-actions>
        </v-col>
 
 
@@ -275,23 +288,6 @@
     </v-row>
     </v-card> 
   </div>
-
-  
-
-   <v-card-actions>
-     <v-spacer></v-spacer>
-      <v-btn
-        color="#7986CB"
-        depressed
-        @click="save()"
-        style="font-size: 2.5rem; font-weight: 500; margin-top:5rem; height:4rem"
-      >
-        <v-icon left x-large>
-          mdi-update
-        </v-icon>
-        SAVE
-      </v-btn>
-    </v-card-actions>
 
 </v-container>
 
@@ -534,8 +530,8 @@ export default {
 
 
 </script>
-<style>
-    .el-input__inner{
-          height: 70px;
+    <style>
+        .el-input__inner{
+          height: 60px!important;
         }
-</style>
+    </style>

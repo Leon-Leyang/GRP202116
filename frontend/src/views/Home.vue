@@ -26,6 +26,7 @@
               dark
               v-bind="attrs"
               v-on="on"
+              style="width:150px;height:60px;font-size:25px; border-radius:15px;margin-left:15px"
               @click="addProject()"
               >
               Create

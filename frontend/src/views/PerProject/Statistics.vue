@@ -4,114 +4,109 @@
   <v-row
         no-gutters
         justify="center"
-        style="height:100%"
+        style="height:100%;padding: 0px 10px 0px 10px"
   >
-  
-  <v-col md="3"><!-- style="height:100%"-->
-        
+<div style="display:flex;width:100%;justify-content: space-between;">
         <v-card
-           class="c-1"
-           outlined
-           tile
+           rounded="xl"
+           style="width:24%;padding:30px;margin:10px 5px 10px 5px;background-color: rgba(120,144,156,0.3);position:relative"
           >
-          Data 
-        <el-row style="height:27%">
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple-light title">Total Data:</div>
-            <div class="pagetext-a">{{statistic.dataListNumber}}</div>
-        </el-col>
-        </el-row> 
+          <div style="font-size:70px;width:160px;transform:rotate(270deg);position:absolute;right:0;padding-top:40px;font-style:italic;font-weight:900;color:rgba(26,35,126,0.5)">
+              Data 
+          </div>
+          <div style="float:left;width:80%">
+            <el-row style="height:27%">
+            <el-col :span="24" class="inblock">
+                <div class="grid-content bg-purple-light title">Total Data:</div>
+                <div class="pagetext-a">{{statistic.dataListNumber}}</div>
+            </el-col>
+            </el-row> 
+
+            <el-row>
+            <el-col :span="24" class="inblock">
+                <div class="grid-content bg-purple title">Percentage completed:</div>
+                <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.completionPercentage"></el-progress></div>
+            </el-col>
+            </el-row>
 
         <el-row>
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple title">Percentage completed:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.completionPercentage"></el-progress></div>
-        </el-col>
-        </el-row>
-       <!--
-        <el-row>
-        <el-col :span="24" class="inblock" v-if="this.$store.state.currentProject.type == 'text'">
-            <div class="grid-content bg-purple-light title">Average word counts per piece of data </div>
-            <div class="pagetext-a">{{statistic.averageTextWordsNumber}}</div>
-        </el-col>
-        </el-row>      
-       --> 
-       <el-row>
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple title">Data completed:</div>
-            <div class="pagetext-a">{{statistic.labeledDataListNumber}}</div>
-        </el-col>
-        </el-row>
+            <el-col :span="24" class="inblock">
+                <div class="grid-content bg-purple title">Data completed:</div>
+                <div class="pagetext-a">{{statistic.labeledDataListNumber}}</div>
+            </el-col>
+            </el-row>              
+          </div>
+
       </v-card>
           
-  </v-col>
-
-  <v-col md="3">
            <v-card
-            class="c-1"
-            outlined
-            tile
+           rounded="xl"
+           style="width:24%;padding:30px;margin:10px 5px 10px 5px;background-color:rgba(38,50,56,0.5);position:relative"
           >
-            Annotation
-        <el-row style="height:27%">
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple title">Total annotations:</div>
-            <div class="pagetext-a">{{statistic.annotationsNumber}}</div>
-        </el-col>     
-        </el-row>
-        <el-row>
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple title">Annotations Percentage:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averageAnnotations" color="green"></el-progress></div>
-        </el-col>
-        </el-row>   
-        <el-row>
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple-light title">Average annotations per piece of data:</div>
-            <div class="pagetext-a">{{statistic.annotationsNumber/statistic.dataListNumber}}</div>
-        </el-col>
-        </el-row>
+          <div style="height:10%;width:500px;font-size:70px;transform:rotate(270deg);position:absolute;margin-top:70px;padding-top:30px;font-style:italic;font-weight:900;color:rgba(26,35,126,0.5)">
+              Annotation
+          </div>
+          <div style="width:80%;float:left">
+            <el-row style="height:27%">
+            <el-col :span="24" class="inblock">
+                <div class="grid-content bg-purple title">Total annotations:</div>
+                <div class="pagetext-a">{{statistic.annotationsNumber}}</div>
+            </el-col>     
+            </el-row>
+            <el-row>
+            <el-col :span="24" class="inblock">
+                <div class="grid-content bg-purple title">Annotations Percentage:</div>
+                <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averageAnnotations" color="green"></el-progress></div>
+            </el-col>
+            </el-row>   
+            <el-row>
+            <el-col :span="24" class="inblock">
+                <div class="grid-content bg-purple-light title">Average annotations per piece of data:</div>
+                <div class="pagetext-a">{{statistic.annotationsNumber/statistic.dataListNumber}}</div>
+            </el-col>
+            </el-row>
+          </div>
           </v-card>
-  </v-col>
   
-  <v-col md="3">
            <v-card
-            class="c-1"
-            outlined
-            tile
+           rounded="xl"
+           style="width:24%;padding:30px;margin:10px 5px 10px 5px;background-color: rgba(120,144,156,0.3);position:relative"
           >
+          <div style="height:10%;width:450px;font-size:70px;transform:rotate(270deg);position:absolute;margin-top:70px;padding-top:56px;font-style:italic;font-weight:900;color:rgba(26,35,126,0.5)">
             Prediction
-        <el-row style="height:27%">
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple title">Total predictions:</div>
-            <div class="pagetext-a">{{statistic.predictionsNumber}}</div>
-        </el-col>
-        </el-row>
+          </div>
+          <div style="width:80%;float:left">
+            <el-row style="height:27%">
+                <el-col :span="24" class="inblock">
+                    <div class="grid-content bg-purple title">Total predictions:</div>
+                    <div class="pagetext-a">{{statistic.predictionsNumber}}</div>
+                </el-col>
+                </el-row>
 
-        <el-row>
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple title">Predictions Percentage:</div>
-            <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averagePredictions" color="red"></el-progress></div>
-        </el-col>
-        </el-row> 
+                <el-row>
+                <el-col :span="24" class="inblock">
+                    <div class="grid-content bg-purple title">Predictions Percentage:</div>
+                    <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averagePredictions" color="red"></el-progress></div>
+                </el-col>
+                </el-row> 
 
-        <el-row>  
-        <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple-light title">Average predictions per piece of data:</div>
-            <div class="pagetext-a">{{statistic.predictionsNumber/statistic.dataListNumber}}</div>
-        </el-col>
-        </el-row>
+                <el-row>  
+                <el-col :span="24" class="inblock">
+                    <div class="grid-content bg-purple-light title">Average predictions per piece of data:</div>
+                    <div class="pagetext-a">{{statistic.predictionsNumber/statistic.dataListNumber}}</div>
+                </el-col>
+                </el-row>
+          </div> 
    
         </v-card>
-  </v-col>
 
-  <v-col md="3">
            <v-card
-            class="c-1"
-            outlined
-            tile
+           rounded="xl"
+           style="width:24%;padding:30px;margin:10px 5px 10px 5px;background-color:rgba(38,50,56,0.5)"
           >
+          <div style="height:10%;width:450px;font-size:70px;transform:rotate(270deg);position:absolute;margin-top:70px;padding-top:60px;font-style:italic;font-weight:900;color:rgba(26,35,126,0.5)">
             ML Model
+          </div>
         <el-row style="height:45%">
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title">Part1</div>
@@ -128,8 +123,8 @@
         </el-col>
         </el-row>
    
-        </v-card>
-  </v-col>
+        </v-card>    
+</div>  
 
 
 </v-row>
@@ -165,6 +160,7 @@ export default {
     margin: 0;
     max-width:100%!important;
     height: 100%;
+    background-color: #f1f2fa;
 }
 .c-1{
     height: 100%;
