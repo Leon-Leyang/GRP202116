@@ -139,15 +139,6 @@ import { Modal } from "antd";
       }
 
     },
-    watch:{
-      tabs:function(val){
-        console.log('val', val)
-        this.$store.state.currentMLList = null
-        console.log('label', this.$store.state.currentConfig)
-        this.projectId = this.$store.state.currentProjectId
-        console.log('liugo', this.$store.state.currentDataList)
-      }
-    },
     mounted() {
       this.id = this.$store.state.currentProjectId
       this.name = this.$store.state.currentProject.name

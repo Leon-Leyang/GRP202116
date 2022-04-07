@@ -200,7 +200,7 @@
                     {{ item.name }}
                 </v-card-title>
 
-                <v-card-subtitle style="height:100px;font-size:24px">{{item.description}}</v-card-subtitle>
+                <v-card-subtitle style="height:80px;font-size:24px;margin-top:5px">{{item.description}}</v-card-subtitle>
               
                 <v-progress-linear
                 :color="customColorMethod(item.process)"

@@ -248,7 +248,7 @@
                                           cols="12"
                                           sm="6"
                                           md="4"
-                                          v-if="nowType = 'Image Classification'"
+                                          v-if="nowType == 'Image Classification'"
                                         >
                                           <v-text-field
                                             v-model="trainObject.params.trainFrac"
@@ -260,7 +260,7 @@
                                         </v-col>
                                         
                                         <v-col
-                                        v-if="nowType = 'Image Classification'"
+                                        v-if="nowType == 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                           md="4"
@@ -274,7 +274,7 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
-                                        v-if="nowType = 'Image Classification'"
+                                        v-if="nowType == 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                           md="4"
@@ -289,7 +289,7 @@
                                         </v-col>
 
                                         <v-col cols="12"
-                                        v-if="nowType = 'Image Classification'">
+                                        v-if="nowType == 'Image Classification'">
                                           
                                             <v-switch
                                               v-model="trainObject.params.shuffle"
@@ -298,7 +298,7 @@
                                         </v-col>
                                       
                                         <v-col cols="12"
-                                        v-if="nowType = 'Image Classification'">
+                                        v-if="nowType == 'Image Classification'">
                                           <v-text-field
                                           v-model="trainObject.params.epochNum"
                                             label="Epoch Number:"
@@ -309,7 +309,7 @@
                                         </v-col>
                                         
                                         <v-col cols="12"
-                                        v-if="nowType = 'Image Classification'">
+                                        v-if="nowType == 'Image Classification'">
                                           <v-text-field
                                           v-model="trainObject.params.learningRate"
                                             label="Learning Rate:"
@@ -320,7 +320,7 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
-                                        v-if="nowType = 'Image Classification'"
+                                        v-if="nowType == 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                         >

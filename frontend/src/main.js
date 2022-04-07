@@ -5,6 +5,8 @@ import router from './router/index.js'
 import axios from 'axios'
 import Vuex from 'vuex'
 import store from './vuex/store'
+import locale from 'element-ui/lib/locale/lang/en'
+
 
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'
@@ -24,11 +26,12 @@ Vue.use(Vuex)
 
 // Vue.forceUpdate()
 
+Vue.use(ElementUI, { locale })
+
 
 // Vue.prototype.$moment = moment;
 
 
-Vue.use(ElementUI);
 // Vue.prototype.$http = http
 
 // Vue.prototype.$axios = axios;

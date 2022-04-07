@@ -109,7 +109,6 @@
       stripe
       @row-click="enterData"
       @selection-change="handleSelectionChange"
-      height="86.5%"
       >
 
           <el-table-column
@@ -334,8 +333,3 @@
   }
 </script>
 
-<style>
-  .el-input__inner{
-    height: 30px;
-  }
-</style>
