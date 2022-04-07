@@ -15,6 +15,8 @@ is of concern to modern deep learning based techniques.
 
 ## Getting Started
 
+#### Important Note: Do not change the file structure of this project.
+
 ### 1. Import SQL Database
 
 + Please make sure that you have **MySQL** installed. You could use the [MySQL Intallation Guide](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) for reference.
