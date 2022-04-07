@@ -328,7 +328,7 @@ export default {
       items: [
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Polygons',
-                img: require('../../assets/logo.png'),
+                img: '/images/1.png',
                 config:`<View>
     <Image name="img" value="$image" showMousePos="true" zoom="true"></Image>
     <PolygonLabels name="tag" toName="img" strokewidth="5" fillcolor="red" pointstyle="circle" pointsize="small">
@@ -339,7 +339,7 @@ export default {
                 },
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Masks',
-                img: '../../assets/logo.png',
+                img: '/images/2.png',
                 config:`<View>
     <Image name="image" value="$image" zoom="true"/>
     <BrushLabels name="tag" toName="image">
@@ -350,7 +350,7 @@ export default {
                 },
                 {
                 title: 'Object Detection'+"\n"+' with Bounding Boxes',
-                img: '../../assets/logo.png',
+                img: '/images/3.png',
                 config:`<View>
     <Image name="img" value="$image"></Image>
     <RectangleLabels name="tag" toName="img" fillOpacity="0.5" strokeWidth="5">
@@ -361,7 +361,7 @@ export default {
                 },
                 {
                 title: 'Keypoint Labeling',
-                img: '../../assets/logo.png',
+                img: '/images/4.png',
                 config:`<View>
     <Image name="img" value="$image" zoom="true"></Image>
     <KeyPointLabels name="tag" toName="img" fillcolor="red">
@@ -372,7 +372,7 @@ export default {
                 },
                 {
                 title: 'Image Classification',
-                img: '../../assets/logo.png',
+                img: '/images/5.png',
                 config:` <View>
     <Image name="image" value="$image"/>
     <Choices name="choice" toName="image">
@@ -531,7 +531,7 @@ export default {
 
 </script>
     <style>
-        .el-input__inner{
-          height: 60px!important;
-        }
+      .el-input__inner{
+        height: 60px!important;
+      }
     </style>
