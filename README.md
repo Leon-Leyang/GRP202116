@@ -33,38 +33,31 @@ is of concern to modern deep learning based techniques.
 
 ### 2. Start the Flask Server
 
-TODO
+*_TODO: Build executable files for the flask server._*
+
++ You could use a preferred IDE ([PyCharm](https://www.jetbrains.com/pycharm/) Recommended) to import the source code under the [flask-server](./flask-server/) directory.
++ Inside the **Run Configurations**, add `--host=0.0.0.0 --port=6000` to the **Additional options**.
++ Start the **app.py** flask application.
+
+
 
 ### 3. Start the Spring Boot Backend
 
-+ (*Recommended*) You could directly use the jar files under the releases to start the Spring Boot backend:
++ You could use a preferred IDE ([**IntelliJ IDEA**](https://www.jetbrains.com/idea/) Recommended) to import the source code under the [backend](./backend/) directory.
 
-  Before this, please make sure you have **Java** installed. You could refer to the [Official Guide](https://www.java.com/en/download/help/download_options.html).
-  
-  Inside the directory which contains the jar files, open separate terminals and execute following commands **sequentially**:
++ After importing the source code, wait for the **Maven** decencies to be downloaded and resolved.
 
-  ```
-  // Open the first terminal and execute:
-  $ java -jar eureka-server-1.2-exec.jar
-  
-  // After the above jar file has successfully started (when it displays "Completed initialization in * "), open a second terminal and execute:
-  $ java -jar sidecar-server-1.2-exec.jar
-  
-  // After the above jar file has successfully started (when it displays "Completed initialization in * "), open a third terminal and execute:
-  $ java -jar consumer-server-1.2-exec.jar
-  ```
++ Then run the backend **in this order**:
 
-+ Or you could also use a preferred IDE to import the source code under the [backend](./backend/) directory.
+  1. eureka-server
 
-+ **Please check** that you are running the backend **in this order**:
+  2. sidecar-server
 
-  + eureka-server
+  3. consumer-server
 
-  + sidecar-server
+* Should you encounter any problems, please close all three applications and try to restart them.
 
-  + consumer-server
 
-* Should you encounter any problems, please close all three applications and start from the beginning.
 
 ### Frontend
 
