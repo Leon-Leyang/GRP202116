@@ -4,7 +4,7 @@
     >
         <v-card
         width="1250px"
-        height="500px"
+        height="650px"
         style="margin-top:30px; margin-left:10px;"
         elevation=0
         >
@@ -48,9 +48,10 @@
                     >
                         <v-img
                         :src="item.img"
-                        height="225px"
+                        
+                        width="300px"
                         >
-                        <v-card-title class="text-h6 white--text">
+                        <v-card-title class="text-h6 white--text" style="margin-left:4px!important">
                             <v-row
                             class="fill-height flex-column"
                             justify="space-between"
@@ -127,6 +128,7 @@
                                 <v-img
                                 :src="item.img"
                                 height="225px"
+                                
                                 >
                                 <v-card-title class="text-h6 black--text">
                                     <v-row
@@ -209,7 +211,7 @@ export default {
             imageTool: [
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Polygons',
-                img: './images/1.jpg',
+                img: './images/1.png',
                 config:`<View>
     <Image name="img" value="$image" showMousePos="true" zoom="true"></Image>
     <PolygonLabels name="tag" toName="img" strokewidth="5" fillcolor="red" pointstyle="circle" pointsize="small">
@@ -220,7 +222,7 @@ export default {
                 },
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Masks',
-                img: './images/2.jpg',
+                img: './images/2.png',
                 config:`<View>
     <Image name="image" value="$image" zoom="true"/>
     <BrushLabels name="tag" toName="image">
@@ -231,7 +233,7 @@ export default {
                 },
                 {
                 title: 'Object Detection'+"\n"+' with Bounding Boxes',
-                img: './images/3.jpg',
+                img: './images/3.png',
                 config:`<View>
     <Image name="img" value="$image"></Image>
     <RectangleLabels name="tag" toName="img" fillOpacity="0.5" strokeWidth="5">
@@ -242,7 +244,7 @@ export default {
                 },
                 {
                 title: 'Keypoint Labeling',
-                img: './images/4.jpg',
+                img: './images/4.png',
                 config:`<View>
     <Image name="img" value="$image" zoom="true"></Image>
     <KeyPointLabels name="tag" toName="img" fillcolor="red">
@@ -253,7 +255,7 @@ export default {
                 },
                 {
                 title: 'Image Classification',
-                img: './images/5.jpg',
+                img: './images/5.png',
                 config:` <View>
     <Image name="image" value="$image"/>
     <Choices name="choice" toName="image">
@@ -268,7 +270,7 @@ export default {
             textTool: [
                 {
                 title: 'Named Entity Recognition',
-                img: './images/a.jpg',
+                img: './images/a.png',
                 config:`<View>
     <Labels name="label" toName="text">
         <Label value="PER" background="red"/>
@@ -281,7 +283,7 @@ export default {
                 },
                 {
                 title: 'Machine Translation',
-                img: './images/b.jpg',
+                img: './images/b.png',
                 config:`<View>
     <Header value="Please read the text" />
     <Text name="text" value="$text" />
@@ -291,7 +293,7 @@ export default {
                 },
                 {
                 title: 'Text Classification',
-                img: './images/c.jpg',
+                img: './images/c.png',
                 config:`<View>
     <Text name="text" value="$text"/>
     <View style="box-shadow: 2px 2px 5px #999; padding: 20px; margin-top: 2em; border-radius: 5px;">
@@ -306,7 +308,7 @@ export default {
                 },
                 {
                 title: 'Text Taxonomy',
-                img: './images/d.jpg',
+                img: './images/d.png',
                 config:`<View>
     <Text name="text" value="$text"/>
     <Taxonomy name="taxonomy" toName="text">
