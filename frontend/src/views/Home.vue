@@ -19,6 +19,7 @@
           v-model="isShow"
           persistent
           width="1400"
+         
           >
           <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -32,7 +33,7 @@
               </v-btn>
           </template>
           <v-card
-          height="700px"
+          height="800px"
           v-if="refresh"
           >
               <v-card-title class="text-h5">
@@ -42,7 +43,7 @@
 
               <!-- Create Project -->
               <div>
-                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="200px" class="demo-ruleForm"  style="padding: 30px 60px 0px 30px; height: 620px;">
+                <el-form :inline="inline" :model="operateForm" ref="operateForm" :rules="rules" label-width="200px" class="demo-ruleForm"  style="padding: 30px 60px 0px 30px; height: 760x;">
                 <el-tabs v-model="active">
                     <!-- Basic information -->
                     <el-tab-pane name="1" >
