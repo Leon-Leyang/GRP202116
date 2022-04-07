@@ -1,3 +1,10 @@
+/**
+ * Global configuration
+ * @link https://vuetifyjs.com/zh-Hans/
+ * @link https://vuex.vuejs.org/
+ * @link https://element.eleme.cn/
+ * @link https://www.npmjs.com/package/vue-codemirror
+ */
 import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
@@ -53,16 +60,6 @@ Vue.use(VueCodemirror, /* {
   events: ['scroll', ...]
 } */)
 
-import uploader from 'vue-simple-uploader'
-
-Vue.use(uploader)
-
-/* eslint-disable no-new */
-// new Vue({
-//   render(createElement) {
-//     return createElement(App)
-//   }
-// }).$mount('#app')
 
 new Vue({
   el:'#app',

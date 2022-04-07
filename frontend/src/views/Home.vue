@@ -1,3 +1,8 @@
+<!--
+This is the Home page of our project 
+which show all project card
+@author LinjingSUN YingjiaLi
+-->
 <template>
 <div>
   <v-container fluid>
@@ -315,7 +320,6 @@ import ML from './Create_ML.vue'
       },
     data () {
       return {
-        scrollInvoked: 0,
         operateType: 'add',
         folderURL: '',
         isShow: false,
@@ -361,9 +365,10 @@ import ML from './Create_ML.vue'
       }
     },
     methods: {
-      onScroll () {
-        this.scrollInvoked++
-      },
+      /**
+       * This function is to get the list of projects and
+       * Assign the value to tableData to make it appear on the page
+       */
       getList() {          // this.tableData = null
           // this.config.loading = true
           // name ? (this.config.page = 1) : ''
@@ -411,6 +416,9 @@ import ML from './Create_ML.vue'
                 });
                 
       },
+      /**
+       * This is called after click "Create" Button
+       */
       addProject() {
           this.folderURL = null
           this.importAllow = true
@@ -419,6 +427,10 @@ import ML from './Create_ML.vue'
           this.isShow = true
           this.refresh = true
       },
+      /**
+       * This is called after click "Edit" Button icon
+       * @param row Thu id of select project
+       */      
       editProject(row) {
           this.importAllow = false
           this.operateType = 'edit'
@@ -427,6 +439,9 @@ import ML from './Create_ML.vue'
           console.log('tag', row)
           this.refresh = true
       },
+      /**
+       * This is called after finish all the information about the project and click 'Confirm'
+       */      
       confirm() {
         console.log('this.operateType', this.operateType)
           if (this.operateType === 'edit') {
@@ -514,6 +529,9 @@ import ML from './Create_ML.vue'
           this.refresh = false
           this.$store.state.currentProjectId = null
       },
+      /**
+       * This is for user do not want continue create or edit project, is called when press 'Cancel' button
+       */      
       cancelChange(){
         this.isShow = false 
         this.active = '1'
@@ -524,6 +542,10 @@ import ML from './Create_ML.vue'
         this.$store.state.currentMLList = null
         this.$store.state.currentConfig = null   
       },
+      /**
+       * This is called after click "Delete" Button icon
+       * @param row Thu id of select project
+       */        
       delProject(row) {
           this.$confirm('This operation will permanently delete the file, are you sure you want to continue?', 'Hint', {
               confirmButtonText: 'Confirm',
@@ -557,20 +579,31 @@ import ML from './Create_ML.vue'
 
 
       },
+      /**
+       * This is for convert time form from "yyyy-MM-dd HH:mm:ss" to "yyyy-MM-dd"
+       * @param oldTime Time fetched from the back end
+       */
       convertTime(oldTime){
           var newTime = new Date(oldTime)
           var time = newTime.getFullYear() + ". " + (newTime.getMonth()+1) + ". " + newTime.getDate();
           return time
       },
-      nextPage () {
-        if (this.page + 1 <= this.numberOfPages) this.page += 1
-      },
-      formerPage () {
-        if (this.page - 1 >= 1) this.page -= 1
-      },
-      updateItemsPerPage (number) {
-        this.itemsPerPage = number
-      },
+
+      // nextPage () {
+      //   if (this.page + 1 <= this.numberOfPages) this.page += 1
+      // },
+      // formerPage () {
+      //   if (this.page - 1 >= 1) this.page -= 1
+      // },
+      // updateItemsPerPage (number) {
+      //   this.itemsPerPage = number
+      // },
+      /**
+       * This is used to change the colour of the progress bar, 
+       * blue means that it is still in progress 
+       * green means that all the data in the item is marked.
+       * @param percentage Current project's percentage
+       */
       customColorMethod(percentage) {
         if (percentage < 100) {
           return '#90CAF9';
@@ -578,40 +611,10 @@ import ML from './Create_ML.vue'
           return '#7EDF96';
         }
       },
-      nextStep() {
-            console.log('tag', this.file)
-            let num = Number(this.active)
-            if(num<4){ /*       */
-                num++;
-            }        
-            // num<3 && num++
-            this.active = num.toString()
-      },
-      beforeAvatarUpload(file) {
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isLt2M) {
-          this.$message.error('Upload file size cannot exceed 2MB!');
-        }
-        return isLt2M;
-      },
-      handlePreview(file) {
-        console.log(file)
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handleChange(file, fileList){
-        console.log(file, fileList);
-        //this.fileList  = fileList.map(function (item) { return item.raw; });
-        this.fileList.push(file);
-        // console.log('a_list',a_list)
-        // console.log('type_a_list',typeof(a_list[0]))
-        // this.fileList = JSON.parse(JSON.stringify(fileList))
-        // this.fileList = JSON.stringify(a_list)
-        // this.fileList = a_list
-        console.log('this.fileList', this.fileList)
-      },
+      /**
+       * this is for upload files directly
+       * @param event Click event
+       */
       getFiles: function(event) {
         this.fileList = [];
         let files = event.target.files;
@@ -619,22 +622,11 @@ import ML from './Create_ML.vue'
           this.fileList.push(files[i]);
         }
       },
-      test(){
-          this.$axios.get('/data/1', {
-                  params: {
-                  }
-              })
-              .then(res => {
-                console.log('rws', res)
-                console.log('type', typeof(res))
-              })
-              .catch((error) => {
-              // here you will have access to error.response
-                console.log(error.response)
-                });
-      },
 
-      //enter project
+      /**
+       * This is to enter per project
+       * @param projectId Item id of the selected item
+       */
       enterProject(projectId){
         console.log(projectId)
         this.$store.state.currentProjectId = projectId

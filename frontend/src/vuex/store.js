@@ -1,3 +1,8 @@
+/**
+ * This is used to store global variables
+ * @link https://vuex.vuejs.org/
+ * @link https://www.npmjs.com/package/axios
+ */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from "axios";

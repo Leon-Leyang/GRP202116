@@ -1,4 +1,8 @@
-<!--用代码设置label interface-->
+<!--This is to change labeling interface template
+user can change label name and color and type by changing code
+@author LinjingSUN
+@link https://www.npmjs.com/package/vue-codemirror
+-->
 <template>
 <div>
   <div style="display:flex;height:540px;width:100%">

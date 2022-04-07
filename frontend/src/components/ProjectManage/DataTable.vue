@@ -1,3 +1,6 @@
+<!--This is the table data page 
+whitch shows the information of per data
+@author LinjingSUN YingjiaLI-->
 <template>
 <div style="background:#f1f2fa;height:100%">
   <v-container style="height:100%">
@@ -83,7 +86,7 @@
         <v-btn
             style="margin-left:20px; margin-right:10px"
             color="blue-grey"
-            @click="xx()"
+           @click="download(id,name)"
             rounded
             depressed
             class="white--text"
@@ -96,6 +99,14 @@
             > mdi-cloud-upload
             </v-icon>
         </v-btn>        
+        <v-radio-group v-model="format" row>
+          <v-radio
+            v-for="n in fileFormat"
+            :key="n"
+            :label="n"
+            :value="n"
+          ></v-radio>
+        </v-radio-group>         
       </v-row>
     </div>
 
@@ -155,6 +166,7 @@
 </template>
 
 <script>
+import { Modal } from "antd";
   export default {
     name: 'DataTable',
     data(){
@@ -177,6 +189,12 @@
         folderURL:'',
         fileList: [],
         dialog: false,
+        format:'json',
+        fileFormat:['json','csv','tsv'],
+        id:null,
+        name:null,
+        projectId:0,
+        dataList:[],        
 
       }
     },
@@ -321,7 +339,40 @@
         this.folderURL = null
         this.fileList = []
         this.dialog = false
-      }         
+      },
+      download(id, name) {
+        console.log('format', this.format)
+        console.log('id$name', id, name)
+        this.$axios.get('/project/'+ id +'/data_export/annotations/'+ this.format, {
+          responseType: 'blob'
+        }).then((res)=> {
+          console.log('resas', res.headers['content-disposition'])
+          const content = res.data
+          const filename = window.decodeURI(res.headers['content-disposition'].split('=')[1], "UTF-8");
+          const blob = new Blob([content])
+          console.log('content blob', content, blob)
+          if ('download' in document.createElement('a')) {
+            const elink = document.createElement('a');
+            elink.download = filename ;
+            elink.style.display = 'none';
+            elink.href = URL.createObjectURL(blob);
+            document.body.appendChild(elink);
+            elink.click();
+            URL.revokeObjectURL(elink.href);
+            document.body.removeChild(elink);
+            Modal.success({
+              title: "Success",
+              okText:"Confirm",
+              content: "Start download...",
+              onOk: () => {}
+            })
+          } else {
+            navigator.msSaveBlob(blob, filename)
+          }
+        }, function(err) {
+          console.log('err', err)
+        })
+      }   
     },
     created() {
       console.log('restart', '')
@@ -329,6 +380,12 @@
       this.dataType = this.$store.state.currentProject.type
       this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize)
       console.log('currentPage', this.currentPage)
+      this.id = this.$store.state.currentProjectId
+      this.name = this.$store.state.currentProject.name
+      console.log('id name', this.id, this.name)
+      this.$store.state.currentMLList = null
+      console.log('label', this.$store.state.currentConfig)
+      this.projectId = this.$store.state.currentProjectId        
     },     
   }
 </script>

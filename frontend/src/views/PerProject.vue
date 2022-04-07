@@ -1,15 +1,8 @@
+<!--This is the page after user enter one project,
+contain four parts: DataList, Statistic, ML, Setting
+@author LinjingSUN YingjiaLi-->
 <template>
   <v-card id="problock" style="background-color:#9FA8DA">
-  <!-- <v-btn @click="back">Back</v-btn>
-  <v-btn @click="download(id,name)"> Down Load </v-btn>
-    <v-radio-group v-model="format" row>
-      <v-radio
-        v-for="n in fileFormat"
-        :key="n"
-        :label="n"
-        :value="n"
-      ></v-radio>
-    </v-radio-group> -->
     <v-btn
       color="blue-grey"
       @click="back"
@@ -76,7 +69,6 @@ import Table from '../components/ProjectManage/DataTable';
 import Statistics from '@/views/PerProject/Statistics'
 import ML from '@/views/PerProject/ML'
 import Setting from '@/views/PerProject/Setting'
-import { Modal } from "antd";
 
   export default {
     components: {
@@ -103,40 +95,6 @@ import { Modal } from "antd";
             name: 'Home', 
         }) 
       },
-
-      download(id, name) {
-        console.log('format', this.format)
-        console.log('id$name', id, name)
-        this.$axios.get('/project/'+ id +'/data_export/annotations/'+ this.format, {
-          responseType: 'blob'
-        }).then((res)=> {
-          console.log('resas', res.headers['content-disposition'])
-          const content = res.data
-          const filename = window.decodeURI(res.headers['content-disposition'].split('=')[1], "UTF-8");
-          const blob = new Blob([content])
-          console.log('content blob', content, blob)
-          if ('download' in document.createElement('a')) {
-            const elink = document.createElement('a');
-            elink.download = filename ;
-            elink.style.display = 'none';
-            elink.href = URL.createObjectURL(blob);
-            document.body.appendChild(elink);
-            elink.click();
-            URL.revokeObjectURL(elink.href);
-            document.body.removeChild(elink);
-            Modal.success({
-              title: "Success",
-              okText:"Confirm",
-              content: "Start download...",
-              onOk: () => {}
-            })
-          } else {
-            navigator.msSaveBlob(blob, filename)
-          }
-        }, function(err) {
-          console.log('err', err)
-        })
-      }
 
     },
     mounted() {

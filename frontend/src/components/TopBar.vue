@@ -1,3 +1,6 @@
+
+<!--This is the top bar component
+@author LinjingSUN YingjiaLI-->
 <template>
     <div class="topbar">
         <div class="mark" style="height:60px">

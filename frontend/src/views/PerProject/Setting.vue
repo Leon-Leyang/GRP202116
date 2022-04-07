@@ -1,4 +1,7 @@
-
+<!--This is the setting page
+In this page user can change project name, description, labeling Interafce,
+and also can delete all data or delete all annotation or delete all prediction
+@author LinjingSUN YingjiaLI-->
 <template>
 <v-card style="height:100%;background:#f1f2fa;padding:10px">
   <v-container style="height:80%">

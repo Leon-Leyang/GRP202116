@@ -1,3 +1,6 @@
+<!--This is the ML page
+In this page user can import ml, run ml and train ml
+@author LinjingSUN YingjiaLi-->
 <template>
 <div style="font-size: 1.25rem; font-weight: 500;background:#EDE7F6;height:100%"> 
     <v-container class="ML-container">

@@ -1,4 +1,9 @@
-<!-- 正常标注界面 -->
+<!--
+This is the interface where the user can work, 
+and can do annotations and view predicts.
+@author LinjingSUN YingjiaLi
+@link https://labelstud.io/
+-->
 <template>
 <div>
   <div>
@@ -501,10 +506,6 @@ export default {
         this.multipleSelection = val;
         console.log('valk', val,this.multipleSelection)
     },   
-    // handleSizeChange(val){
-    //   this.pagesize = val;
-    //   this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);        
-    // },
     handleCurrentChange(val) {
         this.currentPage = val;
         this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);

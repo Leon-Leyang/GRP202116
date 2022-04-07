@@ -1,3 +1,5 @@
+<!--This is the side bar component
+@author LinjingSUN YingjiaLI-->
 <template>
 <div>
   <v-navigation-drawer

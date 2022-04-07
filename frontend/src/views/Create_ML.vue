@@ -1,3 +1,6 @@
+<!--This is the component about importing ml model when create project
+but without RUN and TRAIN
+@author LinjingSUN YingjiaLI-->
 <template>
 <div style="font-size: 1.25rem; font-weight: 500"> 
     <v-container class="ML-container">

@@ -1,3 +1,6 @@
+<!--this is the statistic page
+which contains statistic data about data, annotation prediction, ml
+@author LinjingSUN YingjiaLI-->
 <template>
   <v-container class="co">
  

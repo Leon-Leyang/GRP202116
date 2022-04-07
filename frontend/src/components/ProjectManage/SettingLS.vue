@@ -1,3 +1,6 @@
+<!--This is the setting labeling interface component
+We provide 5 image template and 4 text template for user to use
+@author LinjingSUN YingjiaLI-->
 <template>
 <div>
     <v-row
