@@ -45,6 +45,8 @@ is of concern to modern deep learning based techniques.
 
 ### 3. Start the Spring Boot Backend
 
++ **Please Note: Import the [backend](./backend/) as a whold project for Maven management.**
+
 + You could use a preferred IDE ([**IntelliJ IDEA**](https://www.jetbrains.com/idea/) Recommended) to import the source code under the [backend](./backend/) directory.
 
 + After importing the source code, wait for the **Maven** decencies to be downloaded and resolved.
