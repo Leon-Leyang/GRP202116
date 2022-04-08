@@ -15,6 +15,8 @@ is of concern to modern deep learning based techniques.
 
 ## Getting Started
 
+#### Important Note: Do not change the file structure of this project.
+
 ### 1. Import SQL Database
 
 + Please make sure that you have **MySQL** installed. You could use the [MySQL Intallation Guide](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) for reference.
@@ -42,6 +44,8 @@ is of concern to modern deep learning based techniques.
 
 
 ### 3. Start the Spring Boot Backend
+
++ **Please Note: Import the [backend](./backend/) as a whold project for Maven management.**
 
 + You could use a preferred IDE ([**IntelliJ IDEA**](https://www.jetbrains.com/idea/) Recommended) to import the source code under the [backend](./backend/) directory.
 
