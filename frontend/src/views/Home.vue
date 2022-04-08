@@ -75,22 +75,25 @@ which show all project card
                     <!-- Import Data -->
                     <el-tab-pane name="3" v-if="importAllow">
                         <span slot="label">Import Data</span>
-                        <div>Choose Data Type:</div>
-                        <v-chip-group
-                          v-model="operateForm.type"
-                          active-class="deep-purple--text text--accent-4"
-                          mandatory
-                        >
-                        <v-chip
-                          v-for="type in oType"
-                          :key="type"
-                          :value="type"
-                        >
-                          {{ type }}
-                        </v-chip>
-                        </v-chip-group>
-                        <div style="display:flex">
-                          <div>
+                        <div style="margin-left: 45%">
+                          <div>Choose Data Type:</div>
+                          <v-chip-group
+                            v-model="operateForm.type"
+                            active-class="deep-purple--text text--accent-4"
+                            mandatory
+                          >
+                          <v-chip
+                            v-for="type in oType"
+                            :key="type"
+                            :value="type"
+
+                          >
+                            {{ type }}
+                          </v-chip>
+                          </v-chip-group>                          
+                        </div>
+                        <div style="display:flex; justify-content: space-between;">
+                          <div style="border:5px solid purple; border-radius: 25px; padding: 10px; height:150px">
                             Please enter the path to the folder where you want to use the file:
 
                             <el-input
@@ -102,7 +105,7 @@ which show all project card
                             </el-input>
                             <div slot="tip" class="el-upload__tip">If there are multiple paths please separate them with commas(",").</div>
                           </div>
-                          <div>
+                          <div style="border:5px solid purple; border-radius: 25px; padding: 10px; height:150px">
                             Please upload the appropriate type of file
                             <input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />
                           </div>
@@ -312,7 +315,6 @@ which show all project card
 <script>
 import SettingLS from '../components/ProjectManage/SettingLS.vue'
 import ML from './Create_ML.vue'
-// import Create from '../components/ProjectManage/Create.vue';
   export default {
       components:{
           SettingLS,
@@ -630,10 +632,14 @@ import ML from './Create_ML.vue'
       enterProject(projectId){
         console.log(projectId)
         this.$store.state.currentProjectId = projectId
-        console.log('tabel',this.tableData)
-        this.$store.state.currentProject = this.tableData[projectId-1]
-        this.$store.state.currentConfig = this.tableData[projectId-1].configs
-        this.$store.state.currentProject = this.tableData[projectId-1]
+        console.log('tabel',this.tableData);
+        for(var q = 0;q < this.tableData.length; q++){
+          if(projectId == this.tableData[q].projectId){
+            this.$store.state.currentProject = this.tableData[q];
+            this.$store.state.currentConfig = this.tableData[q].configs;
+            this.$store.state.currentProject = this.tableData[q];
+          }
+        }
         console.log('newwjin',this.$store.state.currentProject )
         this.$router.push({  
                     path: '/per-project',

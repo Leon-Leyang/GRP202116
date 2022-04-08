@@ -4,7 +4,7 @@
       <div style="display:flex; height:100%; width:100%">
         <SideBar />
         <div style="width:100%;height:100%">
-          <div style="height:10%;background-color:#F5F5F5"><TopBar /></div>
+          <div style="height:10%;background-color:#F5F5F5" v-if="pageLocate != 'Data'"><TopBar  v-if="pageLocate != 'Data'" /></div>
          <div id="page" style="background-color:#F5F5F5;height:90%"><!--#F5F5F5-->
           <router-view />
          </div>
@@ -26,8 +26,11 @@ export default {
   },
 
   data: () => ({
-    //
+    pageLocate: 'NotData'
   }),
+  mounted() {
+    this.pageLocate = this.$store.state.pageLocate
+  },
 };
 </script>
 

@@ -516,6 +516,7 @@ export default {
     },    
   },
   mounted() {
+    this.$store.state.pageLocate = 'NotData'
     console.log('this.$store.state.currentProject', this.$store.state.currentProject)
     this.nowTemplateTitle = this.$store.state.currentConfigTitle
     // this.$store.state.beforeConfig = this.$store.state.currentConfig

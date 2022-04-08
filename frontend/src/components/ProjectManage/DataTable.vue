@@ -376,7 +376,7 @@ import { Modal } from "antd";
     },
     created() {
       console.log('restart', '')
-
+      this.$store.state.pageLocate = 'NotData'
       this.dataType = this.$store.state.currentProject.type
       this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize)
       console.log('currentPage', this.currentPage)

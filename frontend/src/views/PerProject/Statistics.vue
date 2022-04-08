@@ -52,19 +52,19 @@ which contains statistic data about data, annotation prediction, ml
           <div style="width:80%;float:left">
             <el-row style="height:27%">
             <el-col :span="24" class="inblock">
-                <div class="grid-content bg-purple title">Total annotations:</div>
+                <div class="grid-content bg-purple title" style="color:#E0E0E0">Total annotations:</div>
                 <div class="pagetext-a">{{statistic.annotationsNumber}}</div>
             </el-col>     
             </el-row>
             <el-row>
             <el-col :span="24" class="inblock">
-                <div class="grid-content bg-purple title">Annotations Percentage:</div>
+                <div class="grid-content bg-purple title" style="color:#E0E0E0">Annotations Percentage:</div>
                 <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averageAnnotations" color="green"></el-progress></div>
             </el-col>
             </el-row>   
             <el-row>
             <el-col :span="24" class="inblock">
-                <div class="grid-content bg-purple-light title">Average annotations per piece of data:</div>
+                <div class="grid-content bg-purple-light title" style="color:#E0E0E0">Average annotations per piece of data:</div>
                 <div class="pagetext-a">{{statistic.annotationsNumber/statistic.dataListNumber}}</div>
             </el-col>
             </el-row>
@@ -112,8 +112,10 @@ which contains statistic data about data, annotation prediction, ml
           </div>
         <el-row style="height:45%">
         <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple title">Part1</div>
-            <div class=""> </div>
+            <div class="grid-content bg-purple title" style="color:#E0E0E0">Model Accuracy</div>
+            <div class=""> 
+                <ve-histogram :data="chartData_1"  height="300px" style="width:250px"></ve-histogram>
+            </div>
         </el-col>
         </el-row>
 
@@ -121,8 +123,8 @@ which contains statistic data about data, annotation prediction, ml
 
         <el-row>  
         <el-col :span="24" class="inblock">
-            <div class="grid-content bg-purple-light title">Part2</div>
-            <div class=""></div>
+            <div class="grid-content bg-purple-light title" style="color:#E0E0E0">Trainset Size</div>
+            <div class="pagetext-a" style="margin-top:60px">100</div>
         </el-col>
         </el-row>
    
@@ -139,9 +141,20 @@ export default {
   data() {
     return {
       statistic:null,
+        chartData_1: {
+          columns: ['Model Name', 'Accuracy'],
+          rows: [
+            { 'Model Name': 'Model 1', 'Accuracy': 68,},
+            { 'Model Name': 'Model 2', 'Accuracy': 89,},
+            { 'Model Name': 'Model 3', 'Accuracy': 47,},
+            { 'Model Name': 'Model 4', 'Accuracy': 85,},
+            { 'Model Name': 'Model 5', 'Accuracy': 50,},
+          ]
+        },
     }
   },
   mounted(){
+    this.$store.state.pageLocate = 'NotData'
     this.$axios.get('/statistics/'+ this.$store.state.currentProjectId)
       .then(res => {
           console.log("statistics",res)

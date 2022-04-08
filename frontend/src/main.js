@@ -13,7 +13,8 @@ import axios from 'axios'
 import Vuex from 'vuex'
 import store from './vuex/store'
 import locale from 'element-ui/lib/locale/lang/en'
-
+import VCharts from 'v-charts'
+Vue.use(VCharts)
 
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'

@@ -28,6 +28,7 @@ const store = new Vuex.Store({
         dataType:'',
         beforeConfig:``,
         selectData:[],
+        pageLocate:'NotData',
     },
     getters: {
         getProjectId(state){

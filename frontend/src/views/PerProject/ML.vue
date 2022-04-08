@@ -2,7 +2,7 @@
 In this page user can import ml, run ml and train ml
 @author LinjingSUN YingjiaLi-->
 <template>
-<div style="font-size: 1.25rem; font-weight: 500;background:#EDE7F6;height:100%"> 
+<div style="font-size: 1.25rem; font-weight: 500;background:#f1f2fa;height:100%"> 
     <v-container class="ML-container">
         <v-row>
             <v-col>
@@ -761,6 +761,7 @@ In this page user can import ml, run ml and train ml
     
     },
     mounted() {
+      this.$store.state.pageLocate = 'NotData'
       console.log('ml.currentProjectId', this.$store.state.currentProjectId)
       this.$axios.get('/model/'+ this.$store.state.currentProjectId)
           .then(res => {

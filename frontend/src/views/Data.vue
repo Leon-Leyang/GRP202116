@@ -7,11 +7,22 @@ and can do annotations and view predicts.
 <template>
 <div>
   <div>
-    <button @click="back" style="width:100px;color:red">Back</button>
+    <v-btn @click="back" style="width:100px;color:purple">
+      <v-icon>
+        mdi-arrow-left
+      </v-icon>
+      Back</v-btn>
 
-    <button @click="prev" style="width:100px;color:red">prev</button>
+    <button @click="prev" style="width:100px;color:purple">
+      <v-icon>
+        mdi-skip-previous
+      </v-icon>
+      </button>
 
-    <button @click="next" style="width:100px;color:red">next</button>
+    <button @click="next" style="width:100px;color:purple">
+      <v-icon>
+        mdi-skip-next
+      </v-icon></button>
 
   </div>
   <div style="display:flex">
@@ -545,6 +556,7 @@ export default {
 
 
   mounted() {
+    this.$store.state.pageLocate = 'Data'
     this.currentPage = this.$store.state.currentPage
     this.total = this.$store.state.totalNum
     var more = 0;
@@ -841,7 +853,7 @@ export default {
       }
     console.log(this.labelStudio.options)
     this.$store.state.nowLS = this.labelStudio
-    },1500)
+    },2000)
 
   },
 };

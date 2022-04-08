@@ -179,14 +179,16 @@ We provide 5 image template and 4 text template for user to use
             :absolute="absolute"
             opacity= 1
             :value="overlay"
-            color="grey"
-            style="height:610px"
+            color="white"
+            style="height:600px"
             dark=false
             >
             <v-btn
                 @click="overlay = false"
             >
-                Hide Overlay
+                <v-icon>
+                    mdi-arrow-left
+                </v-icon>
             </v-btn>
             <Config style="width:1250px;padding:0;height:540px"></Config>
             </v-overlay>
@@ -353,6 +355,9 @@ export default {
             this.overlay = !this.overlay
             this.$store.state.dataType = type
         }
+    },
+    mounted() {
+        this.$store.state.pageLocate = 'NotData'
     },
 
 }
