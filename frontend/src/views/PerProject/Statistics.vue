@@ -160,6 +160,7 @@ export default {
           console.log("statistics",res)
           this.statistic = res.data
           console.log(" sta table",this.statistic)
+          // console.log('tags', this.statistic)
       })
       .catch((error) => {
           // here you will have access to error.response

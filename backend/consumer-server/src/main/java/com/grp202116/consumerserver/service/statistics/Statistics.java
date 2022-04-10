@@ -99,7 +99,7 @@ public class Statistics {
         List<Tag> tags = new ArrayList<>();
 
         String toolPattern = "(?<=(type\\\\\":\\\\\")).*?(?=\\\\\")";
-        for(AnnotationDO annotationDO:annotations){
+        for(AnnotationDO annotationDO:getAnnotationsFromDB()){
             String toolName = "";
             String result = annotationDO.getResult();
             Pattern tool =Pattern.compile(toolPattern);
