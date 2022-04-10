@@ -271,7 +271,6 @@ which show all project card
               <v-list-item
                 v-for="(number, index) in itemsPerPageArray"
                 :key="index"
-                @click="updateItemsPerPage(number)"
               >
                 <v-list-item-title>{{ number }}</v-list-item-title>
               </v-list-item>
@@ -291,17 +290,16 @@ which show all project card
             dark
             color="blue darken-3"
             class="mr-1"
-            @click="formerPage"
           >
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
+
           <v-btn
             fab
             dark
             color="blue darken-3"
             class="ml-1"
-            @click="nextPage"
-          >
+          >          
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </v-row>
@@ -570,7 +568,7 @@ import ML from './Create_ML.vue'
                               message: 'Delete success!'
                           })
                       })
-                      this.getList()
+                  this.getList()
               })
               .catch(() => {
                   this.$message({
