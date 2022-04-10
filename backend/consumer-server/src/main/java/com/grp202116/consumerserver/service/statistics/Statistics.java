@@ -14,9 +14,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The class Statistics contains the basic information of the statistics
@@ -58,6 +61,7 @@ public class Statistics {
     List<DataDO> dataList;
     List<PredictionDO> predictions;
     List<AnnotationDO> annotations;
+    List<Tag> tags;
 
     /**
      * The construct method called once a project is created
@@ -78,13 +82,56 @@ public class Statistics {
         this.setAverageTextWordsNumber(getAverageTextWordsNumber());
         this.setLabeledDataListNumber(countLabeledDataListNumber());
         this.setCompletionPercentage(calculateCompletionPercentage());
-
         this.setPredictions(getPredictionsFromDB());
         this.setPredictionsNumber(BigInteger.valueOf(getPredictions().size()));
         this.setAverageAnnotations(countAverageAnnotations());
         this.setAveragePredictions(countAveragePredictions());
         this.setAverageTextWordsNumber(countAverageTextWordsNumber());
+        this.setTags(getTags());
         return this;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Tag> getTags() {
+        List<Tag> tags = new ArrayList<>();
+
+        String toolPattern = "(?<=(type\\\\\":\\\\\")).*?(?=\\\\\")";
+        for(AnnotationDO annotationDO:annotations){
+            String toolName = "";
+            String result = annotationDO.getResult();
+            Pattern tool =Pattern.compile(toolPattern);
+            Matcher m = tool.matcher(result);
+            if (m.find()) {
+                toolName = m.group(0);
+            }
+
+            String tagPattern = "(?<="+toolName+"\\\\\":\\[\\\\\").*?(?=\\\\)";
+            Pattern tag = Pattern.compile(tagPattern);
+            Matcher m1 = tag.matcher(result);
+
+            if (m1.find()) {
+                String tagName = m1.group(0);
+                if(tags.isEmpty()){
+                    tags.add(new Tag(tagName));
+                }
+                else{
+                    boolean flag  = false;
+                    for(Tag tag1:tags){
+                        if(tag1.getName().equalsIgnoreCase(tagName)){
+                            tag1.setNumber(tag1.getNumber()+1);
+                            flag = true;
+                        }
+                    }
+                    if(flag==false){
+                        tags.add(new Tag(tagName));
+                    }
+                }
+            }
+        }
+        return tags;
     }
 
     private BigInteger countAnnotationNumber() {
