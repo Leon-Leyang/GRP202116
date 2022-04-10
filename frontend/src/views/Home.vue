@@ -65,15 +65,8 @@ which show all project card
                                 </el-form-item>   
                     </el-tab-pane>
 
-                    <!-- Import ML -->
-                  <el-tab-pane name="2" v-if="importAllow">
-                      <span slot="label">Import ML model</span>
-                      <ML></ML>
-                      <!-- Import ML Model -->
-                  </el-tab-pane>
-
                     <!-- Import Data -->
-                    <el-tab-pane name="3" v-if="importAllow">
+                    <el-tab-pane name="2" v-if="importAllow">
                         <span slot="label">Import Data</span>
                         <div style="margin-left: 45%">
                           <div>Choose Data Type:</div>
@@ -113,10 +106,17 @@ which show all project card
                     </el-tab-pane>
 
                     <!-- Setting Label Interface -->
-                    <el-tab-pane name="4">
+                    <el-tab-pane name="3">
                     <span slot="label">Setup Labeling Interface</span>
                         <SettingLS></SettingLS>
-                    </el-tab-pane>                    
+                    </el-tab-pane>    
+
+                    <!-- Import ML -->
+                  <el-tab-pane name="4" v-if="importAllow">
+                      <span slot="label">Import ML model</span>
+                      <ML></ML>
+                      <!-- Import ML Model -->
+                  </el-tab-pane>
 
                 </el-tabs>
                 </el-form>
@@ -271,7 +271,6 @@ which show all project card
               <v-list-item
                 v-for="(number, index) in itemsPerPageArray"
                 :key="index"
-                @click="updateItemsPerPage(number)"
               >
                 <v-list-item-title>{{ number }}</v-list-item-title>
               </v-list-item>
@@ -291,17 +290,16 @@ which show all project card
             dark
             color="blue darken-3"
             class="mr-1"
-            @click="formerPage"
           >
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
+
           <v-btn
             fab
             dark
             color="blue darken-3"
             class="ml-1"
-            @click="nextPage"
-          >
+          >          
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
         </v-row>
@@ -476,7 +474,7 @@ import ML from './Create_ML.vue'
                 console.log('now!!!',this.$store.state.currentMLList)
 
 
-                var folderURL = this.folderURL.split(",")
+                var folderURL = (this.folderURL || "").split(",")
                 var projectId = this.newestId
                 //upload folder address
                 if(folderURL != ''){                
@@ -570,7 +568,7 @@ import ML from './Create_ML.vue'
                               message: 'Delete success!'
                           })
                       })
-                      this.getList()
+                  this.getList()
               })
               .catch(() => {
                   this.$message({
@@ -649,6 +647,7 @@ import ML from './Create_ML.vue'
     },
     mounted() {
         // console.log('tag', '')
+        this.$store.state.pageLocate = 'NotData'
         this.getList()
     },
     activated: function() {
