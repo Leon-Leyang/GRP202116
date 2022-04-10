@@ -1,3 +1,10 @@
+/**
+ * Global configuration
+ * @link https://vuetifyjs.com/zh-Hans/
+ * @link https://vuex.vuejs.org/
+ * @link https://element.eleme.cn/
+ * @link https://www.npmjs.com/package/vue-codemirror
+ */
 import Vue from 'vue'
 import App from './App.vue'
 import vuetify from './plugins/vuetify'
@@ -5,6 +12,9 @@ import router from './router/index.js'
 import axios from 'axios'
 import Vuex from 'vuex'
 import store from './vuex/store'
+import locale from 'element-ui/lib/locale/lang/en'
+import VCharts from 'v-charts'
+Vue.use(VCharts)
 
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'
@@ -24,11 +34,12 @@ Vue.use(Vuex)
 
 // Vue.forceUpdate()
 
+Vue.use(ElementUI, { locale })
+
 
 // Vue.prototype.$moment = moment;
 
 
-Vue.use(ElementUI);
 // Vue.prototype.$http = http
 
 // Vue.prototype.$axios = axios;
@@ -50,16 +61,6 @@ Vue.use(VueCodemirror, /* {
   events: ['scroll', ...]
 } */)
 
-import uploader from 'vue-simple-uploader'
-
-Vue.use(uploader)
-
-/* eslint-disable no-new */
-// new Vue({
-//   render(createElement) {
-//     return createElement(App)
-//   }
-// }).$mount('#app')
 
 new Vue({
   el:'#app',

@@ -157,6 +157,7 @@ public class DataController {
      */
     private void updateDataNumber(BigInteger projectId) {
         List<DataDO> currentList = dataMapper.listByProjectId(projectId);
+        if (currentList.size() < 1) return;
         int number = 1;
         for (DataDO data : currentList) data.setListNumber(number++);
         dataMapper.updateListNumberAll(currentList);

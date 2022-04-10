@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,15 +72,17 @@ public interface DataMapper extends BaseMapper {
      * Set a certain data to the status of annotated
      *
      * @param dataId the id of data
+     * @param date   current date
      */
-    void setAnnotated(BigInteger dataId);
+    void setAnnotated(@Param("dataId") BigInteger dataId, @Param("date") Date date);
 
     /**
      * Set a certain data to the status of not being annotated
      *
      * @param dataId the id of data
+     * @param date   current date
      */
-    void setNotAnnotated(BigInteger dataId);
+    void setNotAnnotated(@Param("dataId") BigInteger dataId, @Param("date") Date date);
 
     /**
      * Updated the {@link DataDO#isPredicted()}

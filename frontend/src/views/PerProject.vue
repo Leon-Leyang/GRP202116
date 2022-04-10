@@ -1,32 +1,38 @@
+<!--This is the page after user enter one project,
+contain four parts: DataList, Statistic, ML, Setting
+@author LinjingSUN YingjiaLi-->
 <template>
-  <v-card id="problock">
-  <v-btn @click="back">Back</v-btn>
-  <v-btn @click="download(id,name)"> Down Load </v-btn>
-    <v-radio-group v-model="format" row>
-      <v-radio
-        v-for="n in fileFormat"
-        :key="n"
-        :label="n"
-        :value="n"
-      ></v-radio>
-    </v-radio-group>
+  <v-card id="problock" style="background-color:#9FA8DA">
+    <v-btn
+      color="blue-grey"
+      @click="back"
+      text
+      large
+      style="font-size:23px;margin-top:10px"
+    >  
+      <v-icon
+        left x-large
+      > mdi-chevron-left
+      </v-icon>
+    </v-btn>
     <v-tabs
         v-model="tabs"
         centered
         grow
-        color="yellow"
-        background-color="rgb(113, 223, 207)"
+        color="#5E35B1"
+        background-color="#9FA8DA"
+        
     >
-        <v-tab>
+        <v-tab style="font-size:25px">
             Data
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:25px">
             Statistics
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:25px">
             Machine Learning Model
         </v-tab>
-        <v-tab>
+        <v-tab style="font-size:25px">
             Settings
         </v-tab>
     </v-tabs>
@@ -63,7 +69,6 @@ import Table from '../components/ProjectManage/DataTable';
 import Statistics from '@/views/PerProject/Statistics'
 import ML from '@/views/PerProject/ML'
 import Setting from '@/views/PerProject/Setting'
-import { Modal } from "antd";
 
   export default {
     components: {
@@ -91,49 +96,6 @@ import { Modal } from "antd";
         }) 
       },
 
-      download(id, name) {
-        console.log('format', this.format)
-        console.log('id$name', id, name)
-        this.$axios.get('/project/'+ id +'/data_export/annotations/'+ this.format, {
-          responseType: 'blob'
-        }).then((res)=> {
-          console.log('resas', res.headers['content-disposition'])
-          const content = res.data
-          const filename = window.decodeURI(res.headers['content-disposition'].split('=')[1], "UTF-8");
-          const blob = new Blob([content])
-          console.log('content blob', content, blob)
-          if ('download' in document.createElement('a')) {
-            const elink = document.createElement('a');
-            elink.download = filename ;
-            elink.style.display = 'none';
-            elink.href = URL.createObjectURL(blob);
-            document.body.appendChild(elink);
-            elink.click();
-            URL.revokeObjectURL(elink.href);
-            document.body.removeChild(elink);
-            Modal.success({
-              title: "Success",
-              okText:"Confirm",
-              content: "Start download...",
-              onOk: () => {}
-            })
-          } else {
-            navigator.msSaveBlob(blob, filename)
-          }
-        }, function(err) {
-          console.log('err', err)
-        })
-      }
-
-    },
-    watch:{
-      tabs:function(val){
-        console.log('val', val)
-        this.$store.state.currentMLList = null
-        console.log('label', this.$store.state.currentConfig)
-        this.projectId = this.$store.state.currentProjectId
-        console.log('liugo', this.$store.state.currentDataList)
-      }
     },
     mounted() {
       this.id = this.$store.state.currentProjectId
@@ -141,21 +103,7 @@ import { Modal } from "antd";
       console.log('id name', this.id, this.name)
       this.$store.state.currentMLList = null
       console.log('label', this.$store.state.currentConfig)
-      this.projectId = this.$store.state.currentProjectId
-      // console.log('projectId',this.projectId)
-      //       this.$axios.get('/data/project/'+ this.projectId)
-      //           .then(res => {
-      //               console.log('res', res)
-      //               this.$store.state.currentDataList = res.data
-      //               // this.$store.state.currentDataList.
-      //               console.log('store datalist', this.$store.state.currentDataList)
-      //           })
-      //           .catch((error) => {
-      //           // here you will have access to error.response
-      //           console.log(error.response)
-      //           });
-      // console.log('liugo', this.$store.state.currentDataList)
-      
+      this.projectId = this.$store.state.currentProjectId      
     },
   }
 </script>
@@ -168,12 +116,12 @@ import { Modal } from "antd";
 }
 
 .tabcard{
-    height:100%;
+    height:700px;
  
 }
 
 .v-tabs-slider{
-  color:yellow;
+  color:#5E35B1;
 }
 
 

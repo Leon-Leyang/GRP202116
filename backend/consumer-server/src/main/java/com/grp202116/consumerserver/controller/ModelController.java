@@ -4,13 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.mapper.*;
+import com.grp202116.consumerserver.pojo.*;
 import com.grp202116.consumerserver.service.ml.ModelDriver;
 import com.grp202116.consumerserver.service.ml.ModelSaver;
-import com.grp202116.consumerserver.service.ml.ModelTrainer;
-import com.grp202116.consumerserver.pojo.AnnotationDO;
-import com.grp202116.consumerserver.pojo.DataDO;
-import com.grp202116.consumerserver.pojo.ModelDO;
-import com.grp202116.consumerserver.pojo.ProjectDO;
 import com.grp202116.consumerserver.service.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,35 +69,8 @@ public class ModelController {
     @PostMapping("/model/update")
     public void updateModel(@RequestBody ModelDO model) {
         ModelSaver modelSaver = new ModelSaver(model);
-        String modelPath = modelSaver.saveModel(model.getModelPath());
-        if (modelPath != null) model.setModelPath(modelPath);
-
-        String labelPath = modelSaver.saveLabels(model.getLabelsPath());
-        if (labelPath != null) model.setLabelsPath(labelPath);
-
-        if (saveModelParams(model, modelSaver)) return;
-        modelMapper.updateModel(model);
-    }
-
-    /**
-     * Save params of model
-     *
-     * @param model      a {@link ModelDO} object
-     * @param modelSaver the {@link ModelSaver} object
-     * @return true if no valid target path
-     */
-    private static boolean saveModelParams(@RequestBody ModelDO model, ModelSaver modelSaver) {
-        JSONObject params = JSON.parseObject(model.getParams());
-        String vocPath = params.getString("vocabPath");
-        if (vocPath != null) {
-            String targetPath = modelSaver.saveLabels(vocPath);
-            if (targetPath == null) return true;
-            else {
-                params.put("vocabPath", targetPath);
-                model.setParams(JSONObject.toJSONString(params));
-            }
-        }
-        return false;
+        if (modelSaver.saveModel()) return;
+        modelMapper.updateModel(modelSaver.getModel());
     }
 
     /**
@@ -129,26 +98,9 @@ public class ModelController {
             model.setProjectId(projectId);
 
             ModelSaver modelSaver = new ModelSaver(model);
-            String modelPath = modelSaver.saveModel(model.getModelPath());
-            if (modelPath == null) {
-                FileUtils.deleteDirectory(modelSaver.getModelPath());
-                return;
-            }
-            else model.setModelPath(modelPath);
+            if (modelSaver.saveModel()) return;
 
-            String labelPath = modelSaver.saveLabels(model.getLabelsPath());
-            if (labelPath == null) {
-                FileUtils.deleteDirectory(modelSaver.getModelPath());
-                return;
-            }
-            else model.setLabelsPath(labelPath);
-
-            if (saveModelParams(model, modelSaver)) {
-                FileUtils.deleteDirectory(modelSaver.getModelPath());
-                return;
-            }
-
-            modelMapper.insert(model);
+            modelMapper.insert(modelSaver.getModel());
         }
     }
 
@@ -175,17 +127,7 @@ public class ModelController {
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(project, model);
 
-        String scriptName;
-        if (model.getType().equals("Custom")) {
-            if (scriptPath == null) {
-                logger.warn("Script Path not specified for custom model");
-                return;
-            } else {
-                scriptName = ModelSaver.saveCustom(scriptPath);
-                if (scriptName == null) return;
-                else modelDriver.setScriptName(scriptName);
-            }
-        }
+        if (modelDriver.setScript(scriptPath)) return;
 
         for (DataDO data : dataList) {
             JSONObject object = modelDriver.runModelConfig(data);
@@ -195,11 +137,14 @@ public class ModelController {
                     restTemplate.postForObject("http://sidecar-server/model/run",
                             HttpUtils.parseJsonToFlask(JSONObject.toJSONString(object)), String.class));
             JSONArray predictions = result.getJSONArray("result");
+            if (predictions == null) continue;
 
             data.setPredicted(true);
             dataMapper.updateDataPredict(data);
+            PredictionDO prediction = modelDriver.savePredictions(predictions);
+            if (prediction == null) continue;
             predictionMapper.alter();
-            predictionMapper.insertAll(modelDriver.savePredictions(predictions));
+            predictionMapper.insert(prediction);
         }
     }
 
@@ -228,19 +173,12 @@ public class ModelController {
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList(projectId);
         if (annotatedDataList.size() < 1) return;
 
-        ModelTrainer modelTrainer = new ModelTrainer(project, model);
+        ModelDriver modelDriver = new ModelDriver(project, model);
 
-        String scriptName;
-        if (model.getType().equals("Customization")) {
-            if (scriptPath == null) return;
-            else {
-                scriptName = ModelSaver.saveCustom(scriptPath);
-                if (scriptName == null) return;
-                else modelTrainer.setScriptName(scriptName);
-            }
-        }
+        if (modelDriver.setScript(scriptPath)) return;
+
         JSONObject object = new JSONObject();
-        object.putAll(modelTrainer.trainModelConfig(trainParams));
+        object.putAll(modelDriver.trainModelConfig(trainParams));
         object.put("annotation_list", annotationList);
         object.put("data_list", annotatedDataList);
 

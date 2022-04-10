@@ -116,16 +116,8 @@ public class FileUtils {
             return;
         }
 
-        DataDO data = new DataDO();
-        data.setProjectId(projectId);
-        data.setType(realType);
-
-        Date date = new Date();
-        data.setUpdateTime(date);
-        data.setCreateTime(date);
-
         File targetFile = new File(projectPath + UUID.randomUUID() + "." + realType);
-        data.setUrl(targetFile.getPath());
+        DataDO data = initData(realType, targetFile.getPath());
 
         try {
             if (targetFile.exists()) Files.delete(targetFile.toPath());
@@ -150,16 +142,7 @@ public class FileUtils {
         String line;
 
         while ((line = bf.readLine()) != null) {
-            DataDO data = new DataDO();
-            data.setProjectId(projectId);
-            data.setType(realType);
-
-            Date date = new Date();
-            data.setUpdateTime(date);
-            data.setCreateTime(date);
-
-            data.setUrl(line);
-
+            DataDO data = initData(realType, line);
             dataList.add(data);
         }
         File targetFile = new File(projectPath + UUID.randomUUID() + "." + realType);
@@ -172,6 +155,26 @@ public class FileUtils {
         }
 
         bf.close();
+    }
+
+    /**
+     * Initialize data by setting up common params
+     *
+     * @param realType the real type of this data
+     * @param url the url of this data
+     * @return a {@link DataDO} object
+     */
+    private static DataDO initData(String realType, String url) {
+        DataDO data = new DataDO();
+        data.setProjectId(projectId);
+        data.setType(realType);
+
+        Date date = new Date();
+        data.setUpdateTime(date);
+        data.setCreateTime(date);
+
+        data.setUrl(url);
+        return data;
     }
 
     /**

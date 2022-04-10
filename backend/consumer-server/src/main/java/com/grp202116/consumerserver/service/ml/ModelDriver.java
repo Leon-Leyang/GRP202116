@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This ModelDriver class contains methods related to ml model running
@@ -39,12 +38,24 @@ public class ModelDriver {
     }
 
     /**
-     * Set the script name of a custom python file
+     * Save custom model script
      *
-     * @param scriptPath the url of the input file
+     * @param scriptPath the path of this script
+     * @return false if success true otherwise
      */
-    public void setScriptName(String scriptPath) {
-        this.scriptName = scriptPath;
+    public boolean setScript(String scriptPath) {
+        String scriptName;
+        if (model.getType().equals("Customization")) {
+            if (scriptPath == null) {
+                logger.warn("Script Path not specified for custom model");
+                return true;
+            } else {
+                scriptName = ModelSaver.saveCustom(scriptPath);
+                if (scriptName == null) return true;
+                else this.scriptName = scriptName;
+            }
+        }
+        return false;
     }
 
     /**
@@ -77,31 +88,46 @@ public class ModelDriver {
     }
 
     /**
+     * Create a {@link JSONObject} which contains all needed params for training
+     *
+     * @return the jsonObject {@link JSONObject}
+     */
+    public JSONObject trainModelConfig(JSONObject trainParams) {
+        JSONObject object = new JSONObject();
+        object.put("script_type", model.getType());
+        object.put("model_path", model.getModelPath());
+        object.put("model_root", model.getModelRoot());
+        object.put("labels_path", model.getLabelsPath());
+
+        JSONObject params = JSON.parseObject(model.getParams());
+        if (scriptName != null) params.put("scriptName", scriptName);
+        params.putAll(trainParams);
+        object.put("params", params);
+
+        return object;
+    }
+
+    /**
      * Convert resulting predictions to a json array
      *
      * @param predictions the {@link JSONArray} of predictions
      * @return a list of {@link ProjectDO}
      */
-    public List<PredictionDO> savePredictions(JSONArray predictions) {
+    public PredictionDO savePredictions(JSONArray predictions) {
+        if (predictions.size() < 1) return null;
 
-        List<PredictionDO> predictionList = new ArrayList<>();
-        for (int i = 0; i < Objects.requireNonNull(predictions).size(); i++) {
-            JSONObject predictionJSONObject = predictions.getJSONObject(i);
-            PredictionDO prediction = new PredictionDO();
-            prediction.setPredictionId(predictionJSONObject.getString("id"));
-            prediction.setType(predictionJSONObject.getString("type"));
-            prediction.setResult("[" + predictionJSONObject.toJSONString() + "]");
+        JSONObject predictionJSONObject = predictions.getJSONObject(0);
+        PredictionDO prediction = new PredictionDO();
+        prediction.setType(predictionJSONObject.getString("type"));
+        prediction.setResult("[" + predictions.toJSONString() + "]");
 
-            Date date = new Date();
-            prediction.setCreateTime(date);
-            prediction.setUpdateTime(date);
-            prediction.setDataId(data.getDataId());
-            prediction.setModel(model.getVersion());
-            prediction.setProjectId(project.getProjectId());
+        Date date = new Date();
+        prediction.setCreateTime(date);
+        prediction.setUpdateTime(date);
+        prediction.setDataId(data.getDataId());
+        prediction.setModel(model.getVersion());
+        prediction.setProjectId(project.getProjectId());
 
-            predictionList.add(prediction);
-        }
-
-        return predictionList;
+        return prediction;
     }
 }

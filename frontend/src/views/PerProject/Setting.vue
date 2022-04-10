@@ -1,7 +1,10 @@
-
+<!--This is the setting page
+In this page user can change project name, description, labeling Interafce,
+and also can delete all data or delete all annotation or delete all prediction
+@author LinjingSUN YingjiaLI-->
 <template>
-<v-card>
-  <v-container>
+<v-card style="height:100%;background:#f1f2fa;padding:10px">
+  <v-container style="height:80%">
     <v-row
       justify="space-between"
     >
@@ -10,79 +13,83 @@
         md="4"
       >
 
-      <div style="font-size: 1.25rem; font-weight: 500">
+      <div style="font-size:30px; font-weight: 500;margin-bottom:20px">
         Project Name:</div>
         
-        <v-form ref="form">
-          <v-text-field
-            v-model="name"
+        <el-input v-model="name"
             :counter="max"
             :rules="rules"
             outlined
-          ></v-text-field> <!-- filled
-              color="blue-grey lighten-2" -->
-        </v-form>
+            style="font-size:2rem"></el-input>
   
 
-       <div style="font-size: 1.25rem; font-weight: 500">
+       <div style="font-size:30px; font-weight: 500; margin-top: 25px">
         Project Description:</div>
 
-        <v-textarea
-              v-model="description"
-              :disabled="isUpdating"
-              outlined
-            > <!--filled
-              color="blue-grey lighten-2" -->
-        </v-textarea>
+        <el-input
+          type="textarea"
+          :rows="3" 
+          placeholder="(Optional)"
+          v-model="description"
+          :disabled="isUpdating"
+          outlined
+          style="font-size:1.7rem"
+          >
+        </el-input>
         
       </v-col>
 
       <v-col
         cols="12"
         md="6"
-      ><!--7-->
-      <div style="font-size: 1.25rem; font-weight: 500">
-        Used Template:</div>
-        <p></p>
+        style="height:100%"
+      >
+          <div style="font-size:30px; font-weight: 500">
+            Used Template:</div>
+            
 
-        <v-card>
-        <v-row
+          <v-card height="88%" class="LIcardA">
+          <v-container>
+          <v-row
           class="fill-height"
-          align="center"
-          justify="center"
-        >
-            <v-col
-              :key="i"
-              cols="12"
-              md="4"
-            >
-            <!--
-            <v-img src="/images/1.JPG" width="250px"/>-->
-            <v-img :src= "nowTemplateImage"
-                    width="225px"/>
-            <v-card-title style="font-size:0.25rem; padding=0">
-                {{ nowTemplateTitle }}
-            </v-card-title> 
-            </v-col>   
-        </v-row>
-        </v-card>
-
-    <v-dialog
+            align="center"
+            justify="center"
+            style="width:100%;"
+            
+          >
+          
+              <v-col
+                :key="i"
+                cols="12"
+                md="4"
+              >
+               <img :src= nowTemplateImage
+                    width="225px">
+              <v-card-title style="font-size:0.5rem" class="LIcard">
+                  {{ nowTemplateTitle }}
+              </v-card-title> 
+              </v-col>   
+          
+          </v-row>
+          </v-container>
+          </v-card>
+    
+          <v-dialog
       v-model="dialog"
       width="1600"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          class="mx-2"
+          style="margin-top:30px"
           fab
           dark
-          small
+          large
           v-bind="attrs"
           v-on="on"
           color="cyan"
           @click="editTemplate"
         >
-          <v-icon dark>
+          <v-icon dark x-large>
             mdi-pencil
           </v-icon>
         </v-btn>
@@ -112,54 +119,204 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    </v-col>
-    </v-row>
-  </v-container>
-
    <v-card-actions>
-      <v-spacer></v-spacer>
+     <v-spacer></v-spacer>
       <v-btn
-        color="blue-grey darken-3"
+        color="#7986CB"
         depressed
         @click="save()"
+        style="font-size: 2.5rem; font-weight: 500; margin-top:6rem; height:4rem"
       >
-        <v-icon left>
+        <v-icon left x-large>
           mdi-update
         </v-icon>
         SAVE
       </v-btn>
-   </v-card-actions>
-    <v-row style="padding:12px">
-        <!--<v-col offset-md="6">5-->
-        <div style="font-size: 1.25rem; font-weight: 500">
-        Manipulation:
-        </div>
-    </v-row> 
-    <v-row>  
-       <v-col offset-md="1">
-        <v-btn
-         @click="deleteAllData()">
-          Delete All Data
-        </v-btn>    
-        <v-btn
-        @click="deleteAllAnno()">
-          Delete All Annotations
-        </v-btn> 
-        <v-btn
-        @click="deleteAllPredict()">
-          Delete All Predictions
-        </v-btn>         
-       </v-col>  
+    </v-card-actions>
+       </v-col>
+
+
     </v-row>
+
+    <v-row>
+        <v-col>
+        <div style="font-size:30px; font-weight: 500">
+        Manipulation:</div>
+        </v-col>
+    </v-row> 
+
+  <div style="margin-top:45px">
+   <v-card outlined>
+    <v-row align="center"
+    justify="space-around" style="padding:20px 20px 20px 20px">
+
+    
+    <v-dialog
+      v-model="dialoga"
+      persistent
+      max-width="1000"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        
+        <v-btn
+        rounded
+          color="#B71C1C"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="font-size:30px; font-weight: 500"
+          height="60px"
+        >
+          Delete All Data
+        </v-btn>
+         
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Data?
+        </v-card-title>
+        <v-card-text>This will empty all the data files in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllData(),dialoga = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialoga = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+
+   
+    <v-dialog
+      v-model="dialogb"
+      persistent
+      max-width="1000"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        rounded
+          color="#B71C1C"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="font-size:30px; font-weight: 500"
+          height="60px"
+        >
+          Delete All Annotations
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Annotations?
+        </v-card-title>
+        <v-card-text>This will empty all the annotations you have made in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllAnno(),dialogb = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialogb = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+   
+
+    
+    <v-dialog
+      v-model="dialogc"
+      persistent
+      max-width="1000"
+      
+    ><!-- max-height="1000!impotant"-->
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+        rounded
+          color="#B71C1C"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="font-size:30px; font-weight: 500"
+          height="60px"
+        >
+          Delete All Predictions
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="text-h5">
+          Delete All Predictions?
+        </v-card-title>
+        <v-card-text>This will empty all the existing predictions in this project.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteAllPredict(),dialogc = false"
+          >
+            Confirm
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="dialogc = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+   
+
+    </v-row>
+    </v-card> 
+  </div>
+
+</v-container>
+
 </v-card>
 </template> 
  
     
 
 <style>
+
+.LIcardA{
+  overflow-y: scroll;
+  width: 100%;
+}
+
+.LIcard{
+  padding:0!important;
+}
+
+
 </style>
 
 <script>
+
+
+
 import SettingLS from '../../components/ProjectManage/SettingLS.vue'
 export default {
   components:{
@@ -168,10 +325,13 @@ export default {
   data() {
     return {
       dialog: false,
+      dialoga: false,
+      dialogb: false,
+      dialogc: false,
       items: [
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Polygons',
-                img: require('../../assets/logo.png'),
+                img: '/images/1.png',
                 config:`<View>
     <Image name="img" value="$image" showMousePos="true" zoom="true"></Image>
     <PolygonLabels name="tag" toName="img" strokewidth="5" fillcolor="red" pointstyle="circle" pointsize="small">
@@ -182,7 +342,7 @@ export default {
                 },
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Masks',
-                img: '../../assets/logo.png',
+                img: '/images/2.png',
                 config:`<View>
     <Image name="image" value="$image" zoom="true"/>
     <BrushLabels name="tag" toName="image">
@@ -193,7 +353,7 @@ export default {
                 },
                 {
                 title: 'Object Detection'+"\n"+' with Bounding Boxes',
-                img: '../../assets/logo.png',
+                img: './images/3.png',
                 config:`<View>
     <Image name="img" value="$image"></Image>
     <RectangleLabels name="tag" toName="img" fillOpacity="0.5" strokeWidth="5">
@@ -204,7 +364,7 @@ export default {
                 },
                 {
                 title: 'Keypoint Labeling',
-                img: '../../assets/logo.png',
+                img: './images/4.png',
                 config:`<View>
     <Image name="img" value="$image" zoom="true"></Image>
     <KeyPointLabels name="tag" toName="img" fillcolor="red">
@@ -215,7 +375,7 @@ export default {
                 },
                 {
                 title: 'Image Classification',
-                img: '../../assets/logo.png',
+                img: './images/5.png',
                 config:` <View>
     <Image name="image" value="$image"/>
     <Choices name="choice" toName="image">
@@ -227,7 +387,7 @@ export default {
                 },
                 {
                 title: 'Named Entity Recognition',
-                img: './images/a.jpg',
+                img: './images/a.png',
                 config:`<View>
     <Labels name="label" toName="text">
         <Label value="PER" background="red"/>
@@ -240,7 +400,7 @@ export default {
                 },
                 {
                 title: 'Machine Translation',
-                img: './images/b.jpg',
+                img: './images/b.png',
                 config:`<View>
     <Header value="Please read the text" />
     <Text name="text" value="$text" />
@@ -250,7 +410,7 @@ export default {
                 },
                 {
                 title: 'Text Classification',
-                img: './images/c.jpg',
+                img: './images/c.png',
                 config:`<View>
     <Text name="text" value="$text"/>
     <View style="box-shadow: 2px 2px 5px #999; padding: 20px; margin-top: 2em; border-radius: 5px;">
@@ -265,7 +425,7 @@ export default {
                 },
                 {
                 title: 'Text Taxonomy',
-                img: './images/d.jpg',
+                img: './images/d.png',
                 config:`<View>
     <Text name="text" value="$text"/>
     <Taxonomy name="taxonomy" toName="text">
@@ -280,6 +440,30 @@ export default {
 </View>`
                 },                
       ],
+/*
+   items: [
+        {
+          title: 'Polygons',
+          img: '/images/1.JPG',
+        },
+        {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+         {
+          title: 'Masks',     
+          img: '/images/2.JPG',
+        },
+      ],*/
+
       nowTemplateTitle:'',
       nowTemplateImage:'',
       name: this.$store.state.currentProject.name,
@@ -332,6 +516,7 @@ export default {
     },    
   },
   mounted() {
+    this.$store.state.pageLocate = 'NotData'
     console.log('this.$store.state.currentProject', this.$store.state.currentProject)
     this.nowTemplateTitle = this.$store.state.currentConfigTitle
     // this.$store.state.beforeConfig = this.$store.state.currentConfig
@@ -347,4 +532,10 @@ export default {
 
 }
 
+
 </script>
+    <style>
+      .el-input__inner{
+        height: 60px!important;
+      }
+    </style>

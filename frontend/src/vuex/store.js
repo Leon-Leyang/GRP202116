@@ -1,3 +1,8 @@
+/**
+ * This is used to store global variables
+ * @link https://vuex.vuejs.org/
+ * @link https://www.npmjs.com/package/axios
+ */
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from "axios";
@@ -9,6 +14,8 @@ const store = new Vuex.Store({
         currentProjectId: 0,
         currentDataList: [],
         currentPageList:[],
+        currentPage: 1,
+        totakNum:0,
         currentDataId: 0,
         realDataId: 0,
         currentProject: [],
@@ -21,6 +28,7 @@ const store = new Vuex.Store({
         dataType:'',
         beforeConfig:``,
         selectData:[],
+        pageLocate:'NotData',
     },
     getters: {
         getProjectId(state){

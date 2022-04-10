@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
-    imgPath = '../../../ml/resources/puppy.webp'
+    imgPath = '../../../ml/resources/golden-retriever-1.jpg'
 
 
     semSegMaskModel = SemSegMaskModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, type, mean, std)

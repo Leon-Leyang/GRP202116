@@ -48,11 +48,8 @@ class TextClsModel(Model):
         # Initialize the preprocess object
         self.preprocess = Preprocess(vocabPath, tokenNum, sequenceLen)
 
-    def predict(self, textPath):
-        super().predict(textPath)
-
-        with open(textPath, 'r') as f:
-            text = f.read()
+    def predict(self, text):
+        super().predict(text)
 
         sequence = torch.from_numpy(np.expand_dims(self.preprocess(text), axis=0)).to(self.device)
         modelOutput = self.model(sequence)
@@ -88,6 +85,6 @@ if __name__ == '__main__':
     textClsModel = TextClsModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, vocabPath,
                                 tokenNum, sequenceLen)
 
-    textPath = '../../../ml/resources/tweets.txt'
-    predictionItem = textClsModel.predict(textPath)
+    text = 'Our Deeds are the Reason of this #earthquake May ALLAH Forgive us all'
+    predictionItem = textClsModel.predict(text)
     print(predictionItem)

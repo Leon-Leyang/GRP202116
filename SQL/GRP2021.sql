@@ -48,6 +48,7 @@ CREATE TABLE `data` (
   `is_annotated` tinyint(1) DEFAULT '0',
   `is_predicted` tinyint(1) DEFAULT '0',
   `list_number` int DEFAULT NULL,
+  `create_time` date DEFAULT NULL,
   PRIMARY KEY (`data_id`),
   KEY `project_id` (`project_id`),
   CONSTRAINT `data_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `project` (`project_id`) ON DELETE CASCADE

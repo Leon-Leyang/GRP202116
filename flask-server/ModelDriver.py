@@ -73,9 +73,9 @@ class ModelDriver():
         from_name, to_name, tool_type = ModelDriver.parse_config(configs)
 
         if script_type == 'Image Classification':
-            print(from_name)
-            print(to_name)
-            print(tool_type)
+            # print(from_name)
+            # print(to_name)
+            # print(tool_type)
             model = ImgClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                 json.loads(params['mean']), json.loads(params['std']), json.loads(params['imgSize']))
         elif script_type == 'Object Detection':
@@ -84,13 +84,13 @@ class ModelDriver():
         elif script_type == 'Keypoint Labeling':
             model = KpLabModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                json.loads(params['threshold']))
-        elif script_type == 'Semantic Segmentation Mask':
+        elif script_type == 'Semantic Segmentation with Masks':
             model = SemSegMaskModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                     json.loads(params['mean']), json.loads(params['std']))
         elif script_type == 'Text Classification':
             model = TextClsModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                                  params['vocabPath'], json.loads(params['tokenNum']), json.loads(params['sequenceLen']))
-        elif script_type == 'Named Entity Recognition':
+        elif script_type == 'Name Entity Recognition':
             model = NERModel(model_path, model_root, labelsPath, model_version, from_name, to_name, tool_type,
                              json.loads(params['sequenceLen']))
         elif script_type == 'Customization':
@@ -101,7 +101,7 @@ class ModelDriver():
             print("model undefined")
 
         prediction_item = model.predict(data)
-
+        # print(data)
         print(prediction_item)
         return prediction_item
 
@@ -196,7 +196,7 @@ if __name__ == '__main__':
     # }
 
     params = {
-        'scriptName' : 'CustomModel',
+        'scriptName': 'CustomModel',
         'savePath': savePath
     }
 

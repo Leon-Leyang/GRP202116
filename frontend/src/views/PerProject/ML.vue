@@ -1,12 +1,15 @@
+<!--This is the ML page
+In this page user can import ml, run ml and train ml
+@author LinjingSUN YingjiaLi-->
 <template>
-<div style="font-size: 1.25rem; font-weight: 500"> 
+<div style="font-size: 1.25rem; font-weight: 500;background:#f1f2fa;height:100%"> 
     <v-container class="ML-container">
         <v-row>
             <v-col>
                 <v-card
                   v-scroll.self="onScroll"
                   class="overflow-y-auto"
-                  max-height="400">
+                  max-height="630px" style="margin-top:20px">
                     <v-card-text>
                         <div class="mb-4">
 
@@ -16,9 +19,9 @@
                                 <el-input v-model="form.version" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model Type:">
+                            <el-form-item label="Script Type:">
 
-                            <el-select v-model="value" placeholder="please select the ML model type" @change="selectType">
+                            <el-select v-model="value" placeholder="Please Select the ML Model Script Type" @change="selectType">
                                 <el-option-group
                                 v-for="group in options"
                                 :key="group.label"
@@ -38,16 +41,16 @@
                                 <el-input v-model="form.modelRoot" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="Model File:" style="margin-top:20px">
+                            <el-form-item label="Model Path:" style="margin-top:20px">
                                 <el-input v-model="form.modelPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
                             
-                            <el-form-item label="Class File:" style="margin-top:20px">
+                            <el-form-item label="Class File Path:" style="margin-top:20px">
                                 <el-input v-model="form.labelsPath" clearable maxlength="" size="small" suffix-icon="el-icon-edit el-input__icon"></el-input>
                             </el-form-item>
 
                             <el-form-item label="Model Description:" style="margin-bottom:20px!important">
-                                <el-input type="textarea" v-model="form.description"></el-input>
+                                <el-input placeholder="(Optional)" type="textarea" v-model="form.description"></el-input>
                             </el-form-item>
                             <!--end-->  
 
@@ -63,7 +66,7 @@
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isObjDetect" label="Threashold:">
+                            <el-form-item v-if="isObjDetect" label="Threshold:">
                                 <el-input v-model="form.params.threshold" clearable maxlength="" size="mini" placeholder="(For object detection)"></el-input>
                             </el-form-item>
                             
@@ -81,7 +84,7 @@
                             </el-form-item>
                             
 
-                            <el-form-item v-if="isTC" label="Vocabulary File:" style="margin-top:20px">
+                            <el-form-item v-if="isTC" label="Vocabulary File Path:" style="margin-top:20px">
                                 <el-input v-model="form.params.vocabPath" clearable maxlength="" size="mini" placeholder="(For keypoint labeling)"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isTC" label="Token Number:">
@@ -97,15 +100,38 @@
                             </el-form-item>
 
                             <el-form-item style="margin-top:40px">
+
+
+                             <!--
                                 <el-button type="primary" @click="onSubmit">Save</el-button>
-                                <el-button>Cancel</el-button>
-                            </el-form-item>
-                            <!--
-                            <div>
-                                    <el-button type="primary" @click="$router.push('/ML-Test')">Test</el-button>
-                                    <el-button type="primary" @click="$router.push('/ML-Train')">Train</el-button>
+                                <el-button>Cancel</el-button>-->
+
+                            <div style="display:flex;flex-direction:row">
+                            <v-btn
+                            
+                            depressed
+                            color="pink lighten-1"
+                            @click="onSubmit"
+                            style="font-size: 2rem"
+                            >
+                            Save
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                            
+                             <v-btn
+                            
+                            depressed
+                            color="error"
+                            style="font-size: 2rem"
+                            >
+                            Cancel
+                            </v-btn>
                             </div>
-                            -->
+                            
+                            </el-form-item>
+
+                            
+                           
                             </el-form>
 
                         </div>
@@ -160,7 +186,7 @@
                                     width="72px"
                                     @click="chooseVersion(item.version, item.type)"
                                   >
-                                    TEST
+                                    Run
                                   </v-btn>
                                   
                                 </template>
@@ -168,26 +194,29 @@
 
                                 <v-card>
                                   <v-card-title>
-                                    <span class="text-h5">Test</span>
+                                    <span class="text-h5">Run</span>
                                   </v-card-title>
                                   <v-card-text>
                                     <v-container>
                                       <v-row>   
                                         <v-col cols="12" v-if="nowType == 'Customization'">
-                                        Upload the Customized Train Script Here:
-                                        <el-input type="textarea" v-model="testScript"></el-input>
+                                        Fill in the Customized Run Script Path Here:
+                                        <el-input placeholder="(Only For Customization Type)" type="textarea" v-model="testScript"></el-input>
                                         </v-col>
                                       </v-row>
                                     </v-container>
                                   </v-card-text>
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
+                                    <v-btn text @click="cancelTest()">
+                                      Cancel
+                                    </v-btn>
                                     <v-btn
                                       color="blue darken-1"
                                       text
                                       @click="MLTest(nowVersion)"
                                     >
-                                      Run
+                                      Start
                                     </v-btn>
                                   </v-card-actions>
                                 </v-card>
@@ -222,7 +251,7 @@
                                           cols="12"
                                           sm="6"
                                           md="4"
-                                          v-if="nowType != 'Customization'"
+                                          v-if="nowType == 'Image Classification'"
                                         >
                                           <v-text-field
                                             v-model="trainObject.params.trainFrac"
@@ -234,7 +263,7 @@
                                         </v-col>
                                         
                                         <v-col
-                                        v-if="nowType != 'Customization'"
+                                        v-if="nowType == 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                           md="4"
@@ -248,7 +277,7 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
-                                        v-if="nowType != 'Customization'"
+                                        v-if="nowType == 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                           md="4"
@@ -263,7 +292,7 @@
                                         </v-col>
 
                                         <v-col cols="12"
-                                        v-if="nowType != 'Customization'">
+                                        v-if="nowType == 'Image Classification'">
                                           
                                             <v-switch
                                               v-model="trainObject.params.shuffle"
@@ -272,7 +301,7 @@
                                         </v-col>
                                       
                                         <v-col cols="12"
-                                        v-if="nowType != 'Customization'">
+                                        v-if="nowType == 'Image Classification'">
                                           <v-text-field
                                           v-model="trainObject.params.epochNum"
                                             label="Epoch Number:"
@@ -283,11 +312,10 @@
                                         </v-col>
                                         
                                         <v-col cols="12"
-                                        v-if="nowType != 'Customization'">
+                                        v-if="nowType == 'Image Classification'">
                                           <v-text-field
                                           v-model="trainObject.params.learningRate"
                                             label="Learning Rate:"
-                                            type="password"
                                             hint="number"
                                             persistent-hint
                                             required
@@ -295,7 +323,7 @@
                                           ></v-text-field>
                                         </v-col>
                                         <v-col
-                                        v-if="nowType != 'Customization'"
+                                        v-if="nowType == 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                         >
@@ -307,7 +335,7 @@
                                           ></v-select>
                                         </v-col>
                                         <v-col
-                                        v-if="nowType != 'Customization'"
+                                        v-if="nowType = 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                         >
@@ -330,10 +358,10 @@
                                         </v-col>
 
                                         <v-col cols="12"
-                                        v-if="nowType == 'Customization'">
+                                        v-if="nowType != 'Image Classification'">
                                           <div style="margin-top:30px">
-                                            Upload the Customized Train Script Here:
-                                            <el-input type="textarea" v-model="trainObject.script_url"></el-input>                                            
+                                            Fill in the Customized Train Script Here:
+                                            <el-input type="textarea" placeholder="(For Every Type Except Image Classification)" v-model="trainObject.script_url"></el-input>                                            
                                           </div>
                                         </v-col>
                                         
@@ -343,21 +371,20 @@
                                   </v-card-text>
                                   <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <!--
+                                    
                                     <v-btn
-                                      color="blue darken-1"
                                       text
-                                      @click="dialog = false"
+                                      @click="cancelTrain()"
                                     >
-                                      Close
+                                      Cancel
                                     </v-btn>
-                                  -->
+                                 
                                     <v-btn
                                       color="blue darken-1"
                                       text
                                       @click="MLTrain(nowVersion)"
                                     >
-                                      Run
+                                      Start
                                     </v-btn>
                                   </v-card-actions>
                                 </v-card>
@@ -395,10 +422,11 @@
 
   .r-card{
     width:100%; 
+    margin-top:20px
   }
 
   .el-select .el-input {
-    width: 280px;
+    width: 350px;
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
@@ -478,7 +506,7 @@
       ],
 
       options: [{
-        label: 'Basic Types',
+        label: 'Supportive Types',
         options: [{
             value: '0',
             label: 'Image Classification'
@@ -617,6 +645,10 @@
 
           console.log('this.$store.state.currentMLList', this.$store.state.currentMLList)
       },
+      cancelTest(){
+        this.testScript = null
+        this.dialog = false
+      },      
       MLTest(version){
         console.log('nee', this.testScript)
         console.log('version', version)
@@ -629,6 +661,7 @@
         .then((res)=>{
           console.log('test model', res)
         })   
+        this.testScript = null
         this.form = {
           modelRoot:'',
           version: '',
@@ -648,6 +681,24 @@
           }
         }    
       },
+      cancelTrain(){
+        this.trainObject={
+          version:null,
+          params:{
+            trainFrac: null,
+            batchSize:null,
+            workerNum:null,
+            shuffle:false,
+            epochNum:null,
+            learningRate:null,
+            optimizer:null,
+            lossFunc:null,
+            savePath:null,
+          },
+          script_url:null,
+        }   
+        this.dialogTrain = false
+      },       
       MLTrain(version){
         this.dialogTrain = false
         console.log('train', version, this.trainObject)
@@ -710,6 +761,7 @@
     
     },
     mounted() {
+      this.$store.state.pageLocate = 'NotData'
       console.log('ml.currentProjectId', this.$store.state.currentProjectId)
       this.$axios.get('/model/'+ this.$store.state.currentProjectId)
           .then(res => {

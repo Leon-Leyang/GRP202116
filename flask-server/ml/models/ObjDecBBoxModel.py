@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     threshold = 0.75
 
-    imgPath = '../../../ml/resources/puppy.webp'
+    imgPath = '../../../ml/resources/persian-cat-5.jpg'
 
     objDecBBoxModel = ObjDecBBoxModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType,
                                       threshold)

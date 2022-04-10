@@ -1,4 +1,8 @@
-<!--用代码设置label interface-->
+<!--This is to change labeling interface template
+user can change label name and color and type by changing code
+@author LinjingSUN
+@link https://www.npmjs.com/package/vue-codemirror
+-->
 <template>
 <div>
   <div style="display:flex;height:540px;width:100%">
@@ -14,6 +18,7 @@
       @ready="onCmReady"
       @focus="onCmFocus"
       @input="onCmCodeChange"
+      style="height:100%!important"
     />
   </div>
   <v-container
@@ -24,10 +29,9 @@
     <v-row
       v-scroll:#scroll-target="onScroll"
       align="center"
-      style="height: 600px"
     >
     <div>
-      <div id="label-studio" style="width:60%;margin-right:30px"></div>
+      <div id="label-studio" style="width:100%;margin-right:30px"></div>
     </div>
     </v-row>
   </v-container>
@@ -292,7 +296,7 @@ export default {
           id: 2,
           data: {
             image:
-                "https://htx-misc.s3.amazonaws.com/opensource/label-studio/examples/images/nick-owuor-astro-nic-visuals-wDifg5xc9Z4-unsplash.jpg",
+                "https://cdn.mos.cms.futurecdn.net/C9JVYkqCELkdERaqd9gFbj-1200-80.jpg",
           },
         },
 
@@ -383,6 +387,10 @@ export default {
     console.log(this.labelStudio);
     console.log('the current CodeMirror instance object:', this.codemirror)
   },
+  mounted() {
+    this.$refs.cmEditor.codemirror.setSize("100%", "100%")
+    this.$store.state.pageLocate = 'NotData'
+  },
 };
 </script>
 
@@ -403,5 +411,9 @@ export default {
   font-size : 13px;
   line-height : 150%;
   text-align: left;
+  height: 100%;
+}
+.CodeMirror-code{
+  height: auto;
 }
 </style>

@@ -1,9 +1,13 @@
 package com.grp202116.consumerserver.service.ml;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.grp202116.consumerserver.pojo.ModelDO;
+import com.grp202116.consumerserver.service.util.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +21,7 @@ import java.nio.file.Files;
  */
 public class ModelSaver {
     private static String modelPath;
+    private final ModelDO model;
     private static final Logger logger = LoggerFactory.getLogger(ModelSaver.class);
 
     /**
@@ -37,49 +42,87 @@ public class ModelSaver {
                 e.printStackTrace();
             }
         }
+        this.model = model;
     }
 
     /**
-     * Get the directory path of a model saver
+     * Return the model in this model saver
      *
-     * @return the directory path {@link #modelPath}
+     * @return {@link ModelDO}
      */
-    public String getModelPath() {
-        return modelPath;
+    public ModelDO getModel() {
+        return model;
     }
 
     /**
      * Save a model by copying it to a local address
      *
-     * @param url the url of the specified mode
+     * @param url      the url of the specified mode
+     * @param isScript true if it is a script
      * @return the saved path
      */
-    public String saveModel(String url) {
+    private String saveFile(String url, boolean isScript) {
         if (url == null) return null;
         File modelFile = new File(url);
         if (!modelFile.exists()) return null;
-        if (!FilenameUtils.getExtension(modelFile.getName()).equals("pth")) {
-            logger.warn("This is not a model .pth file.");
-            return null;
+        if (!isScript) {
+            if (!FilenameUtils.getExtension(modelFile.getName()).equals("pth")) {
+                logger.warn("This is not a model .pth file.");
+                return null;
+            }
+        } else {
+            if (!FilenameUtils.getExtension(modelFile.getName()).equals("txt") &&
+                    !FilenameUtils.getExtension(modelFile.getName()).equals("csv")) {
+                logger.warn("This is not a .txt nor .csv file.");
+                return null;
+            }
         }
+
         return getFilePath(modelFile);
     }
 
     /**
-     * Save a text file by copying it to a local address
+     * This method saves required files to a local directory
      *
-     * @param url the url of the specified file
-     * @return the saved path
+     * @return true if something went wrong false otherwise
      */
-    public String saveLabels(String url) {
-        File labelFile = new File(url);
-        if (!labelFile.exists()) return null;
-        if (!FilenameUtils.getExtension(labelFile.getName()).equals("txt") &&
-                !FilenameUtils.getExtension(labelFile.getName()).equals("csv")) {
-            logger.warn("This is not a .txt nor .csv file.");
-            return null;
+    public boolean saveModel() {
+        String path = saveFile(model.getModelPath(), false);
+        if (path == null) {
+            FileUtils.deleteDirectory(modelPath);
+            return true;
+        } else model.setModelPath(path);
+
+        String labelPath = saveFile(model.getLabelsPath(), true);
+        if (labelPath == null) {
+            FileUtils.deleteDirectory(modelPath);
+            return true;
+        } else model.setLabelsPath(labelPath);
+
+        if (saveModelParams()) {
+            FileUtils.deleteDirectory(modelPath);
+            return true;
         }
-        return getFilePath(labelFile);
+        return false;
+    }
+
+    /**
+     * Save params of model
+     *
+     * @return true if not a valid target path
+     */
+    private boolean saveModelParams() {
+        JSONObject params = JSON.parseObject(model.getParams());
+        String vocPath = params.getString("vocabPath");
+        if (vocPath != null) {
+            String targetPath = saveFile(vocPath, true);
+            if (targetPath == null) return true;
+            else {
+                params.put("vocabPath", targetPath);
+                model.setParams(JSONObject.toJSONString(params));
+            }
+        }
+        return false;
     }
 
     /**

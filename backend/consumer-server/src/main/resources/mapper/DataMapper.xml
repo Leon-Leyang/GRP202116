@@ -7,6 +7,7 @@
     <resultMap id="dataMap" type="com.grp202116.consumerserver.pojo.DataDO">
         <id column="data_id" property="dataId"/>
         <result column="url" property="url"/>
+        <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
         <result column="type" property="type"/>
         <result column="project_id" property="projectId"/>
@@ -36,21 +37,27 @@
 
     <update id="setAnnotated">
         update data
-        set is_annotated = true
+        <set>
+            is_annotated = true,
+            update_time = #{date}
+        </set>
         where data_id = #{dataId}
     </update>
 
     <update id="setNotAnnotated">
         update data
-        set is_annotated = false
+        <set>
+            is_annotated = false,
+            update_time = #{date}
+        </set>
         where data_id = #{dataId}
     </update>
 
     <insert id="insertAll" parameterType="List" useGeneratedKeys="true" keyProperty="dataId" keyColumn="data_id">
-        insert into data (url,update_time,type,project_id, list_number)
+        insert into data (url,update_time,type,project_id, list_number, create_time)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.url},#{item.updateTime},#{item.type},#{item.projectId}, #{item.listNumber})
+            (#{item.url},#{item.updateTime},#{item.type},#{item.projectId}, #{item.listNumber}, #{item.createTime})
         </foreach>
     </insert>
 
