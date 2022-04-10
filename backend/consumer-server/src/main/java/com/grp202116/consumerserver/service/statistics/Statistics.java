@@ -125,6 +125,7 @@ public class Statistics {
                             flag = true;
                         }
                     }
+
                     if(flag==false){
                         tags.add(new Tag(tagName));
                     }
