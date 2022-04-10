@@ -499,7 +499,7 @@ export default {
               })
             },
           });
-        },1500)
+        },2000)
       }
     },
     loadData(projectId, pageNum, pageSize){
@@ -853,7 +853,7 @@ export default {
       }
     console.log(this.labelStudio.options)
     this.$store.state.nowLS = this.labelStudio
-    },2000)
+    },3000)
 
   },
 };

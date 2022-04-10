@@ -65,15 +65,8 @@ which show all project card
                                 </el-form-item>   
                     </el-tab-pane>
 
-                    <!-- Import ML -->
-                  <el-tab-pane name="2" v-if="importAllow">
-                      <span slot="label">Import ML model</span>
-                      <ML></ML>
-                      <!-- Import ML Model -->
-                  </el-tab-pane>
-
                     <!-- Import Data -->
-                    <el-tab-pane name="3" v-if="importAllow">
+                    <el-tab-pane name="2" v-if="importAllow">
                         <span slot="label">Import Data</span>
                         <div style="margin-left: 45%">
                           <div>Choose Data Type:</div>
@@ -113,10 +106,17 @@ which show all project card
                     </el-tab-pane>
 
                     <!-- Setting Label Interface -->
-                    <el-tab-pane name="4">
+                    <el-tab-pane name="3">
                     <span slot="label">Setup Labeling Interface</span>
                         <SettingLS></SettingLS>
-                    </el-tab-pane>                    
+                    </el-tab-pane>    
+
+                    <!-- Import ML -->
+                  <el-tab-pane name="4" v-if="importAllow">
+                      <span slot="label">Import ML model</span>
+                      <ML></ML>
+                      <!-- Import ML Model -->
+                  </el-tab-pane>
 
                 </el-tabs>
                 </el-form>
@@ -476,7 +476,7 @@ import ML from './Create_ML.vue'
                 console.log('now!!!',this.$store.state.currentMLList)
 
 
-                var folderURL = this.folderURL.split(",")
+                var folderURL = (this.folderURL || "").split(",")
                 var projectId = this.newestId
                 //upload folder address
                 if(folderURL != ''){                
@@ -649,6 +649,7 @@ import ML from './Create_ML.vue'
     },
     mounted() {
         // console.log('tag', '')
+        this.$store.state.pageLocate = 'NotData'
         this.getList()
     },
     activated: function() {
