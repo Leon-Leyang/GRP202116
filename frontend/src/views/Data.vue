@@ -499,7 +499,7 @@ export default {
               })
             },
           });
-        },1800)
+        },2000)
       }
     },
     loadData(projectId, pageNum, pageSize){
@@ -675,7 +675,7 @@ export default {
       if(this.annos == [] & this.predicts != []){
         this.annos = this.predicts
       }
-      new LabelStudio().off()
+      new LabelStudio().destroy()
       console.log('anno,pre',this.annos,this.predicts)
       if(this.dataType == 'image'){
         this.labelStudio = new LabelStudio("label-studio", {
@@ -854,7 +854,7 @@ export default {
       }
     console.log(this.labelStudio.options)
     this.$store.state.nowLS = this.labelStudio
-    },1000)
+    },2000)
 
   },
 };

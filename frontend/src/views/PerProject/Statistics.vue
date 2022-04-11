@@ -58,8 +58,10 @@ which contains statistic data about data, annotation prediction, ml
             </el-row>
             <el-row>
             <el-col :span="24" class="inblock">
-                <div class="grid-content bg-purple title" style="color:#E0E0E0">Annotations Percentage:</div>
-                <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averageAnnotations" color="green"></el-progress></div>
+                <div class="grid-content bg-purple title" style="color:#E0E0E0">Annotation Tags Percentage:</div>
+                <div  class="pagetext-b">
+                  <ve-ring :data="AnnoTag"  height="300px" style="width:250px"></ve-ring>
+                </div>
             </el-col>
             </el-row>   
             <el-row>
@@ -137,6 +139,7 @@ which contains statistic data about data, annotation prediction, ml
   
 </template>
 <script>
+// import Item from 'antd/lib/list/Item';
 export default {
   data() {
     return {
@@ -151,6 +154,10 @@ export default {
             { 'Model Name': 'Model 5', 'Accuracy': 50,},
           ]
         },
+        AnnoTag: {
+          columns: ['name','number'],
+          rows: []
+        },        
     }
   },
   mounted(){
@@ -160,11 +167,17 @@ export default {
           console.log("statistics",res)
           this.statistic = res.data
           console.log(" sta table",this.statistic)
+          // console.log('tags', this.statistic)
+          this.AnnoTag.rows = this.statistic.tags.map(item =>{
+            return item
+          })
+          console.log('Anno', this.AnnoTag.columns,this.chartData_1.columns)            
+          console.log('Anno', this.AnnoTag.rows,this.chartData_1.rows)            
       })
       .catch((error) => {
           // here you will have access to error.response
           console.log('error',error.resposnse)
-      });    
+      });  
   }
 }
 </script>

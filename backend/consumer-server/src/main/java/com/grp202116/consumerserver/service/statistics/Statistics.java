@@ -98,8 +98,8 @@ public class Statistics {
     public List<Tag> getTags() {
         List<Tag> tags = new ArrayList<>();
 
-        String toolPattern = "(?<=(type\\\\\":\\\\\")).*?(?=\\\\\")";
-        for(AnnotationDO annotationDO:annotations){
+        String toolPattern = "(?<=(type(\\\\)?\":(\\\\)?\")).*?(?=(\\\\)?\")";
+        for(AnnotationDO annotationDO:getAnnotationsFromDB()){
             String toolName = "";
             String result = annotationDO.getResult();
             Pattern tool =Pattern.compile(toolPattern);
@@ -108,7 +108,7 @@ public class Statistics {
                 toolName = m.group(0);
             }
 
-            String tagPattern = "(?<="+toolName+"\\\\\":\\[\\\\\").*?(?=\\\\)";
+            String tagPattern = "(?<="+toolName+"\":\\[\").*?(?=\")";
             Pattern tag = Pattern.compile(tagPattern);
             Matcher m1 = tag.matcher(result);
 

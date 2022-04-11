@@ -138,7 +138,7 @@ We provide 5 image template and 4 text template for user to use
                                     class="fill-height flex-column"
                                     justify="space-between"
                                     >
-                                    <p class="mt-4 subheading text-left">
+                                    <p class="mt subheading text-left">
                                         {{ item.title }}
                                     </p>
                     <div> <!--class="align-self-center"-->
@@ -227,7 +227,7 @@ export default {
                 },
                 {
                 title: 'Semantic Segmentation'+"\n"+' with Masks',
-                img: './images/2.png',
+                img: './images/2.jpg',
                 config:`<View>
     <Image name="image" value="$image" zoom="true"/>
     <BrushLabels name="tag" toName="image">
@@ -275,7 +275,7 @@ export default {
             textTool: [
                 {
                 title: 'Named Entity Recognition',
-                img: './images/a.png',
+                img: './images/a.jpg',
                 config:`<View>
     <Labels name="label" toName="text">
         <Label value="PER" background="red"/>
@@ -288,7 +288,7 @@ export default {
                 },
                 {
                 title: 'Machine Translation',
-                img: './images/b.png',
+                img: './images/b.jpg',
                 config:`<View>
     <Header value="Please read the text" />
     <Text name="text" value="$text" />
@@ -298,7 +298,7 @@ export default {
                 },
                 {
                 title: 'Text Classification',
-                img: './images/c.png',
+                img: './images/c.jpg',
                 config:`<View>
     <Text name="text" value="$text"/>
     <View style="box-shadow: 2px 2px 5px #999; padding: 20px; margin-top: 2em; border-radius: 5px;">
@@ -313,7 +313,7 @@ export default {
                 },
                 {
                 title: 'Text Taxonomy',
-                img: './images/d.png',
+                img: './images/d.jpg',
                 config:`<View>
     <Text name="text" value="$text"/>
     <Taxonomy name="taxonomy" toName="text">
