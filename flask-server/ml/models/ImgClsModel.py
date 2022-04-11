@@ -1,7 +1,7 @@
 '''
 Author: Leyang Hu (scylh6@nottingham.edu.cn)
 -----
-Last Modified: Saturday, 26th March 2022 18:56
+Last Modified: Saturday, 11th April 2022 11:16
 Modified By: Leyang Hu (scylh6@nottingham.edu.cn)
 -----
 Brief: Script class for image classification which overrides the methods for predicting and training and corresponding dataset class used for training
@@ -26,7 +26,7 @@ from ml.models.Model import Model
 class ImgClsModel(Model):
 
     def __init__(self, modelPath, modelRoot, labelsPath, modelVersion=None, fromName=None, toName=None, toolType=None,
-                 mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], imgSize=224):
+                 mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], imgSize=224):
         super().__init__(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType)
 
         # Preprocessing operations
@@ -84,21 +84,21 @@ class ImgClsModel(Model):
             with torch.no_grad():
                 for data in self.testLoader:
                     images, truths = data
-                    images = images.to(self.device)
-                    truths = truths.to(self.device)
-                    # print('truths: ' + self.labels[truths[0]])
+
+                    images, truths = images.to(self.device), truths.to(self.device)
 
                     # run the model on the test set to predict labels
                     outputs = self.model(images)
-                    # the label with the highest energy will be our prediction
+
+                    # the label with the highest energy will be the prediction
                     _, predicted = torch.max(outputs.data, 1)
-                    # print('predictions: ' + self.labels[predicted[0]] + '/n')
+
                     total += truths.size(0)
                     accuracy += (predicted == truths).sum().item()
 
             # compute the accuracy over all test images
             accuracy = (100 * accuracy / total)
-            return (accuracy)
+            return accuracy
 
         super().train(datas, annotations, savePath)
 
@@ -137,6 +137,7 @@ class ImgClsModel(Model):
         elif (optimizer == 'LBFGS'):
             optimizer = LBFGS(self.model.parameters(), lr=learningRate)
 
+        bestAccuracy = 0.0
 
         for epoch in range(epochNum):  # loop over the dataset multiple times
 
@@ -148,12 +149,16 @@ class ImgClsModel(Model):
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
+
                 # predict classes using images from the training set
                 outputs = self.model(images)
+
                 # compute the loss based on model output and real labels
                 loss = loss_fn(outputs, truths)
+
                 # backpropagate the loss
                 loss.backward()
+
                 # adjust parameters based on the calculated gradients
                 optimizer.step()
 
@@ -161,8 +166,11 @@ class ImgClsModel(Model):
             accuracy = testAccuracy()
             print('For epoch', epoch + 1, 'the test accuracy over the whole test set is %d %%' % (accuracy))
 
-        torch.save(self.model, savePath)
-        return accuracy, trainNum
+            if accuracy > bestAccuracy:
+                torch.save(self.model, savePath)
+                bestAccuracy = accuracy
+
+        return bestAccuracy, trainNum
 
 class ImgClsDataset(Dataset):
     def __init__(self, datas, annotations, preprocess, labels):
@@ -186,19 +194,19 @@ class ImgClsDataset(Dataset):
 
 
 if __name__ == '__main__':
-    modelPath = '../../../ml/models/ImageClassification/resnet101.pth'
+    modelPath = 'C:/Users/Leon/Desktop/dog-cat-classification/model.pth'
     modelVersion = 'one'
-    modelRoot = './'
+    modelRoot = 'C:/Users/Leon/Desktop/dog-cat-classification'
     fromName = 'choice'
     toName = 'image'
     toolType = 'choices'
-    labelsPath = '../../../ml/resources/ImageNetClasses.txt'
+    labelsPath = 'C:/Users/Leon/Desktop/dog-cat-classification/class.txt'
 
     mean = [0.485, 0.456, 0.406]
     std = [0.229, 0.224, 0.225]
     imgSize = 224
 
-    imgPath = '../../../ml/resources/puppy.webp'
+    imgPath = 'C:/Users/Leon/Desktop/train/dog.401.jpg'
     # imgPath = './persian-cat-5.jpg'
 
     imgClsModel = ImgClsModel(modelPath, modelRoot, labelsPath, modelVersion, fromName, toName, toolType, mean, std,
