@@ -5,7 +5,8 @@ whitch shows the information of per data
 <div style="background:#f1f2fa;height:100%">
   <v-container style="height:100%">
     <div style="margin: 10px 10px 12px 14px">
-      <v-row style="height:10%">
+      <v-row style="height:10%;">
+        <v-col cols="5">
         <v-btn
             icon
             @click="multiDelete()"
@@ -15,8 +16,10 @@ whitch shows the information of per data
             mdi-delete
           </v-icon>
         </v-btn>
+        </v-col>
         <v-spacer>
         </v-spacer>
+        <v-col style="padding-top:6px; padding-right:0">
         <v-dialog
           v-model="dialog"
           width="500"
@@ -31,17 +34,17 @@ whitch shows the information of per data
               class="white--text"
               v-on="on"
               large
+              style="margin-right:5px"
             >
               Import
               <v-icon
                 right
                 dark
-                large
+               
               > mdi-database-import
               </v-icon>
             </v-btn>
           </template>
-
           <v-card>
             <div style="display:flex">
               <div>
@@ -82,9 +85,9 @@ whitch shows the information of per data
               </v-btn>
             </v-card-actions>
           </v-card>
-        </v-dialog>
+        </v-dialog>       
         <v-btn
-            style="margin-left:20px; margin-right:10px"
+            style="margin-left:50px; margin-right:0px"
             color="blue-grey"
            @click="download(id,name)"
             rounded
@@ -94,33 +97,47 @@ whitch shows the information of per data
         >
             Export<v-icon
               right
-              dark
-              large
+              dark             
             > mdi-cloud-upload
             </v-icon>
-        </v-btn>   
-        <v-radio-group v-model="dataDefault" row>
+        </v-btn>
+        </v-col>
+        <v-col> 
+        <v-row>      
+        <v-radio-group 
+          v-model="dataDefault" 
+          row
+          style="margin-top:0;padding-top:0"
+        >
           <v-radio
             v-for="n in dataExport"
             :key="n"
             :label="n"
             :value="n"
           ></v-radio>
-        </v-radio-group>         
-        <v-radio-group v-model="format" row>
+        </v-radio-group>    
+        </v-row>
+        <v-row>       
+        <v-radio-group 
+          v-model="format" 
+          row
+          style="margin-top:0;padding-top:0"
+        >
           <v-radio
             v-for="n in fileFormat"
             :key="n"
             :label="n"
             :value="n"
           ></v-radio>
-        </v-radio-group>         
+        </v-radio-group>
+        </v-row> 
+        </v-col>         
       </v-row>
     </div>
 
     <el-table
       :data="tableData"
-      style="width: 100%;border-radius:10px;opacity:0.9"
+      style="width:100%;border-radius:10px;opacity:0.9;height:580px"
       :header-cell-style="{color: '#848484', fontSize: '20px', backgroundColor: '#qua'}"
       :cell-style="{color: '#848484', fontSize: '17px', backgroundColor: '#qua'}"
       :default-sort = "{prop: 'id', order: 'ascending'}" 
@@ -434,4 +451,16 @@ import { Modal } from "antd";
     },     
   }
 </script>
+
+<style>
+
+.el-table__empty-block{
+  min-height: 500px;
+}
+
+.row + .row {
+    margin-top: 0px;
+}
+
+</style>
 
