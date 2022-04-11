@@ -119,7 +119,7 @@ public class ModelDriver {
         JSONObject predictionJSONObject = predictions.getJSONObject(0);
         PredictionDO prediction = new PredictionDO();
         prediction.setType(predictionJSONObject.getString("type"));
-        prediction.setResult("[" + predictions.toJSONString() + "]");
+        prediction.setResult(predictions.toJSONString());
 
         Date date = new Date();
         prediction.setCreateTime(date);
