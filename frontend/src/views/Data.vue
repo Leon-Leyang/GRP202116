@@ -287,7 +287,7 @@ export default {
         vars = this.$store.state.currentDataId % 7;
       }
       console.log('vars', vars)
-      this.$store.state.currentPageList[vars -1].annotated
+      // this.$store.state.currentPageList[vars -1].annotated
       if(this.$store.state.currentPageList[vars  -1].annotated == 0 | this.$store.state.currentPageList[vars  -1].predicted == 0 ){
         if(this.$store.state.currentPageList[vars  -1].annotated == 0){
           var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
@@ -577,24 +577,24 @@ export default {
       if(this.newId == 0){
         this.newId = 7
       }
-      console.log('imag', this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0 )
-      var temp = this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated
-      if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0 | this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0 ){
-        console.log('te', this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0)
-        if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated == 0){
+      console.log('imag', this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 )
+      var temp = this.$store.state.currentPageList[this.newId -1].annotated
+      if(this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 ){
+        console.log('te', this.$store.state.currentPageList[this.newId -1].annotated == 0)
+        if(this.$store.state.currentPageList[this.newId -1].annotated == 0){
           var annotationlist = [{"createTime":null,"projectId":null,"dataId":null,"type":null,"updateTime":null,"result":null,"annotationId":null}]
           annotationlist[0].dataId = this.$store.state.realDataId
           axios.put('/annotation/data/' + this.$store.state.realDataId, annotationlist[0])
           .then((res)=>{
             console.log('annotalist up', res)
-            this.$store.state.currentPageList[this.$store.state.currentDataId -1].annotated = 1
+            this.$store.state.currentPageList[this.newId -1].annotated = 1
           })
           // clearTimeout(this.timer);
           // this.timer = setTimeout(()=>{
             this.getAnno()
           // },500)
         }
-        if(this.$store.state.currentPageList[this.$store.state.currentDataId -1].predicted == 0){
+        if(this.$store.state.currentPageList[this.newId -1].predicted == 0){
           this.predicts = []
             if(temp != 0){
               this.getAnno()
@@ -675,6 +675,7 @@ export default {
       if(this.annos == [] & this.predicts != []){
         this.annos = this.predicts
       }
+      new LabelStudio().destroy()
       console.log('anno,pre',this.annos,this.predicts)
       if(this.dataType == 'image'){
         this.labelStudio = new LabelStudio("label-studio", {
@@ -853,7 +854,7 @@ export default {
       }
     console.log(this.labelStudio.options)
     this.$store.state.nowLS = this.labelStudio
-    },3000)
+    },2000)
 
   },
 };
