@@ -59,10 +59,10 @@ but without RUN and TRAIN
                                 <el-input v-model="form.params.imgSize" clearable size="mini" placeholder="(For image classification)"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Mean:">
-                                <el-input v-model="form.params.mean" clearable size="mini" placeholder="(For image classification) [0.485, 0.456, 0.406] by default"></el-input>
+                                <el-input v-model="form.params.mean" clearable size="mini" placeholder="(For image classification) [0.5, 0.5, 0.5] by default"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isImgCla" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable size="mini" placeholder="(For image classification) [0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable size="mini" placeholder="(For image classification) [0.5, 0.5, 0.5] by default"></el-input>
                             </el-form-item>
                             
 
@@ -72,10 +72,10 @@ but without RUN and TRAIN
                             
 
                             <el-form-item v-if="isSemSeg" label="Mean:">
-                                <el-input v-model="form.params.mean" clearable size="mini" placeholder="(For semantic segmentation) [0.485, 0.456, 0.406] by default"></el-input>
+                                <el-input v-model="form.params.mean" clearable size="mini" placeholder="(For semantic segmentation) [0.5, 0.5, 0.5] by default"></el-input>
                             </el-form-item>
                             <el-form-item v-if="isSemSeg" label="Standard Deviation:">
-                                <el-input v-model="form.params.std" clearable size="mini" placeholder="(For semantic segmentation) [0.229, 0.224, 0.225] by default"></el-input>
+                                <el-input v-model="form.params.std" clearable size="mini" placeholder="(For semantic segmentation) [0.5, 0.5, 0.5] by default"></el-input>
                             </el-form-item>
                             
 
@@ -217,8 +217,8 @@ but without RUN and TRAIN
             type: '',
             resource: '',
             params:{
-                mean:'[0.485, 0.456, 0.406]',
-                std:'[0.229, 0.224, 0.225]',
+                mean:'[0.5, 0.5, 0.5]',
+                std:'[0.5, 0.5, 0.5]',
                 imgSize:null,
                 threshold:null,
                 vocabPath:null,
@@ -307,8 +307,8 @@ but without RUN and TRAIN
             type: '',
             resource: '',
             params:{
-                mean:'[0.485, 0.456, 0.406]',
-                std:'[0.229, 0.224, 0.225]',
+                mean:'[0.5, 0.5, 0.5]',
+                std:'[0.5, 0.5, 0.5]',
                 imgSize:null,
                 threshold:null,
                 vocabPath:null,
