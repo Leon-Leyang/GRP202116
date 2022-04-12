@@ -20,9 +20,10 @@ whitch shows the information of per data
         <v-spacer>
         </v-spacer>
         <v-col style="padding-top:6px; padding-right:0">
+
         <v-dialog
           v-model="dialog"
-          width="500"
+          width="1200"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -45,28 +46,36 @@ whitch shows the information of per data
               </v-icon>
             </v-btn>
           </template>
-          <v-card>
-            <div style="display:flex">
-              <div>
-                Please enter the path to the folder where you want to use the file:
 
+          <v-card>       
+            <div style="display:flex; padding:20px; font-size:20px">
+              <v-row justify="end">
+                <v-col>
+              <div>             
+                Please enter the local path of the folder where the files are:                
                 <el-input
+                  clearable
                   type="textarea"
                   :rows="2"
                   placeholder="Address"
                   v-model="folderURL"
+                  style="margin-top:7px;"
                   >
                 </el-input>
                 <div slot="tip" class="el-upload__tip">If there are multiple paths please separate them with commas(",").</div>
               </div>
+              </v-col>
+               <v-col>
               <div>
                 Please upload the appropriate type of file
                 <input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />
               </div>
+               </v-col>
+              </v-row>
             </div>
-
             <v-divider></v-divider>
 
+            <div style="display:flex;padding-left:10px">
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
@@ -77,13 +86,15 @@ whitch shows the information of per data
                 Cancel
               </v-btn>      
               <v-btn
-                color="primary"
+                
                 text
                 @click="ImportData()"
               >
                 Accept
               </v-btn>
             </v-card-actions>
+            </div>
+          
           </v-card>
         </v-dialog>       
         <v-btn
@@ -455,12 +466,22 @@ import { Modal } from "antd";
 <style>
 
 .el-table__empty-block{
-  min-height: 500px;
+    min-height: 500px;
 }
 
 .row + .row {
     margin-top: 0px;
 }
+
+.el-upload__tip{
+    font-size: 15px!important;
+    margin-top: 0px!important;
+}
+
+
+/* .el-textarea__inner{
+    border: #7d60c3 solid!important;
+} */
 
 </style>
 
