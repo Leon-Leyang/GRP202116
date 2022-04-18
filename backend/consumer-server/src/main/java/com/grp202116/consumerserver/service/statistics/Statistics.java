@@ -136,33 +136,36 @@ public class Statistics {
         String toolPattern = "(?<=(type(\\\\)?\": ?(\\\\)?\")).*?(?=(\\\\)?\")";
         for(PredictionDO predictionDO:getPredictionsFromDB()){
             String typeName = "";
-            String result = predictionDO.getResult();
-            Pattern tool =Pattern.compile(toolPattern);
-            Matcher m = tool.matcher(result);
-            if (m.find()) {
-                typeName = m.group(0);
-            }
-            String tagPattern = "(?<="+typeName+"\": ?\\[\").*?(?=\")";
-            Pattern tag = Pattern.compile(tagPattern);
-            Matcher m1 = tag.matcher(result);
-            if (m1.find()) {
-                String tagName = m1.group(0);
-                if(tags.isEmpty()){
-                    tags.add(new Tag(tagName));
+            if(predictionDO.getResult()!=null){
+                String result = predictionDO.getResult();
+                Pattern tool =Pattern.compile(toolPattern);
+                Matcher m = tool.matcher(result);
+                if (m.find()) {
+                    typeName = m.group(0);
                 }
-                else{
-                    boolean flag  = false;
-                    for(Tag tag1:tags){
-                        if(tag1.getName().equalsIgnoreCase(tagName)){
-                            tag1.setNumber(tag1.getNumber()+1);
-                            flag = true;
-                        }
-                    }
-                    if(flag==false){
+                String tagPattern = "(?<="+typeName+"\": ?\\[\").*?(?=\")";
+                Pattern tag = Pattern.compile(tagPattern);
+                Matcher m1 = tag.matcher(result);
+                if (m1.find()) {
+                    String tagName = m1.group(0);
+                    if(tags.isEmpty()){
                         tags.add(new Tag(tagName));
                     }
+                    else{
+                        boolean flag  = false;
+                        for(Tag tag1:tags){
+                            if(tag1.getName().equalsIgnoreCase(tagName)){
+                                tag1.setNumber(tag1.getNumber()+1);
+                                flag = true;
+                            }
+                        }
+                        if(flag==false){
+                            tags.add(new Tag(tagName));
+                        }
+                    }
                 }
             }
+
         }
         return tags;
     }
@@ -181,40 +184,40 @@ public class Statistics {
      */
     public List<Tag> getTags() {
         List<Tag> tags = new ArrayList<>();
-
         String toolPattern = "(?<=(type(\\\\)?\":(\\\\)?\")).*?(?=(\\\\)?\")";
         for(AnnotationDO annotationDO:getAnnotationsFromDB()){
             String toolName = "";
-            String result = annotationDO.getResult();
-            Pattern tool =Pattern.compile(toolPattern);
-            Matcher m = tool.matcher(result);
-            if (m.find()) {
-                toolName = m.group(0);
-            }
-
-            String tagPattern = "(?<="+toolName+"\":\\[\").*?(?=\")";
-            Pattern tag = Pattern.compile(tagPattern);
-            Matcher m1 = tag.matcher(result);
-
-            if (m1.find()) {
-                String tagName = m1.group(0);
-                if(tags.isEmpty()){
-                    tags.add(new Tag(tagName));
+            if(annotationDO.getResult()!=null){
+                String result = annotationDO.getResult();
+                Pattern tool =Pattern.compile(toolPattern);
+                Matcher m = tool.matcher(result);
+                if (m.find()) {
+                    toolName = m.group(0);
                 }
-                else{
-                    boolean flag  = false;
-                    for(Tag tag1:tags){
-                        if(tag1.getName().equalsIgnoreCase(tagName)){
-                            tag1.setNumber(tag1.getNumber()+1);
-                            flag = true;
-                        }
-                    }
+                String tagPattern = "(?<="+toolName+"\":\\[\").*?(?=\")";
+                Pattern tag = Pattern.compile(tagPattern);
+                Matcher m1 = tag.matcher(result);
 
-                    if(flag==false){
+                if (m1.find()) {
+                    String tagName = m1.group(0);
+                    if(tags.isEmpty()){
                         tags.add(new Tag(tagName));
                     }
+                    else{
+                        boolean flag  = false;
+                        for(Tag tag1:tags){
+                            if(tag1.getName().equalsIgnoreCase(tagName)){
+                                tag1.setNumber(tag1.getNumber()+1);
+                                flag = true;
+                            }
+                        }
+                        if(flag==false){
+                            tags.add(new Tag(tagName));
+                        }
+                    }
                 }
             }
+
         }
         return tags;
     }
