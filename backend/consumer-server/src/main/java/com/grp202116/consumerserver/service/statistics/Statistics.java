@@ -110,6 +110,7 @@ public class Statistics {
     public void setModelList(List<ModelDO> models) {
         this.models = models;
     }
+
     public List<ModelDO> getModelFromDB() {
         return statistics.modelMapper.getByProjectId(this.projectId);
     }
