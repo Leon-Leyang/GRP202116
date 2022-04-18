@@ -2,9 +2,11 @@ package com.grp202116.consumerserver.service.statistics;
 
 import com.grp202116.consumerserver.mapper.AnnotationMapper;
 import com.grp202116.consumerserver.mapper.DataMapper;
+import com.grp202116.consumerserver.mapper.ModelMapper;
 import com.grp202116.consumerserver.mapper.PredictionMapper;
 import com.grp202116.consumerserver.pojo.AnnotationDO;
 import com.grp202116.consumerserver.pojo.DataDO;
+import com.grp202116.consumerserver.pojo.ModelDO;
 import com.grp202116.consumerserver.pojo.PredictionDO;
 import org.springframework.stereotype.Component;
 
@@ -38,6 +40,8 @@ public class Statistics {
     private AnnotationMapper annotationMapper;
     @Resource
     private PredictionMapper predictionMapper;
+    @Resource
+    private ModelMapper modelMapper;
 
     public static Statistics statistics;
 
@@ -47,6 +51,7 @@ public class Statistics {
         statistics.dataMapper = this.dataMapper;
         statistics.annotationMapper = this.annotationMapper;
         statistics.predictionMapper = this.predictionMapper;
+        statistics.modelMapper = this.modelMapper;
     }
 
     BigInteger projectId;
@@ -58,11 +63,13 @@ public class Statistics {
     Float averageAnnotations;
     Float averagePredictions;
     Float averageTextWordsNumber;
+    String modelAccuracy;
     List<DataDO> dataList;
     List<PredictionDO> predictions;
     List<AnnotationDO> annotations;
+    List<ModelDO> models;
     List<Tag> tags;
-
+    List<Tag> predictionTags;
     /**
      * The construct method called once a project is created
      * and initialize the basic data object
@@ -75,7 +82,6 @@ public class Statistics {
         this.setDataListNumber(countDataList());
         this.setAnnotations(getAnnotationsFromDB());
         this.setAnnotationsNumber(countAnnotationNumber());
-
         this.setCompletionPercentage(getCompletionPercentage());
         this.setAverageAnnotations(getAverageAnnotations());
         this.setAveragePredictions(getAveragePredictions());
@@ -88,13 +94,91 @@ public class Statistics {
         this.setAveragePredictions(countAveragePredictions());
         this.setAverageTextWordsNumber(countAverageTextWordsNumber());
         this.setTags(getTags());
+        this.setPredictionsTags(getPredictionsTags());
+        this.setModelList(getModelFromDB());
         return this;
     }
 
+    public String getModelAccuracy() {
+        return modelAccuracy;
+    }
+
+    public void setModelAccuracy(String modelAccuracy) {
+        this.modelAccuracy = modelAccuracy;
+    }
+
+    public void setModelList(List<ModelDO> models) {
+        this.models = models;
+    }
+    public List<ModelDO> getModelFromDB() {
+        return statistics.modelMapper.getByProjectId(this.projectId);
+    }
+
+    public List<ModelDO> getModels() {
+        return models;
+    }
+
+
+    /**
+     * Set the prediction tags
+     * @param predictionTags the prediction tags list
+     */
+    public void setPredictionsTags(List<Tag> predictionTags) {
+        this.predictionTags = predictionTags;
+    }
+
+    /**
+     * Get the prediction tag list
+     * @return the prediction tag list
+     */
+    public List<Tag> getPredictionsTags(){
+        List<Tag> tags = new ArrayList<>();
+        String toolPattern = "(?<=(type(\\\\)?\": ?(\\\\)?\")).*?(?=(\\\\)?\")";
+        for(PredictionDO predictionDO:getPredictionsFromDB()){
+            String typeName = "";
+            String result = predictionDO.getResult();
+            Pattern tool =Pattern.compile(toolPattern);
+            Matcher m = tool.matcher(result);
+            if (m.find()) {
+                typeName = m.group(0);
+            }
+            String tagPattern = "(?<="+typeName+"\": ?\\[\").*?(?=\")";
+            Pattern tag = Pattern.compile(tagPattern);
+            Matcher m1 = tag.matcher(result);
+            if (m1.find()) {
+                String tagName = m1.group(0);
+                if(tags.isEmpty()){
+                    tags.add(new Tag(tagName));
+                }
+                else{
+                    boolean flag  = false;
+                    for(Tag tag1:tags){
+                        if(tag1.getName().equalsIgnoreCase(tagName)){
+                            tag1.setNumber(tag1.getNumber()+1);
+                            flag = true;
+                        }
+                    }
+                    if(flag==false){
+                        tags.add(new Tag(tagName));
+                    }
+                }
+            }
+        }
+        return tags;
+    }
+
+    /**
+     * Set the annotation tag list
+     * @param tags the annotation tag list
+     */
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 
+    /**
+     * Get the annotation tag list
+     * @return the annotation tag list
+     */
     public List<Tag> getTags() {
         List<Tag> tags = new ArrayList<>();
 
@@ -402,7 +486,7 @@ public class Statistics {
      * @return the average number of Predictions
      */
     public Float countAveragePredictions() {
-        return getPredictionsNumber().floatValue() / getDataListNumber().floatValue();
+        return getPredictionsNumber().floatValue() / getDataListNumber().floatValue()* 100;
     }
 
     /**
