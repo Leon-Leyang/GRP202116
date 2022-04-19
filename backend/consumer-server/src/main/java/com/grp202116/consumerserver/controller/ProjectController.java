@@ -1,9 +1,7 @@
 package com.grp202116.consumerserver.controller;
 
 import com.grp202116.consumerserver.mapper.*;
-import com.grp202116.consumerserver.pojo.DataDO;
-import com.grp202116.consumerserver.pojo.ModelDO;
-import com.grp202116.consumerserver.pojo.ProjectDO;
+import com.grp202116.consumerserver.pojo.*;
 import com.grp202116.consumerserver.service.util.ExportUtils;
 import com.grp202116.consumerserver.service.util.FileUtils;
 import org.springframework.core.io.ByteArrayResource;
@@ -16,6 +14,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -140,8 +139,13 @@ public class ProjectController {
     @GetMapping("/project/{projectId}/data_export/annotations/{format}")
     public ResponseEntity<ByteArrayResource> exportAnnotation(@PathVariable String format,
                                                               @PathVariable BigInteger projectId) {
+        List<AnnotationDO> list = annotationMapper.listByProjectId(projectId);
+        List<AnnotationDO> dataList = new ArrayList<>();
+        for (AnnotationDO annotation: list) {
+            if (annotation.getResult() != null) dataList.add(annotation);
+        }
         ByteArrayResource resource = ExportUtils.exportFile(true, format,
-                Collections.singletonList(annotationMapper.listByProjectId(projectId)));
+                Collections.singletonList(dataList));
 
         return getResponse(resource);
     }
@@ -156,8 +160,13 @@ public class ProjectController {
     public ResponseEntity<ByteArrayResource> exportPrediction(@PathVariable String format,
                                                               @PathVariable BigInteger projectId) {
 
+        List<PredictionDO> list = predictionMapper.listByProjectId(projectId);
+        List<PredictionDO> dataList = new ArrayList<>();
+        for (PredictionDO prediction: list) {
+            if (prediction.getResult() != null) dataList.add(prediction);
+        }
         ByteArrayResource resource = ExportUtils.exportFile(false, format,
-                Collections.singletonList(predictionMapper.listByProjectId(projectId)));
+                Collections.singletonList(dataList));
 
         return getResponse(resource);
     }
