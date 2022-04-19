@@ -115,7 +115,7 @@ public class ProjectController {
      * @param projectId the projectId fetched from the mapper
      */
     @DeleteMapping("/project/{projectId}")
-    public void deleteProject(@PathVariable BigInteger projectId) {
+    public ResponseEntity<String> deleteProject(@PathVariable BigInteger projectId) {
         String projectDirectory = ".." + File.separator + "frontend" + File.separator +
                 "public" + File.separator + "files" + File.separator + projectId + File.separator;
         FileUtils.deleteDirectory(projectDirectory);
@@ -128,6 +128,7 @@ public class ProjectController {
         }
 
         projectMapper.deleteByProjectId(projectId);
+        return ResponseEntity.ok().build();
     }
 
     /**
