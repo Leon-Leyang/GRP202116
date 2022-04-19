@@ -9,7 +9,7 @@ which show all project card
 
 
     <v-data-iterator
-      :items="tableData"
+      :items="items"
       :items-per-page.sync="itemsPerPage"
       :page.sync="page"
       :search="search"
@@ -192,10 +192,10 @@ which show all project card
         </v-card-title>
       </template>
 
-      <template >
+      <template v-slot:default="props">
         <v-row dense>
           <v-col
-            v-for="item in tableData"
+            v-for="item in props.items"
             :key="item.projectId"
             cols="12"
             md="4"
@@ -326,7 +326,7 @@ import ML from './Create_ML.vue'
         operateType: 'add',
         folderURL: '',
         isShow: false,
-        tableData: [],
+        items: [],
         tempProcess:0.0,
         operateForm: {
             configs:'',
@@ -346,7 +346,7 @@ import ML from './Create_ML.vue'
         filter: {},
         sortDesc: false,
         page: 1,
-        itemsPerPage: 8,
+        itemsPerPage: 6,
         sortBy: 'name',
         keys: [
           'Name',
@@ -370,9 +370,9 @@ import ML from './Create_ML.vue'
     methods: {
       /**
        * This function is to get the list of projects and
-       * Assign the value to tableData to make it appear on the page
+       * Assign the value to items to make it appear on the page
        */
-      getList() {          // this.tableData = null
+      getList() {          // this.items = null
           // this.config.loading = true
           // name ? (this.config.page = 1) : ''
           this.$axios.get('/project/list', {
@@ -387,12 +387,12 @@ import ML from './Create_ML.vue'
                 let length = temp.data.length
                 console.log('lenth', length)
                 if(length == 0){
-                  this.tableData = []
+                  this.items = []
                 }else{
                 let newest = temp.data[length-1]
                 this.newestId = newest.projectId
                 console.log('newr', this.newestId)
-                this.tableData = res.data.map(item => {
+                this.items = res.data.map(item => {
                   console.log('noew', item)
                   let projectId = item.projectId
                     item.updateTime = this.convertTime(item.updateTime)
@@ -633,12 +633,12 @@ import ML from './Create_ML.vue'
       enterProject(projectId){
         console.log(projectId)
         this.$store.state.currentProjectId = projectId
-        console.log('tabel',this.tableData);
-        for(var q = 0;q < this.tableData.length; q++){
-          if(projectId == this.tableData[q].projectId){
-            this.$store.state.currentProject = this.tableData[q];
-            this.$store.state.currentConfig = this.tableData[q].configs;
-            this.$store.state.currentProject = this.tableData[q];
+        console.log('tabel',this.items);
+        for(var q = 0;q < this.items.length; q++){
+          if(projectId == this.items[q].projectId){
+            this.$store.state.currentProject = this.items[q];
+            this.$store.state.currentConfig = this.items[q].configs;
+            this.$store.state.currentProject = this.items[q];
           }
         }
         console.log('newwjin',this.$store.state.currentProject )
@@ -658,7 +658,7 @@ import ML from './Create_ML.vue'
     },
     computed: {
       numberOfPages () {
-        return Math.ceil(this.tableData.length / this.itemsPerPage)
+        return Math.ceil(this.items.length / this.itemsPerPage)
       },
       filteredKeys () {
         return this.keys.filter(key => key !== 'Name')
