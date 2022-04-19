@@ -347,7 +347,7 @@ import ML from './Create_ML.vue'
         sortDesc: false,
         page: 1,
         itemsPerPage: 6,
-        sortBy: 'name',
+        sortBy: 'createTime',
         keys: [
           'Name',
           'Process',
@@ -661,7 +661,7 @@ import ML from './Create_ML.vue'
         return Math.ceil(this.items.length / this.itemsPerPage)
       },
       filteredKeys () {
-        return this.keys.filter(key => key !== 'Name')
+        return this.keys.filter(key => key !== 'CreateTime')
       },
     },
 
