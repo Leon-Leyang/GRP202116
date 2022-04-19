@@ -147,7 +147,7 @@ public class Statistics {
                 String tagPattern = "(?<="+typeName+"\": ?\\[\").*?(?=\")";
                 Pattern tag = Pattern.compile(tagPattern);
                 Matcher m1 = tag.matcher(result);
-                if (m1.find()) {
+                while (m1.find()) {
                     String tagName = m1.group(0);
                     if(tags.isEmpty()){
                         tags.add(new Tag(tagName));
@@ -199,7 +199,7 @@ public class Statistics {
                 Pattern tag = Pattern.compile(tagPattern);
                 Matcher m1 = tag.matcher(result);
 
-                if (m1.find()) {
+                while (m1.find()) {
                     String tagName = m1.group(0);
                     if(tags.isEmpty()){
                         tags.add(new Tag(tagName));
