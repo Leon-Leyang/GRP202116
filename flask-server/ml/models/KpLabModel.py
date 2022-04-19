@@ -11,6 +11,8 @@ from PIL import Image
 
 import uuid
 import torchvision.transforms as tf
+import torch
+import numpy as np
 
 from ml import Preprocess
 from ml.models.Model import Model
@@ -44,12 +46,18 @@ class KpLabModel(Model):
         modelOutput = self.model(imgVec)
 
         for item in modelOutput:
-            if(item['scores'] > self.threshold):
+            if(torch.max(item['scores']) > self.threshold):
                 keypoints = item['keypoints'].cpu().detach().numpy().squeeze()
                 for idx, keypoint in enumerate(keypoints):
                     label = self.labels[idx]
-                    x = keypoint[0]
-                    y = keypoint[1]
+                    if(isinstance(keypoint[0], np.ndarray)):
+                        x = keypoint[0][0]
+                    else:
+                        x = keypoint[0]
+                    if (isinstance(keypoint[1], np.ndarray)):
+                        y = keypoint[1][0]
+                    else:
+                        y = keypoint[0]
                     xPix = (x / imgWidth) * 100
                     yPix = (y / imgHeight) * 100
                     value = {}
