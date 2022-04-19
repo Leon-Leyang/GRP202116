@@ -192,7 +192,7 @@ which show all project card
         </v-card-title>
       </template>
 
-      <template>
+      <template >
         <v-row dense>
           <v-col
             v-for="item in tableData"
@@ -271,6 +271,7 @@ which show all project card
               <v-list-item
                 v-for="(number, index) in itemsPerPageArray"
                 :key="index"
+                @click="updateItemsPerPage(number)"
               >
                 <v-list-item-title>{{ number }}</v-list-item-title>
               </v-list-item>
@@ -290,6 +291,7 @@ which show all project card
             dark
             color="blue darken-3"
             class="mr-1"
+            @click="formerPage"
           >
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
@@ -299,6 +301,7 @@ which show all project card
             dark
             color="blue darken-3"
             class="ml-1"
+            @click="nextPage"
           >          
             <v-icon>mdi-chevron-right</v-icon>
           </v-btn>
@@ -589,15 +592,15 @@ import ML from './Create_ML.vue'
           return time
       },
 
-      // nextPage () {
-      //   if (this.page + 1 <= this.numberOfPages) this.page += 1
-      // },
-      // formerPage () {
-      //   if (this.page - 1 >= 1) this.page -= 1
-      // },
-      // updateItemsPerPage (number) {
-      //   this.itemsPerPage = number
-      // },
+      nextPage () {
+        if (this.page + 1 <= this.numberOfPages) this.page += 1
+      },
+      formerPage () {
+        if (this.page - 1 >= 1) this.page -= 1
+      },
+      updateItemsPerPage (number) {
+        this.itemsPerPage = number
+      },
       /**
        * This is used to change the colour of the progress bar, 
        * blue means that it is still in progress 

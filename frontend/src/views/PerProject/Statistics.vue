@@ -90,8 +90,10 @@ which contains statistic data about data, annotation prediction, ml
 
                 <el-row>
                 <el-col :span="24" class="inblock">
-                    <div class="grid-content bg-purple title">Predictions Percentage:</div>
-                    <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.averagePredictions" color="red"></el-progress></div>
+                     <div class="grid-content bg-purple title" style="color:#E0E0E0">Predictions Tags Percentage:</div>
+                  <div  class="pagetext-b">
+                    <ve-ring :data="PredTag"  height="300px" style="width:250px"></ve-ring>
+                  </div>
                 </el-col>
                 </el-row> 
 
@@ -116,7 +118,7 @@ which contains statistic data about data, annotation prediction, ml
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple title" style="color:#E0E0E0">Model Accuracy</div>
             <div class=""> 
-                <ve-histogram :data="chartData_1"  height="300px" style="width:250px"></ve-histogram>
+                <ve-histogram :data="accuracyTable"  height="300px" style="width:250px"></ve-histogram>
             </div>
         </el-col>
         </el-row>
@@ -144,20 +146,18 @@ export default {
   data() {
     return {
       statistic:null,
-        chartData_1: {
+        accuracyTable: {
           columns: ['Model Name', 'Accuracy'],
-          rows: [
-            { 'Model Name': 'Model 1', 'Accuracy': 68,},
-            { 'Model Name': 'Model 2', 'Accuracy': 89,},
-            { 'Model Name': 'Model 3', 'Accuracy': 47,},
-            { 'Model Name': 'Model 4', 'Accuracy': 85,},
-            { 'Model Name': 'Model 5', 'Accuracy': 50,},
-          ]
+          rows: []
         },
         AnnoTag: {
           columns: ['name','number'],
           rows: []
-        },        
+        }, 
+        PredTag: {
+          columns: ['name', 'number'],
+          rows: []
+        } ,      
     }
   },
   mounted(){
@@ -171,8 +171,15 @@ export default {
           this.AnnoTag.rows = this.statistic.tags.map(item =>{
             return item
           })
-          console.log('Anno', this.AnnoTag.columns,this.chartData_1.columns)            
-          console.log('Anno', this.AnnoTag.rows,this.chartData_1.rows)            
+          this.PredTag.rows = this.statistic.predictionsTags.map(item =>{
+            return item
+          })
+          this.accuracyTable.rows = this.statistic.modelFromDB.map(item =>{
+            return { 'Model Name': item.version, "Accuracy": item.accuracy}
+          })          
+
+          console.log('Anno', this.AnnoTag.columns,this.accuracyTable.columns)            
+          console.log('Anno', this.AnnoTag.rows,this.accuracyTable.rows)            
       })
       .catch((error) => {
           // here you will have access to error.response
