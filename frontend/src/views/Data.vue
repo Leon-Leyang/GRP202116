@@ -124,6 +124,7 @@ export default {
       this.$store.state.realDataId = data.dataId
       console.log('cur', this.$store.state.currentDataId,this.$store.state.realDataId)
       console.log('culist', this.$store.state.currentPageList)
+      this.labelStudio.destroy(),
       this.newLS(data)
       console.log('enter', data)
     },
@@ -140,9 +141,7 @@ export default {
           this.currentPage --
           this.$store.state.currentDataId --
           console.log('this.$store.state.currentDataId', this.currentPage,this.$store.state.currentDataId)
-          this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize);
-          // clearTimeout(this.timer);
-        // this.timer = setTimeout(()=>{   
+          this.loadData(this.$store.state.currentProjectId, this.currentPage, this.pagesize)
           console.log('tag1', this.currentPage,this.$store.state.currentPageList)
 
         // clearTimeout(this.timer);
@@ -153,7 +152,9 @@ export default {
           this.currentDataId = this.$store.state.currentDataId         
           console.log('cyr', this.$store.state.currentPageList,this.$store.state.realDataId, this.currentDataId)
           // console.log('this.$store.state.currentPageList[this.$store.state.currentDataId - 1]', this.$store.state.currentDataId)
-          this.newLS(this.$store.state.currentPageList[6])},800)
+          this.labelStudio.destroy(),
+          this.newLS(this.$store.state.currentPageList[6])
+          },800)
         }else{
           console.log('no next')
         }
@@ -197,7 +198,9 @@ export default {
           this.currentDataId = this.$store.state.currentDataId         
           console.log('cyr', this.$store.state.currentPageList,this.$store.state.realDataId, this.currentDataId)
           // console.log('this.$store.state.currentPageList[this.$store.state.currentDataId - 1]', this.$store.state.currentDataId)
-          this.newLS(this.$store.state.currentPageList[0])},800)
+          this.newLS(this.$store.state.currentPageList[0])
+          this.labelStudio.destroy()
+          },800)
         }else{
           console.log('no next')
         }
@@ -217,7 +220,8 @@ export default {
           lam = 7
         }
         this.$store.state.realDataId = this.$store.state.currentPageList[lam- 1].dataId
-        console.log('next', this.$store.state.realDataId, this.$store.state.currentPageList[lam - 1])        
+        console.log('next', this.$store.state.realDataId, this.$store.state.currentPageList[lam - 1])  
+        this.labelStudio.destroy()      
         this.newLS(this.$store.state.currentPageList[lam- 1])        
       }
     },
@@ -240,7 +244,7 @@ export default {
                 return {...item}
             })
             console.log('Anno', this.annoDataList)
-
+            this.annos = []
             for(var i = 0; i < this.annoDataList.length; i++){
               console.log('i', i)
               this.annos.push({id: this.annoDataList[i].annotationId, result: eval(this.annoDataList[i].result)})
@@ -266,6 +270,7 @@ export default {
                 return {...item}
             })
             console.log('pre', this.predictDataList)
+            this.predicts = []
             for(var j = 0; j < this.predictDataList.length; j++){
               this.predicts.push({id: this.predictDataList[j].predictionId, result: eval(this.predictDataList[j].result)})
             }
@@ -279,7 +284,8 @@ export default {
 
     newLS(data){
       this.labelStudio.destroy()
-      console.log('this.$store.state.currentDataId % 7', this.$store.state.currentDataId % 7)
+      this.labelStudio = null
+      console.log('this.$store.state.currentDataId % 7', this.$store.state.currentDataId % 7, this.labelStudio)
       let vars = 0;
       if(this.$store.state.currentDataId % 7 == 0){
         vars = 7;
@@ -310,19 +316,28 @@ export default {
           }
           console.log('pre', this.predicts )
         }
+
+        else{
+          this.getPredict()
+        }
+
       }else{
         this.getAnno()
         this.getPredict()
       }
-      console.log('des', '')
-      console.log('this', this.annos)
-      if(this.annos == [] & this.predicts != []){
-        this.annos = this.predicts
-      }
-      console.log('anno,pre',this.annos,this.predicts)
-      console.log('data', data)
+
       if(this.dataType == 'image'){
         setTimeout(()=>{
+          console.log('des', '')
+          console.log('this anno', this.annos)
+          if(this.predicts != []){
+            for(var i = 0; i<this.predicts.length; i++){
+              this.annos.push(this.predicts[i])
+            }
+          }
+          console.log('anno,pre',this.annos,this.predicts)
+          console.log('data', data)
+
           this.labelStudio = new LabelStudio("label-studio", {
             config: this.$store.state.currentConfig,
             interfaces: [
@@ -382,12 +397,13 @@ export default {
               })
             },
 
-            onLabelStudioLoad: function (LS) {
-              var c = LS.annotationStore.addAnnotation({
-                userGenerate: true,
-              });
-              LS.annotationStore.selectAnnotation(c.id);
-            },
+            // onLabelStudioLoad: function (LS) {
+            //   var c = LS.annotationStore.addAnnotation({
+            //     userGenerate: true,
+            //   });
+            //   LS.annotationStore.selectAnnotation(c.id);
+            // },
+
 
             onUpdateAnnotation: function (LS, annotation) {
               // retrive an annotation 
@@ -412,7 +428,18 @@ export default {
           console.log('this.labelStudio', this.labelStudio)
         },1500)
       }else{
-        setTimeout(()=>{        
+
+        setTimeout(()=>{     
+          console.log('des', '')
+          console.log('this anno', this.annos)
+          if(this.predicts != []){
+            for(var i = 0; i<this.predicts.length; i++){
+              this.annos.push(this.predicts[i])
+            }
+          }
+          console.log('anno,pre',this.annos,this.predicts)
+          console.log('data', data)             
+
           this.labelStudio = new LabelStudio("label-studio", {
             config: this.$store.state.currentConfig,
             interfaces: [
@@ -472,12 +499,14 @@ export default {
               })
             },
 
-            onLabelStudioLoad: function (LS) {
-              var c = LS.annotationStore.addAnnotation({
-                userGenerate: true,
-              });
-              LS.annotationStore.selectAnnotation(c.id);
-            },
+
+            // onLabelStudioLoad: function (LS) {
+            //   var c = LS.annotationStore.addAnnotation({
+            //     userGenerate: true,
+            //   });
+            //   LS.annotationStore.selectAnnotation(c.id);
+            // },
+
 
             onUpdateAnnotation: function (LS, annotation) {
               // retrive an annotation 
@@ -499,7 +528,8 @@ export default {
               })
             },
           });
-        },2000)
+        },1500)
+
       }
     },
     loadData(projectId, pageNum, pageSize){
@@ -577,7 +607,9 @@ export default {
       if(this.newId == 0){
         this.newId = 7
       }
-      console.log('imag', this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 )
+
+      console.log('imag', this.$store.state.currentPageList[this.newId -1].annotated == 0 , this.$store.state.currentPageList[this.newId -1].predicted == 0, this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 )
+
       var temp = this.$store.state.currentPageList[this.newId -1].annotated
       if(this.$store.state.currentPageList[this.newId -1].annotated == 0 | this.$store.state.currentPageList[this.newId -1].predicted == 0 ){
         console.log('te', this.$store.state.currentPageList[this.newId -1].annotated == 0)
@@ -600,6 +632,10 @@ export default {
               this.getAnno()
             }
           console.log('empty pre', this.predicts)
+
+        }else{
+        this.getPredict()
+
         }
       }else{
         this.getAnno()
@@ -630,6 +666,9 @@ export default {
                 this.getAnno()
               }
             console.log('empty pre', this.predicts)
+          }else{
+            this.getPredict()
+
           }
         }else{
           this.getAnno()
@@ -671,11 +710,15 @@ export default {
 
     setTimeout(()=>{
       //lack the multi people condition
-      console.log('this', this.annos)
-      if(this.annos == [] & this.predicts != []){
-        this.annos = this.predicts
+
+      console.log('this', this.annos, this.predicts)
+      if(this.predicts != []){
+        for(var i = 0; i<this.predicts.length; i++){
+          this.annos.push(this.predicts[i])
+        }
       }
-      new LabelStudio().destroy()
+      // new LabelStudio().destroy()
+
       console.log('anno,pre',this.annos,this.predicts)
       if(this.dataType == 'image'){
         this.labelStudio = new LabelStudio("label-studio", {
