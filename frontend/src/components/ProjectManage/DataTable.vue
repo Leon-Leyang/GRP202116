@@ -233,10 +233,25 @@ import { Modal } from "antd";
         name:null,
         projectId:0,
         dataList:[],        
-
+        annoNum: null,
+        predNum: null,
       }
     },
     methods: {
+      getAnnoNum(dataid){
+        this.$axios.get('/statistics/' + dataid + '/' + true)
+        .then((res) => {
+          console.log('AnnoNum', res)
+          this.annoNum = res
+        })
+      },
+      getPredNum(dataId){
+        this.$axios.get('/statistics/' + dataId + '/' + false)
+        .then((res) => {
+          console.log('PredNum', res)
+          this.predNum = res
+        })
+      },
       loadData(projectId, pageNum, pageSize){
         this.$axios.get('/data/page/'+ projectId +"/"+ pageNum +"/"+ pageSize)
         .then((res) => {
@@ -246,11 +261,14 @@ import { Modal } from "antd";
                 this.total = res.data.total
                 this.tableData = this.$store.state.currentPageList
                 this.tableData = this.tableData.map(item => {
-                  console.log('noew', item)
+                  console.log('noew', item.dataId)
+                    this.getAnnoNum(item.dataId)
+                    this.getPredNum(item.dataId)                  
                     item.updateTime = this.convertTime(item.updateTime)
                     item.createTime = this.convertTime(item.createTime)
-                    return {...item}
-                })                     
+                    return {...item, 'anno': this.annoNum, 'predi': this.predNum}
+                }) 
+                console.log('testtab', this.tableData)                    
                 this.convertData()
         })
         // this.$set(this.tableData,1,this.tableData)
