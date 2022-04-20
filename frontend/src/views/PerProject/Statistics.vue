@@ -28,7 +28,7 @@ which contains statistic data about data, annotation prediction, ml
             <el-row>
             <el-col :span="24" class="inblock">
                 <div class="grid-content bg-purple title">Percentage completed:</div>
-                <div class="pagetext-b"><el-progress type="circle" :percentage="statistic.completionPercentage"></el-progress></div>
+                <div class="pagetext-b"><el-progress type="circle" :percentage="(statistic.completionPercentage).toFixed(2)"></el-progress></div>
             </el-col>
             </el-row>
 
@@ -67,7 +67,7 @@ which contains statistic data about data, annotation prediction, ml
             <el-row>
             <el-col :span="24" class="inblock">
                 <div class="grid-content bg-purple-light title" style="color:#E0E0E0">Average annotations per piece of data:</div>
-                <div class="pagetext-a">{{statistic.annotationsNumber/statistic.dataListNumber}}</div>
+                <div class="pagetext-a">{{(statistic.annotationsNumber/statistic.dataListNumber).toFixed(2)}}</div>
             </el-col>
             </el-row>
           </div>
@@ -100,7 +100,7 @@ which contains statistic data about data, annotation prediction, ml
                 <el-row>  
                 <el-col :span="24" class="inblock">
                     <div class="grid-content bg-purple-light title">Average predictions per piece of data:</div>
-                    <div class="pagetext-a">{{statistic.predictionsNumber/statistic.dataListNumber}}</div>
+                    <div class="pagetext-a">{{(statistic.predictionsNumber/statistic.dataListNumber).toFixed(2)}}</div>
                 </el-col>
                 </el-row>
           </div> 
@@ -128,7 +128,9 @@ which contains statistic data about data, annotation prediction, ml
         <el-row>  
         <el-col :span="24" class="inblock">
             <div class="grid-content bg-purple-light title" style="color:#E0E0E0">Trainset Size</div>
-            <div class="pagetext-a" style="margin-top:60px">100</div>
+            <div class=""> 
+                <ve-histogram :data="TrainsetSize"  height="300px" style="width:250px"></ve-histogram>
+            </div>
         </el-col>
         </el-row>
    
@@ -148,6 +150,10 @@ export default {
       statistic:null,
         accuracyTable: {
           columns: ['Model Name', 'Accuracy'],
+          rows: []
+        },
+        TrainsetSize:{
+          columns: ['Model Name', 'Data Length'],
           rows: []
         },
         AnnoTag: {
@@ -176,6 +182,9 @@ export default {
           })
           this.accuracyTable.rows = this.statistic.modelFromDB.map(item =>{
             return { 'Model Name': item.version, "Accuracy": item.accuracy}
+          }) 
+          this.TrainsetSize.rows = this.statistic.models.map(item =>{
+            return { 'Model Name': item.version, "Data Length": item.dataLength}
           })          
 
           console.log('Anno', this.AnnoTag.columns,this.accuracyTable.columns)            

@@ -368,8 +368,8 @@ export default {
 
             user: {
               pk: 1,
-              firstName: "James",
-              lastName: "Dean",
+              firstName: "Leyang",
+              lastName: "HU",
             },
 
             task: {
@@ -426,7 +426,7 @@ export default {
             },
           });
           console.log('this.labelStudio', this.labelStudio)
-        },1500)
+        },1800)
       }else{
 
         setTimeout(()=>{     
@@ -470,8 +470,8 @@ export default {
 
             user: {
               pk: 1,
-              firstName: "James",
-              lastName: "Dean",
+              firstName: "Leyang",
+              lastName: "HU",
             },
 
             task: {
@@ -528,7 +528,7 @@ export default {
               })
             },
           });
-        },1500)
+        },1800)
 
       }
     },
@@ -747,13 +747,13 @@ export default {
             "predictions:menu", //==> Reject | Accept
             // "auto-annotation",
             // "edit-history",
-            "topbar:prevnext",
+            // "topbar:prevnext",
           ],
 
           user: {
             pk: 1,
-            firstName: "James",
-            lastName: "Dean",
+            firstName: "Leyang",
+            lastName: "HU",
           },
 
           task: {
@@ -834,13 +834,13 @@ export default {
             "predictions:menu", //==> Reject | Accept
             // "auto-annotation",
             // "edit-history",
-            "topbar:prevnext",
+            // "topbar:prevnext",
           ],
 
           user: {
             pk: 1,
-            firstName: "James",
-            lastName: "Dean",
+            firstName: "Leyang",
+            lastName: "HU",
           },
 
           task: {

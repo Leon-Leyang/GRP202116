@@ -198,8 +198,8 @@ In this page user can import ml, run ml and train ml
                                   </v-card-title>
                                   <v-card-text>
                                     <v-container>
-                                      <v-row>   
-                                        <v-col cols="12" v-if="nowType == 'Customization'">
+                                      <v-row  v-if="nowType == 'Customization'">   
+                                        <v-col cols="12">
                                         Fill in the Customized Run Script Path Here:
                                         <el-input placeholder="(Only For Customization Type)" type="textarea" v-model="testScript"></el-input>
                                         </v-col>
@@ -335,7 +335,7 @@ In this page user can import ml, run ml and train ml
                                           ></v-select>
                                         </v-col>
                                         <v-col
-                                        v-if="nowType = 'Image Classification'"
+                                        v-if="nowType == 'Image Classification'"
                                           cols="12"
                                           sm="6"
                                         >
@@ -474,6 +474,7 @@ In this page user can import ml, run ml and train ml
     return {
       nowVersion:'',
       nowType:'',
+      Type:'',
       form: {
         modelRoot:'',
         version: '',
@@ -588,11 +589,16 @@ In this page user can import ml, run ml and train ml
       }
     },
     methods:{
+      show(){
+        console.log('teset',this.nowType,this.$store.state.nowType)
+      },
       chooseVersion(version,type){
         console.log('nowversion', version)
         this.nowVersion = version
         this.nowType = type
-        console.log('testTYpe', this.nowType)
+        this.Type = type
+        this.$store.state.nowType = type
+        console.log('testTYpe', this.nowType, this.nowType == 'Customization',this.nowType != 'Customization', this.$store.state.nowType)
 
       },
       onSubmit() {

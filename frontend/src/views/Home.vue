@@ -565,13 +565,14 @@ import ML from './Create_ML.vue'
                           }
                       })
                       .then(res => {
-                          console.log("as",res.data)
+                          console.log("as",res)
                           this.$message({
                               type: 'success',
                               message: 'Delete success!'
                           })
-                      })
                   this.getList()
+
+                      })
               })
               .catch(() => {
                   this.$message({
