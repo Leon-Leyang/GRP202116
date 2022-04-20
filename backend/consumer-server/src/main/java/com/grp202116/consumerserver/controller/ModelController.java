@@ -224,7 +224,7 @@ public class ModelController {
      * @param getRun if true, return the status of running, otherwise return the status of training
      * @return status
      */
-    @PostMapping("/model/status/{getRun}")
+    @GetMapping("/model/status/{getRun}")
     public boolean getRunModelStatus(@PathVariable boolean getRun) {
         if (getRun) return isTesting;
         return isTraining;
