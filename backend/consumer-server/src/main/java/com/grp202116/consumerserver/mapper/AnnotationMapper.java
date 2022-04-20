@@ -74,4 +74,6 @@ public interface AnnotationMapper extends BaseMapper {
      */
     @Deprecated
     void update(AnnotationDO annotationDO);
+
+    int countAnnotation(BigInteger dataId);
 }

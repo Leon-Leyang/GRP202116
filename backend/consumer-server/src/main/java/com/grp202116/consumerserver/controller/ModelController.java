@@ -38,6 +38,8 @@ public class ModelController {
     @Resource
     DataMapper dataMapper;
 
+    private static boolean isTesting = false;
+    private static boolean isTraining = false;
     private final RestTemplate restTemplate;
     private static final Logger logger = LoggerFactory.getLogger(ModelController.class);
 
@@ -112,7 +114,12 @@ public class ModelController {
      */
     @PostMapping("/model/run/{projectId}")
     public void runModel(@PathVariable BigInteger projectId, @RequestBody JSONObject runObject) {
-        if (!runObject.containsKey("version") || !runObject.containsKey("script_url")) return;
+        isTesting = true;
+        if (!runObject.containsKey("version") || !runObject.containsKey("script_url")) {
+            isTesting = false;
+            logger.warn("Missing json parameters");
+            return;
+        }
         String version = runObject.getString("version");
         String scriptPath = runObject.getString("script_url");
 
@@ -121,17 +128,25 @@ public class ModelController {
 
         if (model == null) {
             logger.warn("Model cannot be located according to the project and version");
+            isTesting = false;
             return;
         }
 
         List<DataDO> dataList = dataMapper.listByProjectId(projectId);
         ModelDriver modelDriver = new ModelDriver(project, model);
 
-        if (modelDriver.setScript(scriptPath)) return;
+        if (modelDriver.setScript(scriptPath)) {
+            logger.warn("Missing custom script");
+            isTesting = false;
+            return;
+        }
 
         for (DataDO data : dataList) {
             JSONObject object = modelDriver.runModelConfig(data);
-            if (object == null) return;
+            if (object == null) {
+                isTesting = false;
+                return;
+            }
 
             JSONObject result = JSONObject.parseObject(
                     restTemplate.postForObject("http://sidecar-server/model/run",
@@ -146,6 +161,7 @@ public class ModelController {
             predictionMapper.alter();
             predictionMapper.insert(prediction);
         }
+        isTesting = false;
     }
 
     /**
@@ -156,9 +172,13 @@ public class ModelController {
      */
     @PostMapping("/model/train/{projectId}")
     public void trainModel(@PathVariable BigInteger projectId, @RequestBody JSONObject trainObject) {
-
+        isTraining = true;
         if (!trainObject.containsKey("version") && !trainObject.containsKey("params") &&
-                !trainObject.containsKey("script_url")) return;
+                !trainObject.containsKey("script_url")) {
+            logger.warn("Missing json parameters");
+            isTraining = false;
+            return;
+        }
 
         String version = trainObject.getString("version");
         String scriptPath = trainObject.getString("script_url");
@@ -168,14 +188,20 @@ public class ModelController {
         ModelDO model = modelMapper.getByVersionProject(version, projectId);
 
         List<AnnotationDO> annotationList = annotationMapper.listByProjectId(projectId);
-        if (annotationList.size() < 1) return;
 
         List<DataDO> annotatedDataList = dataMapper.getAnnotatedList(projectId);
-        if (annotatedDataList.size() < 1) return;
+        if (annotatedDataList.size() < 1 || annotationList.size() < 1) {
+            isTraining = false;
+            return;
+        }
 
         ModelDriver modelDriver = new ModelDriver(project, model);
 
-        if (modelDriver.setScript(scriptPath)) return;
+        if (modelDriver.setScript(scriptPath)) {
+            isTraining = false;
+            logger.warn("Missing custom script");
+            return;
+        }
 
         JSONObject object = new JSONObject();
         object.putAll(modelDriver.trainModelConfig(trainParams));
@@ -189,5 +215,18 @@ public class ModelController {
         model.setAccuracy(result.getString("accuracy"));
         model.setDataLength(result.getInteger("trainNum"));
         modelMapper.updateAccuracy(model);
+        isTraining = false;
+    }
+
+    /**
+     * Get the status of model
+     *
+     * @param getRun if true, return the status of running, otherwise return the status of training
+     * @return status
+     */
+    @PostMapping("/model/status/{getRun}")
+    public boolean getRunModelStatus(@PathVariable boolean getRun) {
+        if (getRun) return isTesting;
+        return isTraining;
     }
 }

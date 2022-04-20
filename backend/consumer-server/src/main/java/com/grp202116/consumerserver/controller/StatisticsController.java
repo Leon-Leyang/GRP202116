@@ -1,10 +1,11 @@
 package com.grp202116.consumerserver.controller;
 
+import com.grp202116.consumerserver.mapper.AnnotationMapper;
+import com.grp202116.consumerserver.mapper.PredictionMapper;
 import com.grp202116.consumerserver.service.statistics.Statistics;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -18,6 +19,11 @@ import java.math.BigInteger;
  */
 @RestController
 public class StatisticsController {
+    @Resource
+    private AnnotationMapper annotationMapper;
+    @Resource
+    private PredictionMapper predictionMapper;
+
     /**
      * Get the Statistics of certain project
      *
@@ -27,5 +33,19 @@ public class StatisticsController {
     @GetMapping("/statistics/{projectId}")
     public Statistics getStatistics(@PathVariable BigInteger projectId) throws IOException {
         return new Statistics().setupStatistics(projectId);
+    }
+
+    /**
+     * Get data count
+     *
+     * @param dataId the id of a certain data
+     * @param isAnnotation if true then return the number of annotations
+     * @return otherwise return predictions
+     */
+    @GetMapping("/statistics/{dataId}/{isAnnotation}")
+    public int getCount(@PathVariable BigInteger dataId, @PathVariable boolean isAnnotation) {
+        if (dataId == null) return 0;
+        if (isAnnotation) return annotationMapper.countAnnotation(dataId);
+        return predictionMapper.countPrediction(dataId);
     }
 }

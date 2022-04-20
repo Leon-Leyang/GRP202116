@@ -72,4 +72,10 @@
         where project_id = #{projectId}
     </delete>
 
+    <select id="countPrediction">
+        select count(*)
+        from prediction
+        where data_id = #{dataId}
+    </select>
+
 </mapper>

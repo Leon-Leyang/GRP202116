@@ -73,4 +73,6 @@ public interface PredictionMapper extends BaseMapper {
      * @param predictionId the id of the specified prediction
      */
     void setNotAccepted(BigInteger predictionId);
+
+    int countPrediction(BigInteger dataId);
 }

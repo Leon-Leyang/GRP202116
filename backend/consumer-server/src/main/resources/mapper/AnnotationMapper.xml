@@ -76,4 +76,10 @@
         where data_id = #{dataId}
     </delete>
 
+    <select id="countAnnotation">
+        select count(*)
+        from annotation
+        where data_id = #{dataId}
+    </select>
+
 </mapper>
