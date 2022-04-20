@@ -30,6 +30,7 @@
           :key="item.title"
           link
           style="height:70px"
+          @click="Jump(item.title)"
         >
           <v-list-item-icon style="margin-right:25px">
             <v-icon large style="min-height:3rem">{{ item.icon }}</v-icon>
@@ -44,9 +45,10 @@
       <template v-slot:append>
         <div>
           <v-btn block depressed tile color="indigo darken-2" height="72px">
-            <v-icon x-large    
+            <a href="https://github.com/Leon-Leyang/GRP202116" target="_blank"><v-icon x-large    
             > mdi-github
-            </v-icon>
+            </v-icon></a>
+            
           </v-btn>
         </div>
       </template>
@@ -60,14 +62,29 @@
       return {
         drawer: true,
         items: [
-          { title: 'Home', icon: 'mdi-home-city' },
-          { title: 'User Manual', icon: 'mdi-account' },
-          { title: 'Our Website', icon: 'mdi-account-group-outline' },
-          { title: 'Documentation', icon: 'mdi-file-document-multiple' },
+          { title: 'Home', icon: 'mdi-home-city', url: "http://localhost:7000/#/" },
+          { title: 'User Manual', icon: 'mdi-account', url: "https://www.overleaf.com/7949523734fhvykwrkmmsk"},
+          { title: 'Our Website', icon: 'mdi-account-group-outline', url: "http://cslinux.nottingham.edu.cn/~Team202116/index.html" },
         ],
         mini: true,
       }
     },
+    methods:{
+      Jump(title){
+        if(title == 'Home'){
+          this.$router.push({  
+              path: '/',
+              name: 'Home', 
+          }) 
+        }else if (title == 'User Manual'){
+          var tempwindow=window.open('_blank');
+          tempwindow.location='https://www.overleaf.com/7949523734fhvykwrkmmsk';
+        }else if (title == 'Our Website'){
+          var tempwin=window.open('_blank');
+          tempwin.location='http://cslinux.nottingham.edu.cn/~Team202116/index.html';
+        }
+      }
+    }
   }
 </script>
 <style>
