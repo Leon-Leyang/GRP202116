@@ -3,8 +3,8 @@ In this page user can change project name, description, labeling Interafce,
 and also can delete all data or delete all annotation or delete all prediction
 @author LinjingSUN YingjiaLI-->
 <template>
-<v-card style="height:100%;background:#f1f2fa;padding:10px">
-  <v-container style="height:80%">
+<v-card style="height:100%;background:#f1f2fa;padding:10px"  >
+  <v-container style="height:100%" v-scroll.self="onScroll" class="overflow-y-auto">
     <v-row
       justify="space-between"
     >
@@ -98,7 +98,7 @@ and also can delete all data or delete all annotation or delete all prediction
       <v-card height="700">
         <SettingLS style="height:650px"></SettingLS>
 
-        <v-divider></v-divider>
+        
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -125,7 +125,7 @@ and also can delete all data or delete all annotation or delete all prediction
         color="#7986CB"
         depressed
         @click="save()"
-        style="font-size: 2.5rem; font-weight: 500; margin-top:6rem; height:4rem"
+        style="font-size: 2.5rem; font-weight: 500; height:4rem"
       >
         <v-icon left x-large>
           mdi-update
@@ -145,7 +145,7 @@ and also can delete all data or delete all annotation or delete all prediction
         </v-col>
     </v-row> 
 
-  <div style="margin-top:45px">
+  <div style="margin-top:15px">
    <v-card outlined>
     <v-row align="center"
     justify="space-around" style="padding:20px 20px 20px 20px">
